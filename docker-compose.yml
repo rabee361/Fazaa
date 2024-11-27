@@ -15,7 +15,7 @@ services:
       - 8000:8000
     restart: always
     env_file:
-      - .env.dev
+      - .env.prod
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_NAME=${DB_NAME}
@@ -30,7 +30,7 @@ services:
     image: postgres:15
     container_name: db
     env_file:
-      - .env.dev
+      - .env.prod
     environment:
       - POSTGRES_HOST=${DB_HOST}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -52,7 +52,7 @@ services:
     image: nginx
     build: ./nginx
     env_file:
-      - .env.dev
+      - .env.prod
     ports:
       - "9000:80"
     volumes:
