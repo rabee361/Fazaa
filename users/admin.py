@@ -24,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 class OTPCodeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'phonenumber', 'code_type', 'code','expiresAt']
+    list_display = ['id', 'phonenumber', 'code_type', 'code','createdAt','expiresAt','is_used']
     search_fields = ['phonenumber']
 
 

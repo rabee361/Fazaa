@@ -19,6 +19,8 @@ class CustomUser(AbstractUser):
         SHAREEK = 'SHAREEK'
         ADMIN = 'ADMIN'
     username = None
+    first_name = None
+    last_name = None
     phonenumber = models.CharField(db_index=True ,max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], unique=True)
     fullName = models.CharField(max_length=255 , null=True , blank=True)
     email = models.EmailField(unique=True , null=True , blank=True)
@@ -55,6 +57,7 @@ class OTPCode(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     expiresAt = models.DateTimeField(default=get_expiration_time)
     code_type = models.CharField(max_length=20, choices=CodeTypes.choices , default=CodeTypes.SIGNUP)
+    is_used = models.BooleanField(default=False)
 
     def checkLimit(phonenumber):
         return OTPCode.objects.filter(phonenumber=phonenumber,createdAt__gt=timezone.localtime()-timezone.timedelta(minutes=15)).count() >= 5 

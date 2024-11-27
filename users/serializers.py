@@ -8,29 +8,19 @@ from base.models import OrganizationType
 class CustomUserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = ['id','fullName','phonenumber','user_type','image']
 
 class LoginSerializer(Serializer):
-    phonenumber = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
+    phonenumber = serializers.CharField()
+    password = serializers.CharField()
 
     def validate(self, data):
         phonenumber = data.get('phonenumber')
         password = data.get('password')
-        request=self.context.get('request')
 
         if not phonenumber or not password:
             raise serializers.ValidationError({"error":["رقم الهاتف وكلمة المرور مطلوب"]})
-
-        user = authenticate(request=request, phonenumber=phonenumber, password=password)
-        if not user:
-            raise serializers.ValidationError({"error":["لا يوجد مستخدم بهذه المعلومات"]})
-        if not user.is_active:
-            raise serializers.ValidationError({"error":["هذا الحساب غير مفعل"]})
         
-        data['user'] = user
-        data['image'] = request.build_absolute_uri(user.image.url) # relocate to models
-
         return data
 
 
@@ -65,15 +55,11 @@ class SignUpUserSerializer(ModelSerializer):
 
 class ResetPasswordSerializer(Serializer):
     password = serializers.CharField(required=True)
-    password2 = serializers.CharField(required=True)
-    user_id = serializers.IntegerField(required=True)
+    new_password = serializers.CharField(required=True)
 
     def validate(self, data):
-        password = data.get('password')
-        password2 = data.get('password2')
-        if password != password2:
-            raise serializers.ValidationError({"error":["كلمات المرور غير متطابقة"]})
-        validate_password(password)
+        new_password = data.get('new_password')
+        validate_password(new_password)
         return data
 
 
