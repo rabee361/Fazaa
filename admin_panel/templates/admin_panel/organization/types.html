@@ -1,0 +1,7 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+{% block content %}
+    {% for type in types %}
+        <h1 class="test">{{ type.name }}</h1>
+    {% endfor %}
+{% endblock %}

@@ -4,8 +4,9 @@ from base.models import *
 
 
 class ListOrganizationType(generic.ListView):
-    queryset = OrganizationType.objects.all()
-    template_name = 'organization_type_list.html'
+    model = OrganizationType
+    context_object_name = 'types'
+    template_name = 'admin_panel/organization/types.html'
 
 
 class CreateOrganizationType(generic.CreateView):

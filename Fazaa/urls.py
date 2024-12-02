@@ -9,10 +9,11 @@ APIPatterns = [
 ]
 
 urlpatterns = [
+    path("silk/", include("silk.urls", namespace="silk")),
     path('admin/', admin.site.urls),
-    # path('dashboard/', include('admin_panel.urls')),
+    path('dashboard/', include('admin_panel.urls')),
     path('api/' , include(APIPatterns)),
+]
 
-]+ static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
-
-urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
+urlpatterns += static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

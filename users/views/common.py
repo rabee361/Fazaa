@@ -19,7 +19,8 @@ from django.contrib.auth import logout
 
 
 class BaseAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    pass
+    # permission_classes = [IsAuthenticated]
 
 
 
@@ -48,7 +49,7 @@ class LoginView(APIView):
             return Response({'error':['خطأ في رقم الهاتف أو كلمة المرور']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LogoutView(BaseAPIView):    
+class LogoutView(BaseAPIView):
     def post(self, request):
         try:
             if 'refresh' not in request.data:
@@ -71,7 +72,7 @@ class SignUpOTPView(BaseAPIView):
             return Response({"error":['الرجاء إدخال رقم الهاتف']})
         if OTPCode.checkLimit(phonenumber):
             otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type='SIGNUP')
-            #send the code to the user over sms
+            #send the code to the user over whatsapp
             #send_code()
             return Response({'message':['تم ارسال رمز التحقق']} , status=status.HTTP_200_OK)
         else:

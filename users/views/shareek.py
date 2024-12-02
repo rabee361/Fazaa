@@ -15,6 +15,7 @@ from utils.helper import generate_code
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from .common import BaseAPIView
+from utils.permissions import IsShareekUser , IsClientUser
 # Create your views here.
 
 
@@ -41,22 +42,26 @@ class ShareekSignUpView(APIView):
 
 
 class ShareekRegisterView(BaseAPIView):
-    # permission_classes = [IsShareek]
 
     @transaction.atomic
-    def post(self , request):
-        serializer = ShareekRegisterSerializer(data = request.data)
-        if serializer.is_valid(raise_exception=True):
-            data = serializer.save()
-            organization = Shareek.create_organization(**data)
-            shareek ,created = Shareek.objects.get_or_create(
-                user = request.user,
-                organization = organization,
-                job = data.job
-            )
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': serializer.errors.values()}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self ,request):
+        ShareekRegisterSerializer(data = request.data).is_valid(raise_exception=True)
+        user = request.user
+        user.email = request.get('email',None)
+        user.fullName = request.get('fullName',None)
+        user.save()
+        shareek = Shareek.objects.create(
+            user=user,
+            job=request.data.get('job',None)
+        )
+        organization = Shareek.create_organization(**request.data)
+        shareek = Shareek.objects.create(
+            user = request.user,
+            organization = organization,
+        )
+        return Response({
+            **CustomUser(instance=shareek.user)
+        })
 
 
 

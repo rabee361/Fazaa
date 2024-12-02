@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from base.models import OrganizationType
+from base.serializers import OrganizationTypeSerializer
 
 class CustomUserSerializer(ModelSerializer):
     class Meta:
@@ -69,26 +70,23 @@ class ResetPasswordSerializer(Serializer):
 
 
 class ShareekRegisterSerializer(serializers.Serializer):
-    job = serializers.CharField(required=True)
     full_name = serializers.CharField(required=True)
-    email = serializers.EmailField(required=True)
-    organization_name = serializers.CharField(required=True)
-    commercial_register_id = serializers.CharField(required=True)
-    organization_type = serializers.CharField(required=True)
+    job = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
 
     def validate(self, attrs):
         type_id = attrs.get('organization_type')
-        if not OrganizationType.objects.get(id=type_id).exists():
+        if not OrganizationType.objects.get(id=type_id):
             raise serializers.ValidationError('لا يوجد منظمة من هذا النوع')
         
         return super().validate(attrs)
 
 
 
-# class ShareekSerializer(ModelSerializer):
-#     class Meta:
-#         model = Shareek
-#         fields = '__all__'  
+class ShareekSerializer(ModelSerializer):
+    class Meta:
+        model = Shareek
+        fields = '__all__'  
 
 
 # class ClientSerializer(ModelSerializer):

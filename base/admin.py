@@ -37,7 +37,7 @@ class OrganizationTypeAdmin(admin.ModelAdmin):
 
 
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'organization', 'longitude', 'latitude']
+    list_display = ['id', 'name', 'organization', 'long', 'lat']
     list_filter = ['organization']
     search_fields = ['name', 'description']
 
@@ -66,6 +66,16 @@ class DeliveryCompanyLinkAdmin(admin.ModelAdmin):
     list_filter = ['delivery_company', 'createdAt']
 
 
+class TemplateAdmin(admin.ModelAdmin):
+    list_display = ['id', 'createdAt']
+
+
+class ServiceOfferAdmin(admin.ModelAdmin):
+    list_display = ['id','organization__name','content','expiresAt']
+
+class ClientOfferAdmin(admin.ModelAdmin):
+    list_display = ['id','organization__name','content','expiresAt']
+
 
 
 admin.site.register(Organization, OrganizationAdmin)
@@ -79,3 +89,6 @@ admin.site.register(SocialMedia, SocialMediaAdmin)
 admin.site.register(SocialMediaLink, SocialMediaLinkAdmin)
 admin.site.register(DeliveryCompany, DeliveryCompanyAdmin)
 admin.site.register(DeliveryCompanyLink, DeliveryCompanyLinkAdmin)
+admin.site.register(ClientOffer, ClientOfferAdmin)
+admin.site.register(ServiceOffer, ServiceOfferAdmin)
+admin.site.register(Template, TemplateAdmin)

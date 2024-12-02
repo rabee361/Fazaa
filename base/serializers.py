@@ -7,18 +7,18 @@ from django.contrib.auth import authenticate
 
 
 
-# class OrganizationSerializer(ModelSerializer):
-#     class Meta:
-#         model = Organization
-#         fields = '__all__'
+class OrganizationSerializer(ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = '__all__'
 
 
 
 
-# class OrganizationTypeSerializer(ModelSerializer):
-#     class Meta:
-#         model = OrganizationType
-#         fields = '__all__'
+class OrganizationTypeSerializer(ModelSerializer):
+    class Meta:
+        model = OrganizationType
+        fields = '__all__'
 
 
 
@@ -71,3 +71,24 @@ class DeliveryCompanyLinkSerializer(ModelSerializer):
 #     class Meta:
 #         model = DeliveryCompany
 #         fields = '__all__'
+
+
+
+class ServiceOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceOffer
+        fields = '__all__'
+
+
+class ClientOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientOffer
+        fields = '__all__'
+
+
+
+class TemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Template
+        fields = '__all__'
+

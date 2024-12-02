@@ -80,17 +80,17 @@ class Shareek(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
     job = models.CharField(max_length=255)
 
-    def create_organization(register_id ,org_type ,org_name ,**args):
-        organization_type = OrganizationType.objects.get(id=org_type)
+    def create_organization(commercial_register_id ,organization_type ,organization_name ,**args):
+        organization_type = OrganizationType.objects.get(id=organization_type)
         organization = Organization.objects.create(
-            name=org_name,
+            name=organization_name,
             organization_type=organization_type,
-            commercial_register_id=register_id
+            commercial_register_id=commercial_register_id
         )
         return organization
 
     def __str__(self) -> str:
-        return self.user.fullName
+        return f"{self.user.fullName} - {self.user.id}"
 
 
 class Subscription(models.Model):
