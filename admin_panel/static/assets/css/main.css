@@ -1,0 +1,46 @@
+.test {
+    background: red;
+}
+
+.login_container {
+    background-color: #f6f6f6;
+}
+
+
+.login_body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login_form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.input {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.fazaa_image_container {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.fazaa_image {
+    width: 100px;
+    height: 100px;
+}
+
+.login_text {
+    text-align: center;
+    margin: 10px;
+}
+

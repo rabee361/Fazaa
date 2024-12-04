@@ -2,20 +2,47 @@ from django.views import generic
 from django.views import View
 from base.models import *
 from users.models import *
+from django.shortcuts import redirect , render
+from django.contrib.auth import authenticate , login , logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
+login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
 
 
 
 class LoginView(View):
-    pass
+    def get(self, request):
+        return render(request, 'admin_panel/login.html',context={})
+
+    def post(self,request): 
+        phonenumber = request.POST.get('phonenumber',None)
+        password = request.POST.get('password',None)
+        remember_me = request.POST.get('remember_me',False)
+        print(remember_me)
+        if phonenumber and password:
+            user = authenticate(request,phonenumber=phonenumber,password=password)
+            if user:
+                if remember_me:
+                    request.session.set_expiry(60*60*24*30)
+                    login(request,user)
+                    print("if")
+                    print(request.session.get_expiry_age())
+                    return redirect('dashboard')
+
+            
 
 class LogoutView(View):
-    pass
+    def post(self, request):
+        logout(request)
+        return redirect('login')
 
+@login_required_m
 class DashboardView(View):
-    pass
+    def get(self, request):
+        return render(request, 'admin_panel/dashboard.html',context={})
 
 
 

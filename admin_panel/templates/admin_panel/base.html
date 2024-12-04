@@ -4,18 +4,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'assets/main.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
     <title>Fazaa</title>
 </head>
 <body>
-    <aside>
-        <ul>
-            <h1>hello</h1>
-        </ul>
+    <aside class="sidebar">
+        <div class="sidebar-wrapper" id="sidebar-wrapper" style="font-family: Cairo; font-size: larger;">
+            <ul class="nav" style="text-align: right;">
+              <li style="display: flex; flex-direction: column; color: white; align-items: center;">
+                <p class="h3">
+                  <img src="{{user_image}}" alt="" class="rounded-circle" style="width: 90px; height: 90px; object-fit: cover; margin: auto;">
+                  <h5>{{username}}</h5>
+                </p> 
+              </li>
+              <li class="">
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons design_app"></i>
+                  <p>اللوحة الرئيسية</p>
+                </a>
+              </li>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons files_paper"></i>
+                  <p>استمارات التسجيل</p>
+                </a>
+              </li>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons users_single-02"></i>
+                  <p>الحجاج</p>
+                </a>
+              </li>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons files_paper"></i>
+                  <p>ملاحظات</p>
+                </a>
+              </li>
+              <li>
+                <a class="test" id="trigger" data-toggle="collapse" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons users_single-02"></i>
+                  <p>الموظفين</p>
+                  <i class="now-ui-icons arrows-1_minimal-down"></i>
+                </a>
+              </li>
+              <div class="collapse" id="section" style=" background: #2e2e2e;">
+                <li>
+                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                    <p>المرشدين</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                    <p>الادارة</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                    <p>الموظفين</p>
+                  </a>
+                </li>
+              </div>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons design_bullet-list-67"></i>
+                  <p>المهام</p>
+                </a>
+              </li>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons ui-1_bell-53"></i>
+                  <p>الاشعارات</p>
+                </a>
+              </li>
+              <li>
+                <a class="test3" id="trigger3" data-toggle="collapse" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons users_single-02"></i>
+                  <p>خط السير</p>
+                  <i class="now-ui-icons arrows-1_minimal-down"></i>
+                </a>
+              </li>
+  
+              <div class="collapse" id="section3" style=" background: #2e2e2e;">
+  
+                <li>
+                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                    <p>الخطوات الرئيسية</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                    <p>الخطوات الفرعية</p>
+                  </a>
+                </li>
+    
+                </div>
+  
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons travel_istanbul"></i>
+                  <p>الارشاد الديني</p>
+                </a>
+              </li>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons travel_istanbul"></i>
+                  <p>الأعمال الدينية</p>
+                </a>
+              </li>
+              <li>
+                <a class="test2" id="trigger2" data-toggle="collapse" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons users_single-02"></i>
+                  <p>فئات</p>
+                  <i class="now-ui-icons arrows-1_minimal-down"></i>
+                </a>
+              </li>
+              <div class="collapse" id="section2" style=" background: #2e2e2e;">
+  
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                  <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                  <p>فئات الأعمال الدينية</p>
+                </a>
+              </li>
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
+                  <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
+                  <p>فئات الإرشاد الديني</p>
+                </a>
+              </li>
+              </div>
+              
+              <li>
+                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
+                  <i class="now-ui-icons ui-1_bell-53"></i>
+                  <p>الأحكام و الخصوصية</p>
+                </a>
+              </li>
+            </ul>
+          </div>
     </aside>
-    {% block content %}
+    <div class="main">
+        {% block content %}
 
-    {% endblock %}
+        {% endblock %}
+    </div>
+
 </body> 
 </html>
 

@@ -1,7 +1,11 @@
 from django.views import generic
 from utils import permissions
 from base.models import *
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
+
+login_required_m =  method_decorator(login_required, name="dispatch")
 
 class ListOrganizationType(generic.ListView):
     model = OrganizationType
@@ -31,6 +35,32 @@ class DeleteOrganizationType(generic.DeleteView):
     pk_url_kwarg = 'id'
 
 
+
+
+
+class ListCatalogsView(generic.ListView):
+    model = Catalog
+    template_name = 'catalog_list.html' 
+
+
+class CreateCatalogView(generic.CreateView):
+    model = Catalog
+    template_name = 'catalog_form.html'
+    fields = ['name', 'organization']
+    success_url = '/admin/catalogs/'
+
+class UpdateCatalogView(generic.UpdateView):
+    model = Catalog
+    template_name = 'catalog_form.html'
+    fields = ['name', 'organization']
+    success_url = '/admin/catalogs/'
+    pk_url_kwarg = 'id'
+
+class DeleteCatalogView(generic.DeleteView):
+    model = Catalog
+    template_name = 'catalog_confirm_delete.html'
+    success_url = '/admin/catalogs/'
+    pk_url_kwarg = 'id'
 
 
 
@@ -90,25 +120,25 @@ class DeleteDeliveryCompanyLink(generic.DeleteView):
 
 class ListSocialMedia(generic.ListView):
     queryset = SocialMedia.objects.all()
-    template_name = 'branch_list.html'
+    template_name = 'social_media_list.html'
 
 class CreateSocialMedia(generic.CreateView):
     model = Branch
-    template_name = 'branch_form.html'
-    fields = ['name', 'address', 'phone', 'email', 'organization']
-    success_url = '/admin/branches/'
+    template_name = 'create_social_media.html'
+    fields = ['name', 'icon']
+    success_url = '/dashboard/social-media/'
 
 class DeleteSocialMedia(generic.DeleteView):
     model = SocialMedia
-    template_name = 'branch_confirBranchm_delete.html'
-    success_url = '/admin/branches/'
+    template_name = 'delete_social_media.html'
+    success_url = '/dashboard/social-media/'
     pk_url_kwarg = 'id'
 
 class UpdateSocialMedia(generic.UpdateView):
     model = SocialMedia
     template_name = 'social_media_form.html'
-    fields = ['name', 'address', 'phone', 'email', 'organization']
-    success_url = '/admin/branches/'
+    fields = ['name', 'icon']
+    success_url = '/dashboard/social-media/'
     pk_url_kwarg = 'id'
 
 
@@ -125,7 +155,6 @@ class DeleteSocialMediaLink(generic.DeleteView):
 
 class UpdateSocialMediaLink(generic.UpdateView):
     pass
-
 
 
 
@@ -152,4 +181,58 @@ class UpdateBranch(generic.UpdateView):
     success_url = '/admin/branches/'
     pk_url_kwarg = 'id'
 
+
+
+
+
+
+
+class ListClientOffers(generic.ListView):
+    model = ClientOffer
+    template_name = 'client_offer_list.html'
+
+class CreateClientOffer(generic.CreateView):
+    model = ClientOffer
+    template_name = 'client_offer_form.html'
+    fields = ['name', 'description', 'organization']
+    success_url = '/admin/client-offers/'
+
+class UpdateClientOffer(generic.UpdateView):
+    model = ClientOffer
+    template_name = 'client_offer_form.html'
+    fields = ['name', 'description', 'organization']
+    success_url = '/admin/client-offers/'
+    pk_url_kwarg = 'id'
+
+class DeleteClientOffer(generic.DeleteView):
+    model = ClientOffer
+    template_name = 'client_offer_confirm_delete.html'
+    success_url = '/admin/client-offers/'
+    pk_url_kwarg = 'id'
+
+
+
+
+class ListServiceOffers(generic.ListView):
+    model = ServiceOffer
+    template_name = 'service_offer_list.html'
+
+class CreateServiceOffer(generic.CreateView):
+    model = ServiceOffer
+    template_name = 'service_offer_form.html'
+    fields = ['name', 'description', 'organization']
+    success_url = '/admin/service-offers/'
+
+class UpdateServiceOffer(generic.UpdateView):
+    model = ServiceOffer
+    template_name = 'service_offer_form.html'
+    fields = ['name', 'description', 'organization']
+    success_url = '/admin/service-offers/'
+    pk_url_kwarg = 'id'
+
+class DeleteServiceOffer(generic.DeleteView):
+    model = ServiceOffer
+    template_name = 'service_offer_confirm_delete.html'
+    success_url = '/admin/service-offers/'
+    pk_url_kwarg = 'id'
 

@@ -34,7 +34,9 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
-
+# CSRF_TRUSTED_ORIGINS = [
+# "http://127.0.0.1:8000",
+# ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -153,6 +155,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+SESSION_COOKIE_AGE = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
