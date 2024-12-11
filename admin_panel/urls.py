@@ -76,6 +76,9 @@ OrganizationPatterns=[
     # path('organization/<int:id>/branches/<int:id>/update/' , organization_views.UpdateBranch.as_view() , name="update-branch"),
     # path('organization/<int:id>/branches/<int:id>/delete/' , organization_views.DeleteBranch.as_view() , name="delete-branch"),
 
+    path('about/' , app_views.AboutUsView.as_view() , name="about-us"),
+    path('about/update/' , app_views.UpdateAboutUsView.as_view() , name="update-about"),
+
     path('reports/' , app_views.ListReportsView.as_view() , name="reports"),
     path('reports/<int:id>' , app_views.GetReportView.as_view() , name="get-report"),
     path('reports/<int:id>/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
@@ -87,8 +90,6 @@ OrganizationPatterns=[
 
     path('notifications/' , app_views.BaseNotificationsView.as_view() , name="notifications"),
     path('notification/send/' , app_views.SendNotificationView.as_view() , name="send-notification"),
-
-
 ]
 
 
@@ -97,6 +98,6 @@ urlpatterns = [
     path('login/' , user_views.LoginView.as_view() , name="login"),
     path('logout/' , user_views.LogoutView.as_view() , name="logout"),
     path('' , user_views.DashboardView.as_view() , name="dashboard"),
-    # path('users/',include(UsersPatterns)),
+    path('users/',include(UsersPatterns)),
     path('organization/',include(OrganizationPatterns)),
 ]

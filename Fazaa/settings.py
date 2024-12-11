@@ -155,7 +155,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-SESSION_COOKIE_AGE = 1
+# Session Settings
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days in seconds
+SESSION_SAVE_EVERY_REQUEST = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -163,14 +166,12 @@ SESSION_COOKIE_AGE = 1
 STATIC_ROOT = os.path.join(BASE_DIR , 'static')
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'admin_panel/static'),
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
 
@@ -216,7 +217,6 @@ SIMPLE_JWT = {
 }
 
 
-
 # firebase settigns
 
 # class CustomFirebaseCredentials(credentials.ApplicationDefault):
@@ -234,7 +234,6 @@ SIMPLE_JWT = {
 # FIREBASE_MESSAGING_APP = initialize_app(custom_credentials, options={'projectId': 'nouralhj-2fb2e'}, name='messaging')
 
 
-
 # FCM_DJANGO_SETTINGS = {
 #      # an instance of firebase_admin.App to be used as default for all fcm-django requests
 #      # default: None (the default Firebase app)
@@ -249,4 +248,3 @@ SIMPLE_JWT = {
 #      # default: False
 #     "DELETE_INACTIVE_DEVICES": False,
 # }
-

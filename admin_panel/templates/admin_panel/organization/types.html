@@ -1,7 +1,53 @@
 {% extends 'admin_panel/base.html' %}
-{% load static %}
+
 {% block content %}
-    {% for type in types %}
-        <h1 class="test">{{ type.name }}</h1>
-    {% endfor %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>طلبات الاشتراك</h2>
+        <div class="search-box">
+            <input type="text" class="form-control" placeholder="بحث...">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">الاسم</th>
+                    <th scope="col">رقم الهاتف</th>
+                    <th scope="col">اسم المنشأة</th>
+                    <th scope="col">نوع المنشأة</th>
+                    <th scope="col">السجل التجاري</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>ناصر خليفة</td>
+                    <td>+96312345789</td>
+                    <td>الملك للسيارات</td>
+                    <td>متجر</td>
+                    <td>123456789</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>ناصر خليفة</td>
+                    <td>+96312345789</td>
+                    <td>الملك للسيارات</td>
+                    <td>مطعم</td>
+                    <td>123456789</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>ناصر خليفة</td>
+                    <td>+96312345789</td>
+                    <td>الملك للسيارات</td>
+                    <td>متجر</td>
+                    <td>123456789</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

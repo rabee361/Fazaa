@@ -46,3 +46,14 @@ class BaseNotificationsView(generic.ListView):
 class SendNotificationView(View):
     def post(self,request):
         pass
+
+
+
+class AboutUsView(generic.ListView):
+    model = AboutUs
+    context_object_name = 'about'
+
+
+class UpdateAboutUsView(generic.UpdateView):
+    model = AboutUs
+    context_object_name = 'about'

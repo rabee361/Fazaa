@@ -1,160 +1,256 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazaa - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
-    <title>Fazaa</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="sidebar-wrapper" id="sidebar-wrapper" style="font-family: Cairo; font-size: larger;">
-            <ul class="nav" style="text-align: right;">
-              <li style="display: flex; flex-direction: column; color: white; align-items: center;">
-                <p class="h3">
-                  <img src="{{user_image}}" alt="" class="rounded-circle" style="width: 90px; height: 90px; object-fit: cover; margin: auto;">
-                  <h5>{{username}}</h5>
-                </p> 
-              </li>
-              <li class="">
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons design_app"></i>
-                  <p>اللوحة الرئيسية</p>
-                </a>
-              </li>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons files_paper"></i>
-                  <p>استمارات التسجيل</p>
-                </a>
-              </li>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons users_single-02"></i>
-                  <p>الحجاج</p>
-                </a>
-              </li>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons files_paper"></i>
-                  <p>ملاحظات</p>
-                </a>
-              </li>
-              <li>
-                <a class="test" id="trigger" data-toggle="collapse" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons users_single-02"></i>
-                  <p>الموظفين</p>
-                  <i class="now-ui-icons arrows-1_minimal-down"></i>
-                </a>
-              </li>
-              <div class="collapse" id="section" style=" background: #2e2e2e;">
-                <li>
-                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                    <p>المرشدين</p>
-                  </a>
-                </li>
-                <li>
-                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                    <p>الادارة</p>
-                  </a>
-                </li>
-                <li>
-                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                    <p>الموظفين</p>
-                  </a>
-                </li>
-              </div>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons design_bullet-list-67"></i>
-                  <p>المهام</p>
-                </a>
-              </li>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons ui-1_bell-53"></i>
-                  <p>الاشعارات</p>
-                </a>
-              </li>
-              <li>
-                <a class="test3" id="trigger3" data-toggle="collapse" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons users_single-02"></i>
-                  <p>خط السير</p>
-                  <i class="now-ui-icons arrows-1_minimal-down"></i>
-                </a>
-              </li>
-  
-              <div class="collapse" id="section3" style=" background: #2e2e2e;">
-  
-                <li>
-                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                    <p>الخطوات الرئيسية</p>
-                  </a>
-                </li>
-                <li>
-                  <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                    <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                    <p>الخطوات الفرعية</p>
-                  </a>
-                </li>
-    
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <img src="{{ request.user.image }}" alt="User Profile" class="profile-image">
+                    <div class="user-info">
+                        <h3>{{ request.user.name }}</h3>
+                        <p>{{ request.user.role }}</p>
+                    </div>
                 </div>
-  
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons travel_istanbul"></i>
-                  <p>الارشاد الديني</p>
-                </a>
-              </li>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons travel_istanbul"></i>
-                  <p>الأعمال الدينية</p>
-                </a>
-              </li>
-              <li>
-                <a class="test2" id="trigger2" data-toggle="collapse" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons users_single-02"></i>
-                  <p>فئات</p>
-                  <i class="now-ui-icons arrows-1_minimal-down"></i>
-                </a>
-              </li>
-              <div class="collapse" id="section2" style=" background: #2e2e2e;">
-  
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                  <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                  <p>فئات الأعمال الدينية</p>
-                </a>
-              </li>
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: 10pt;">
-                  <i class="now-ui-icons users_single-02" style="font-size: 11pt;"></i>
-                  <p>فئات الإرشاد الديني</p>
-                </a>
-              </li>
-              </div>
-              
-              <li>
-                <a href="" style="display: flex; flex-direction: row-reverse; gap: 5px; font-size: larger;">
-                  <i class="now-ui-icons ui-1_bell-53"></i>
-                  <p>الأحكام و الخصوصية</p>
-                </a>
-              </li>
-            </ul>
-          </div>
-    </aside>
-    <div class="main">
-        {% block content %}
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
 
-        {% endblock %}
+                    <div class="nav-item">
+                        <a href="{% url 'dashboard' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>لوحة التحكم</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item collapsible">
+                        <div class="nav-header">
+                            <i class="fas fa-users"></i>
+                            <span>المستخدمين</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="nav-content">
+                            <a href="{% url 'admins' %}" class="sub-item">الأدمن</a>
+                            <a href="{% url 'clients' %}" class="sub-item">العملاء</a>
+                            <a href="{% url 'shareeks' %}" class="sub-item">الشركاء</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="{% url 'organization-types' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>أنواع المنشأت</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>باقات الاشتراك</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="{% url 'about-us' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>معلومات تعريفية</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="{% url 'social-media' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>تواصل اجتماعي</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="{% url 'delivery-companies' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>برامج التوصيل</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item collapsible">
+                        <div class="nav-header">
+                            <i class="fas fa-file-invoice"></i>
+                            <span>عروض و خصومات</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="nav-content">
+                            <a href="" class="sub-item">الاشتراكات النشطة</a>
+                            <a href="#" class="sub-item">الاشتراكات المنتهية</a>
+                            <a href="#" class="sub-item">طلبات الاشتراك</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="{% url 'catalogs' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>كتالوجات</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item collapsible">
+                        <div class="nav-header">
+                            <i class="fas fa-question-circle"></i>
+                            <span>محفظة الروابط</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="nav-content">
+                            <a href="#" class="sub-item">التواصل الاجتماعي</a>
+                            <a href="#" class="sub-item">برامج التوصيل</a>
+                            <a href="#" class="sub-item">معومات تعريفية</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item collapsible">
+                        <div class="nav-header">
+                            <i class="fas fa-question-circle"></i>
+                            <span>مركز المساعدة</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="nav-content">
+                            <a href="#" class="sub-item">تقارير المبيعات</a>
+                            <a href="#" class="sub-item">تقارير المستخدمين</a>
+                            <a href="#" class="sub-item">تقارير الأداء</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item collapsible">
+                        <div class="nav-header">
+                            <i class="fas fa-info-circle"></i>
+                            <span>عن التطبيق</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </div>
+                        <div class="nav-content">
+                            <a href="#" class="sub-item">تقارير المبيعات</a>
+                            <a href="#" class="sub-item">تقارير المستخدمين</a>
+                            <a href="#" class="sub-item">تقارير الأداء</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="">
+                            <div class="nav-header">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>سياسة الخصوصية</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="">
+                            <div class="nav-header">
+                                <i class="fas fa-file-contract"></i>
+                                <span>الشروط و الأحكام</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="{% url 'notifications' %}">
+                            <div class="nav-header">
+                                <i class="fas fa-bell"></i>
+                                <span>الإشعارات</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="">
+                            <div class="nav-header">
+                                <i class="fas fa-headset"></i>
+                                <span>الدعم</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a href="">
+                            <div class="nav-header">
+                                <i class="fas fa-cog"></i>
+                                <span>الإعدادات</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <form action="{% url 'logout' %}" method="post" id="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>تسجيل الخروج</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            {% block content %}
+            {% endblock %}
+        </main>
     </div>
 
-</body> 
-</html>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle collapsible sections
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(item => {
+                const header = item.querySelector('.nav-header');
+                header.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
 
+            // Handle sub-item selection
+            const subItems = document.querySelectorAll('.sub-item');
+            subItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    // Remove active class from all sub-items
+                    subItems.forEach(si => si.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+                });
+            });
+
+            // Set active state based on current URL
+            const currentPath = window.location.pathname;
+            subItems.forEach(item => {
+                if (item.getAttribute('href') === currentPath) {
+                    item.classList.add('active');
+                    // Expand parent collapsible
+                    const parentCollapsible = item.closest('.collapsible');
+                    if (parentCollapsible) {
+                        parentCollapsible.classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

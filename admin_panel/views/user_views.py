@@ -11,28 +11,45 @@ from django.utils.decorators import method_decorator
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
 
-
-
 class LoginView(View):
     def get(self, request):
-        return render(request, 'admin_panel/login.html',context={})
+        return render(request, 'admin_panel/login.html', context={})
 
-    def post(self,request): 
-        phonenumber = request.POST.get('phonenumber',None)
-        password = request.POST.get('password',None)
-        remember_me = request.POST.get('remember_me',False)
-        print(remember_me)
-        if phonenumber and password:
-            user = authenticate(request,phonenumber=phonenumber,password=password)
-            if user:
-                if remember_me:
-                    request.session.set_expiry(60*60*24*30)
-                    login(request,user)
-                    print("if")
-                    print(request.session.get_expiry_age())
-                    return redirect('dashboard')
-
+    def post(self, request): 
+        phonenumber = request.POST.get('phonenumber', None)
+        password = request.POST.get('password', None)
+        remember_me = request.POST.get('remember_me', False)
+        
+        context = {
+            'phonenumber': phonenumber,
+            'has_error': False,
+            'phone_error': False,
+            'password_error': False
+        }
+        
+        if not phonenumber or not password:
+            context['has_error'] = True
+            if not phonenumber:
+                context['phone_error'] = True
+            if not password:
+                context['password_error'] = True
+            return render(request, 'admin_panel/login.html', context=context)
             
+        user = authenticate(request, phonenumber=phonenumber, password=password)
+        if user:
+            login(request, user)
+            if not remember_me:
+                request.session.set_expiry(60*60*4)  # 30 days
+            else:
+                request.session.set_expiry(0)  # Expire when browser closes
+            request.session.modified = True
+            return redirect('dashboard')
+        else:
+            context['has_error'] = True
+            context['phone_error'] = True
+            context['password_error'] = True
+            return render(request, 'admin_panel/login.html', context=context)
+
 
 class LogoutView(View):
     def post(self, request):
@@ -43,8 +60,6 @@ class LogoutView(View):
 class DashboardView(View):
     def get(self, request):
         return render(request, 'admin_panel/dashboard.html',context={})
-
-
 
 
 class ListClients(generic.ListView):
@@ -78,8 +93,6 @@ class GetClient(generic.DetailView):
 
 
 
-
-
 class ListShareeks(generic.ListView):
     model = Shareek
     template_name = 'shareek_list.html'
@@ -107,8 +120,6 @@ class GetShareek(generic.DetailView):
     model = Shareek
     template_name = 'shareek_detail.html'
     pk_url_kwarg = 'id'
-
-
 
 
 
@@ -148,8 +159,6 @@ class GetSubscription(generic.DetailView):
 
 
 
-
-
 class ListAdmins(generic.ListView):
     model = CustomUser
     template_name = 'admin_list.html'
@@ -177,4 +186,3 @@ class GetAdmin(generic.DetailView):
     model = Shareek
     template_name = 'shareek_detail.html'
     pk_url_kwarg = 'id'
-

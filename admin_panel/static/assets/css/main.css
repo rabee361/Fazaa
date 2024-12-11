@@ -1,46 +1,332 @@
-.test {
-    background: red;
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Noto+Sans+Arabic:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap');
+
+body {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
 }
 
-.login_container {
-    background-color: #f6f6f6;
-}
-
-
-.login_body {
+.login-body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow-y: hidden;
 }
 
-.login_form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.login-container {
+    background-color: #f6f6f6;
+    width: 70svh;
     padding: 20px;
     border-radius: 10px;
 }
 
-.input {
+.login-form {
+    width: 100%;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
 }
 
-.fazaa_image_container {
+/* .login_header {
+
+} */
+
+.fazaa-image-container {
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
 
-.fazaa_image {
-    width: 100px;
-    height: 100px;
+
+.input {
+    width: 80%;
+    display: flex;
+    justify-content: center;
 }
 
-.login_text {
+.input input {
+    width: 100%;
+    padding: 6px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: white;
+    color: #333;
+    outline: none;
+    text-align: right;
+}
+
+.input input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.input input::placeholder {
+    color: #999;
+    font-size: 14px;
+    text-align: right;
+}
+
+.input input.error {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
+}
+
+.input input.error:focus {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
+}
+
+.login-form label {
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: 500;
+    width: 80%;
+    text-align: right;
+}
+
+.fazaa-image {
+    width: 200px;
+    height: 200px;
+}
+
+.login-text {
     text-align: center;
     margin: 10px;
 }
 
+
+.remember-me-checkbox {
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.remember-me-checkbox label {
+    margin: 0;
+    text-align: right;
+}
+
+.login-btn {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+    width: 80%;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #8B4513;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+.login-btn:hover {
+    background-color: #A0522D;
+}
+
+
+
+
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 200px;
+    background-color: #F6F6F6;
+    color: #333;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    border-left: 1px solid #e0e0e0;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.user-profile {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-info p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Navigation Styles */
+.sidebar-nav {
+    padding: 20px 0;
+}
+
+.nav-item {
+    margin-bottom: 5px;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.nav-header {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.nav-item:not(.collapsible) .nav-header:hover,
+.nav-item a:hover .nav-header {
+    background-color: #e0e0e0;
+}
+
+.nav-header i {
+    margin-left: 10px;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-header span {
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.arrow {
+    transition: transform 0.5s ease;
+}
+
+.nav-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-content .sub-item {
+    display: block;
+    padding: 10px 20px 10px 50px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.5s;
+}
+
+
+/* Logout Button */
+.logout-btn {
+    width: 100%;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+
+.logout-btn i {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-right: 200px;
+    padding: 0;
+    background-color: #f6f6f6;
+}
+
+/* Dashboard Table Styles */
+.table {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 100%;
+    /* background-color: white; */
+    background: red;
+    border-radius: 20px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.search-box {
+    padding: 20px;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table thead th {
+
+    /* background-color: #f8f9fa; */
+    /* background: red; */
+
+    border-bottom: none;
+    color: #666;
+    font-weight: 700;
+    text-align: right;
+    padding: 15px;
+}
+
+.table tbody td {
+    border-top: 1px solid #eee;
+    padding: 15px;
+    text-align: right;
+    color: #333;
+}
+
+.search-box input {
+    border-radius: 20px;
+    padding: 8px 20px;
+    border: 1px solid #ddd;
+    width: 300px;
+}
+
+.search-box input::placeholder {
+    text-align: right;
+}
+
+/* RTL Support */
+.table {
+    direction: rtl;
+}

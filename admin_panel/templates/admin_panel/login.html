@@ -7,26 +7,35 @@
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
     <title>Fazaa</title>
 </head>
-<body class="login_body">
-    <div class="login_container">
-        <div class="fazaa_image_container">
-            <img src="{% static 'assets/images/fazaa.png' %}" class="fazaa_image" alt="">
+
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <div class="fazaa-image-container">
+                <img src="{% static 'assets/images/fazaa.png' %}" class="fazaa-image" alt="">
+            </div>
+            <h1 class="login-text">
+                تسجيل الدخول
+            </h1>
         </div>
-        <h1 class="login_text">
-            تسجيل الدخول
-        </h1>
-        <form class="login_form" action="" method="post">
+        <form class="login-form" action="" method="post">
             {% csrf_token %}
+            <label for="phonenumber">: رقم الهاتف</label>
             <div class="input">
-                <label for="phonenumber">: رقم الهاتف</label>
-                <input type="text" placeholder="رقم الهاتف" name="phonenumber">
+                <input type="text" placeholder="رقم الهاتف" name="phonenumber" 
+                       value="{{ phonenumber|default:'' }}"
+                       class="{% if phone_error %}error{% endif %}">
             </div>
+            <label for="password">: كلمة السر</label>
             <div class="input">
-                <label for="password">: كلمة السر</label>
-                <input type="password" placeholder="كلمة السر" name="password">
+                <input type="password" placeholder="كلمة السر" name="password"
+                       class="{% if password_error %}error{% endif %}">
             </div>
-            <p>تذكرني <input type="checkbox" name="remember_me"></p>
-            <button type="submit">login</button>
+            <div class="remember-me-checkbox">
+                <label for="remember-me">تذكرني</label>
+                <input type="checkbox" name="remember-me">
+            </div>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
         </form>
     </div>
 </body>
