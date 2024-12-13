@@ -13,7 +13,7 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="user-profile">
-                    <img src="{{ request.user.image }}" alt="User Profile" class="profile-image">
+                    <img src="{{ request.user.image.url }}" alt="User Profile" class="profile-image">
                     <div class="user-info">
                         <h3>{{ request.user.name }}</h3>
                         <p>{{ request.user.role }}</p>
@@ -27,7 +27,7 @@
                     <div class="nav-item">
                         <a href="{% url 'dashboard' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-solid fa-chart-line"></i>
                                 <span>لوحة التحكم</span>
                             </div>
                         </a>
@@ -49,7 +49,7 @@
                     <div class="nav-item">
                         <a href="{% url 'organization-types' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-solid fa-building"></i>
                                 <span>أنواع المنشأت</span>
                             </div>
                         </a>
@@ -58,7 +58,7 @@
                     <div class="nav-item">
                         <a href="">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-regular fa-credit-card"></i>
                                 <span>باقات الاشتراك</span>
                             </div>
                         </a>
@@ -67,7 +67,7 @@
                     <div class="nav-item">
                         <a href="{% url 'about-us' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-solid fa-circle-info"></i>
                                 <span>معلومات تعريفية</span>
                             </div>
                         </a>
@@ -76,7 +76,7 @@
                     <div class="nav-item">
                         <a href="{% url 'social-media' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-brands fa-facebook"></i>
                                 <span>تواصل اجتماعي</span>
                             </div>
                         </a>
@@ -85,7 +85,7 @@
                     <div class="nav-item">
                         <a href="{% url 'delivery-companies' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-solid fa-truck"></i>
                                 <span>برامج التوصيل</span>
                             </div>
                         </a>
@@ -93,21 +93,20 @@
 
                     <div class="nav-item collapsible">
                         <div class="nav-header">
-                            <i class="fas fa-file-invoice"></i>
+                            <i class="fa-solid fa-briefcase"></i>
                             <span>عروض و خصومات</span>
                             <i class="fas fa-chevron-down arrow"></i>
                         </div>
                         <div class="nav-content">
-                            <a href="" class="sub-item">الاشتراكات النشطة</a>
-                            <a href="#" class="sub-item">الاشتراكات المنتهية</a>
-                            <a href="#" class="sub-item">طلبات الاشتراك</a>
+                            <a href="" class="sub-item">عروض الأفراد</a>
+                            <a href="#" class="sub-item">عروض الشركاء</a>
                         </div>
                     </div>
 
                     <div class="nav-item">
                         <a href="{% url 'catalogs' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
+                                <i class="fa-regular fa-image"></i>
                                 <span>كتالوجات</span>
                             </div>
                         </a>
@@ -115,7 +114,7 @@
 
                     <div class="nav-item collapsible">
                         <div class="nav-header">
-                            <i class="fas fa-question-circle"></i>
+                            <i class="fa-solid fa-share-from-square"></i>
                             <span>محفظة الروابط</span>
                             <i class="fas fa-chevron-down arrow"></i>
                         </div>
@@ -227,26 +226,27 @@
                 });
             });
 
-            // Handle sub-item selection
-            const subItems = document.querySelectorAll('.sub-item');
-            subItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    // Remove active class from all sub-items
-                    subItems.forEach(si => si.classList.remove('active'));
-                    // Add active class to clicked item
-                    item.classList.add('active');
-                });
-            });
-
-            // Set active state based on current URL
+            // Get current URL path
             const currentPath = window.location.pathname;
-            subItems.forEach(item => {
+
+            // Handle all nav items (both main items and sub-items)
+            const allNavItems = document.querySelectorAll('.nav-item a');
+            allNavItems.forEach(item => {
                 if (item.getAttribute('href') === currentPath) {
-                    item.classList.add('active');
-                    // Expand parent collapsible
-                    const parentCollapsible = item.closest('.collapsible');
-                    if (parentCollapsible) {
-                        parentCollapsible.classList.add('active');
+                    // Add active class to the nav header
+                    const navHeader = item.querySelector('.nav-header');
+                    if (navHeader) {
+                        navHeader.classList.add('active');
+                    }
+                    
+                    // If it's a sub-item
+                    if (item.classList.contains('sub-item')) {
+                        item.classList.add('active');
+                        // Expand parent collapsible
+                        const parentCollapsible = item.closest('.collapsible');
+                        if (parentCollapsible) {
+                            parentCollapsible.classList.add('active');
+                        }
                     }
                 }
             });

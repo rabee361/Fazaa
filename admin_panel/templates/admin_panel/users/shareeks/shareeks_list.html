@@ -20,22 +20,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for type in types %}
+                {% for shareek in shareeks %}
                 <tr>
                     <td><input type="checkbox"></td>
-                    <td>{{ type.id }}</td>
-                    <td>{{ type.name }}</td>
-                    <td>{{ type.createAt }}</td>
+                    <td>{{ shareek.id }}</td>
+                    <td>{{ shareek.username }}</td>
+                    <td>{{ shareek.phonenumber }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-    
-    <div class="action-button-container">
-        <button class="btn btn-brown">
-            إضافة
-        </button>
     </div>
 </div>
 {% endblock %}

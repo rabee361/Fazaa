@@ -20,22 +20,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for type in types %}
+                {% for admin in admins %}
                 <tr>
                     <td><input type="checkbox"></td>
-                    <td>{{ type.id }}</td>
-                    <td>{{ type.name }}</td>
-                    <td>{{ type.createAt }}</td>
+                    <td>{{ admin.id }}</td>
+                    <td>{{ admin.username }}</td>
+                    <td>{{ admin.phonenumber }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-    
-    <div class="action-button-container">
-        <button class="btn btn-brown">
-            إضافة
-        </button>
     </div>
 </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -21,12 +22,13 @@ class CustomUser(AbstractUser):
     username = None
     first_name = None
     last_name = None
-    phonenumber = models.CharField(db_index=True ,max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], unique=True)
-    fullName = models.CharField(max_length=255 , null=True , blank=True)
-    email = models.EmailField(unique=True , null=True , blank=True)
-    image = models.ImageField(upload_to='images/users/', default='images/users/default.png')
+    phonenumber = models.CharField(db_index=True ,max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], unique=True, verbose_name='الهاتف')
+    fullName = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
+    email = models.EmailField(unique=True , null=True , blank=True, verbose_name='البريد الالكتروني')
+    image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg')
     user_type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     get_notifications = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, verbose_name="مفعل")   
 
     objects = CustomUserManager()
     USERNAME_FIELD = 'phonenumber'

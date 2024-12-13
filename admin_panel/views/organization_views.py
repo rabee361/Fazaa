@@ -3,13 +3,16 @@ from utils import permissions
 from base.models import *
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.generic import ListView
+from utils.views import FieldListBaseView
+login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
 
-login_required_m =  method_decorator(login_required, name="dispatch")
 
-class ListOrganizationType(generic.ListView):
+class ListOrganizationType(FieldListBaseView, ListView):
     model = OrganizationType
     context_object_name = 'types'
+    context_fields = ['id','name','createAt']
     template_name = 'admin_panel/organization/types.html'
 
 
@@ -65,7 +68,7 @@ class DeleteCatalogView(generic.DeleteView):
 
 
 class ListDeliveryCompanies(generic.ListView):
-    queryset = DeliveryCompany.objects.all()
+    model = DeliveryCompany
     template_name = 'delivery_company_list.html'
 
 class CreateDeliveryCompany(generic.CreateView):
@@ -92,7 +95,7 @@ class DeleteDeliveryCompany(generic.DeleteView):
 
 
 class ListDeliveryLinks(generic.ListView):
-    queryset = DeliveryCompanyLink.objects.all()
+    queryset = DeliveryCompanyLink
     template_name = 'delivery_link_list.html'
 
 class CreateDeliveryCompanyLink(generic.CreateView):
@@ -119,7 +122,7 @@ class DeleteDeliveryCompanyLink(generic.DeleteView):
 
 
 class ListSocialMedia(generic.ListView):
-    queryset = SocialMedia.objects.all()
+    model = SocialMedia
     template_name = 'social_media_list.html'
 
 class CreateSocialMedia(generic.CreateView):
@@ -159,7 +162,7 @@ class UpdateSocialMediaLink(generic.UpdateView):
 
 
 class ListBranches(generic.ListView):
-    queryset = Branch.objects.all()
+    model = Branch
     template_name = 'branch_list.html'
 
 class CreateBranch(generic.CreateView):
@@ -235,4 +238,3 @@ class DeleteServiceOffer(generic.DeleteView):
     template_name = 'service_offer_confirm_delete.html'
     success_url = '/admin/service-offers/'
     pk_url_kwarg = 'id'
-

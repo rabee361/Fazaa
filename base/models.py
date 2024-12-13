@@ -8,17 +8,16 @@ from utils.helper import generateShortLink
 
 
 class OrganizationType(models.Model):
-    name = models.CharField(max_length=255)
-    createAt = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255 , verbose_name='الاسم')
+    createAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
 
     def __str__(self) -> str:
         return self.name
 
 
-
 class Organization(models.Model):
     commercial_register_id = models.IntegerField()
-    logo = models.ImageField(upload_to='media/organizations/logos/', default='organizations/logos/default.png')
+    logo = models.ImageField(upload_to='media/organizations/logos/', default='media/images/organizations/logos/default.png')
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255 , null=True, blank=True)
     organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True)
@@ -51,14 +50,14 @@ class Branch(models.Model):
 
 class ImageGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/image_galleries/')
+    image = models.ImageField(upload_to='media/images/image_galleries/')
     createdAt = models.DateTimeField(auto_now_add=True)
 
 
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    video = models.FileField(upload_to='media/reels_galleries/')
+    video = models.FileField(upload_to='media/images/reels_galleries/')
     createdAt = models.DateTimeField(auto_now_add=True)
 
 
@@ -70,7 +69,7 @@ class Catalog(models.Model):
         OFFERS='OFFERS'
 
     catalog_type = models.CharField(max_length=255 , choices=CATALOG_TYPES.choices)
-    file = models.FileField(upload_to='media/catalogs/')
+    file = models.FileField(upload_to='media/images/catalogs/')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True)
 
@@ -91,7 +90,7 @@ class Catalog(models.Model):
 
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to='media/social_media/', default='social_media/default_media.png')
+    icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/social_media/default_media.png')
 
     def __str__(self) -> str:
         return self.name
@@ -118,7 +117,7 @@ class SocialMediaLink(models.Model):
 
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to='media/delivery_company/', default='delivery_company/default_company.png')
+    icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/delivery_company/default_company.png')
 
     def __str__(self) -> str:
         return self.name
@@ -146,7 +145,7 @@ class DeliveryCompanyLink(models.Model):
 
 class Template(models.Model):
     name = models.CharField(max_length=255)
-    template = models.ImageField(upload_to='media/templates/')
+    template = models.ImageField(upload_to='media/images/templates/')
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -190,7 +189,7 @@ class ClientOffer(models.Model):
 class AboutUs(models.Model):
     name = models.CharField(max_length=255)
     link = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to='media/about_us/', default='about_us/default_about_us.png')
+    icon = models.ImageField(upload_to='media/images/about_us/', default='images/about_us/default_about_us.png')
 
     def __str__(self) -> str:
         return self.name

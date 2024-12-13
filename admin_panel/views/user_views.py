@@ -1,3 +1,4 @@
+from dataclasses import Field
 from django.views import generic
 from django.views import View
 from base.models import *
@@ -6,7 +7,7 @@ from django.shortcuts import redirect , render
 from django.contrib.auth import authenticate , login , logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
+from utils.views import FieldListBaseView
 
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
@@ -62,9 +63,15 @@ class DashboardView(View):
         return render(request, 'admin_panel/dashboard.html',context={})
 
 
-class ListClients(generic.ListView):
-    queryset = Client
-    template_name = 'organization_type_list.html'
+class ListClients(FieldListBaseView,generic.ListView):
+    model = CustomUser
+    context_object_name = 'clients'
+    context_fields = ['id','fullName','phonenumber','is_active']
+    template_name = 'admin_panel/users/clients/clients_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type='CLIENT')
+
 
 class CreateClient(generic.CreateView):
     model = OrganizationType
@@ -93,9 +100,15 @@ class GetClient(generic.DetailView):
 
 
 
-class ListShareeks(generic.ListView):
-    model = Shareek
-    template_name = 'shareek_list.html'
+class ListShareeks(FieldListBaseView,generic.ListView):
+    model = CustomUser
+    context_object_name = 'shareeks'
+    context_fields = ['id','fullName','phonenumber','is_active']
+    template_name = 'admin_panel/users/shareeks/shareeks_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type='SHAREEK')
+
 
 class CreateShareek(generic.CreateView):
     model = Shareek
@@ -159,9 +172,14 @@ class GetSubscription(generic.DetailView):
 
 
 
-class ListAdmins(generic.ListView):
+class ListAdmins(FieldListBaseView,generic.ListView):
     model = CustomUser
-    template_name = 'admin_list.html'
+    context_object_name = 'admins'
+    context_fields = ['id','fullName','phonenumber','is_active']
+    template_name = 'admin_panel/users/admins/admins_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user_type='ADMIN')
 
 class CreateAdmin(generic.CreateView):
     model = Shareek
