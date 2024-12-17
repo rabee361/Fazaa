@@ -1,0 +1,48 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة شركة توصيل{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="{% url 'delivery-companies' %}">شركات التوصيل</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>إضافة شركة توصيل</span>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.name.label }}</label>
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.icon.label }}</label>
+                    {{ form.icon }}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="action-button-container">
+            <a href="{% url 'create-delivery-company' %}" class="btn btn-brown">
+                إضافة
+            </a>
+            <a href="" class="btn btn-white">
+                إلغاء
+            </a>
+        </div>
+
+
+
+    </form>
+</div>
+{% endblock %}

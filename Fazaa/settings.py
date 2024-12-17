@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'admin_panel',
-    'base',
-    'users',
+    'app.admin_panel',
+    'app.base',
+    'app.users',
     # extrernal libraries
     'silk',
     'rest_framework',

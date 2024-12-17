@@ -1,0 +1,47 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'admins' %}">أنواع المنشأت</a>
+            <i class="separator fas fa-chevron-left"></i>
+            <span>إضافة نوع</span> 
+        </nav>
+    </div>
+
+    <div class="search-container d-flex justify-content-center">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="form-control" placeholder="بحث...">
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for field in field_names %}
+                        <th>{{ field }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for shareek in shareeks %}
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>{{ shareek.id }}</td>
+                        <td>{{ shareek.username }}</td>
+                        <td>{{ shareek.phonenumber }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

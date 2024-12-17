@@ -1,0 +1,54 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'delivery-companies' %}">شركات التوصيل</a>
+            <i class="separator fas fa-chevron-left"></i>
+            <span>إضافة شركة توصيل</span> 
+        </nav>
+    </div>
+
+    <div class="search-container d-flex justify-content-center">
+        <form method="get" class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" name="q" class="form-control" placeholder="بحث...">
+        </form>
+    </div>
+
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for field in field_names %}
+                        <th>{{ field }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>{{ company.id }}</td>
+                        <td>{{ company.name }}</td>
+                        <td><img width="30px" height="30px" src="{{ company.icon.url }}" alt=""></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="action-button-container">
+        <a href="{% url 'create-delivery-company' %}" class="btn btn-brown">
+            إضافة
+        </a>
+        <a href="" class="btn btn-brown">
+            حذف
+        </a>
+    </div>
+</div>
+{% endblock %}

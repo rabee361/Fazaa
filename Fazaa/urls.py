@@ -4,14 +4,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 APIPatterns = [
-    path('', include('base.urls')),
-    path('auth/', include('users.urls')),
+    path('', include('app.base.urls')),
+    path('auth/', include('app.users.urls')),
 ]
 
 urlpatterns = [
     path("silk/", include("silk.urls", namespace="silk")),
     path('admin/', admin.site.urls),
-    path('dashboard/', include('admin_panel.urls')),
+    path('dashboard/', include('app.admin_panel.urls')),
     path('api/' , include(APIPatterns)),
 ]
 
