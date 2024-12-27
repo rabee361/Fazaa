@@ -102,6 +102,7 @@ if ENVIRONMENT:
             'NAME': env('DEV_DB_NAME'),
         }
     }
+    
 else:  # production
     DATABASES = {
         'default': {
