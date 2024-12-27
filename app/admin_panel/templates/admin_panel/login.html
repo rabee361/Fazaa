@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <title>Fazaa</title>
+</head>
+
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <div class="fazaa-image-container">
+                <img src="{% static 'assets/images/fazaa.png' %}" class="fazaa-image" alt="">
+            </div>
+            <h1 class="login-text">
+                تسجيل الدخول
+            </h1>
+        </div>
+        <form class="login-form" action="" method="post">
+            {% csrf_token %}
+            <label for="phonenumber">: رقم الهاتف</label>
+            <div class="input">
+                <input type="text" placeholder="رقم الهاتف" name="phonenumber" 
+                       value="{{ phonenumber|default:'' }}"
+                       class="{% if phone_error %}error{% endif %}">
+            </div>
+            <label for="password">: كلمة السر</label>
+            <div class="input">
+                <input type="password" placeholder="كلمة السر" name="password"
+                       class="{% if password_error %}error{% endif %}">
+            </div>
+            <div class="remember-me-checkbox">
+                <label for="remember-me">تذكرني</label>
+                <input type="checkbox" name="remember-me">
+            </div>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+        </form>
+    </div>
+</body>
+</html>

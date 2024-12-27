@@ -1,0 +1,48 @@
+{% extends "admin_panel/QR_base.html" %}
+{% load static %}
+
+{% block title %}QR{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-content">
+            <div class="profile-image">
+                <img width="100%" height="100%" src="{% static 'assets/images/fazaa.png' %}" alt="صورة الملف الشخصي">
+            </div>
+            <div class="profile-details">
+                <h1 class="profile-name">{{ organization.name }}</h1>
+                <p class="additional-info">{{ organization.organization_type.name }}</p>
+                <button class="add-contact-btn">إضافة إلى جهات الاتصال</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <div class="info-item">
+            <div class="info-icon">📱</div>
+            <div class="info-content">
+                <label>نبذة تعريفية</label>
+                <p>{{ organization.description }}</p>
+                <!-- <a href="tel:{{ organization.shareek.phonenumber }}">{{ organization.shareek.phonenumber }}</a> -->
+            </div>
+        </div>
+        
+        <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-content">
+                <label>البريد الإلكتروني</label>
+                <a href="mailto:{{ email }}">rabee@email.com</a>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-content">
+                <label>الموقع</label>
+                <span>{{ organization.long}} - {{ organization.lat }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

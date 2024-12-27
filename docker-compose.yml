@@ -1,0 +1,87 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn Fazaa.wsgi:application --bind 0.0.0.0:8000
+    container_name: expense_web_1
+    volumes:
+      - .:/app
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    ports:
+      - 8000:8000
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_NAME=${DB_HOST}
+      - POSTGRES_DB=${DB_NAME}
+    depends_on:
+      - db
+      - redis
+    networks:
+      - fazaa_network
+
+ 
+  db:
+    image: postgres:15
+    container_name: db
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_DB=${DB_NAME}
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5434:5432
+    expose:
+      - "5434"
+
+    networks:
+        - fazaa_network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - fazaa_network
+    volumes:
+      - redis_data:/data
+
+  nginx:
+    image: nginx
+    build: ./nginx
+    env_file:
+      - ./.env
+    ports:
+      - "9000:80"
+    volumes:
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    depends_on:
+      - web
+    restart: always
+    networks:
+      fazaa_network:
+
+
+networks:
+  fazaa_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  media_volume:
+  static_volume:
+  redis_data:

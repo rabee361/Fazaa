@@ -1,0 +1,57 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'admins' %}">التواصل الاجتماعي</a>
+            <i class="separator fas fa-chevron-left"></i>
+            <span>إضافة وسيلة تواصل</span> 
+        </nav>
+    </div>
+
+    <div class="search-container d-flex justify-content-center">
+        <form class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" name="q" class="form-control" placeholder="بحث...">
+        </form>
+    </div>
+
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for field in field_names %}
+                        <th>{{ field }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for social in socials %}
+                    <tr onclick="clickHandler(event)" data-link="{% url 'social-media-info' social.id %}">
+                        <td onclick="event.stopPropagation();"><input type="checkbox"></td>
+                        <td>{{ social.id }}</td>
+                        <td>{{ social.name }}</td>
+                        <td><img width="30px" height="30px" src="{{ social.icon.url }}" alt=""></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    {% include 'admin_panel/pagination.html' %}
+
+
+    <div class="action-button-container">
+        <a href="{% url 'add-social-media' %}" class="btn btn-brown">
+            إضافة
+        </a>
+        <a href="" class="btn btn-brown">
+            حذف
+        </a>
+    </div>
+</div>
+{% endblock %}

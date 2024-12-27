@@ -1,0 +1,89 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة شريك{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="">المستخدمين</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <a href="{% url 'shareeks' %}">الشركاء</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>إضافة شريك</span>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="form-section">
+                <!-- <div class="form-group">
+                    <label>{{ form.image.label }}</label>
+                    <div class="image-upload">
+                        {{ form.image }}
+                        <div class="upload-placeholder">اختر صورة</div>
+                    </div>
+                </div> -->
+
+                <div class="form-group">
+                    <label>{{ form.email.label }}</label>
+                    {{ form.email }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.organization_type.label }}</label>
+                    {{ form.organization_type }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.password.label }}</label>
+                    {{ form.password }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.confirm_password.label }}</label>
+                    {{ form.confirm_password }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.fullName.label }}</label>
+                    {{ form.fullName }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.phonenumber.label }}</label>
+                    {{ form.phonenumber }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.organization_name.label }}</label>
+                    {{ form.organization_name }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.job.label }}</label>
+                    {{ form.job }}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="action-button-container">
+            <button class="btn btn-brown">
+                إضافة
+            </button>
+            <button class="btn btn-white">
+                إلغاء
+            </button>
+        </div>
+
+
+
+    </form>
+</div>
+{% endblock %}

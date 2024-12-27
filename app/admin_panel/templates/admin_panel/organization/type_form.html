@@ -1,0 +1,41 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة نوع منشأة{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="{% url 'organization-types' %}">أنواع المنشأت</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>إضافة نوع</span>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.name.label }}:</label>
+                    {{ form.name }}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="action-button-container">
+            <button class="btn btn-brown">
+                حفظ
+            </button>
+            <button class="btn btn-white">
+                إلغاء
+            </button>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}

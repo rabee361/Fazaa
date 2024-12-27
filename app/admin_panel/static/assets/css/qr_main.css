@@ -1,0 +1,202 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Noto+Sans+Arabic:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap');
+
+* {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+}
+
+
+:root {
+    --primary-color: #A69076;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+    --border-color: #e0e0e0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--background-color);
+    direction: rtl;
+}
+
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-right: 0;
+    margin-left: 20px;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: right;
+    flex: 1;
+    padding-right: 0;
+}
+
+.profile-name {
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.additional-info {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.add-contact-btn {
+    width: 200px;
+    background-color: white;
+    color: var(--primary-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.add-contact-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.profile-tabs {
+    display: flex;
+    background-color: white;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    color: #666;
+}
+
+.tab.active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.contact-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+    margin-top: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-icon {
+    font-size: 24px;
+    margin-right: 15px;
+    width: 40px;
+    text-align: center;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-content label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+    text-align: right;
+}
+
+.info-content a,
+.info-content p,
+.info-content span {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 16px;
+    text-align: right;
+}
+
+.info-content a:hover {
+    color: var(--primary-color);
+}
+
+.phone-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.call-btn:hover {
+    background-color: #8b7862;
+}
+
+.call-btn i {
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    .call-btn {
+        padding: 8px 20px;
+        font-size: 16px;
+    }
+    
+    .call-btn i {
+        font-size: 14px;
+    }
+}

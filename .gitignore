@@ -1,0 +1,16 @@
+.env
+.env.prod
+.bak
+.dat
+.dir
+db.sqlite3
+django.log
+media
+
+celerybeat-schedule.* 
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.sqlite
+*.sqlite3
