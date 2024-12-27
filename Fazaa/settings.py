@@ -32,6 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
+ENVIRONMENT = env('ENVIRONMENT')
 
 ALLOWED_HOSTS = []
 
@@ -94,16 +95,24 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
+if ENVIRONMENT == 'development':
+    DATABASES = {
+        'default': {
+            'ENGINE': env('DEV_DB_ENGINE'),
+            'NAME': env('DEV_DB_NAME'),
+        }
     }
-}
+else:  # production
+    DATABASES = {
+        'default': {
+            'ENGINE': env('PROD_DB_ENGINE'),
+            'NAME': env('PROD_DB_NAME'),
+            'USER': env('PROD_DB_USER'),
+            'PASSWORD': env('PROD_DB_PASSWORD'),
+            'HOST': env('PROD_DB_HOST'),
+            'PORT': env('PROD_DB_PORT'),
+        }
+    }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

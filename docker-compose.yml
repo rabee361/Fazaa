@@ -41,9 +41,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - 5434:5432
+      - 5432:5432
     expose:
-      - "5434"
+      - "5432"
 
     networks:
         - fazaa_network
@@ -73,7 +73,7 @@ services:
       - web
     restart: always
     networks:
-      fazaa_network:
+      - fazaa_network
 
 
 networks:
