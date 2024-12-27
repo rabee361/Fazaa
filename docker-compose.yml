@@ -65,7 +65,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "9000:80"
+      - "9000:8080"
     volumes:
       - static_volume:/home/app/static
       - media_volume:/home/app/media
