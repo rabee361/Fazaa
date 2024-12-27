@@ -17,9 +17,9 @@ services:
     env_file:
       - ./.env
     environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_NAME=${DB_HOST}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=${PROD_DB_PASSWORD}
+      - POSTGRES_NAME=${PROD_DB_NAME}
+      - POSTGRES_DB=${PROD_DB_NAME}
     depends_on:
       - db
       - redis
@@ -33,10 +33,10 @@ services:
     env_file:
       - ./.env
     environment:
-      - POSTGRES_HOST=${DB_HOST}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_NAME=${DB_NAME}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST=${PROD_DB_HOST}
+      - POSTGRES_PASSWORD=${PROD_DB_PASSWORD}
+      - POSTGRES_NAME=${PROD_DB_NAME}
+      - POSTGRES_DB=${PROD_DB_NAME}
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
