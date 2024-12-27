@@ -6,13 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile
     command: gunicorn Fazaa.wsgi:application --bind 0.0.0.0:8000
-    container_name: expense_web_1
+    container_name: fazaa_web_1
     volumes:
       - .:/app
       - static_volume:/home/app/static
       - media_volume:/home/app/media
     ports:
-      - 8000:8000
+      - 8080:8000
     restart: always
     env_file:
       - ./.env
@@ -29,7 +29,7 @@ services:
  
   db:
     image: postgres:15
-    container_name: db
+    container_name: fazaa_db_1
     env_file:
       - ./.env
     environment:
@@ -50,7 +50,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: fazaa_redis_1
     ports:
       - "6380:6379"
     restart: always

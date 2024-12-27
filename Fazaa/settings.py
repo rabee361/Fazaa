@@ -95,7 +95,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if ENVIRONMENT == 'development':
+if ENVIRONMENT:
     DATABASES = {
         'default': {
             'ENGINE': env('DEV_DB_ENGINE'),
