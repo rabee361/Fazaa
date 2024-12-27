@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 ENVIRONMENT = env('ENVIRONMENT')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['145.223.80.125:8080','127.0.0.1:8000']
 
 # CSRF_TRUSTED_ORIGINS = [
 # "http://127.0.0.1:8000",
@@ -102,7 +102,7 @@ if ENVIRONMENT:
             'NAME': env('DEV_DB_NAME'),
         }
     }
-    
+
 else:  # production
     DATABASES = {
         'default': {
