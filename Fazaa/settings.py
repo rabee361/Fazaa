@@ -34,7 +34,12 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 ENVIRONMENT = env('ENVIRONMENT')
 
-ALLOWED_HOSTS = ['145.223.80.125:8080','127.0.0.1:8000']
+ALLOWED_HOSTS = [
+    '145.223.80.125',
+    '127.0.0.1',
+    'localhost',
+    # Add any other hosts you need
+]
 
 # CSRF_TRUSTED_ORIGINS = [
 # "http://127.0.0.1:8000",
