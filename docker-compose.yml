@@ -9,7 +9,7 @@ services:
     container_name: fazaa_web_1
     volumes:
       - .:/home/app
-      - static_volume:/home/app/static
+      - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
     ports:
       - 8080:8000
@@ -67,7 +67,7 @@ services:
     ports:
       - "9000:8080"
     volumes:
-      - static_volume:/home/app/static
+      - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
     depends_on:
       - web
