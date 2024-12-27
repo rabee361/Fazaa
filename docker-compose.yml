@@ -41,7 +41,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - 5432:5432
+      - 5433:5432
     expose:
       - "5432"
 
@@ -52,7 +52,7 @@ services:
     image: redis:latest
     container_name: redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     restart: always
     networks:
       - fazaa_network
