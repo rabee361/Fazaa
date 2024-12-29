@@ -8,14 +8,14 @@ from django.contrib.auth.admin import UserAdmin
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ['id','fullName','phonenumber','get_notifications']
+    list_display = ['id','full_name','phonenumber','get_notifications']
 
     fieldsets = (
         (None, 
                 {'fields':('phonenumber','email', 'password',)}
             ),
             ('User Information',
-                {'fields':('fullName', 'image','user_type','get_notifications')}
+                {'fields':('full_name', 'image','user_type','get_notifications')}
             ),
             ('Registration', 
                 {'fields':('last_login',)}
@@ -29,13 +29,13 @@ class OTPCodeAdmin(admin.ModelAdmin):
 
 
 class ShareekAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'user__fullName','user__phonenumber','job']
-    search_fields = ['user__fullName']
+    list_display = ['id', 'user', 'user__full_name','user__phonenumber','job']
+    search_fields = ['user__full_name']
 
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'user__fullName','user__phonenumber']
-    search_fields = ['user__fullName']
+    list_display = ['id', 'user', 'user__full_name','user__phonenumber']
+    search_fields = ['user__full_name']
 
 
 class SupportChatAdmin(admin.ModelAdmin):

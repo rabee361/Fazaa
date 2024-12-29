@@ -33,7 +33,9 @@ class LoginView(APIView):
             return Response({'error':['الرجاء إدخال كلمة السر']}, status=status.HTTP_400_BAD_REQUEST)
         phonenumber = request.data.get('phonenumber')
         password = request.data.get('password')
+        # print(phonenumber,password)
         user=authenticate(request,phonenumber=phonenumber,password=password)
+        # print(user)
         if user:
             # set the device token for notification 
             device_token = request.data.get('device_token',None)

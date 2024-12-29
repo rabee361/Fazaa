@@ -25,13 +25,13 @@ class CustomPagination(PageNumberPagination):
 
 
 class OrganizationTypes(BaseAPIView,generics.ListAPIView):
+    queryset = OrganizationType.objects.all()
     serializer_class = OrganizationTypeSerializer
-    queryset = OrganizationType
 
 
 class GetOrganizationView(BaseAPIView, generics.RetrieveAPIView):
-    serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
 
 
 class DeleteOrganizationView(generics.DestroyAPIView):
@@ -48,8 +48,8 @@ class SocialMediaUrlView(BaseAPIView):
     
 
 class UpdateSocialMediaUrlView(BaseAPIView , generics.UpdateAPIView):
-    serializer_class = SocialMediaUrlSerializer
     queryset = SocialMediaUrl.objects.all()
+    serializer_class = SocialMediaUrlSerializer
 
 
 

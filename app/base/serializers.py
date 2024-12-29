@@ -28,7 +28,7 @@ class OrganizationSerializer(ModelSerializer):
 class OrganizationTypeSerializer(ModelSerializer):
     class Meta:
         model = OrganizationType
-        fields = '__all__'
+        fields = ['id','name']
 
 
 

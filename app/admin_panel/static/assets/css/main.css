@@ -736,3 +736,98 @@
         padding: 1rem;
     }
 }
+
+/* 404 Error Page Styles */
+.error-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px);
+    background-color: #fff;
+    padding: 20px;
+}
+
+.error-container {
+    text-align: center;
+    max-width: 500px;
+    padding: 40px;
+    background-color: #F6F6F6;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-code {
+    font-size: 120px;
+    font-weight: 700;
+    color: #A69076;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 2px 2px 4px rgba(166, 144, 118, 0.3);
+}
+
+.error-divider {
+    width: 80px;
+    height: 4px;
+    background-color: #A69076;
+    margin: 20px auto;
+    border-radius: 2px;
+}
+
+.error-title {
+    color: #333;
+    font-size: 24px;
+    margin: 20px 0 10px;
+    font-weight: 600;
+}
+
+.error-message {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.error-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #A69076;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.error-button:hover {
+    background-color: #ac8559;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(166, 144, 118, 0.3);
+}
+
+.error-button i {
+    font-size: 18px;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 768px) {
+    .error-container {
+        padding: 20px;
+    }
+
+    .error-code {
+        font-size: 100px;
+    }
+
+    .error-title {
+        font-size: 20px;
+    }
+
+    .error-message {
+        font-size: 14px;
+    }
+
+    .error-button {
+        padding: 10px 20px;
+    }
+}

@@ -71,7 +71,7 @@ class DashboardView(View):
 class ListClientsView(CustomListBaseView):
     model = CustomUser
     context_object_name = 'clients'
-    context_fields = ['id','fullName','phonenumber','is_active']
+    context_fields = ['id','full_name','phonenumber','is_active']
     template_name = 'admin_panel/users/clients/clients_list.html'
 
     def get_queryset(self):
@@ -81,13 +81,13 @@ class ListClientsView(CustomListBaseView):
 class CreateClientView(generic.CreateView):
     model = CustomUser
     template_name = 'admin_panel/users/clients/client_form.html'
-    fields = ['fullName','phonenumber','email','get_notifications','image']
+    fields = ['full_name','phonenumber','email','get_notifications','image']
     success_url = '/dashboard/users/clients'
 
 class ClientInfoView(generic.UpdateView):
     model = CustomUser
     template_name = 'admin_panel/users/clients/client_form.html'
-    fields = ['fullName','phonenumber','email','get_notifications','image']
+    fields = ['full_name','phonenumber','email','get_notifications','image']
     success_url = '/dashboard/users/clients'
     pk_url_kwarg = 'id'
 
@@ -108,7 +108,7 @@ class DeleteClientView(View):
 class ListShareeksView(CustomListBaseView,generic.ListView):
     model = CustomUser
     context_object_name = 'shareeks'
-    context_fields = ['id','fullName','phonenumber','is_active']
+    context_fields = ['id','full_name','phonenumber','is_active']
     template_name = 'admin_panel/users/shareeks/shareeks_list.html'
 
     def get_queryset(self):
@@ -185,7 +185,7 @@ class DeleteSubscription(generic.DeleteView):
 class ListAdminsView(CustomListBaseView,generic.ListView):
     model = CustomUser
     context_object_name = 'admins'
-    context_fields = ['id','fullName','phonenumber','is_active']
+    context_fields = ['id','full_name','phonenumber','is_active']
     template_name = 'admin_panel/users/admins/admins_list.html'
 
     def get_queryset(self):
@@ -194,13 +194,13 @@ class ListAdminsView(CustomListBaseView,generic.ListView):
 class CreateAdminView(generic.CreateView):
     model = CustomUser
     template_name = 'admin_panel/users/admins/admin_form.html'
-    fields = ['fullName', 'phonenumber', 'email', 'password']
+    fields = ['full_name', 'phonenumber', 'email', 'password']
     success_url = '/dashboard/users/admins/'
 
 class UpdateAdminView(generic.UpdateView):
     model = CustomUser
     template_name = 'admin_panel/users/admins/admin_form.html'
-    fields = ['fullName','phonenumber','email','get_notifications','image']
+    fields = ['full_name','phonenumber','email','get_notifications','image']
     success_url = '/dashboard/users/admins/'
     pk_url_kwarg = 'id'
 

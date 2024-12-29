@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     first_name = None
     last_name = None
     phonenumber = models.CharField(db_index=True ,max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], unique=True, verbose_name='الهاتف')
-    fullName = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
+    full_name = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
     email = models.EmailField(unique=True , null=True , blank=True, verbose_name='البريد الالكتروني')
     image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg')
     user_type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CLIENT)
@@ -34,13 +34,13 @@ class CustomUser(AbstractUser):
     def save(self , *args , **kwargs) -> None:
         OTPCode.objects.create( ## put in the save method in CustomUser Model
             phonenumber=self.phonenumber,
-            fullName=self.fullName,
+            full_name=self.full_name,
             code_type='SIGNUP'
         )
         return super().save(*args, **kwargs)   
 
     def __str__(self) -> str:
-        return f"{self.fullName} - {self.phonenumber}"
+        return f"{self.full_name} - {self.phonenumber}"
 
 
 
@@ -52,7 +52,7 @@ class OTPCode(models.Model):
         FORGET_PASSWORD = 'FORGET_PASSWORD'
 
     phonenumber = models.CharField(max_length=20)
-    fullName = models.CharField(max_length=40 , null=True , blank=True)
+    full_name = models.CharField(max_length=40 , null=True , blank=True)
     code = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(9999)] , default=generate_code)
     createdAt = models.DateTimeField(auto_now_add=True)
     expiresAt = models.DateTimeField(default=get_expiration_time)
@@ -71,12 +71,12 @@ class Client(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     
     def __str__(self) -> str:
-        return self.user.fullName   
+        return self.user.full_name   
     
 
 
 class Shareek(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
     job = models.CharField(max_length=255)
 
@@ -90,7 +90,7 @@ class Shareek(models.Model):
         return organization
 
     def __str__(self) -> str:
-        return f"{self.user.fullName} - {self.user.id}"
+        return f"{self.user.full_name} - {self.user.id}"
 
 
 class Subscription(models.Model):
@@ -105,7 +105,7 @@ class SupportChat(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.user.fullName} - {self.id}"
+        return f"{self.user.full_name} - {self.id}"
 
 
 class Message(models.Model):
@@ -144,6 +144,6 @@ class Report(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.user.fullName} - {self.organization}"
+        return f"{self.user.full_name} - {self.organization}"
 
 

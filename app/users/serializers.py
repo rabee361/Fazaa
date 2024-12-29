@@ -9,7 +9,7 @@ from app.base.serializers import OrganizationTypeSerializer
 class CustomUserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id','fullName','phonenumber','user_type','image']
+        fields = ['id','full_name','phonenumber','user_type','image']
 
 class LoginSerializer(Serializer):
     phonenumber = serializers.CharField()
@@ -32,7 +32,7 @@ class SignUpUserSerializer(ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id','fullName','phonenumber','user_type','password2','password']
+        fields = ['id','full_name','phonenumber','user_type','password2','password']
 
     def validate(self, data):
         phonenumber = data.get('phonenumber')
@@ -49,8 +49,9 @@ class SignUpUserSerializer(ModelSerializer):
        
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
+        client = Client.objects.create(user=user)
+        # client.save()
         return user
-    
 
 
 
@@ -73,13 +74,16 @@ class ShareekRegisterSerializer(serializers.Serializer):
     full_name = serializers.CharField(required=True)
     job = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
+    organization_type = serializers.IntegerField(required=True)
 
-    def validate(self, attrs):
-        type_id = attrs.get('organization_type')
-        if not OrganizationType.objects.get(id=type_id):
-            raise serializers.ValidationError('لا يوجد منظمة من هذا النوع')
-        
-        return super().validate(attrs)
+    def validate(self, data):
+        type_id = data['organization_type']
+        print(type_id)
+        try:
+            OrganizationType.objects.get(id=type_id)
+        except OrganizationType.DoesNotExist:
+            raise serializers.ValidationError({'error':['لا يوجد منظمة من هذا النوع']})
+        return super().validate(data)
 
 
 

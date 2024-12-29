@@ -7,7 +7,7 @@ from app.users.models import Shareek , CustomUser , Organization , OrganizationT
 class ShareekForm(forms.Form):
     job = forms.CharField(max_length=255, required=True, label='الوظيفة')
     organization_type = forms.ModelChoiceField(queryset=OrganizationType.objects.all(), required=True, label='نوع المنظمة')
-    fullName = forms.CharField(max_length=255, required=True, label='الاسم')
+    full_name = forms.CharField(max_length=255, required=True, label='الاسم')
     phonenumber = forms.CharField(max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], required=True, label='الهاتف')
     email = forms.EmailField(required=False, label='البريد الالكتروني')
     get_notifications = forms.BooleanField(required=False, label='تلقي الإشعارات')
@@ -25,7 +25,7 @@ class ShareekForm(forms.Form):
 
     def save(self, commit=True):
         user = CustomUser.objects.create_user(
-            fullName=self.cleaned_data['fullName'],
+            full_name=self.cleaned_data['full_name'],
             phonenumber=self.cleaned_data['phonenumber'],
             email=self.cleaned_data['email'],
             get_notifications=self.cleaned_data['get_notifications'],

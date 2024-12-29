@@ -28,7 +28,7 @@ class ShareekSignUpView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             data = serializer.data
-            user.user_type = 'shareek'
+            user.user_type = 'SHAREEK'
             user.save()
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}
@@ -47,8 +47,8 @@ class ShareekRegisterView(BaseAPIView):
     def post(self ,request):
         ShareekRegisterSerializer(data = request.data).is_valid(raise_exception=True)
         user = request.user
-        user.email = request.get('email',None)
-        user.fullName = request.get('fullName',None)
+        user.email = request.data.get('email',None)
+        user.full_name = request.data.get('full_name',None)
         user.save()
         shareek = Shareek.objects.create(
             user=user,
@@ -60,7 +60,7 @@ class ShareekRegisterView(BaseAPIView):
             organization = organization,
         )
         return Response({
-            **CustomUser(instance=shareek.user)
+            **CustomUserSerializer(instance=shareek.user).data
         })
 
 

@@ -27,7 +27,7 @@ class ClientSignUpView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             data = serializer.data
-            user.user_type = 'client'
+            user.user_type = 'CLIENT'
             user.save()
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}

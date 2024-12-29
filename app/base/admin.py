@@ -32,7 +32,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 
 class OrganizationTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name','createAt']
+    list_display = ['id', 'name','createdAt']
     search_fields = ['name']
 
 

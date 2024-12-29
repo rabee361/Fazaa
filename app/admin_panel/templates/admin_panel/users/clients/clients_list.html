@@ -37,9 +37,9 @@
                         <tr onclick="clickHandler(event)" data-link="{% url 'client-info' client.id %}">
                             <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ client.id }}"></td>
                             <td>{{ client.id }}</td>
-                            <td>{{ client.fullnName }}</td>
-                            <td>{{ client.email }}</td>
-                            <td>{{ client.createAt }}</td>
+                            <td>{{ client.full_name }}</td>
+                            <td>{{ client.phonenumber }}</td>
+                            <td>{{ client.is_active }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

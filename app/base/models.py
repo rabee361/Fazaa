@@ -10,7 +10,7 @@ from utils.helper import generateShortUrl
 
 class OrganizationType(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
-    createAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
+    createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
 
     def __str__(self) -> str:
         return self.name
