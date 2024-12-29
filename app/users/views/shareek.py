@@ -50,18 +50,26 @@ class ShareekRegisterView(BaseAPIView):
         user.email = request.data.get('email',None)
         user.full_name = request.data.get('full_name',None)
         user.save()
-        shareek = Shareek.objects.create(
-            user=user,
-            job=request.data.get('job',None)
-        )
+        
+        # Check if the organization already exists or create a new one
         organization = Shareek.create_organization(**request.data)
-        shareek = Shareek.objects.create(
-            user = request.user,
-            organization = organization,
-        )
-        return Response({
-            **CustomUserSerializer(instance=shareek.user).data
-        })
+        
+        # Check if a Shareek instance already exists for this user
+        shareek = Shareek.objects.filter(user=user).first()
+        
+        if not shareek:
+            # If no existing Shareek, create a new one
+            shareek = Shareek.objects.create(
+                user=user,
+                job=request.data.get('job', None),
+                organization=organization
+            )
+            return Response({
+                **CustomUserSerializer(instance=shareek.user).data
+            })
+        else:
+            # If Shareek already exists, return an error response
+            return Response({"error": "يوجد شريك مسجل بهذا الرقم "}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

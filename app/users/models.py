@@ -22,7 +22,7 @@ class CustomUser(AbstractUser):
     last_name = None
     phonenumber = models.CharField(db_index=True ,max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], unique=True, verbose_name='الهاتف')
     full_name = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
-    email = models.EmailField(unique=True , null=True , blank=True, verbose_name='البريد الالكتروني')
+    email = models.EmailField(null=True , blank=True, verbose_name='البريد الالكتروني')
     image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg')
     user_type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     get_notifications = models.BooleanField(default=True)

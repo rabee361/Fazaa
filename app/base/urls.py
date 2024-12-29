@@ -8,8 +8,8 @@ urlpatterns = [
     path('organization/<int:id>' , shareek.DeleteOrganizationView.as_view()),
     path('organization/<int:pk>' , shareek.GetOrganizationView.as_view()),
 
-    path('<int:id>/social-media/' , shareek.SocialMediaUrlView.as_view()),
-    path('social-media/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
+    path('<int:id>/social-urls/' , shareek.SocialMediaUrlView.as_view()),
+    path('social-urls/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
 
     path('<int:id>/delivery-url/' , shareek.DeliveryUrlView.as_view()),
     path('delivery-url/update/' , shareek.UpdateDeliveryUrlView.as_view()),
