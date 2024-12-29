@@ -105,6 +105,6 @@ urlpatterns = [
     path('card/<slug:slug>/' , organization_views.CardUrlView.as_view() , name="card-url"),
     path('catalog/<slug:slug>/' , app_views.CatalogSlugUrlView.as_view()),
     path('social/<slug:slug>/' , app_views.SocialMediaSlugUrlView.as_view()),
-    path('website/<slug:slug>/' , app_views.SocialMediaSlugUrlView.as_view()),
+    path('website/<slug:slug>/' , app_views.WebsiteSlugUrlView.as_view()),
     path('delivery/<slug:slug>/' , app_views.DeliverySlugUrlView.as_view()),  
 ]

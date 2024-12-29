@@ -5,14 +5,17 @@ from .views import shareek , client
 urlpatterns = [
     path('org-types' , shareek.OrganizationTypes.as_view()),
     # path('organization/<int:id>' , shareek.UpdateOrganizationView.as_view()),
-    path('organization/<int:id>' , shareek.DeleteOrganizationView.as_view()),
+    path('organization/<int:id>/delete' , shareek.DeleteOrganizationView.as_view()),
     path('organization/<int:pk>' , shareek.GetOrganizationView.as_view()),
 
-    path('<int:id>/social-urls/' , shareek.SocialMediaUrlView.as_view()),
-    path('social-urls/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
+    # path('social-media/' , shareek.SocialMediaView.as_view()),
+    path('organization/<int:pk>/social-url/' , shareek.SocialMediaUrlView.as_view()),
+    path('organization/<int:pk>/social-urls/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
 
-    path('<int:id>/delivery-url/' , shareek.DeliveryUrlView.as_view()),
-    path('delivery-url/update/' , shareek.UpdateDeliveryUrlView.as_view()),
+
+    # path('delivery-companies/' , shareek.DeliveryCompanyView.as_view()),
+    path('organization/<int:pk>/delivery-url/' , shareek.DeliveryUrlView.as_view()),
+    path('organization/<int:pk>/delivery-url/update/' , shareek.UpdateDeliveryUrlView.as_view()),
 
     path('<int:id>/reels/' , shareek.ReelsView.as_view()),
     path('reels/create/' , shareek.CreateReelsView.as_view()),

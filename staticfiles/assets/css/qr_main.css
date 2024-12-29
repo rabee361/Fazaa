@@ -90,11 +90,6 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.add-contact-btn a {
-    text-decoration: none;
-    color: var(--primary-color);
-}
-
 .add-contact-btn:hover {
     background-color: #f0f0f0;
 }
@@ -118,7 +113,6 @@ body {
     border-bottom: 2px solid var(--primary-color);
 }
 
-
 .contact-info {
     background-color: white;
     padding: 20px;
@@ -128,50 +122,41 @@ body {
 
 .info-item {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     padding: 15px 0;
     border-bottom: 1px solid var(--border-color);
-    align-items: flex-end;
 }
 
-.info-label {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    width: 100%;
-    justify-content: flex-end;
-}
-
-.info-label label {
-    font-weight: 600;
-    color: #333;
-    font-size: 16px;
+.info-item:last-child {
+    border-bottom: none;
 }
 
 .info-icon {
-    font-size: 20px;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 24px;
+    margin-right: 15px;
+    width: 40px;
+    text-align: center;
 }
 
 .info-content {
-    width: 100%;
+    flex: 1;
+}
+
+.info-content label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
     text-align: right;
 }
 
-.info-content p,
 .info-content a,
+.info-content p,
 .info-content span {
-    margin: 0;
     color: var(--text-color);
     text-decoration: none;
     font-size: 16px;
     text-align: right;
-    display: block;
 }
 
 .info-content a:hover {

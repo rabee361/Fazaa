@@ -6,7 +6,7 @@ from utils.helper import generateShortUrl
 # Create your models here.
 
 
-
+ 
 
 class OrganizationType(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')

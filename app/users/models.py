@@ -5,8 +5,7 @@ from utils.helper import get_expiration_time , generate_code
 from app.base.models import Organization
 from .managers import CustomUserManager
 from django.utils import timezone
-from app.base.models import OrganizationType , Organization
-
+from app.base.models import OrganizationType , Organization , SocialMedia , SocialMediaUrl , DeliveryCompany , DeliveryCompanyUrl
 # # Create your models here.
 
 
@@ -77,7 +76,7 @@ class Client(models.Model):
 
 class Shareek(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True, related_name='shareeks')
     job = models.CharField(max_length=255)
 
     def create_organization(commercial_register_id ,organization_type ,organization_name ,**args):
@@ -87,6 +86,22 @@ class Shareek(models.Model):
             organization_type=organization_type,
             commercial_register_id=commercial_register_id
         )
+        
+        # Create social media links for each social media platform
+        social_medias = SocialMedia.objects.all()
+        for social in social_medias:
+            SocialMediaUrl.objects.create(
+                organization=organization,
+                social_media=social,
+            )
+        # Create delivery company links for each delivery company
+        delivery_companies = DeliveryCompany.objects.all()
+        for delivery_company in delivery_companies:
+            DeliveryCompanyUrl.objects.create(
+                organization=organization,
+                delivery_company=delivery_company,
+            )
+            
         return organization
 
     def __str__(self) -> str:

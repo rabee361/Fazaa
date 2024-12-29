@@ -41,8 +41,8 @@ class DeleteOrganizationView(generics.DestroyAPIView):
 
 
 class SocialMediaUrlView(BaseAPIView):
-    def get(self,request,id):
-        socials = SocialMediaUrl.objects.filter(organization__id=id)
+    def get(self,request,pk):
+        socials = SocialMediaUrl.objects.filter(organization__id=pk)
         serializer = SocialMediaUrlSerializer(socials , many=True , context={'request':request})
         return Response(serializer.data , status=status.HTTP_200_OK)
     
@@ -53,10 +53,16 @@ class UpdateSocialMediaUrlView(BaseAPIView , generics.UpdateAPIView):
 
 
 
+class SocialMediaView(BaseAPIView , generics.ListAPIView):
+    queryset = SocialMedia.objects.all()
+    serializer_class = SocialMediaSerializer
+
+
+
 
 class DeliveryUrlView(BaseAPIView):
-    def get(self,request,id):
-        companies = DeliveryCompanyUrl.objects.filter(organization__id=id)
+    def get(self,request,pk):
+        companies = DeliveryCompanyUrl.objects.filter(organization__id=pk)
         serializer = DeliveryCompanyUrlSerializer(companies , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
 
@@ -65,6 +71,17 @@ class DeliveryUrlView(BaseAPIView):
 class UpdateDeliveryUrlView(generics.UpdateAPIView):
     serializer_class = DeliveryCompanyUrlSerializer
     queryset = DeliveryCompanyUrl.objects.all()
+
+
+
+
+class DeliveryCompanyView(BaseAPIView , generics.ListAPIView):
+    queryset = DeliveryCompany.objects.all()
+    serializer_class = DeliveryCompanySerializer
+
+
+
+
 
 
 

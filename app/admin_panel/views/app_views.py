@@ -21,7 +21,7 @@ class SocialMediaSlugUrlView(View):
         return redirect(social.url)
 
 
-class WebsiteSligUrl(View):
+class WebsiteSlugUrlView(View):
     def get(self,request,slug):
         organization = Organization.objects.get(website_short_url=slug)
         return redirect(organization.website)
