@@ -7,6 +7,14 @@ from django.contrib.auth import authenticate
 
 
 
+class OrganizationListSerializer(ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ['id','name','description','logo']
+
+
+
+
 class OrganizationSerializer(ModelSerializer):
     website_short_url = serializers.SerializerMethodField()
     card_url = serializers.SerializerMethodField()

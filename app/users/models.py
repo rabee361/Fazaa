@@ -5,6 +5,7 @@ from utils.helper import get_expiration_time , generate_code
 from app.base.models import Organization
 from .managers import CustomUserManager
 from django.utils import timezone
+from django.db import transaction
 from app.base.models import OrganizationType , Organization , SocialMedia , SocialMediaUrl , DeliveryCompany , DeliveryCompanyUrl
 # # Create your models here.
 
@@ -70,15 +71,15 @@ class Client(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     
     def __str__(self) -> str:
-        return self.user.full_name   
+        return f"{self.user.phonenumber} - {self.user.full_name}" 
     
-
 
 class Shareek(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True, related_name='shareeks')
     job = models.CharField(max_length=255)
 
+    @transaction.atomic 
     def create_organization(commercial_register_id ,organization_type ,organization_name ,**args):
         organization_type = OrganizationType.objects.get(id=organization_type)
         organization = Organization.objects.create(
@@ -86,32 +87,22 @@ class Shareek(models.Model):
             organization_type=organization_type,
             commercial_register_id=commercial_register_id
         )
-        
-        # Create social media links for each social media platform
-        social_medias = SocialMedia.objects.all()
-        for social in social_medias:
-            SocialMediaUrl.objects.create(
-                organization=organization,
-                social_media=social,
-            )
-        # Create delivery company links for each delivery company
-        delivery_companies = DeliveryCompany.objects.all()
-        for delivery_company in delivery_companies:
-            DeliveryCompanyUrl.objects.create(
-                organization=organization,
-                delivery_company=delivery_company,
-            )
-            
+        organization.create_social_media()
+        organization.create_delivery_company()
         return organization
 
     def __str__(self) -> str:
         return f"{self.user.full_name} - {self.user.id}"
 
 
+
 class Subscription(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     days = models.IntegerField(validators=[MinValueValidator(1)])
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.price}"
 
 
 

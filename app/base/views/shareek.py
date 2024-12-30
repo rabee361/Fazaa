@@ -4,11 +4,9 @@ from ..serializers import *
 from ..models import *
 from fcm_django.models import FCMDevice
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.pagination import PageNumberPagination
 from app.users.views.common import BaseAPIView
 from django.shortcuts import redirect
@@ -16,10 +14,9 @@ from django.shortcuts import redirect
 
 
 class CustomPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 5
     page_size_query_param = 'page_size'
-    max_page_size = 100
-    page_query_param = 'p'
+    page_query_param = 'page'
 
 
 
@@ -27,6 +24,12 @@ class CustomPagination(PageNumberPagination):
 class OrganizationTypes(BaseAPIView,generics.ListAPIView):
     queryset = OrganizationType.objects.all()
     serializer_class = OrganizationTypeSerializer
+
+
+class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
+    queryset = Organization.objects.all()
+    pagination_class = CustomPagination
+    serializer_class = OrganizationListSerializer
 
 
 class GetOrganizationView(BaseAPIView, generics.RetrieveAPIView):

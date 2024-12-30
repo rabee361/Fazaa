@@ -24,12 +24,10 @@ class ShareekSignUpView(APIView):
 
     @transaction.atomic
     def post(self,request):
-        serializer = SignUpUserSerializer(data = request.data)
+        serializer = SignUpShareekSerializer(data = request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             data = serializer.data
-            user.user_type = 'SHAREEK'
-            user.save()
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}
             # send FCM token to the user
@@ -65,7 +63,10 @@ class ShareekRegisterView(BaseAPIView):
                 organization=organization
             )
             return Response({
-                **CustomUserSerializer(instance=shareek.user).data
+                **CustomUserSerializer(instance=shareek.user).data,
+                'organization_name': organization.name,
+                'organization_type': organization.organization_type.name,
+                'commercial_register_id': organization.commercial_register_id,
             })
         else:
             # If Shareek already exists, return an error response

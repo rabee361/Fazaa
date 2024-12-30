@@ -30,6 +30,16 @@ class Organization(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    def create_social_media(self):
+        social_medias = SocialMedia.objects.all()
+        for social in social_medias:
+            social_media , created = SocialMediaUrl.objects.get_or_create(organization=self,social_media=social,)
+
+    def create_delivery_company(self):
+        delivery_companies = DeliveryCompany.objects.all()
+        for delivery in delivery_companies:
+            delivery_company , created = DeliveryCompanyUrl.objects.get_or_create( organization=self,delivery_company=delivery,)
+    
     def get_absolute_card_url(self):
         return f"/card/{self.card_url}/"
 

@@ -49,8 +49,22 @@ class SignUpUserSerializer(ModelSerializer):
        
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
+        return user
+
+
+
+
+class SignUpClientSerializer(SignUpUserSerializer):
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(**validated_data, user_type='CLIENT')
         client = Client.objects.create(user=user)
-        # client.save()
+        return user
+
+
+class SignUpShareekSerializer(SignUpUserSerializer):
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(**validated_data, user_type='SHAREEK')
+        shareek = Shareek.objects.create(user=user)
         return user
 
 
@@ -71,14 +85,13 @@ class ResetPasswordSerializer(Serializer):
 
 
 class ShareekRegisterSerializer(serializers.Serializer):
-    full_name = serializers.CharField(required=True)
-    job = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
+    full_name = serializers.CharField(required=True , allow_blank=True)
+    job = serializers.CharField(required=False , allow_blank=True)
+    email = serializers.EmailField(required=False , allow_blank=True)
     organization_type = serializers.IntegerField(required=True)
 
     def validate(self, data):
         type_id = data['organization_type']
-        print(type_id)
         try:
             OrganizationType.objects.get(id=type_id)
         except OrganizationType.DoesNotExist:
@@ -93,10 +106,10 @@ class ShareekSerializer(ModelSerializer):
         fields = '__all__'  
 
 
-# class ClientSerializer(ModelSerializer):
-#     class Meta:
-#         model = Client
-#         fields = '__all__' 
+class ClientSerializer(ModelSerializer):
+    class Meta:
+        model = Client
+        fields = '__all__' 
 
 
 class NotificationSerializer(ModelSerializer):

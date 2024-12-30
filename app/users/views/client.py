@@ -23,12 +23,10 @@ class ClientSignUpView(APIView):
 
     @transaction.atomic
     def post(self,request):
-        serializer = SignUpUserSerializer(data = request.data)
+        serializer = SignUpClientSerializer(data = request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             data = serializer.data
-            user.user_type = 'CLIENT'
-            user.save()
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}
             # send FCM token to the user
