@@ -35,6 +35,47 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Sidebar toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('hidden');
+        overlay.classList.toggle('show');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('hidden');
+        overlay.classList.remove('show');
+    }
+
+    // Toggle sidebar when clicking the hamburger button
+    sidebarToggle?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+    });
+
+    // Close sidebar when clicking overlay
+    overlay?.addEventListener('click', function() {
+        closeSidebar();
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!sidebar.contains(e.target) && 
+            !sidebarToggle.contains(e.target) && 
+            !sidebar.classList.contains('hidden')) {
+            closeSidebar();
+        }
+    });
+
+    // Prevent clicks inside sidebar from closing it
+    sidebar?.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
 
 function clickHandler(event) {
     if (!event.target.closest('.checkbox-cell')) {

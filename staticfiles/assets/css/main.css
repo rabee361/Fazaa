@@ -192,16 +192,49 @@
 
 /* Sidebar Styles */
 .sidebar {
-    width: 200px;
-    background-color: #F6F6F6;
-    color: #333;
-    height: 100vh;
     position: fixed;
-    right: 0;
     top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: #fff;
+    z-index: 999;
     overflow-y: auto;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
     border-left: 1px solid #e0e0e0;
+    transform: translateX(0);
+}
+
+.sidebar.hidden {
+    transform: translateX(100%);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        right: auto;
+        left: 0;
+        transform: translateX(0);
+    }
+    
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.show {
+    display: block;
 }
 
 .sidebar-header {
@@ -876,4 +909,28 @@
     margin: 0;
     color: #666;
     text-decoration: none;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .sidebar.collapsed {
+        transform: translateX(-100%);
+    }
 }

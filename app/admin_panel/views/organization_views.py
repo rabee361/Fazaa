@@ -27,7 +27,7 @@ class CardUrlView(View):
 class ListOrganizationType(CustomListBaseView):
     model = OrganizationType
     context_object_name = 'types'
-    context_fields = ['id','name','createAt']
+    context_fields = ['id','name','createdAt']
     template_name = 'admin_panel/organization/types.html'
 
     def get_queryset(self):

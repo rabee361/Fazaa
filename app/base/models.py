@@ -3,6 +3,7 @@ from typing import Iterable
 from django.db import models
 from django.core.validators import MinValueValidator , MaxValueValidator
 from utils.helper import generateShortUrl
+
 # Create your models here.
 
 
@@ -112,6 +113,17 @@ class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/social_media/default_media.png',verbose_name='الصورة')
 
+    def save(self, *args, **kwargs):        
+        if not self.pk:
+            super().save(*args, **kwargs)
+            organizations = Organization.objects.all()
+            for org in organizations:
+                social , created = SocialMediaUrl.objects.get_or_create(
+                    organization=org,
+                    social_media=self,
+                    active=False
+                )
+
     def __str__(self) -> str:
         return self.name
 
@@ -135,6 +147,17 @@ class SocialMediaUrl(models.Model):
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255,verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/delivery_company/default_company.png',verbose_name='الصورة')
+
+    def save(self, *args, **kwargs):        
+        if not self.pk:
+            super().save(*args, **kwargs)
+            organizations = Organization.objects.all()
+            for org in organizations:
+                delivery , created = DeliveryCompanyUrl.objects.get_or_create(
+                    organization=org,
+                    delivery_company=self,
+                    active=False
+                )
 
     def __str__(self) -> str:
         return self.name
