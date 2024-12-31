@@ -13,6 +13,7 @@ import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.db.models import Count, Q
 
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
@@ -65,7 +66,31 @@ class LogoutView(View):
 @login_required_m
 class DashboardView(View):
     def get(self, request):
-        return render(request, 'admin_panel/dashboard.html',context={})
+        
+        user_counts = CustomUser.objects.aggregate(
+            admins=Count('id', filter=Q(user_type='ADMIN')),
+            clients=Count('id', filter=Q(user_type='CLIENT')), 
+            shareeks=Count('id', filter=Q(user_type='SHAREEK'))
+        )
+        admins = user_counts['admins']
+        clients = user_counts['clients']
+        shareeks = user_counts['shareeks']
+        organizations = Organization.objects.count()
+        delivery_companies = DeliveryCompany.objects.count()
+        delivery_companies_urls = DeliveryCompanyUrl.objects.count()
+        social_media = SocialMedia.objects.count()
+        social_media_urls = SocialMediaUrl.objects.count()
+        context = {
+            'admins':admins,
+            'clients':clients,
+            'shareeks':shareeks,
+            'organizations':organizations,
+            'delivery_companies':delivery_companies,
+            'delivery_companies_urls':delivery_companies_urls,
+            'social_media_urls':social_media_urls,
+            'social_media':social_media,
+        }
+        return render(request, 'admin_panel/dashboard.html',context=context)
 
 
 class ListClientsView(CustomListBaseView):

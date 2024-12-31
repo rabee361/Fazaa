@@ -1,5 +1,79 @@
 {% extends 'admin_panel/base.html' %}
+{% load static %}
 
 {% block content %}
+<div class="container mt-4">
 
+    <div class="content-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'admins' %}">لوحة التحكم</a>
+            <i class="separator fas fa-chevron-left"></i>
+        </nav>
+    </div>
+
+    <div class="stats-grid">
+        <!-- First Row -->
+        <div class="stat-card">
+            <h3>جميع العملاء</h3>
+            <div class="stat-number">{{clients}}</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>جميع الشركاء</h3>
+            <div class="stat-number">{{shareeks}}</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>جميع الأدمن</h3>
+            <div class="stat-number">{{admins}}</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>جميع المنشأت</h3>
+            <div class="stat-number">{{organizations}}</div>
+            <div class="stat-wave"></div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="stat-card">
+            <h3>روابط تواصل اجتماعي</h3>
+            <div class="stat-number">{{social_media_urls}}</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>برامج التوصيل</h3>
+            <div class="stat-number">{{delivery_companies_urls}}</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>تواصل اجتماعي</h3>
+            <div class="stat-number">{{social_media}}</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>روابط برامج توصيل</h3>
+            <div class="stat-number">{{delivery_companies_urls}}</div>
+            <div class="stat-wave"></div>
+        </div>
+
+        <!-- Third Row -->
+        <div class="stat-card">
+            <h3>التنبيهات</h3>
+            <div class="stat-number">20</div>
+            <div class="stat-wave"></div>
+        </div>
+        
+        <div class="stat-card">
+            <h3>الأسئلة الشائعة</h3>
+            <div class="stat-number">20</div>
+            <div class="stat-wave"></div>
+        </div>
+    </div>
+</div>
 {% endblock %}

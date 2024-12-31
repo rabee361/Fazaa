@@ -4,9 +4,8 @@
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'admins' %}">أنواع المنشأت</a>
             <i class="separator fas fa-chevron-left"></i>
-            <span>إضافة نوع</span> 
+            <a href="{% url 'admins' %}">أنواع المنشأت</a>
         </nav>
     </div>
 
@@ -46,8 +45,6 @@
             </div>
         </div>
 
-        {% include 'admin_panel/pagination.html' %}
-
         <div class="action-button-container">
             <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
                 إضافة
@@ -56,6 +53,8 @@
                 حذف
             </button>
         </div>
+
+        {% include 'admin_panel/pagination.html' %}
     </form>
 </div>
 

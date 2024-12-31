@@ -4,9 +4,8 @@
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'catalogs' %}">الكتالوجات</a>
             <i class="separator fas fa-chevron-left"></i>
-            <span>قائمة الكتالوجات</span> 
+            <a href="{% url 'catalogs' %}">الكتالوجات</a>
         </nav>
     </div>
 
@@ -25,8 +24,8 @@
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
-                        <tr onclick="clickHandler(event)" data-link="{% url 'catalog-info' type.id %}">
-                            <th onclick="event.stopPropagation();"><input type="checkbox" id="selectAll" class="select-all-checkbox"></th>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" class="select-all-checkbox"></th>
                             {% for field in field_names %}
                             <th>{{ field }}</th>
                             {% endfor %}
@@ -34,8 +33,8 @@
                     </thead>
                     <tbody>
                         {% for catalog in catalogs %}
-                        <tr>
-                            <td><input type="checkbox" class="row-checkbox" value="{{ catalog.id }}"></td>
+                        <tr onclick="clickHandler(event)" data-link="{% url 'catalog-info' catalog.id %}">
+                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ catalog.id }}"></td>
                             <td>{{ catalog.id }}</td>
                             <td>{{ catalog.organization }}</td>
                             <td>{{ catalog.catalog_type }}</td>
