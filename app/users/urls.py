@@ -15,6 +15,7 @@ ShareekPatterns = [
     path('verify-otp/' , common.OTPVerificationView.as_view()),
     path('reset-password/' , common.ResetPasswordView.as_view()),
     path('update/<int:pk>/' , shareek.UpdateShareekView.as_view()),
+    path('delete/' , shareek.DeleteShareekView.as_view()),
 ]
 
 
@@ -29,11 +30,11 @@ ClientPatterns = [
     path('verify-otp/' , common.OTPVerificationView.as_view()),
     path('reset-password/' , common.ResetPasswordView.as_view()),
     path('update/<int:pk>/' , client.UpdateClientView.as_view()),
+    path('delete/' , client.DeleteClientView.as_view()),
 ]
 
 
 urlpatterns = [
     path('shareek/' , include(ShareekPatterns)),
     path('client/' , include(ClientPatterns)),
-    path('common-questions/' , common.CommonQuestionsView.as_view()),
 ]

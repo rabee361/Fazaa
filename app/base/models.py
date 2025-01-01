@@ -233,6 +233,13 @@ class AboutUs(models.Model):
 
 
 
+class TermsPrivacy(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.CharField(max_length=255)
+    createdAt = models.DateTimeField(auto_now_add=True)
+
+
+
 
 class CommonQuestion(models.Model):
     question = models.CharField(max_length=255)
@@ -241,3 +248,13 @@ class CommonQuestion(models.Model):
 
     def __str__(self) -> str:
         return self.question
+    
+
+class Report(models.Model):
+    client = models.CharField(max_length=255)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    content = models.CharField(max_length=255)
+    createdAt = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.client} - {self.organization.name}"

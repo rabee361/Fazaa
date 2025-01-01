@@ -17,12 +17,8 @@ from utils.helper import generate_code
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.contrib.auth import logout
+from utils.views import BaseAPIView
 # Create your views here.
-
-
-class BaseAPIView(APIView):
-    pass
-    # permission_classes = [IsAuthenticated]
 
 
 
@@ -158,10 +154,4 @@ class NotificationsView(generics.ListAPIView,BaseAPIView):
         user = request.user
         return Notification.objects.filter(user=user)
 
-
-
-
-class CommonQuestionsView(BaseAPIView,generics.ListAPIView):
-    serializer_class = CommonQuestionsSerializer
-    queryset = CommonQuestion.objects.all()
 

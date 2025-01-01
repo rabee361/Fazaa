@@ -1,5 +1,5 @@
-
-
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.views.generic import ListView
 
 class CustomListBaseView(ListView):
@@ -19,3 +19,9 @@ class CustomListBaseView(ListView):
 # class MyListView(FieldListBaseView):
 #     model = MyModel
 #     context_fields = ['field1', 'field2', 'field3']
+
+
+class BaseAPIView(APIView):
+    pass
+    # permission_classes = [IsAuthenticated]
+

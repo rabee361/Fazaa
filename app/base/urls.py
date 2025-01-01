@@ -1,5 +1,5 @@
 from django.urls import path , include
-from .views import shareek , client
+from .views import shareek , client , common
 
 
 urlpatterns = [
@@ -40,6 +40,12 @@ urlpatterns = [
     path('service-offers/<int:id>/update/' , shareek.UpdateServiceOffer.as_view()),
 
     path('templates/' , shareek.TemplatesView.as_view()),
+
+    path('terms-privacy/' , common.TermsPrivacyView.as_view()),
+    path('common-questions/' , common.CommonQuestionsView.as_view()),
+
+    path('report/create/' , client.CreateReportView.as_view()),
+    path('reports/' , client.ReportListView.as_view()),
 ]
 
 

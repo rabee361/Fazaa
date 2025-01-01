@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from utils.helper import generate_code
 from django.shortcuts import get_object_or_404
 from django.db import transaction
-from .common import BaseAPIView
+from utils.views import BaseAPIView
 from utils.permissions import IsShareekUser , IsClientUser
 # Create your views here.
 
@@ -92,3 +92,15 @@ class UpdateShareekView(BaseAPIView):
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         
+
+
+
+class DeleteShareekView(BaseAPIView):
+    @transaction.atomic
+    def delete(self,request):
+        user = request.user
+        shareek = Shareek.objects.get(user=user)
+        shareek.organization.delete()
+        shareek.delete()
+        user.delete()
+        return Response({'message':'user deleted'},status=status.HTTP_200_OK)

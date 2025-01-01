@@ -62,17 +62,12 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 
 
-class ReportAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user__phonenumber', 'organization', 'content', 'createdAt']
-    list_filter = ['user__phonenumber', 'organization', 'createdAt']
-    search_fields = ['content']
 
 
 
 admin.site.register(CustomUser)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Shareek, ShareekAdmin)
-admin.site.register(Report, ReportAdmin)
 admin.site.register(OTPCode, OTPCodeAdmin)
 admin.site.register(SupportChat, SupportChatAdmin)
 admin.site.register(Message, MessageAdmin)

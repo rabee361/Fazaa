@@ -157,13 +157,3 @@ class UserNotification(models.Model):
 
 
 
-class Report(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    content = models.CharField(max_length=255)
-    organization = models.CharField(max_length=255)
-    createdAt = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self) -> str:
-        return f"{self.user.full_name} - {self.organization}"
-
-

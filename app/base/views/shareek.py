@@ -8,7 +8,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
-from app.users.views.common import BaseAPIView
+from utils.views import BaseAPIView
 from django.shortcuts import redirect
 # Create your views here.
 
@@ -226,3 +226,6 @@ class DeleteServiceOffer(BaseAPIView):
 class TemplatesView(generics.ListAPIView):
     queryset = Template.objects.all()
     serializer_class = TemplateSerializer
+
+
+

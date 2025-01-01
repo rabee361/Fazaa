@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from utils.helper import generate_code
 from django.shortcuts import get_object_or_404
 from django.db import transaction
-from .common import BaseAPIView
+from utils.views import BaseAPIView
 # Create your views here.
 
 
@@ -47,4 +47,16 @@ class UpdateClientView(BaseAPIView):
             return Response(serializer.data,status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class DeleteClientView(BaseAPIView):
+    @transaction.atomic
+    def delete(self,request):
+        user = request.user
+        client = Client.objects.get(user=user)
+        client.delete()
+        user.delete()
+        return Response({'message':'user deleted'},status=status.HTTP_200_OK)
+
 

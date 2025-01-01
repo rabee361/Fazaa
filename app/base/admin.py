@@ -70,6 +70,16 @@ class ClientOfferAdmin(admin.ModelAdmin):
     list_display = ['id','organization__name','content','expiresAt']
 
 
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ['id', 'client', 'organization', 'content', 'createdAt']
+    list_filter = ['client', 'organization', 'createdAt']
+    search_fields = ['content']
+
+
+class CommonQuestionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'question', 'answer', 'createdAt']
+    search_fields = ['question', 'answer']
+
 
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(OrganizationType, OrganizationTypeAdmin)
@@ -85,3 +95,5 @@ admin.site.register(DeliveryCompanyUrl, DeliveryCompanyUrlAdmin)
 admin.site.register(ClientOffer, ClientOfferAdmin)
 admin.site.register(ServiceOffer, ServiceOfferAdmin)
 admin.site.register(Template, TemplateAdmin)
+admin.site.register(Report, ReportAdmin)
+admin.site.register(CommonQuestion, CommonQuestionAdmin)

@@ -139,8 +139,22 @@ class TemplateSerializer(serializers.ModelSerializer):
 
 
 
+class TermsPrivacySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TermsPrivacy
+        fields = '__all__'
+
+
+
 class CommonQuestionsSerializer(ModelSerializer):
     class Meta:
         model = CommonQuestion
+        fields = '__all__'
+
+
+
+class ReportSerializer(ModelSerializer):
+    class Meta:
+        model = Report
         fields = '__all__'
 
