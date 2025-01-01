@@ -68,6 +68,22 @@ class SignUpShareekSerializer(SignUpUserSerializer):
         return user
 
 
+class UpdateClientSerializer(ModelSerializer):
+    email = serializers.EmailField(required=False, allow_blank=True)
+    image = serializers.ImageField(required=False, allow_null=True)
+    
+    class Meta:
+        model = CustomUser
+        fields = ['full_name','phonenumber','email','image']
+
+    def update(self, instance, validated_data):
+        if 'image' in validated_data and validated_data['image'] is None:
+            validated_data.pop('image')
+        return super().update(instance, validated_data)
+
+
+
+
 
 class ResetPasswordSerializer(Serializer):
     password = serializers.CharField(required=True)
@@ -97,6 +113,42 @@ class ShareekRegisterSerializer(serializers.Serializer):
         except OrganizationType.DoesNotExist:
             raise serializers.ValidationError({'error':['لا يوجد منظمة من هذا النوع']})
         return super().validate(data)
+
+
+class UpdateShareekSerializer(UpdateClientSerializer):
+    job = serializers.CharField(required=False, allow_blank=True)
+    organization_type = serializers.IntegerField(required=False)
+    organization_name = serializers.CharField(required=False, allow_blank=True)
+    commercial_register_id = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ['full_name','phonenumber','email','image','job','organization_type','organization_name','commercial_register_id']
+    
+    def validate(self, data):
+        type_id = data['organization_type']
+        try:
+            OrganizationType.objects.get(id=type_id)
+        except OrganizationType.DoesNotExist:
+            raise serializers.ValidationError({'error':['لا يوجد منظمة من هذا النوع']})
+        return super().validate(data)
+
+    def update(self, instance, validated_data):
+        # Handle organization-related fields if they exist in validated_data
+        shareek = Shareek.objects.get(user=instance)
+        if any(field in validated_data for field in ['organization_type', 'organization_name', 'commercial_register_id', 'job']):
+            org_type = OrganizationType.objects.get(id=validated_data.pop('organization_type', None))
+            shareek.update_organization(
+                organization_type=org_type,
+                organization_name=validated_data.pop('organization_name', None), 
+                commercial_register_id=validated_data.pop('commercial_register_id', None),
+                job=validated_data.pop('job', None)
+            )
+
+        # Remove any None/empty values from validated_data
+        validated_data = {k:v for k,v in validated_data.items() if v not in [None, '']}
+        
+        return super().update(instance, validated_data)
 
 
 

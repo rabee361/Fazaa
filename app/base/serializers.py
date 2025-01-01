@@ -137,3 +137,10 @@ class TemplateSerializer(serializers.ModelSerializer):
         model = Template
         fields = '__all__'
 
+
+
+class CommonQuestionsSerializer(ModelSerializer):
+    class Meta:
+        model = CommonQuestion
+        fields = '__all__'
+

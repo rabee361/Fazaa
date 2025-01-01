@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..serializers import *
 from ..models import *
+from app.base.models import CommonQuestion
+from app.base.serializers import CommonQuestionsSerializer
 from fcm_django.models import FCMDevice
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -156,4 +158,10 @@ class NotificationsView(generics.ListAPIView,BaseAPIView):
         user = request.user
         return Notification.objects.filter(user=user)
 
+
+
+
+class CommonQuestionsView(BaseAPIView,generics.ListAPIView):
+    serializer_class = CommonQuestionsSerializer
+    queryset = CommonQuestion.objects.all()
 

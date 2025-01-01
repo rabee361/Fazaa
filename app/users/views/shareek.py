@@ -74,3 +74,21 @@ class ShareekRegisterView(BaseAPIView):
 
 
 
+class UpdateShareekView(BaseAPIView):
+    @transaction.atomic
+    def put(self ,request,pk):
+        user = get_object_or_404(CustomUser,pk=pk)
+        serializer = UpdateShareekSerializer(user,data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
+            shareek = Shareek.objects.get(user=user)
+            return Response({
+                **serializer.data,
+                'job': shareek.job,
+                'organization_name': shareek.organization.name,
+                'organization_type': shareek.organization.organization_type.name,
+                'commercial_register_id': shareek.organization.commercial_register_id,
+            },status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        

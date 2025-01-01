@@ -90,6 +90,20 @@ class Shareek(models.Model):
         organization.create_social_media()
         organization.create_delivery_company()
         return organization
+    
+    @transaction.atomic
+    def update_organization(self ,commercial_register_id=None ,organization_type=None ,organization_name=None ,job=None ,**args):
+        if organization_type is not None:
+            self.organization.organization_type = organization_type
+        if organization_name is not None:
+            self.organization.name = organization_name 
+        if commercial_register_id is not None:
+            self.organization.commercial_register_id = commercial_register_id
+        if job is not None:
+            self.job = job
+        self.organization.save()
+        self.save()
+        return self.organization
 
     def __str__(self) -> str:
         return f"{self.user.full_name} - {self.user.id}"

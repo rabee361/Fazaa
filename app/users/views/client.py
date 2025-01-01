@@ -34,3 +34,17 @@ class ClientSignUpView(APIView):
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response({'error': serializer.errors.values()}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UpdateClientView(BaseAPIView):
+    @transaction.atomic
+    def put(self,request,pk):
+        user = get_object_or_404(CustomUser,pk=pk)
+        serializer = UpdateClientSerializer(user,data=request.data,context={'request':request})
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
