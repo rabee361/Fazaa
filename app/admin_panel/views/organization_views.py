@@ -22,8 +22,8 @@ class CardUrlView(View):
     def get(self,request,slug):
         organization = Organization.objects.select_related('organization_type').get(card_url=slug)
         shareek_phonenumber = organization.shareeks.first().user.phonenumber
-
-        return render(request,'admin_panel/QR_Info.html',context={'organization':organization,'shareek_phonenumber':shareek_phonenumber})
+        branches = Branch.objects.filter(organization=organization)
+        return render(request,'admin_panel/QR_Info.html',context={'organization':organization,'shareek_phonenumber':shareek_phonenumber,'branches':branches})
 
 
 class ListOrganizationType(CustomListBaseView):

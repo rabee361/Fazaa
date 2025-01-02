@@ -3,7 +3,6 @@
 .dir
 db.sqlite3
 django.log
-media
 
 celerybeat-schedule.* 
 __pycache__/

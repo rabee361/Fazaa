@@ -57,7 +57,9 @@
                 </div>
             </div>
             <div class="info-content">
-                <a href="https://www.google.com/maps?q=35.8893477,34.8777994" target="_blank">سوريا - طرطوس - شارع الثورة</a>
+                {% for branch in branches %}
+                <a href="https://www.google.com/maps?q={{ branch.location }}" target="_blank">{{ branch.name }}</a>
+                {% endfor %}
             </div>
         </div>
     </div>
