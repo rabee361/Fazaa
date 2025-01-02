@@ -1073,7 +1073,7 @@
 
     .search-box .search-icon {
         font-size: 0.8rem;
-        /* right: 8px; */
+        right: 8px;
     }
 
     .action-button-container {
@@ -1099,7 +1099,7 @@
 
     .search-box .search-icon {
         font-size: 0.75rem;
-        /* right: 6px; */
+        right: 6px;
     }
 
     .table thead tr {
@@ -1109,5 +1109,17 @@
     .table tbody tr {
         font-size: 14px;
     }
+}
+
+@media (max-width: 768px) {
+    .breadcrumb {
+        font-size: 0.7rem;
+    }
+
+    .content-header {
+        padding: 0.1rem 0.3rem;
+        padding-bottom: 2rem;
+    }
+
 }
 
