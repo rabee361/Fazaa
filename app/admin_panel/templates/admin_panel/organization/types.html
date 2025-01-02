@@ -37,13 +37,13 @@
                             <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ type.id }}"></td>
                             <td>{{ type.id }}</td>
                             <td>{{ type.name }}</td>
-                            <td>{{ type.createAt }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
+        {% include 'admin_panel/pagination.html' %}
 
         <div class="action-button-container">
             <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
@@ -54,7 +54,6 @@
             </button>
         </div>
 
-        {% include 'admin_panel/pagination.html' %}
     </form>
 </div>
 

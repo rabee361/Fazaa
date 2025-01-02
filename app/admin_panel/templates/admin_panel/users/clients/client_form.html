@@ -1,14 +1,14 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}إضافة عميل{% endblock %}
+{% block title %}معلومات عميل{% endblock %}
 
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
         <a href="{% url 'clients' %}">عملاء</a>
         <i class="separator fas fa-chevron-left"></i>
-        <span>إضافة عميل</span>
+        <span>معلومات عميل</span>
     </nav>
 </div>
 
@@ -18,31 +18,63 @@
         
         <div class="form-grid">
             <div class="form-section">
+            
                 <div class="form-group">
-                    <label>{{ form.full_name.label }}:</label>
-                    {{ form.full_name }}
+                    <label>{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="error">{{ form.email.errors }}</div>
+                    {% endif %}
                 </div>
+
+
                 <div class="form-group">
-                    <label>{{ form.phonenumber.label }}:</label>
-                    {{ form.phonenumber }}
+                    <label>{{ form.password.label }}</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="error">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.confirm_password.label }}</label>
+                    {{ form.confirm_password }}
+                    {% if form.confirm_password.errors %}
+                        <div class="error">{{ form.confirm_password.errors }}</div>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="form-section">
                 <div class="form-group">
-                    <label>{{ form.email.label }}:</label>
-                    {{ form.email }}
+                    <label>{{ form.full_name.label }}</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                        <div class="error">{{ form.full_name.errors }}</div>
+                    {% endif %}
                 </div>
-                <div class="form-group">
-                    <label>{{ form.get_notifications.label }}:</label>
-                    {{ form.get_notifications }}
-                </div>
-                <div class="form-group">
-                    <label>{{ form.image.label }}:</label>
-                    {{ form.image }}
-                </div>
-            </div>
 
+                <div class="form-group">
+                    <label>{{ form.phonenumber.label }}</label>
+                    {{ form.phonenumber }}
+                    {% if form.phonenumber.errors %}
+                        <div class="error">{{ form.phonenumber.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.image.label }}</label>
+                    <div class="image-upload">
+                        {{ form.image }}
+                        <div class="upload-placeholder">اختر صورة</div>
+                    </div>
+                    {% if form.image.errors %}
+                        <div class="error">{{ form.image.errors }}</div>
+                    {% endif %}
+                </div>
+
+
+            </div>
         </div>
 
         <div class="action-button-container">

@@ -90,7 +90,7 @@ class Catalog(models.Model):
         OFFERS='OFFERS'
 
     catalog_type = models.CharField(max_length=255 , choices=CATALOG_TYPES.choices , verbose_name='النوع')
-    file = models.FileField(upload_to='media/images/catalogs/')
+    file = models.FileField(upload_to='media/images/catalogs/',verbose_name='الملف')
     short_url = models.SlugField(max_length=300 , default=generateShortUrl , verbose_name='الرابط المختصر')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name="المنظمة")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name="تاريخ الإنشاء")
@@ -258,3 +258,13 @@ class Report(models.Model):
 
     def __str__(self) -> str:
         return f"{self.client} - {self.organization.name}"
+
+
+
+class Subscription(models.Model):
+    name = models.CharField(max_length=100 , verbose_name="اسم الاشتراك")
+    price = models.FloatField(verbose_name="السعر")
+    days = models.IntegerField(validators=[MinValueValidator(1)] , verbose_name="الفترة (الأيام)")
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.price}"

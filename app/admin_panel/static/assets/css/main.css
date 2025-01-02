@@ -20,7 +20,7 @@
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
     --border-color: #404040;
-    --accent-color: #B39B7D;
+    --accent-color: #8B7860;
 }
 
 * {
@@ -30,7 +30,6 @@
 
 .container-body {
     background-color: var(--bg-primary);
-    overflow-y: hidden;
 }
 
 .login-body {
@@ -223,7 +222,7 @@
     right: 0;
     top: 0;
     overflow-y: auto;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
     border-left: 1px solid var(--border-color);
 }
 
@@ -375,6 +374,7 @@
     margin-right: 200px;
     padding: 0;
     background-color: var(--bg-primary);
+    transition: margin-right 0.3s ease;
 }
 
 /* Dashboard Table Styles */
@@ -662,7 +662,7 @@
 
 .form-group input,
 .form-group select {
-    padding: 0.5rem 0.75rem;
+    padding: 0 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 0.85rem;
@@ -672,6 +672,7 @@
     width: 100%;
     margin: 0;
     color: var(--text-primary);
+    line-height: 35px;
 }
 
 .form-group select {
@@ -683,6 +684,8 @@
     background-position: right 0.5rem center;
     background-size: 1em;
     padding-right: 2rem;
+    text-align-last: right;
+    line-height: normal;
 }
 
 .image-upload {
@@ -974,6 +977,19 @@
     transform: scale(1.05);
 }
 
-.theme-toggle i {
-    font-size: 1.2rem;
+
+.error {
+    color: #ff4444; /* Red color for error messages */
+    font-size: 0.85rem; /* Slightly smaller font size */
+    margin-top: 0.25rem; /* Space between the input and the error message */
+    font-weight: 500; /* Medium weight for emphasis */
+    text-align: right; /* Align text to the right for RTL languages */
+}
+
+/* Optional: Add a background or border to make errors more visible */
+.error-background {
+    background-color: rgba(255, 68, 68, 0.1); /* Light red background */
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
 }

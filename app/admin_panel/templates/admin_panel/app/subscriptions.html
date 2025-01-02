@@ -1,26 +1,27 @@
 {% extends 'admin_panel/base.html' %}
 
+{% block title %} الاشتراك {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'delivery-companies' %}">التواصل الاجتماعي</a>
+            <span>الاشتراكات</span>
             <i class="separator fas fa-chevron-left"></i>
-            <span>إضافة وسيلة تواصل </span> 
         </nav>
     </div>
 
     <div class="search-container d-flex justify-content-center">
         <form method="get" class="search-box">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" name="q" class="form-control" placeholder="بحث...">
+            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
         </form>
     </div>
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-social-media' %}">
+    <form id="deleteForm" method="POST" action="{% url 'delete-subscription' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
-
+        
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -33,27 +34,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for social in socials %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'social-media-info' social.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ social.id }}"></td>
-                            <td>{{ social.id }}</td>
-                            <td>{{ social.name }}</td>
-                            <td><img width="30px" height="30px" src="{{ social.icon.url }}" alt=""></td>
+                        {% for subscription in subscriptions %}
+                        <tr onclick="clickHandler(event)" data-link="{% url 'subscription-info' subscription.id %}">
+                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ subscription.id }}"></td>
+                            <td>{{ subscription.id }}</td>
+                            <td>{{ subscription.name }}</td>
+                            <td>{{ subscription.days }}</td>
+                            <td>{{ subscription.price }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-    
+
+        
         <div class="action-button-container">
-            <a href="{% url 'add-social-media' %}" class="btn btn-brown">
+            <a href="{% url 'add-subscription' %}" class="btn btn-brown">
                 إضافة
             </a>
             <button type="submit" class="btn btn-brown" id="deleteBtn">
                 حذف
             </button>
         </div>
+
+        {% include 'admin_panel/pagination.html' %}
+    
     </form>
 </div>
+
 {% endblock %}

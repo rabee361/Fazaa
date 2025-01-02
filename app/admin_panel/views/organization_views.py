@@ -27,7 +27,7 @@ class CardUrlView(View):
 class ListOrganizationType(CustomListBaseView):
     model = OrganizationType
     context_object_name = 'types'
-    context_fields = ['id','name','createdAt']
+    context_fields = ['id','name']
     template_name = 'admin_panel/organization/types.html'
 
     def get_queryset(self):
@@ -50,7 +50,7 @@ class UpdateOrganizationType(generic.UpdateView):
     model = OrganizationType
     template_name = 'admin_panel/organization/type_form.html'
     fields = ['name']
-    success_url = '/dashboard/organization/organization-types/'
+    success_url = '/dashboard/organization/types'
     pk_url_kwarg = 'id'
 
 
@@ -120,13 +120,13 @@ class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
 class CreateDeliveryCompany(generic.CreateView):
     model = DeliveryCompany
     template_name = 'admin_panel/links/delivery_company_form.html'
-    fields = ['name']
+    fields = ['name','icon']
     success_url = '/dashboard/organization/delivery-companies'
 
 class UpdateDeliveryCompany(generic.UpdateView):
     model = DeliveryCompany
     template_name = 'admin_panel/links/delivery_company_form.html'
-    fields = ['name']
+    fields = ['name','icon']
     success_url = '/dashboard/organization/delivery-companies'
     pk_url_kwarg = 'id'
 

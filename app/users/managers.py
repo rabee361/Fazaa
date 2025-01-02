@@ -6,7 +6,6 @@ class CustomUserManager(BaseUserManager):
         if not phonenumber:
             raise ValueError('Users must have a phonenumber')
         user = self.model(phonenumber=phonenumber, email=email, full_name=full_name, get_notifications=get_notifications)
-        print(password)
         user.set_password(password)
         user.save()
         return user

@@ -17,38 +17,43 @@
         </form>
     </div>
 
-    <div class="table-container">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        {% for field in field_names %}
-                        <th>{{ field }}</th>
+    <form id="deleteForm" method="POST" action="{% url 'delete-companies' %}">
+        {% csrf_token %}
+        <input type="hidden" name="selected_ids" id="selectedIds">
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" class="select-all-checkbox"></th>
+                            {% for field in field_names %}
+                            <th>{{ field }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                        <tr onclick="clickHandler(event)" data-link="{% url 'delivery-company-info' company.id %}">
+                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ company.id }}"></td>
+                            <td>{{ company.id }}</td>
+                            <td>{{ company.name }}</td>
+                            <td><img width="30px" height="30px" src="{{ company.icon.url }}" alt=""></td>
+                        </tr>
                         {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for company in companies %}
-                    <tr onclick="clickHandler(event)" data-link="{% url 'delivery-company-info' company.id %}">
-                        <td onclick="event.stopPropagation();"><input type="checkbox"></td>
-                        <td>{{ company.id }}</td>
-                        <td>{{ company.name }}</td>
-                        <td><img width="30px" height="30px" src="{{ company.icon.url }}" alt=""></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     
-    <div class="action-button-container">
-        <a href="{% url 'create-delivery-company' %}" class="btn btn-brown">
-            إضافة
-        </a>
-        <a href="" class="btn btn-brown">
-            حذف
-        </a>
-    </div>
+        <div class="action-button-container">
+            <a href="{% url 'add-delivery-company' %}" class="btn btn-brown">
+                إضافة
+            </a>
+            <button type="submit" class="btn btn-brown" id="deleteBtn">
+                حذف
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}

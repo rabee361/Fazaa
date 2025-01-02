@@ -1,12 +1,14 @@
 {% extends 'admin_panel/base.html' %}
 
+{% block title %} العملاء {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'clients' %}">العملاء</a>
+            <span>المستخدمين</span>
             <i class="separator fas fa-chevron-left"></i>
-            <span>إضافة عميل</span> 
+            <span>العملاء</span> 
         </nav>
     </div>
 
@@ -47,8 +49,7 @@
             </div>
         </div>
 
-        {% include 'admin_panel/pagination.html' %}
-
+        
         <div class="action-button-container">
             <a href="{% url 'add-client' %}" class="btn btn-brown">
                 إضافة
@@ -57,6 +58,9 @@
                 حذف
             </button>
         </div>
+
+        {% include 'admin_panel/pagination.html' %}
+    
     </form>
 </div>
 

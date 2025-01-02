@@ -20,21 +20,25 @@
         <div class="form-grid">
             <div class="form-section">
                 <div class="form-group">
-                    <label>{{ form.catalog_type.label }}:</label>
+                    <label>{{ form.catalog_type.label }} :</label>
                     {{ form.catalog_type }}
                 </div>
 
                 <div class="form-group">
-                    <label>{{ form.organization.label }}:</label>
+                    <label>{{ form.organization.label }} :</label>
                     {{ form.organization }}
                 </div>
             </div>
 
-            <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.file.label }}:</label>
+            <div class="form-group">
+                <label>{{ form.file.label }} :</label>
+                <div class="image-upload">
                     {{ form.file }}
+                    <div class="upload-placeholder">اختر صورة</div>
                 </div>
+                {% if form.file.errors %}
+                    <div class="error">{{ form.file.errors }}</div>
+                {% endif %}
             </div>
 
         </div>

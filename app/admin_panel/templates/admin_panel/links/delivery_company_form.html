@@ -23,11 +23,15 @@
                     {{ form.name }}
                 </div>
             </div>
-            <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.icon.label }}</label>
+            <div class="form-group">
+                <label>{{ form.icon.label }}</label>
+                <div class="image-upload">
                     {{ form.icon }}
+                    <div class="upload-placeholder">اختر صورة</div>
                 </div>
+                {% if form.icon.errors %}
+                    <div class="error">{{ form.icon.errors }}</div>
+                {% endif %}
             </div>
 
         </div>

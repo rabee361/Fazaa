@@ -4,16 +4,11 @@ from app.users.models import Shareek , CustomUser , Organization , OrganizationT
 
 
 
-class ShareekForm(forms.Form):
-    job = forms.CharField(max_length=255, required=True, label='الوظيفة')
-    organization_type = forms.ModelChoiceField(queryset=OrganizationType.objects.all(), required=True, label='نوع المنظمة')
-    full_name = forms.CharField(max_length=255, required=True, label='الاسم')
-    phonenumber = forms.CharField(max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], required=True, label='الهاتف')
-    email = forms.EmailField(required=False, label='البريد الالكتروني')
-    get_notifications = forms.BooleanField(required=False, label='تلقي الإشعارات')
-    password = forms.CharField(widget=forms.PasswordInput(), required=True, label='كلمة المرور')
+class UserForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, label='تأكيد كلمة المرور')
-    organization_name = forms.CharField(max_length=255, required=True, label='اسم المنظمة')
+    class Meta:
+        model = CustomUser
+        fields = ['full_name','phonenumber','email','password','confirm_password','image']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -23,17 +18,18 @@ class ShareekForm(forms.Form):
             raise forms.ValidationError('كلمة المرور غير متطابقة')
         return cleaned_data
 
-    def save(self, commit=True):
-        user = CustomUser.objects.create_user(
-            full_name=self.cleaned_data['full_name'],
-            phonenumber=self.cleaned_data['phonenumber'],
-            email=self.cleaned_data['email'],
-            get_notifications=self.cleaned_data['get_notifications'],
-            password=self.cleaned_data['password'],
-        )
+
+class ShareekForm(UserForm):
+    job = forms.CharField(max_length=255, required=True, label='الوظيفة')
+    organization_type = forms.ModelChoiceField(queryset=OrganizationType.objects.all(), required=True, label='نوع المنظمة')
+    organization_name = forms.CharField(max_length=255, required=True, label='اسم المنظمة')
+
+    def save(self):
+        user =  super().save()
+        user.user_type = 'SHAREEK'
         organization = Organization.objects.create(
-            organization_name=self.cleaned_data['organization_name'],
-            organization_type=OrganizationType.objects.get(id=self.cleaned_data['organization_type']),
+            name=self.cleaned_data['organization_name'],
+            organization_type=OrganizationType.objects.get(id=self.cleaned_data['organization_type'].id),
         )
         shareek = Shareek.objects.create(
             user=user,
@@ -41,3 +37,17 @@ class ShareekForm(forms.Form):
             organization=organization,
         )
         return shareek
+
+
+
+
+class AdminForm(UserForm):
+    class Meta:
+        model = CustomUser
+        fields = ['full_name','phonenumber','email','password','confirm_password','image']
+
+    
+class ClientForm(UserForm):
+    class Meta:
+        model = CustomUser
+        fields = ['full_name','phonenumber','email','password','confirm_password','image']

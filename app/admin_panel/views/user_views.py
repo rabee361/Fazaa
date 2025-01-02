@@ -102,11 +102,10 @@ class ListClientsView(CustomListBaseView):
     def get_queryset(self):
         return super().get_queryset().filter(user_type='CLIENT')
 
-
 class CreateClientView(generic.CreateView):
     model = CustomUser
+    form_class = ClientForm
     template_name = 'admin_panel/users/clients/client_form.html'
-    fields = ['full_name','phonenumber','email','get_notifications','image']
     success_url = '/dashboard/users/clients'
 
 class ClientInfoView(generic.UpdateView):
@@ -116,15 +115,14 @@ class ClientInfoView(generic.UpdateView):
     success_url = '/dashboard/users/clients'
     pk_url_kwarg = 'id'
 
-
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeleteClientView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
-            OrganizationType.objects.filter(id__in=selected_ids).delete()
+            CustomUser.objects.filter(id__in=selected_ids).delete()
             messages.success(request, 'تم حذف العناصر المحددة بنجاح')
-        return HttpResponseRedirect(reverse('organization-types'))
+        return HttpResponseRedirect(reverse('clients'))
 
 
 
@@ -140,26 +138,16 @@ class ListShareeksView(CustomListBaseView,generic.ListView):
         return super().get_queryset().filter(user_type='SHAREEK')
 
 
-class CreateShareekView(View):
-    def get(self,request):
-        form = ShareekForm()
-        return render(request, 'admin_panel/users/shareeks/shareek_form.html', {'form': form})
-    # def post(self, request):
-    #     form = ShareekForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         shareek = form.save()
-    #         return redirect('users/shareek/')
-    #     else:
-    #         return render(request, 'admin_panel/users/shareeks/add_shareek.html', {'form': form})
-    # model = Shareek
-    # form_class = ShareekForm
-    # template_name = 'admin_panel/users/shareeks/add_shareek.html'
-    # success_url = 'users/shareek/'
-
-class UpdateShareekView(generic.UpdateView):
+class CreateShareekView(generic.CreateView):
     model = Shareek
+    form_class = ShareekForm
     template_name = 'admin_panel/users/shareeks/shareek_form.html'
-    fields = ['shareek', 'commercial_register_id', 'logo', 'name', 'description', 'organization_type', 'website', 'website_short_link']
+    success_url = 'users/shareek/'
+
+class ShareekInfoView(generic.UpdateView):
+    model = Shareek
+    form_class = ShareekForm
+    template_name = 'admin_panel/users/shareeks/shareek_form.html'
     success_url = '/dashboard/users/shareeks/'
     pk_url_kwarg = 'id'
 
@@ -168,7 +156,7 @@ class DeleteShareekView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
-            Shareek.objects.filter(id__in=selected_ids).delete()
+            CustomUser.objects.filter(id__in=selected_ids).delete()
             messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('shareeks'))
 
@@ -216,11 +204,23 @@ class ListAdminsView(CustomListBaseView,generic.ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user_type='ADMIN')
 
-class CreateAdminView(generic.CreateView):
-    model = CustomUser
-    template_name = 'admin_panel/users/admins/admin_form.html'
-    fields = ['full_name', 'phonenumber', 'email', 'password']
-    success_url = '/dashboard/users/admins/'
+
+class CreateAdminView(View):
+    def get(self,request):
+        form = AdminForm()
+        return render (request, 'admin_panel/users/admins/admin_form.html',{'form':form})
+    def post(self,request):
+        form = AdminForm(request.POST,request.FILES)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.user_type = 'ADMIN'
+            user.is_superuser = True
+            user.save()
+            print(form.errors)
+            return redirect('admins')
+        return render(request,'admin_panel/users/admins/admin_form.html',{'form':form})
+
+
 
 class UpdateAdminView(generic.UpdateView):
     model = CustomUser

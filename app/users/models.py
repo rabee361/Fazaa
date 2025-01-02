@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
     phonenumber = models.CharField(db_index=True ,max_length=20, validators=[RegexValidator(regex=r'^\d{7,20}$',message='Phone number must be between 7 and 20 digits.',code='invalid_phone')], unique=True, verbose_name='الهاتف')
     full_name = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
     email = models.EmailField(null=True , blank=True, verbose_name='البريد الالكتروني')
-    image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg')
+    image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg' , verbose_name="الصورة الشخصية")
     user_type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     get_notifications = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True, verbose_name="مفعل")   
@@ -38,6 +38,9 @@ class CustomUser(AbstractUser):
             code_type='SIGNUP'
         )
         return super().save(*args, **kwargs)   
+    
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self) -> str:
         return f"{self.full_name} - {self.phonenumber}"
@@ -107,16 +110,6 @@ class Shareek(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.full_name} - {self.user.id}"
-
-
-
-class Subscription(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.FloatField()
-    days = models.IntegerField(validators=[MinValueValidator(1)])
-
-    def __str__(self) -> str:
-        return f"{self.name} - {self.price}"
 
 
 

@@ -106,3 +106,30 @@ class AboutUsView(generic.ListView):
 class UpdateAboutUsView(generic.UpdateView):
     model = AboutUs
     context_object_name = 'about'
+
+
+class ListSubscriptionsView(CustomListBaseView):
+    model = Subscription
+    context_fields = ['id','name','days','price']
+    context_object_name = 'subscriptions'
+    template_name = 'admin_panel/app/subscriptions.html'
+
+class CreateSubscriptionView(generic.CreateView):
+    model = Subscription
+    fields = ['name','days','price']
+    template_name = 'admin_panel/app/subscription_form.html'
+    success_url = 'dashboard/subscriptions'
+
+class SubscriptionInfoView(generic.UpdateView):
+    model = Subscription
+    fields = ['name','days','price']
+    template_name = 'admin_panel/app/subscription_form.html'
+    success_url = 'dashboard/subscriptions'
+
+class DeleteSubscriptionView(View):
+    def post(self, request):
+            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+            if selected_ids:
+                Subscription.objects.filter(id__in=selected_ids).delete()
+            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
+            return HttpResponseRedirect(reverse('subscriptions'))

@@ -11,7 +11,7 @@ UsersPatterns=[
 
     path('shareek/' , user_views.ListShareeksView.as_view() , name="shareeks"),
     path('shareek/add/' , user_views.CreateShareekView.as_view() , name="add-shareek"),
-    path('shareek/<int:id>/update/' , user_views.UpdateShareekView.as_view() , name="shareek-info"),
+    path('shareek/<int:id>/update/' , user_views.ShareekInfoView.as_view() , name="shareek-info"),
     path('shareek/delete/' , user_views.DeleteShareekView.as_view() , name="delete-shareek"),
 
     path('admins/' , user_views.ListAdminsView.as_view() , name="admins"),
@@ -40,7 +40,7 @@ OrganizationPatterns=[
     path('social-media' , organization_views.ListSocialMedia.as_view() , name="social-media"),
     path('social-media/add' , organization_views.CreateSocialMedia.as_view() , name="add-social-media"),
     path('social-media/<int:id>/info' , organization_views.UpdateSocialMedia.as_view() , name="social-media-info"),
-    path('social-media/<int:id>/delete' , organization_views.DeleteSocialMedia.as_view() , name="delete-social-media"),
+    path('social-media/delete' , organization_views.DeleteSocialMedia.as_view() , name="delete-social-media"),
 
     # path('organization/<int:id>/social-links/' , organization_views.ListSocialMediaLinks.as_view() , name="social-links"),
     # path('organization/<int:id>/social-links/create/' , organization_views.CreateSocialMediaLink.as_view() , name="create-social-link"),
@@ -48,9 +48,9 @@ OrganizationPatterns=[
     # path('organization/<int:id>/social-links/<int:link_id>/delete/' , organization_views.DeleteSocialMediaLink.as_view() , name="delete-social-link"),
 
     path('delivery-companies' , organization_views.ListDeliveryCompanies.as_view() , name="delivery-companies"),
-    path('delivery-companies/create/' , organization_views.CreateDeliveryCompany.as_view() , name="create-delivery-company"),
+    path('delivery-companies/create/' , organization_views.CreateDeliveryCompany.as_view() , name="add-delivery-company"),
     path('delivery-companies/<int:id>/info/' , organization_views.UpdateDeliveryCompany.as_view() , name="delivery-company-info"),
-    path('delivery-companies/<int:id>/delete/' , organization_views.DeleteDeliveryCompany.as_view() , name="delete-delivery-company"),
+    path('delivery-companies/delete/' , organization_views.DeleteDeliveryCompany.as_view() , name="delete-companies"),
 
     path('client-offers' , organization_views.ListClientOffers.as_view() , name="client-offers"),
     path('client-offers/add/' , organization_views.CreateClientOffer.as_view() , name="add-client-offer"),
@@ -74,6 +74,11 @@ OrganizationPatterns=[
 
     path('about' , app_views.AboutUsView.as_view() , name="about-us"),
     path('about/update/' , app_views.UpdateAboutUsView.as_view() , name="update-about"),
+
+    path('subscriptions' , app_views.ListSubscriptionsView.as_view() , name="subscriptions"),
+    path('subscriptions/add' , app_views.CreateSubscriptionView.as_view() , name="add-subscription"),
+    path('subscriptions/<int:id>/info' , app_views.SubscriptionInfoView.as_view() , name="subscription-info"),
+    path('subscriptions/delete' , app_views.DeleteSubscriptionView.as_view() , name="delete-subscription"),
 
     path('reports' , app_views.ListReportsView.as_view() , name="reports"),
     path('reports/<int:id>' , app_views.GetReportView.as_view() , name="get-report"),
