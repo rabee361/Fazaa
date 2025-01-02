@@ -20,8 +20,10 @@ login_required_m =  method_decorator(login_required(login_url='login') , name="d
 
 class CardUrlView(View):
     def get(self,request,slug):
-        organization = Organization.objects.get(card_url=slug)
-        return render(request,'admin_panel/QR_Info.html',context={'organization':organization})
+        organization = Organization.objects.select_related('organization_type').get(card_url=slug)
+        shareek_phonenumber = organization.shareeks.first().user.phonenumber
+
+        return render(request,'admin_panel/QR_Info.html',context={'organization':organization,'shareek_phonenumber':shareek_phonenumber})
 
 
 class ListOrganizationType(CustomListBaseView):

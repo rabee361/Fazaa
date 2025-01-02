@@ -8,13 +8,17 @@
     <div class="profile-header">
         <div class="profile-content">
             <div class="profile-image">
-                <img width="100%" height="100%" src="{% static 'assets/images/fazaa.png' %}" alt="صورة الملف الشخصي">
+                {% if organization.logo %}
+                    <img width="100%" height="100%" src="{{ organization.logo.url }}" alt="صورة الملف الشخصي">
+                {% else %}
+                    <img width="100%" height="100%" src="{% static 'assets/images/fazaa.png' %}" alt="صورة الملف الشخصي">
+                {% endif %}
             </div>
             <div class="profile-details">
                 <h1 class="profile-name">{{ organization.name }}</h1>
                 <p class="additional-info">{{ organization.organization_type.name }}</p>
                 <button class="add-contact-btn">
-                    <a href="tel:{{ organization.shareeks.first.user.phonenumber }}">إضافة إلى جهات الاتصال</a>
+                    <a href="tel:{{ shareek_phonenumber }}">إضافة إلى جهات الاتصال</a>
                 </button>
             </div>
         </div>
@@ -41,7 +45,7 @@
                 </div>
             </div>
             <div class="info-content">
-                <a href="tel:{{ organization.shareeks.first.user.phonenumber }}">{{ organization.shareeks.first.user.phonenumber }}</a>
+                <a href="tel:{{ shareek_phonenumber }}">{{ shareek_phonenumber }}</a>
             </div>
         </div>
 
