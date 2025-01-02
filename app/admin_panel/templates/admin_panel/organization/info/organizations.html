@@ -4,9 +4,8 @@
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'notifications' %}">الإشعارات</a>
             <i class="separator fas fa-chevron-left"></i>
-            <span>إضافة إشعار</span> 
+            <a href="{% url 'organizations' %}">معلومات تعريفية</a>
         </nav>
     </div>
 
@@ -18,16 +17,13 @@
             </form>
         </div>
         <div class="action-button-container">
-            <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
-                إضافة
-            </a>
             <button type="submit" class="btn btn-brown" id="deleteBtn">
                 حذف
             </button>
         </div>
     </div>
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-notification' %}">
+    <form id="deleteForm" method="POST" action="">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
         
@@ -43,12 +39,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for notification in notifications %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'notification-info' notification.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ notification.id }}"></td>
-                            <td>{{ notification.id }}</td>
-                            <td>{{ notification.title }}</td>
-                            <td>{{ notification.createdAt }}</td>
+                        {% for organization in organizations %}
+                        <tr onclick="clickHandler(event)" data-link="{% url 'organization-info' organization.id %}">
+                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ organization.id }}"></td>
+                            <td>{{ organization.id }}</td>
+                            <td>{{ organization.name }}</td>    
+                            <td>{{ organization.organization_type.name }}</td>
+                            <td>{{ organization.commercial_register_id }}</td>
+                            <td>{{ organization.createdAt }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

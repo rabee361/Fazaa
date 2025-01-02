@@ -1,0 +1,68 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة منشأة{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <i class="separator fas fa-chevron-left"></i>
+        <a href="{% url 'organizations' %}">المنشآت</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>إضافة منشأة</span>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.website.label }} :</label>
+                    {{ form.website }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.name.label }} :</label>
+                    {{ form.name }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>{{ form.logo.label }} :</label>
+                <div class="image-upload">
+                    {{ form.logo }}
+                    <div class="upload-placeholder">اختر صورة</div>
+                </div>
+                {% if form.logo.errors %}
+                    <div class="error">{{ form.logo.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>{{ form.commercial_register_id.label }} :</label>
+                {{ form.commercial_register_id }}
+            </div>
+
+            <div class="form-group">
+                <label>{{ form.description.label }} :</label>
+                {{ form.description }}
+            </div>
+
+        </div>
+
+        <div class="action-button-container">
+            <button class="btn btn-brown">
+                حفظ
+            </button>
+            <button class="btn btn-white">
+                إلغاء
+            </button>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}

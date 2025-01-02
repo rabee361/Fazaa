@@ -18,15 +18,15 @@ class OrganizationType(models.Model):
 
 
 class Organization(models.Model):
-    commercial_register_id = models.IntegerField(null=True , blank=True)
-    logo = models.ImageField(upload_to='media/organizations/logos/', default='media/images/organizations/logos/default.png')
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255 , null=True, blank=True)
-    organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True)
-    website = models.CharField(max_length=300 , null=True, blank=True)
-    website_short_url = models.SlugField(max_length=50 , default=generateShortUrl)
-    card_url = models.SlugField(max_length=50 , default=generateShortUrl)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    commercial_register_id = models.IntegerField(null=True , blank=True , verbose_name='رقم السجل التجاري')
+    logo = models.ImageField(upload_to='media/organizations/logos/', default='media/images/organizations/logos/default.png', verbose_name='الشعار')
+    name = models.CharField(max_length=255, verbose_name='الاسم')
+    description = models.CharField(max_length=255 , null=True, blank=True, verbose_name='المعلومات التعريفية')
+    organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True, verbose_name='نوع المنظمة')
+    website = models.CharField(max_length=300 , null=True, blank=True, verbose_name='الموقع الإلكتروني')
+    website_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='الرابط المختصر')
+    card_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='الرابط المختصر')
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
 
     def __str__(self) -> str:
         return self.name
@@ -49,24 +49,15 @@ class Organization(models.Model):
 
 
 class Branch(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255) # default method for settings name ex: org-branch2
-    long = models.FloatField()
-    lat = models.FloatField()
-    description = models.CharField(max_length=255,null=True ,blank=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
+    name = models.CharField(max_length=255 , verbose_name='الاسم') # default method for settings name ex: org-branch2
+    long = models.FloatField(verbose_name='الطول')
+    lat = models.FloatField(verbose_name='العرض')
+    description = models.CharField(max_length=255,null=True ,blank=True , verbose_name='الوصف')
 
     def __str__(self) -> str:
         return self.name
     
-
-# class BranchUrl(models.Model):
-#     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
-#     url = models.URLField(max_length=300)
-#     short_url = models.CharField(max_length=50)
-
-#     def __str__(self) -> str:
-#         return f"{self.branch.organization.name} - {self.branch.name}"
-
 
 
 class ImageGallery(models.Model):

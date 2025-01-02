@@ -118,13 +118,14 @@ class CreateSubscriptionView(generic.CreateView):
     model = Subscription
     fields = ['name','days','price']
     template_name = 'admin_panel/app/subscription_form.html'
-    success_url = 'dashboard/subscriptions'
+    success_url = '/dashboard/organization/subscriptions'
 
 class SubscriptionInfoView(generic.UpdateView):
     model = Subscription
     fields = ['name','days','price']
     template_name = 'admin_panel/app/subscription_form.html'
-    success_url = 'dashboard/subscriptions'
+    success_url = '/dashboard/organization/subscriptions'
+    pk_url_kwarg = 'id'
 
 class DeleteSubscriptionView(View):
     def post(self, request):

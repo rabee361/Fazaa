@@ -4,55 +4,64 @@
     <div class="container mt-4">
         <div class="content-header">
             <nav class="breadcrumb">
-                <a href="{% url 'admins' %}">أنواع المنشأت</a>
+                <a href="{% url 'service-offers' %}">عروض الخدمات</a>
                 <i class="separator fas fa-chevron-left"></i>
-                <span>إضافة نوع</span> 
+                <span>إضافة عرض</span> 
             </nav>
         </div>
 
-        <div class="search-container d-flex justify-content-center">
-            <form method="get" class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-            </form>
-        </div>
-
-        <div class="table-container">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            {% for field in field_names %}
-                            <th>{{ field }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for offer in offers %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'service-offer-info' offer.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox"></td>
-                            <td>{{ offer.id }}</td>
-                            <td>{{ offer.createdAt }}</td>
-                            <td>{{ offer.expiresAt }}</td>
-                            <td>{{ offer.content }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="table-controls">
+            <div class="search-container d-flex justify-content-center">
+                <form method="get" class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+                </form>
+            </div>
+            <div class="action-button-container">
+                <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
+                    إضافة
+                </a>
+                <button type="submit" class="btn btn-brown" id="deleteBtn">
+                    حذف
+                </button>
             </div>
         </div>
 
-        {% include 'admin_panel/pagination.html' %}
+        <form id="deleteForm" method="POST" action="{% url 'delete-service-offer' %}">
+            {% csrf_token %}
+            <input type="hidden" name="selected_ids" id="selectedIds">
 
-        <div class="action-button-container">
-            <a href="{% url 'add-service-offer' %}" class="btn btn-brown">
-                إضافة
-            </a>
-            <button type="submit" class="btn btn-brown" id="deleteBtn">
-                حذف
-            </button>
-        </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                {% for field in field_names %}
+                                <th>{{ field }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for offer in offers %}
+                            <tr onclick="clickHandler(event)" data-link="{% url 'service-offer-info' offer.id %}">
+                                <td onclick="event.stopPropagation();"><input type="checkbox"></td>
+                                <td>{{ offer.id }}</td>
+                                <td>{{ offer.organization.name }}</td>
+                                <td>{{ offer.createdAt }}</td>
+                                <td>{{ offer.expiresAt }}</td>
+                                <td>{{ offer.content }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            {% include 'admin_panel/pagination.html' %}
+
+        </form>
+
 
     </div>
 {% endblock %}

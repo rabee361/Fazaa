@@ -18,11 +18,6 @@ UsersPatterns=[
     path('admins/add/' , user_views.CreateAdminView.as_view() , name="add-admin"),
     path('admins/<int:id>/info/' , user_views.UpdateAdminView.as_view() , name="admin-info"),
     path('admins/delete/' , user_views.DeleteAdminView.as_view() , name="delete-admin"),
-
-#     path('subscriptions/' , user_views.ListSubscriptions.as_view() , name="subscriptions"),
-#     path('subscriptions/create/' , user_views.CreateSubscription.as_view() , name="create-subscription"),
-#     path('subscriptions/<int:id>/update/' , user_views.UpdateSubscription.as_view() , name="update-subscription"),
-#     path('subscriptions/<int:id>/delete/' , user_views.DeleteSubscription.as_view() , name="delete-subscription"),
 ]
 
 
@@ -31,6 +26,11 @@ OrganizationPatterns=[
     path('types/add' , organization_views.CreateOrganizationType.as_view() , name="add-organization-type"),
     path('types/<int:id>/update' , organization_views.UpdateOrganizationType.as_view() , name="organization-type-info"),
     path('types/delete' , organization_views.DeleteOrganizationType.as_view() ,name="delete-organization-type"),
+
+    path('organizations' , organization_views.ListOrganizationsView.as_view() , name="organizations"),
+    # path('organizations/add' , organization_views.CreateOrganizationView.as_view() , name="add-organization"),
+    path('organizations/<int:id>/info' , organization_views.OrganizationInfoView.as_view() , name="organization-info"),
+    # path('organizations/delete' , organization_views.DeleteOrganizationView.as_view() , name="delete-organization"),
 
     path('catalogs' , organization_views.ListCatalogsView.as_view() , name="catalogs"),
     path('catalogs/add/' , organization_views.CreateCatalogView.as_view() , name="add-catalog"),
@@ -55,12 +55,12 @@ OrganizationPatterns=[
     path('client-offers' , organization_views.ListClientOffers.as_view() , name="client-offers"),
     path('client-offers/add/' , organization_views.CreateClientOffer.as_view() , name="add-client-offer"),
     path('client-offers/<int:id>/update/' , organization_views.UpdateClientOffer.as_view() , name="client-offer-info"),
-    path('client-offers/<int:id>/delete/' , organization_views.DeleteClientOffer.as_view() , name="delete-client-offer"),
+    path('client-offers/delete/' , organization_views.DeleteClientOffer.as_view() , name="delete-client-offer"),
 
     path('service-offers' , organization_views.ListServiceOffers.as_view() , name="service-offers"),
     path('service-offers/add/' , organization_views.CreateServiceOffer.as_view() , name="add-service-offer"),
     path('service-offers/<int:id>/update/' , organization_views.UpdateServiceOffer.as_view() , name="service-offer-info"),
-    path('service-offers/<int:id>/delete/' , organization_views.DeleteServiceOffer.as_view() , name="delete-service-offer"),
+    path('service-offers/delete/' , organization_views.DeleteServiceOffer.as_view() , name="delete-service-offer"),
 
     # path('organization/<int:id>/delivery-links/' , organization_views.ListDeliveryLinks.as_view() , name="delivery-links"),
     # path('organization/<int:id>/delivery-links/create/' , organization_views.CreateDeliveryCompanyLink.as_view() , name="create-delivery-link"),

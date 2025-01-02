@@ -6,39 +6,33 @@
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
-        <a href="{% url 'client-offers' %}">عروض الأفراد</a>
+        <a href="{% url 'service-offers' %}">عروض الخدمات</a>
         <i class="separator fas fa-chevron-left"></i>
         <span>إضافة عرض</span>
     </nav>
 </div>
 
 <div class="content-body">
-
-        
-        <form method="post" enctype="multipart/form-data" class="form-container">
+    <form method="post" enctype="multipart/form-data" class="form-container">
         {% csrf_token %}
         
         <div class="form-grid">
 
             <div class="form-section">
+
                 <div class="form-group">
                     <label>{{ form.content.label }}:</label>
                     {{ form.content }}
                 </div>
 
                 <div class="form-group">
-                    <label>{{ form.template.label }}:</label>
-                    {{ form.template }}
+                    <label>{{ form.expiresAt.label }}:</label>
+                    {{ form.expiresAt }}
                 </div>
 
             </div>
 
             <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.expiresAt.label }}:</label>
-                    {{ form.expiresAt }}
-                </div>
-
                 <div class="form-group">
                     <label>{{ form.organization.label }}:</label>
                     {{ form.organization }}

@@ -68,6 +68,30 @@ class DeleteOrganizationType(View):
 
 
 
+class ListOrganizationsView(CustomListBaseView):
+    model = Organization
+    context_object_name = 'organizations'
+    context_fields = ['id','name','organization_type','commercial_register_id','createdAt']
+    template_name = 'admin_panel/organization/info/organizations.html'
+
+
+class OrganizationInfoView(generic.UpdateView):
+    model = Organization
+    fields = ['name','logo','website','description','commercial_register_id','description']
+    template_name = 'admin_panel/organization/info/organization_info.html'
+    success_url = '/dashboard/organization/organizations'
+    pk_url_kwarg = 'id'
+
+
+
+
+class CreateOrganizationView(generic.CreateView):
+    model = Organization
+    template_name = 'admin_panel/organization/info/organization_info.html'
+    fields = ['name','organization_type','logo','website','description']
+    success_url = '/dashboard/organization/organizations'
+
+
 class ListCatalogsView( CustomListBaseView):
     model = Catalog
     context_object_name = 'catalogs'
@@ -257,13 +281,10 @@ class UpdateBranch(generic.UpdateView):
 
 
 
-
-
-
 class ListClientOffers(CustomListBaseView,generic.ListView):
     model = ClientOffer
     context_object_name = 'offers'
-    context_fields = ['id','content','expiresAt','createdAt']
+    context_fields = ['id','organization','expiresAt','createdAt','content']
     template_name = 'admin_panel/organization/offers/client_offers.html'
 
     def get_queryset(self):
@@ -276,15 +297,15 @@ class ListClientOffers(CustomListBaseView,generic.ListView):
 
 class CreateClientOffer(generic.CreateView):
     model = ClientOffer
-    template_name = 'admin_panel/organization/offer/client_offer_form.html'
-    fields = ['name', 'description', 'organization']
-    success_url = '/admin/client-offers/'
+    template_name = 'admin_panel/organization/offers/client_offer_form.html'
+    fields = ['expiresAt', 'content', 'organization','template']
+    success_url = '/dashboard/organization/client-offers'
 
 class UpdateClientOffer(generic.UpdateView):
     model = ClientOffer
-    template_name = 'admin_panel/organization/offer/client_offer_form.html'
-    fields = ['name', 'description', 'organization']
-    success_url = '/admin/client-offers/'
+    template_name = 'admin_panel/organization/offers/client_offer_form.html'
+    fields = ['expiresAt', 'content', 'organization','template']
+    success_url = '/dashboard/organization/client-offers'
     pk_url_kwarg = 'id'
 
 class DeleteClientOffer(generic.DeleteView):
@@ -302,7 +323,7 @@ class DeleteClientOffer(generic.DeleteView):
 class ListServiceOffers(CustomListBaseView,generic.ListView):
     model = ServiceOffer
     context_object_name = 'offers'
-    context_fields = ['id','content','expiresAt','createdAt']
+    context_fields = ['id','organization','expiresAt','createdAt','content']
     template_name = 'admin_panel/organization/offers/service_offers.html'
 
     def get_queryset(self):
@@ -316,14 +337,14 @@ class ListServiceOffers(CustomListBaseView,generic.ListView):
 class CreateServiceOffer(generic.CreateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
-    fields = ['name', 'description', 'organization']
-    success_url = '/admin/service-offers/'
+    fields = ['content', 'organization','expiresAt']
+    success_url = '/dashboard/organization/service-offers'
 
 class UpdateServiceOffer(generic.UpdateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
-    fields = ['name', 'description', 'organization']
-    success_url = '/admin/service-offers/'
+    fields = ['content', 'organization','expiresAt']
+    success_url = '/dashboard/organization/service-offers'
     pk_url_kwarg = 'id'
 
 
