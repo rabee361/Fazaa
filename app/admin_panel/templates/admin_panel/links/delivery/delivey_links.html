@@ -9,22 +9,13 @@
         </nav>
     </div>
 
-    <div class="table-controls">
-        <div class="search-container d-flex justify-content-center">
-            <form method="get" class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-            </form>
-        </div>
-        <div class="action-button-container">
-            <a href="{% url 'add-delivery-link' %}" class="btn btn-brown">
-                إضافة
-            </a>
-            <button type="submit" class="btn btn-brown" id="deleteBtn">
-                حذف
-            </button>
-        </div>
+    <div class="search-container">
+        <form method="get" class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+        </form>
     </div>
+
 
     <form id="deleteForm" method="POST" action="{% url 'delete-delivery-link' %}">
         {% csrf_token %}
@@ -57,9 +48,21 @@
             </div>
         </div>
         
+        
+        <div class="table-controls">
+            <div class="action-button-container">
+                <a href="{% url 'add-delivery-link' %}" class="btn btn-brown">
+                    إضافة
+                </a>
+                <a href="{% url 'delete-delivery-link' %}" class="btn btn-brown" id="deleteBtn">
+                    حذف
+                </a>
+            </div>
+        </div>
+        
         {% include 'admin_panel/pagination.html' %}
+        
     </form>
-    
 
 </div>
 {% endblock %}

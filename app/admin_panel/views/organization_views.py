@@ -218,7 +218,7 @@ class CreateSocialMedia(generic.CreateView):
     fields = ['name', 'icon']
     success_url = '/dashboard/organization/social-media'
 
-class DeleteSocialMedia(generic.DeleteView):
+class DeleteSocialMedia(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -258,7 +258,7 @@ class UpdateSocialLinkView(generic.UpdateView):
     success_url = '/dashboard/links/social-links/'
     pk_url_kwarg = 'id'
 
-class DeleteSocialLinkView(generic.DeleteView):
+class DeleteSocialLinkView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -281,7 +281,7 @@ class CreateBranch(generic.CreateView):
     fields = ['name', 'address', 'phone', 'email', 'organization']
     success_url = '/admin/branches/'
 
-class DeleteBranch(generic.DeleteView):
+class DeleteBranch(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -327,7 +327,7 @@ class UpdateClientOffer(generic.UpdateView):
     success_url = '/dashboard/organization/client-offers'
     pk_url_kwarg = 'id'
 
-class DeleteClientOffer(generic.DeleteView):
+class DeleteClientOffer(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -367,7 +367,7 @@ class UpdateServiceOffer(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 
-class DeleteServiceOffer(generic.DeleteView):
+class DeleteServiceOffer(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:

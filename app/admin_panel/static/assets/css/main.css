@@ -39,7 +39,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /* overflow-y: hidden; */
+    overflow-y: hidden;
     background-color: var(--bg-primary);
 }
 
@@ -306,13 +306,13 @@
 .nav-content {
     max-height: 0;
     overflow: hidden;
-    transition: transform 0.5s ease-in-out, background-color 0.5s ease;
+    transition: max-height 0.3s ease-in-out, background-color 0.5s ease;
     background-color: var(--bg-secondary);
 }
 
 .nav-item.active .nav-content {
     max-height: 1000px;
-    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s ease;
+    transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s ease;
 }
 
 .nav-item.active .arrow {
@@ -447,7 +447,7 @@
 
 .search-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     padding-right: 0.5rem;
 }
 
@@ -488,7 +488,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: left;
     gap: 1rem;
 }
 
@@ -606,7 +606,8 @@
 
 /* Form Styles */
 .content-header {
-    padding: 1rem 2rem;
+    padding: 0.1rem 1rem;
+    padding-bottom: 3rem;
 }
 
 .breadcrumb {
@@ -1119,6 +1120,15 @@
     .content-header {
         padding: 0.1rem 0.3rem;
         padding-bottom: 2rem;
+    }
+
+    .login-body {
+        display: flex;
+        justify-content: center;
+        align-items: first baseline;
+        height: 100vh;
+        overflow-y: hidden;
+        background-color: var(--bg-primary);
     }
 
 }

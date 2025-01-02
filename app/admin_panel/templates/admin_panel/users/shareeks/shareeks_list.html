@@ -13,21 +13,11 @@
         </nav>
     </div>
 
-    <div class="table-controls">
-        <div class="search-container d-flex justify-content-center">
-            <form method="get" class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-            </form>
-        </div>
-        <div class="action-button-container">
-            <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
-                إضافة
-            </a>
-            <button type="submit" class="btn btn-brown" id="deleteBtn">
-                حذف
-            </button>
-        </div>
+    <div class="search-container d-flex justify-content-center">
+        <form method="get" class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+        </form>
     </div>
 
     <form id="deleteForm" method="POST" action="{% url 'delete-shareek' %}">
@@ -57,6 +47,17 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="table-controls">
+            <div class="action-button-container">
+                <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
+                    إضافة
+                </a>
+                <button type="submit" class="btn btn-brown" id="deleteBtn">
+                    حذف
+                </button>
             </div>
         </div>
 
