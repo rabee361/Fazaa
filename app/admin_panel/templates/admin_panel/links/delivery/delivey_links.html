@@ -4,9 +4,8 @@
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'delivery-companies' %}">شركات التوصيل</a>
             <i class="separator fas fa-chevron-left"></i>
-            <span>إضافة شركة توصيل</span> 
+            <a href="{% url 'delivery-links' %}">روابط برامج التوصيل</a>
         </nav>
     </div>
 
@@ -18,7 +17,7 @@
             </form>
         </div>
         <div class="action-button-container">
-            <a href="{% url 'add-organization-type' %}" class="btn btn-brown">
+            <a href="{% url 'add-delivery-link' %}" class="btn btn-brown">
                 إضافة
             </a>
             <button type="submit" class="btn btn-brown" id="deleteBtn">
@@ -27,7 +26,7 @@
         </div>
     </div>
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-delivery-company' %}">
+    <form id="deleteForm" method="POST" action="{% url 'delete-delivery-link' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
 
@@ -43,12 +42,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for company in companies %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'delivery-company-info' company.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ company.id }}"></td>
-                            <td>{{ company.id }}</td>
-                            <td>{{ company.name }}</td>
-                            <td><img width="30px" height="30px" src="{{ company.icon.url }}" alt=""></td>
+                        {% for link in links %}
+                        <tr onclick="clickHandler(event)" data-link="{% url 'delivery-link-info' link.id %}">
+                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ link.id }}"></td>
+                            <td>{{ link.id }}</td>
+                            <td>{{ link.organization.name }}</td>
+                            <td>{{ link.delivery_company.name }}</td>
+                            <td>{{ link.active }}</td>
+                            <td>{{ link.createdAt }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -58,7 +59,7 @@
         
         {% include 'admin_panel/pagination.html' %}
     </form>
-
+    
 
 </div>
 {% endblock %}

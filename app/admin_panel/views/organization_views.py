@@ -167,37 +167,39 @@ class DeleteDeliveryCompany(View):
 
 
 
-class ListDeliveryLinks(CustomListBaseView,generic.ListView):
-    queryset = DeliveryCompanyUrl
-    template_name = 'admin_panel/links/delivery_link_list.html'
-
-
-
-
-class CreateDeliveryCompanyLink(generic.CreateView):
+class ListDeliveryLinksView(CustomListBaseView):
     model = DeliveryCompanyUrl
-    template_name = 'delivery_link_form.html'
-    fields = ['name', 'url', 'delivery_company']
-    success_url = '/admin/delivery-links/'
+    context_object_name = 'links'
+    context_fields = ['id','organization','delivery_company','active','createdAt']
+    template_name = 'admin_panel/links/delivery/delivey_links.html'
 
-class UpdateDeliveryCompanyLink(generic.UpdateView):
+class CreateDeliveryLinkView(generic.CreateView):
     model = DeliveryCompanyUrl
-    template_name = 'delivery_link_form.html'
-    fields = ['name', 'url', 'delivery_company']
-    success_url = '/admin/delivery-links/'
+    template_name = 'admin_panel/links/delivery/delivery_link_form.html'
+    fields = ['url', 'delivery_company','active' ,'organization']
+    success_url = '/dashboard/organization/delivery-links/'
+
+class UpdateDeliveryLinkView(generic.UpdateView):
+    model = DeliveryCompanyUrl
+    template_name = 'admin_panel/links/delivery/delivery_link_form.html'
+    fields = ['url', 'delivery_company','active' ,'organization']
+    success_url = '/dashboard/organization/delivery-links/'
     pk_url_kwarg = 'id'
 
-class DeleteDeliveryCompanyLink(generic.DeleteView):
-    model = DeliveryCompanyUrl
-    template_name = 'delivery_link_confirm_delete.html'
-    success_url = '/admin/delivery-links/'
-    pk_url_kwarg = 'id'
+class DeleteDeliveryLinkView(View):
+    def post(self, request):
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        if selected_ids:
+            DeliveryCompanyUrl.objects.filter(id__in=selected_ids).delete()
+            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
+        return HttpResponseRedirect(reverse('delivery-links'))
 
 
 
 
 
-class ListSocialMedia(CustomListBaseView,generic.ListView):
+
+class ListSocialMedia(CustomListBaseView):
     model = SocialMedia
     context_object_name = 'socials'
     context_fields = ['id','name','icon']
@@ -210,7 +212,6 @@ class ListSocialMedia(CustomListBaseView,generic.ListView):
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
         
-
 class CreateSocialMedia(generic.CreateView):
     model = SocialMedia
     template_name = 'admin_panel/links/add_social_media.html'
@@ -225,7 +226,6 @@ class DeleteSocialMedia(generic.DeleteView):
             messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('social-media'))
 
-
 class UpdateSocialMedia(generic.UpdateView):
     model = SocialMedia
     template_name = 'admin_panel/links/social_media_form.html'
@@ -236,19 +236,38 @@ class UpdateSocialMedia(generic.UpdateView):
 
 
 
-class ListSocialMediaLinks(CustomListBaseView,generic.ListView):
-    pass
 
 
 
-class CreateSocialMediaLink(generic.CreateView):
-    pass
+class ListSocialLinksView(CustomListBaseView):
+    model = SocialMediaUrl
+    context_object_name = 'links'
+    context_fields = ['id','organization','social_media','active','createdAt']
+    template_name = 'admin_panel/links/social/social_links.html'
 
-class DeleteSocialMediaLink(generic.DeleteView):
-    pass
+class CreateSocialLinkView(generic.CreateView):
+    model = SocialMediaUrl
+    template_name = 'admin_panel/links/social/social_link_form.html'
+    fields = ['url', 'social_media','active','organization']
+    success_url = '/dashboard/links/social-links/'
 
-class UpdateSocialMediaLink(generic.UpdateView):
-    pass
+class UpdateSocialLinkView(generic.UpdateView):
+    model = SocialMediaUrl
+    template_name = 'admin_panel/links/social/social_link_form.html'
+    fields = ['url', 'social_media','active','organization']
+    success_url = '/dashboard/links/social-links/'
+    pk_url_kwarg = 'id'
+
+class DeleteSocialLinkView(generic.DeleteView):
+    def post(self, request):
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        if selected_ids:
+            SocialMediaUrl.objects.filter(id__in=selected_ids).delete()
+            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
+        return HttpResponseRedirect(reverse('social-links'))
+
+
+
 
 
 

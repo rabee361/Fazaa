@@ -42,15 +42,10 @@ OrganizationPatterns=[
     path('social-media/<int:id>/info' , organization_views.UpdateSocialMedia.as_view() , name="social-media-info"),
     path('social-media/delete' , organization_views.DeleteSocialMedia.as_view() , name="delete-social-media"),
 
-    # path('organization/<int:id>/social-links/' , organization_views.ListSocialMediaLinks.as_view() , name="social-links"),
-    # path('organization/<int:id>/social-links/create/' , organization_views.CreateSocialMediaLink.as_view() , name="create-social-link"),
-    # path('organization/<int:id>/social-links/<int:link_id>/update/' , organization_views.UpdateSocialMediaLink.as_view() , name="update-social-link"),
-    # path('organization/<int:id>/social-links/<int:link_id>/delete/' , organization_views.DeleteSocialMediaLink.as_view() , name="delete-social-link"),
-
     path('delivery-companies' , organization_views.ListDeliveryCompanies.as_view() , name="delivery-companies"),
     path('delivery-companies/create/' , organization_views.CreateDeliveryCompany.as_view() , name="add-delivery-company"),
     path('delivery-companies/<int:id>/info/' , organization_views.UpdateDeliveryCompany.as_view() , name="delivery-company-info"),
-    path('delivery-companies/delete/' , organization_views.DeleteDeliveryCompany.as_view() , name="delete-companies"),
+    path('delivery-companies/delete/' , organization_views.DeleteDeliveryCompany.as_view() , name="delete-delivery-company"),
 
     path('client-offers' , organization_views.ListClientOffers.as_view() , name="client-offers"),
     path('client-offers/add/' , organization_views.CreateClientOffer.as_view() , name="add-client-offer"),
@@ -62,10 +57,15 @@ OrganizationPatterns=[
     path('service-offers/<int:id>/update/' , organization_views.UpdateServiceOffer.as_view() , name="service-offer-info"),
     path('service-offers/delete/' , organization_views.DeleteServiceOffer.as_view() , name="delete-service-offer"),
 
-    # path('organization/<int:id>/delivery-links/' , organization_views.ListDeliveryLinks.as_view() , name="delivery-links"),
-    # path('organization/<int:id>/delivery-links/create/' , organization_views.CreateDeliveryCompanyLink.as_view() , name="create-delivery-link"),
-    # path('organization/<int:id>/delivery-links/<int:id>/update/' , organization_views.UpdateDeliveryCompanyLink.as_view() , name="update-delivery-link"),
-    # path('organization/<int:id>/delivery-links/<int:id>/delete/' , organization_views.DeleteDeliveryCompanyLink.as_view() , name="delete-delivery-link"),
+    path('delivery-links/' , organization_views.ListDeliveryLinksView.as_view() , name="delivery-links"),
+    path('delivery-links/add/' , organization_views.CreateDeliveryLinkView.as_view() , name="add-delivery-link"),
+    path('delivery-links/<int:id>/info/' , organization_views.UpdateDeliveryLinkView.as_view() , name="delivery-link-info"),
+    path('delivery-links/delete/' , organization_views.DeleteDeliveryLinkView.as_view() , name="delete-delivery-link"),
+
+    path('social-links' , organization_views.ListSocialLinksView.as_view() , name="social-links"),
+    path('social-links/add' , organization_views.CreateSocialLinkView.as_view() , name="add-social-link"),
+    path('social-links/<int:id>/info' , organization_views.UpdateSocialLinkView.as_view() , name="social-link-info"),
+    path('social-links/delete' , organization_views.DeleteSocialLinkView.as_view() , name="delete-social-link"),
 
     # path('organization/<int:id>/branches/' , organization_views.ListBranches.as_view() , name="branches"),
     # path('organization/<int:id>/branches/create/' , organization_views.CreateBranch.as_view() , name="create-branch"),

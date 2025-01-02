@@ -1,0 +1,60 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة تواصل اجتماعي{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="{% url 'social-media' %}">أنواع التواصل الاجتماعي</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>إضافة تواصل اجتماعي</span>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.active.label }}:</label>
+                    {{ form.active }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.organization.label }}:</label>
+                    {{ form.organization }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label>{{ form.social_media.label }}:</label>
+                    {{ form.social_media }}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.url.label }}:</label>
+                    {{ form.url }}
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="action-button-container">
+            <button class="btn btn-brown">
+                حفظ
+            </button>
+            <button class="btn btn-white">
+                إلغاء
+            </button>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}

@@ -121,12 +121,12 @@ class SocialMedia(models.Model):
 
 
 class SocialMediaUrl(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    social_media = models.ForeignKey(SocialMedia, on_delete=models.CASCADE)
-    url = models.URLField(max_length=300, null=True , blank=True)
-    short_url = models.SlugField(max_length=50 , default=generateShortUrl)
-    active = models.BooleanField(default=False)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة")
+    social_media = models.ForeignKey(SocialMedia, on_delete=models.CASCADE , verbose_name= "موقع التواصل الاجتماعي")
+    url = models.URLField(max_length=300, null=True , blank=True , verbose_name= "الرابط")
+    short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
+    active = models.BooleanField(default=False , verbose_name= "الحالة")
+    createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.social_media.name}"
@@ -155,12 +155,12 @@ class DeliveryCompany(models.Model):
 
 
 class DeliveryCompanyUrl(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
-    url = models.URLField(max_length=300 , null=True , blank=True)
-    short_url = models.SlugField(max_length=50 , default=generateShortUrl)
-    active = models.BooleanField(default=False)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة")
+    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE , verbose_name= "شركة التوصيل")
+    url = models.URLField(max_length=300 , null=True , blank=True , verbose_name= "الرابط")
+    short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
+    active = models.BooleanField(default=False , verbose_name= "الحالة")
+    createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.delivery_company.name}"
