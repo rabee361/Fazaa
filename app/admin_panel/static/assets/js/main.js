@@ -41,3 +41,21 @@ function clickHandler(event) {
         window.location.href = event.currentTarget.getAttribute('data-link');
     }
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerBtn = document.getElementById('hamburgerMenu');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    hamburgerBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    // Close sidebar when clicking overlay
+    overlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+});
