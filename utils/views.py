@@ -15,6 +15,7 @@ class CustomListBaseView(ListView):
         ]
         return context
 
+
 # Usage example:
 # class MyListView(FieldListBaseView):
 #     model = MyModel

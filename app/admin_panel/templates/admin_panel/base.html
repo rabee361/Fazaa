@@ -123,7 +123,7 @@
                         <a href="{% url 'catalogs' %}">
                             <div class="nav-header">
                                 <i class="fa-regular fa-image"></i>
-                                <span>كتالوجات</span>
+                                <span>الكتالوجات</span>
                             </div>
                         </a>
                     </div>
@@ -137,7 +137,6 @@
                         <div class="nav-content">
                             <a href="{% url 'social-links' %}" class="sub-item">التواصل الاجتماعي</a>
                             <a href="{% url 'delivery-links' %}" class="sub-item">برامج التوصيل</a>
-                            <a href="#" class="sub-item">معلومات تعريفية</a>
                         </div>
                     </div>
 
@@ -148,13 +147,12 @@
                             <i class="fas fa-chevron-down arrow"></i>
                         </div>
                         <div class="nav-content">
-                            <a href="#" class="sub-item">تقارير المبيعات</a>
-                            <a href="#" class="sub-item">تقارير المستخدمين</a>
-                            <a href="#" class="sub-item">تقارير الأداء</a>
+                            <a href="{% url 'common-questions' %}" class="sub-item">الأسئلة الشائعة</a>
+                            <a href="{% url 'contact-us' %}" class="sub-item">التواصل معنا</a>
                         </div>
                     </div>
 
-                    <div class="nav-item collapsible">
+                    <!-- <div class="nav-item collapsible">
                         <div class="nav-header">
                             <i class="fas fa-info-circle"></i>
                             <span>عن التطبيق</span>
@@ -165,7 +163,7 @@
                             <a href="#" class="sub-item">تقارير المستخدمين</a>
                             <a href="#" class="sub-item">تقارير الأداء</a>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="nav-item">
                         <a href="">
@@ -204,10 +202,10 @@
                     </div>
 
                     <div class="nav-item">
-                        <a href="">
+                        <a href="{% url 'reports' %}">
                             <div class="nav-header">
-                                <i class="fas fa-cog"></i>
-                                <span>الإعدادات</span>
+                                <i class="fas fa-flag"></i>
+                                <span>التبليغات</span>
                             </div>
                         </a>
                     </div>

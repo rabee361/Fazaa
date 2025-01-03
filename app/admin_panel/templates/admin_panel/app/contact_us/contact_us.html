@@ -1,26 +1,27 @@
 {% extends 'admin_panel/base.html' %}
 
+{% block title %} التواصل معنا {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
+            <span>التواصل معنا</span>
             <i class="separator fas fa-chevron-left"></i>
-            <a href="{% url 'delivery-links' %}">روابط برامج التوصيل</a>
         </nav>
     </div>
 
-    <div class="search-container">
+    <div class="search-container d-flex justify-content-center">
         <form method="get" class="search-box">
             <i class="fas fa-search search-icon"></i>
             <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
         </form>
     </div>
 
-
-    <form id="deleteForm" method="POST" action="{% url 'delete-delivery-link' %}">
+    <form id="deleteForm" method="POST" action="{% url 'delete-contact-us' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
-
+        
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -33,41 +34,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for link in links %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'delivery-link-info' link.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ link.id }}"></td>
-                            <td>{{ link.id }}</td>
-                            <td>{{ link.organization.name }}</td>
-                            <td>{{ link.delivery_company.name }}</td>
-                            <td>{% if link.active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
-                            <td onclick="event.stopPropagation();">
-                                <div class="copy-btn-wrapper">
-                                    <input type="button" class="copy-btn" data-url="{{ link.short_url}}" value="" title="نسخ الرابط">
-                                    <i class="fas fa-copy"></i>
-                                </div>
-                            </td>
+                        {% for contact in contact_us %}
+                        <tr onclick="clickHandler(event)" data-link="{% url 'contact-us-info' contact.id %}">
+                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ contact.id }}"></td>
+                            <td>{{ contact.id }}</td>
+                            <td>{{ contact.name }}</td>
+                            <td>{{ contact.link }}</td>
+                            <td>{{ contact.icon }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-        
-        
+
         <div class="table-controls">
             <div class="action-button-container">
-                <a href="{% url 'add-delivery-link' %}" class="btn btn-brown">
+                <a href="{% url 'add-contact-us' %}" class="btn btn-brown">
                     إضافة
                 </a>
-                <a href="{% url 'delete-delivery-link' %}" class="btn btn-brown" id="deleteBtn">
+                <button type="submit" class="btn btn-brown" id="deleteBtn">
                     حذف
-                </a>
+                </button>
             </div>
         </div>
-        
-        {% include 'admin_panel/pagination.html' %}
-        
-    </form>
 
+        {% include 'admin_panel/pagination.html' %}
+    
+    </form>
 </div>
+
 {% endblock %}

@@ -33,6 +33,21 @@ document.addEventListener('DOMContentLoaded', function() {
             this.submit();
         }
     });
+
+    // Handle copy button clicks
+    document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.stopPropagation(); // Prevent row click event
+            const url = this.getAttribute('data-url');
+            
+            try {
+                await navigator.clipboard.writeText(url);
+                showToast('تم نسخ الرابط بنجاح');
+            } catch (err) {
+                showToast('حدث خطأ أثناء نسخ الرابط');
+            }
+        });
+    });
 });
 
 
@@ -59,3 +74,27 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.classList.remove('active');
     });
 });
+
+// Add this function for toast notifications
+function showToast(message) {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    // Create and show new toast
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // Trigger reflow and add show class
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Remove toast after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}

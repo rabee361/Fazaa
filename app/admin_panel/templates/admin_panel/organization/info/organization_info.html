@@ -14,46 +14,47 @@
 </div>
 
 <div class="content-body">
-    <form method="post" enctype="multipart/form-data" class="form-container">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <div class="form-grid">
-            <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.website.label }} :</label>
-                    {{ form.website }}
+        <div class="form-container">
+            <div class="form-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.website.label }} :</label>
+                        {{ form.website }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ form.name.label }} :</label>
+                        {{ form.name }}
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>{{ form.name.label }} :</label>
-                    {{ form.name }}
+                    <label>{{ form.logo.label }} :</label>
+                    <div class="image-upload">
+                        {{ form.logo }}
+                        <div class="upload-placeholder">اختر صورة</div>
+                    </div>
+                    {% if form.logo.errors %}
+                        <div class="error">{{ form.logo.errors }}</div>
+                    {% endif %}
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>{{ form.logo.label }} :</label>
-                <div class="image-upload">
-                    {{ form.logo }}
-                    <div class="upload-placeholder">اختر صورة</div>
+                <div class="form-group">
+                    <label>{{ form.commercial_register_id.label }} :</label>
+                    {{ form.commercial_register_id }}
                 </div>
-                {% if form.logo.errors %}
-                    <div class="error">{{ form.logo.errors }}</div>
-                {% endif %}
-            </div>
 
-            <div class="form-group">
-                <label>{{ form.commercial_register_id.label }} :</label>
-                {{ form.commercial_register_id }}
-            </div>
+                <div class="form-group">
+                    <label>{{ form.description.label }} :</label>
+                    {{ form.description }}
+                </div>
 
-            <div class="form-group">
-                <label>{{ form.description.label }} :</label>
-                {{ form.description }}
             </div>
-
         </div>
 
-        <div class="action-button-container">
+        <div class="form-button-container">
             <button class="btn btn-brown">
                 حفظ
             </button>
@@ -61,7 +62,6 @@
                 إلغاء
             </button>
         </div>
-
 
     </form>
 </div>

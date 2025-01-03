@@ -57,7 +57,7 @@ OrganizationPatterns=[
     path('service-offers/<int:id>/update/' , organization_views.UpdateServiceOffer.as_view() , name="service-offer-info"),
     path('service-offers/delete/' , organization_views.DeleteServiceOffer.as_view() , name="delete-service-offer"),
 
-    path('delivery-links/' , organization_views.ListDeliveryLinksView.as_view() , name="delivery-links"),
+    path('delivery-links' , organization_views.ListDeliveryLinksView.as_view() , name="delivery-links"),
     path('delivery-links/add/' , organization_views.CreateDeliveryLinkView.as_view() , name="add-delivery-link"),
     path('delivery-links/<int:id>/info/' , organization_views.UpdateDeliveryLinkView.as_view() , name="delivery-link-info"),
     path('delivery-links/delete/' , organization_views.DeleteDeliveryLinkView.as_view() , name="delete-delivery-link"),
@@ -72,8 +72,10 @@ OrganizationPatterns=[
     # path('organization/<int:id>/branches/<int:id>/update/' , organization_views.UpdateBranch.as_view() , name="update-branch"),
     # path('organization/<int:id>/branches/<int:id>/delete/' , organization_views.DeleteBranch.as_view() , name="delete-branch"),
 
-    path('about' , app_views.AboutUsView.as_view() , name="about-us"),
-    path('about/update/' , app_views.UpdateAboutUsView.as_view() , name="update-about"),
+    path('contact-us' , app_views.ContactUsView.as_view() , name="contact-us"),
+    path('contact-us/add' , app_views.CreateContactUsView.as_view() , name="add-contact-us"),
+    path('contact-us/<int:id>/info' , app_views.UpdateContactUsView.as_view() , name="contact-us-info"),
+    path('contact-us/delete' , app_views.DeleteContactUsView.as_view() , name="delete-contact-us"),
 
     path('subscriptions' , app_views.ListSubscriptionsView.as_view() , name="subscriptions"),
     path('subscriptions/add' , app_views.CreateSubscriptionView.as_view() , name="add-subscription"),
@@ -85,9 +87,9 @@ OrganizationPatterns=[
     path('reports/<int:id>/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
 
     path('common-questions' , app_views.CommonQuestionsView.as_view() , name="common-questions"),
-    path('common-questions/create' , app_views.CreateQuestionView.as_view() , name="create-common-question"),
-    path('common-questions/<int:id>/delete' , app_views.DeleteQuestionView.as_view() , name="delete-common-question"),
-    path('common-questions/<int:id>/update' , app_views.UpdateQuestionView.as_view() , name="update-common-question"),
+    path('common-questions/add' , app_views.CreateQuestionView.as_view() , name="add-common-question"),
+    path('common-questions/<int:id>/info' , app_views.UpdateQuestionView.as_view() , name="common-question-info"),
+    path('common-questions/delete' , app_views.DeleteQuestionView.as_view() , name="delete-common-question"),
 
     path('notifications' , app_views.BaseNotificationsView.as_view() , name="notifications"),
     path('notifications/send/' , app_views.SendNotificationView.as_view() , name="send-notification"),

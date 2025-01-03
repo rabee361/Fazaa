@@ -39,8 +39,13 @@
                             <td>{{ link.id }}</td>
                             <td>{{ link.organization.name }}</td>
                             <td>{{ link.social_media.name }}</td>
-                            <td>{{ link.active }}</td>
-                            <td>{{ link.createdAt }}</td>
+                            <td>{% if link.active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
+                            <td onclick="event.stopPropagation();">
+                                <div class="copy-btn-wrapper">
+                                    <input type="button" class="copy-btn" data-url="{{ link.short_url}}" value="" title="نسخ الرابط">
+                                    <i class="fas fa-copy"></i>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

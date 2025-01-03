@@ -15,39 +15,42 @@
 <div class="content-body">
 
         
-        <form method="post" enctype="multipart/form-data" class="form-container">
+        <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <div class="form-grid">
+        <div class="form-container">
 
-            <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.content.label }}:</label>
-                    {{ form.content }}
+            <div class="form-grid">
+
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.content.label }}:</label>
+                        {{ form.content }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ form.template.label }}:</label>
+                        {{ form.template }}
+                    </div>
+
                 </div>
 
-                <div class="form-group">
-                    <label>{{ form.template.label }}:</label>
-                    {{ form.template }}
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.expiresAt.label }}:</label>
+                        {{ form.expiresAt }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ form.organization.label }}:</label>
+                        {{ form.organization }}
+                    </div>  
                 </div>
 
-            </div>
-
-            <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.expiresAt.label }}:</label>
-                    {{ form.expiresAt }}
-                </div>
-
-                <div class="form-group">
-                    <label>{{ form.organization.label }}:</label>
-                    {{ form.organization }}
-                </div>
             </div>
 
         </div>
 
-        <div class="action-button-container">
+        <div class="form-button-container">
             <button class="btn btn-brown">
                 حفظ
             </button>

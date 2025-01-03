@@ -1,12 +1,12 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}إضافة اشتراك{% endblock %}
+{% block title %}إضافة سؤال {% endblock %}
 
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
-        <a href="{% url 'subscriptions' %}"></a>
+        <a href="{% url 'common-questions' %}"></a>
         <i class="separator fas fa-chevron-left"></i>
     </nav>
 </div>
@@ -17,37 +17,35 @@
         <div class="form-container">
             <div class="form-grid">
                 <div class="form-section">
-                    
                     <div class="form-group">
-                        <label>{{ form.name.label }}</label>
+                        <label>{{ form.name.label }} :</label>
                         {{ form.name }}
                         {% if form.name.errors %}
                             <div class="error">{{ form.name.errors }}</div>
                         {% endif %}
                     </div>
-
                     <div class="form-group">
-                        <label>{{ form.price.label }}</label>
-                        {{ form.price }}
-                        {% if form.price.errors %}
-                            <div class="error">{{ form.price.errors }}</div>
+                        <label>{{ form.icon.label }} :</label>
+                        <div class="image-upload">
+                            {{ form.icon }}
+                            <div class="upload-placeholder">اختر شعار</div>
+                        </div>
+                        {% if form.icon.errors %}
+                            <div class="error">{{ form.icon.errors }}</div>
                         {% endif %}
                     </div>
-
-
                 </div>
-
+                
                 <div class="form-section">
-
                     <div class="form-group">
-                        <label>{{ form.days.label }}</label>
-                        {{ form.days }}
-                        {% if form.days.errors %}
-                            <div class="error">{{ form.days.errors }}</div>
+                        <label>{{ form.link.label }} :</label>
+                        {{ form.link }}
+                        {% if form.link.errors %}
+                            <div class="error">{{ form.link.errors }}</div>
                         {% endif %}
                     </div>
-
                 </div>
+
             </div>
         </div>
         

@@ -13,24 +13,27 @@
 </div>
 
 <div class="content-body">
-    <form method="post" enctype="multipart/form-data" class="form-container">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <div class="form-grid">
-            <div class="form-section">
-                <div class="form-group">
-                    <label>{{ form.title.label }}:</label>
-                    {{ form.title }}
+        <div class="form-container">
+            <div class="form-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.title.label }}:</label>
+                        {{ form.title }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>{{ form.body.label }}:</label>
-                    {{ form.body }}
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.body.label }}:</label>
+                        {{ form.body }}
+                    </div>  
                 </div>
+
             </div>
+        </div>  
 
-        </div>
-
-        <div class="action-button-container">
+        <div class="form-button-container">
             <button class="btn btn-brown">
                 إرسال
             </button>

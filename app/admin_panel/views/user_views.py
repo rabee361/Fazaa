@@ -162,39 +162,6 @@ class DeleteShareekView(View):
 
 
 
-
-class ListSubscriptions(generic.ListView):
-    model = Subscription
-    template_name = 'subscription_list.html'
-
-
-class CreateSubscription(generic.CreateView):
-    model = Subscription
-    template_name = 'subscription_form.html'
-    fields = ['shareek', 'commercial_register_id', 'logo', 'name', 'description', 'organization_type', 'website', 'website_short_link']
-    success_url = '/admin/organizations/'
-
-
-class UpdateSubscription(generic.UpdateView):
-    model = Subscription
-    template_name = 'subscription_form.html'
-    fields = ['shareek', 'commercial_register_id', 'logo', 'name', 'description', 'organization_type', 'website', 'website_short_link']
-    success_url = '/admin/organizations/'
-    pk_url_kwarg = 'id'
-
-
-class DeleteSubscription(generic.DeleteView):
-    def post(self, request):
-        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
-            OrganizationType.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
-        return HttpResponseRedirect(reverse('organization-types'))
-
-
-
-
-
 class ListAdminsView(CustomListBaseView,generic.ListView):
     model = CustomUser
     context_object_name = 'admins'
@@ -219,7 +186,6 @@ class CreateAdminView(View):
             print(form.errors)
             return redirect('admins')
         return render(request,'admin_panel/users/admins/admin_form.html',{'form':form})
-
 
 
 class UpdateAdminView(generic.UpdateView):

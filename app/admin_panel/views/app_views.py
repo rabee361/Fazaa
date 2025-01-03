@@ -40,9 +40,19 @@ class CatalogSlugUrlView(View):
         return redirect(catalog.file.url)
 
 
-class ListReportsView(generic.ListView):
+class ListReportsView(CustomListBaseView):
     model = Report
     context_object_name = 'reports'
+    context_fields = ['id','organization','client','createdAt']
+    template_name = 'admin_panel/reports/reports.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q').select_related('organization')
+        if search_query:
+            queryset = queryset.filter(organization__name__icontains=search_query)
+        return queryset
+
 
 class GetReportView(generic.DeleteView):
     model = Report
@@ -54,21 +64,33 @@ class DeleteReportView(generic.DeleteView):
 
 
 
-class CommonQuestionsView(generic.ListView):
+class CommonQuestionsView(CustomListBaseView):
     model = CommonQuestion
-    context_object_name = 'questions'
+    context_object_name = 'common_questions'   
+    context_fields = ['id','question','answer']
+    template_name = 'admin_panel/app/common_questions/common_questions.html'
 
-class CreateQuestionView(generic.DeleteView):
-    model = CommonQuestion
-    context_object_name = 'question'
 
-class UpdateQuestionView(generic.DeleteView):
+class CreateQuestionView(generic.CreateView):
     model = CommonQuestion
-    context_object_name = 'question'
+    fields = ['question','answer']
+    template_name = 'admin_panel/app/common_questions/common_question_form.html'
+    success_url = '/dashboard/organization/common-questions'
 
-class DeleteQuestionView(generic.DeleteView):
+class UpdateQuestionView(generic.UpdateView):
     model = CommonQuestion
-    context_object_name = 'question'
+    fields = ['question','answer']
+    template_name = 'admin_panel/app/common_questions/common_question_form.html'
+    success_url = '/dashboard/organization/common-questions'
+    pk_url_kwarg = 'id'
+
+class DeleteQuestionView(View):
+    def post(self, request):    
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        if selected_ids:
+            CommonQuestion.objects.filter(id__in=selected_ids).delete()
+        messages.success(request, 'تم حذف العناصر المحددة بنجاح')
+        return HttpResponseRedirect(reverse('common-questions'))
 
 
 
@@ -98,14 +120,33 @@ class DeleteNotificationView(View):
 
 
 
-class AboutUsView(generic.ListView):
-    model = AboutUs
-    context_object_name = 'about'
+class ContactUsView(CustomListBaseView):
+    model = ContactUs
+    context_object_name = 'contact_us'
+    context_fields = ['id','name','link','icon']
+    template_name = 'admin_panel/app/contact_us/contact_us.html'
 
+class CreateContactUsView(generic.CreateView):
+    model = ContactUs
+    template_name = 'admin_panel/app/contact_us/contact_us_form.html'
+    fields = ['name','link','icon']
+    success_url = '/dashboard/organization/contact-us'
 
-class UpdateAboutUsView(generic.UpdateView):
-    model = AboutUs
-    context_object_name = 'about'
+class UpdateContactUsView(generic.UpdateView):
+    model = ContactUs
+    context_object_name = 'contact_us'
+    template_name = 'admin_panel/app/contact_us/contact_us_form.html'
+    fields = ['name','link','icon']
+    success_url = '/dashboard/organization/contact-us'
+    pk_url_kwarg = 'id'
+
+class DeleteContactUsView(View):
+    def post(self, request):
+            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+            if selected_ids:
+                ContactUs.objects.filter(id__in=selected_ids).delete()
+            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
+            return HttpResponseRedirect(reverse('contact-us'))
 
 
 class ListSubscriptionsView(CustomListBaseView):
@@ -113,6 +154,13 @@ class ListSubscriptionsView(CustomListBaseView):
     context_fields = ['id','name','days','price']
     context_object_name = 'subscriptions'
     template_name = 'admin_panel/app/subscriptions.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
 
 class CreateSubscriptionView(generic.CreateView):
     model = Subscription

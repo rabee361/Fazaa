@@ -41,20 +41,26 @@
                             <td>{{ organization.organization_type.name }}</td>
                             <td>{{ organization.commercial_register_id }}</td>
                             <td>{{ organization.createdAt }}</td>
+                            <td onclick="event.stopPropagation();">
+                                <div class="copy-btn-wrapper">
+                                    <input type="button" class="copy-btn" data-url="{{ organization.card_url}}" value="" title="نسخ الرابط">
+                                    <i class="fas fa-copy"></i>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-
+<!-- 
         <div class="table-controls">
             <div class="action-button-container">
                 <button type="submit" class="btn btn-brown" id="deleteBtn">
                     حذف
                 </button>
             </div>
-        </div>
+        </div> -->
 
         {% include 'admin_panel/pagination.html' %}
 

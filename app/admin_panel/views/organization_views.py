@@ -71,8 +71,21 @@ class DeleteOrganizationType(View):
 class ListOrganizationsView(CustomListBaseView):
     model = Organization
     context_object_name = 'organizations'
-    context_fields = ['id','name','organization_type','commercial_register_id','createdAt']
+    context_fields = ['id','name','organization_type','commercial_register_id','createdAt','card_url']
     template_name = 'admin_panel/organization/info/organizations.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('organization_type')
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        for organization in context['organizations']:
+            organization.card_url = self.request.build_absolute_uri(organization.get_absolute_card_url())
+        return context
 
 
 class OrganizationInfoView(generic.UpdateView):
@@ -82,7 +95,12 @@ class OrganizationInfoView(generic.UpdateView):
     success_url = '/dashboard/organization/organizations'
     pk_url_kwarg = 'id'
 
-
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('organization_type')
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
 
 
 class CreateOrganizationView(generic.CreateView):
@@ -92,17 +110,23 @@ class CreateOrganizationView(generic.CreateView):
     success_url = '/dashboard/organization/organizations'
 
 
-class ListCatalogsView( CustomListBaseView):
+class ListCatalogsView(CustomListBaseView):
     model = Catalog
     context_object_name = 'catalogs'
-    context_fields = ['id','catalog_type','organization']
+    context_fields = ['id','catalog_type','organization','short_url']
     template_name = 'admin_panel/organization/catalogs/catalogs.html' 
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for catalog in context['catalogs']:
+            catalog.short_url = self.request.build_absolute_uri(catalog.get_absolute_url())
+        return context
+
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('organization')
         search_query = self.request.GET.get('q')
         if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
+            queryset = queryset.filter(organization__name__icontains=search_query)
         return queryset
 
 
@@ -170,20 +194,34 @@ class DeleteDeliveryCompany(View):
 class ListDeliveryLinksView(CustomListBaseView):
     model = DeliveryCompanyUrl
     context_object_name = 'links'
-    context_fields = ['id','organization','delivery_company','active','createdAt']
+    context_fields = ['id','organization','delivery_company','active','short_url']
     template_name = 'admin_panel/links/delivery/delivey_links.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('organization','delivery_company')
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(organization__name__icontains=search_query)
+        return queryset
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        for link in context['links']:
+            link.short_url = self.request.build_absolute_uri(link.get_absolute_url())
+        return context
+
 
 class CreateDeliveryLinkView(generic.CreateView):
     model = DeliveryCompanyUrl
     template_name = 'admin_panel/links/delivery/delivery_link_form.html'
     fields = ['url', 'delivery_company','active' ,'organization']
-    success_url = '/dashboard/organization/delivery-links/'
+    success_url = '/dashboard/organization/delivery-links'
 
 class UpdateDeliveryLinkView(generic.UpdateView):
     model = DeliveryCompanyUrl
     template_name = 'admin_panel/links/delivery/delivery_link_form.html'
     fields = ['url', 'delivery_company','active' ,'organization']
-    success_url = '/dashboard/organization/delivery-links/'
+    success_url = '/dashboard/organization/delivery-links'
     pk_url_kwarg = 'id'
 
 class DeleteDeliveryLinkView(View):
@@ -242,20 +280,34 @@ class UpdateSocialMedia(generic.UpdateView):
 class ListSocialLinksView(CustomListBaseView):
     model = SocialMediaUrl
     context_object_name = 'links'
-    context_fields = ['id','organization','social_media','active','createdAt']
+    context_fields = ['id','organization','social_media','active','short_url']
     template_name = 'admin_panel/links/social/social_links.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('organization','social_media')
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(organization__name__icontains=search_query)
+        return queryset
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        for link in context['links']:
+            link.short_url = self.request.build_absolute_uri(link.get_absolute_url())
+        return context
+
 
 class CreateSocialLinkView(generic.CreateView):
     model = SocialMediaUrl
     template_name = 'admin_panel/links/social/social_link_form.html'
     fields = ['url', 'social_media','active','organization']
-    success_url = '/dashboard/links/social-links/'
+    success_url = '/dashboard/organization/social-links'
 
 class UpdateSocialLinkView(generic.UpdateView):
     model = SocialMediaUrl
     template_name = 'admin_panel/links/social/social_link_form.html'
     fields = ['url', 'social_media','active','organization']
-    success_url = '/dashboard/links/social-links/'
+    success_url = '/dashboard/organization/social-links'
     pk_url_kwarg = 'id'
 
 class DeleteSocialLinkView(View):
@@ -303,14 +355,14 @@ class UpdateBranch(generic.UpdateView):
 class ListClientOffers(CustomListBaseView,generic.ListView):
     model = ClientOffer
     context_object_name = 'offers'
-    context_fields = ['id','organization','expiresAt','createdAt','content']
+    context_fields = ['id','organization','expiresAt','createdAt']
     template_name = 'admin_panel/organization/offers/client_offers.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('organization','template')
         search_query = self.request.GET.get('q')
         if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
+            queryset = queryset.filter(organization__name__icontains=search_query)
         return queryset
         
 
@@ -342,14 +394,14 @@ class DeleteClientOffer(View):
 class ListServiceOffers(CustomListBaseView,generic.ListView):
     model = ServiceOffer
     context_object_name = 'offers'
-    context_fields = ['id','organization','expiresAt','createdAt','content']
+    context_fields = ['id','organization','expiresAt','createdAt']
     template_name = 'admin_panel/organization/offers/service_offers.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('organization','template')
         search_query = self.request.GET.get('q')
         if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
+            queryset = queryset.filter(organization__name__icontains=search_query)
         return queryset
         
 

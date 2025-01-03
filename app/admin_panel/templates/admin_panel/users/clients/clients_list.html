@@ -42,7 +42,7 @@
                             <td>{{ client.id }}</td>
                             <td>{{ client.full_name }}</td>
                             <td>{{ client.phonenumber }}</td>
-                            <td>{{ client.is_active }}</td>
+                            <td>{% if client.user.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -13,30 +13,31 @@
 </div>
 
 <div class="content-body">
-    <form method="post" enctype="multipart/form-data" class="form-container">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <div class="form-grid">
-            <div class="form-section">
+        <div class="form-container">
+            <div class="form-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.name.label }}</label>
+                        {{ form.name }}
+                    </div>
+                </div>
                 <div class="form-group">
-                    <label>{{ form.name.label }}</label>
-                    {{ form.name }}
+                    <label>{{ form.icon.label }}</label>
+                    <div class="image-upload">
+                        {{ form.icon }}
+                        <div class="upload-placeholder">اختر صورة</div>
+                    </div>
+                    {% if form.icon.errors %}
+                        <div class="error">{{ form.icon.errors }}</div>
+                    {% endif %}
                 </div>
-            </div>
-            <div class="form-group">
-                <label>{{ form.icon.label }}</label>
-                <div class="image-upload">
-                    {{ form.icon }}
-                    <div class="upload-placeholder">اختر صورة</div>
-                </div>
-                {% if form.icon.errors %}
-                    <div class="error">{{ form.icon.errors }}</div>
-                {% endif %}
-            </div>
 
+            </div>
         </div>
-
-        <div class="action-button-container">
+        
+        <div class="form-button-container">
             <button type="submit" class="btn btn-brown">
                 حفظ
             </button>

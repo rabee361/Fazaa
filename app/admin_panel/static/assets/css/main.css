@@ -30,6 +30,14 @@
     transition: background-color 0.5s ease, color 0.5s ease , border-color 0.5s ease;
 }
 
+.text-success {
+    color: #28a745;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
 .container-body {
     background-color: var(--bg-primary);
 }
@@ -203,6 +211,16 @@
     text-align: center;
     padding-left: 0.5rem;
 }
+
+.form-button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-top: 1rem;
+}
+
 
 /* Dashboard Layout */
 .dashboard-container {
@@ -1131,5 +1149,86 @@
         background-color: var(--bg-primary);
     }
 
+}
+
+/* Copy button styles */
+.copy-btn-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.copy-btn {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background-color: var(--accent-color);
+}
+
+.copy-btn-wrapper i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    pointer-events: none;
+}
+
+.copy-btn:hover + i {
+    color: white;
+}
+
+/* Responsive styles for copy button */
+@media (max-width: 768px) {
+    .copy-btn-wrapper {
+        width: 28px;
+        height: 28px;
+    }
+
+    .copy-btn-wrapper i {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .copy-btn-wrapper {
+        width: 24px;
+        height: 24px;
+    }
+
+    .copy-btn-wrapper i {
+        font-size: 0.75rem;
+    }
+}
+
+/* Toast notification styles */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+    opacity: 1;
 }
 

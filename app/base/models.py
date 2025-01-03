@@ -94,6 +94,9 @@ class Catalog(models.Model):
             self.file = f"{self.organization.name}-{self.catalog_type}.pdf"
         super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return f"/catalog/{self.short_url}/"
+
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.catalog_type}"
 
@@ -120,12 +123,12 @@ class SocialMedia(models.Model):
 
 
 
-class SocialMediaUrl(models.Model):
+class   SocialMediaUrl(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة")
     social_media = models.ForeignKey(SocialMedia, on_delete=models.CASCADE , verbose_name= "موقع التواصل الاجتماعي")
     url = models.URLField(max_length=300, null=True , blank=True , verbose_name= "الرابط")
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
-    active = models.BooleanField(default=False , verbose_name= "الحالة")
+    active = models.BooleanField(default=False , verbose_name= "مفعل")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
 
     def __str__(self) -> str:
@@ -159,7 +162,7 @@ class DeliveryCompanyUrl(models.Model):
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE , verbose_name= "شركة التوصيل")
     url = models.URLField(max_length=300 , null=True , blank=True , verbose_name= "الرابط")
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
-    active = models.BooleanField(default=False , verbose_name= "الحالة")
+    active = models.BooleanField(default=False , verbose_name= "مفعل")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
 
     def __str__(self) -> str:
@@ -213,10 +216,10 @@ class ClientOffer(models.Model):
 
 
 
-class AboutUs(models.Model):
-    name = models.CharField(max_length=255)
-    link = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to='media/images/about_us/', default='images/about_us/default_about_us.png')
+class ContactUs(models.Model):
+    name = models.CharField(max_length=255 , verbose_name='الاسم')
+    link = models.CharField(max_length=255 , verbose_name='الرابط')
+    icon = models.ImageField(upload_to='media/images/about_us/', default='images/about_us/default_about_us.png', verbose_name='الشعار')
 
     def __str__(self) -> str:
         return self.name
@@ -233,9 +236,9 @@ class TermsPrivacy(models.Model):
 
 
 class CommonQuestion(models.Model):
-    question = models.CharField(max_length=255)
-    answer = models.CharField(max_length=255)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    question = models.CharField(max_length=255 , verbose_name='السؤال')
+    answer = models.CharField(max_length=255 , verbose_name='الجواب')
+    createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الإنشاء')
 
     def __str__(self) -> str:
         return self.question

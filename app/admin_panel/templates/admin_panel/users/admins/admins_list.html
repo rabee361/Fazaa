@@ -41,7 +41,7 @@
                             <td>{{ admin.id }}</td>
                             <td>{{ admin.full_name }}</td>
                             <td>{{ admin.phonenumber }}</td>
-                            <td>{{ admin.is_active }}</td>
+                            <td>{% if admin.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

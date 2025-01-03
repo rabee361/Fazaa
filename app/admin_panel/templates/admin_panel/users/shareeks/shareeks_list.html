@@ -42,7 +42,7 @@
                             <td>{{ shareek.id }}</td>
                             <td>{{ shareek.full_name }}</td>
                             <td>{{ shareek.phonenumber }}</td>
-                            <td>{{ shareek.is_active }}</td>
+                            <td>{% if shareek.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
