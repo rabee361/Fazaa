@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from app.users.models import Shareek , CustomUser , Organization , OrganizationType
+from app.base.models import SocialMedia , DeliveryCompany
 
 
 
@@ -51,3 +52,18 @@ class ClientForm(UserForm):
     class Meta:
         model = CustomUser
         fields = ['full_name','phonenumber','email','password','confirm_password','image']
+
+
+class SocialMediaForm(forms.ModelForm):
+    icon = forms.ImageField(required=False, label='الصورة')
+    class Meta:
+        model = SocialMedia
+        fields = ['name']
+
+
+class DeliveryCompanyForm(forms.ModelForm):
+    icon = forms.ImageField(required=True, label='الصورة')
+    class Meta:
+        model = DeliveryCompany
+        fields = ['name','icon']
+

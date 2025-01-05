@@ -4,6 +4,7 @@
 db.sqlite3
 django.log
 media
+staticfiles
 
 celerybeat-schedule.* 
 __pycache__/

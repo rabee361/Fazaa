@@ -3,7 +3,7 @@ from typing import Iterable
 from django.db import models
 from django.core.validators import MinValueValidator , MaxValueValidator
 from utils.helper import generateShortUrl
-
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 
@@ -27,6 +27,10 @@ class Organization(models.Model):
     website_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='الرابط المختصر')
     card_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='الرابط المختصر')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
+
+    def clean(self):
+        if self.logo and self.logo.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise ValidationError('حجم الشعار يجب أن لا يتجاوز 2 ميجابايت')
 
     def __str__(self) -> str:
         return self.name
@@ -65,13 +69,19 @@ class ImageGallery(models.Model):
     image = models.ImageField(upload_to='media/images/image_galleries/')
     createdAt = models.DateTimeField(auto_now_add=True)
 
+    def clean(self):
+        if self.image and self.image.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
 
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     video = models.FileField(upload_to='media/images/reels_galleries/')
     createdAt = models.DateTimeField(auto_now_add=True)
- 
+
+    def clean(self):
+        if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes
+            raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
 
 
 class Catalog(models.Model):
@@ -85,6 +95,10 @@ class Catalog(models.Model):
     short_url = models.SlugField(max_length=300 , default=generateShortUrl , verbose_name='الرابط المختصر')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name="المنظمة")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name="تاريخ الإنشاء")
+
+    def clean(self):
+        if self.file and self.file.size > 10 * 1024 * 1024:  # 10MB in bytes
+            raise ValidationError('حجم الملف يجب أن لا يتجاوز 10 ميجابايت')
 
     def save(self, *args, **kwargs) -> None:
         existing_catalog = Catalog.objects.filter(organization=self.organization,catalog_type=self.catalog_type)
@@ -106,6 +120,10 @@ class Catalog(models.Model):
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/social_media/default_media.png',verbose_name='الصورة')
+
+    def clean(self):
+        if self.icon and self.icon.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
     def save(self, *args, **kwargs):        
         if not self.pk:
@@ -141,6 +159,10 @@ class   SocialMediaUrl(models.Model):
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255,verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/delivery_company/default_company.png',verbose_name='الصورة')
+
+    def clean(self):
+        if self.icon and self.icon.size > 1 * 1024 * 1024:  # 2MB in bytes
+            raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
     def save(self, *args, **kwargs):        
         if not self.pk:
@@ -180,6 +202,10 @@ class Template(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    def clean(self):
+        if self.template and self.template.size > 5 * 1024 * 1024:  # 5MB in bytes
+            raise ValidationError('حجم القالب يجب أن لا يتجاوز 5 ميجابايت')
 
 
 
@@ -245,10 +271,10 @@ class CommonQuestion(models.Model):
     
 
 class Report(models.Model):
-    client = models.CharField(max_length=255)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    content = models.CharField(max_length=255)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    client = models.CharField(max_length=255 , verbose_name='العميل')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
+    content = models.CharField(max_length=255 , verbose_name='المحتوى')
+    createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الإنشاء')
 
     def __str__(self) -> str:
         return f"{self.client} - {self.organization.name}"

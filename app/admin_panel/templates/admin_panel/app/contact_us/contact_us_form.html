@@ -1,12 +1,12 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}إضافة سؤال {% endblock %}
+{% block title %}إضافة تواصل معنا {% endblock %}
 
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
-        <a href="{% url 'common-questions' %}"></a>
+        <a href="{% url 'contact-us' %}">التواصل معنا</a>
         <i class="separator fas fa-chevron-left"></i>
     </nav>
 </div>
@@ -28,7 +28,7 @@
                         <label>{{ form.icon.label }} :</label>
                         <div class="image-upload">
                             {{ form.icon }}
-                            <div class="upload-placeholder">اختر شعار</div>
+                            <div class="upload-placeholder">اختر شعار :</div>
                         </div>
                         {% if form.icon.errors %}
                             <div class="error">{{ form.icon.errors }}</div>

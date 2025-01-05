@@ -6,7 +6,8 @@ from app.base.models import Organization
 from .managers import CustomUserManager
 from django.utils import timezone
 from django.db import transaction
-from app.base.models import OrganizationType , Organization , SocialMedia , SocialMediaUrl , DeliveryCompany , DeliveryCompanyUrl
+from app.base.models import OrganizationType , Organization
+from django.core.exceptions import ValidationError
 # # Create your models here.
 
 
@@ -30,6 +31,10 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
     USERNAME_FIELD = 'phonenumber'
+
+    def clean(self):
+        if self.image and self.image.size > 10 * 1024 * 1024:  # 10MB in bytes
+            raise ValidationError('حجم الصورة يجب أن لا يتجاوز 10 ميجابايت')
 
     def save(self , *args , **kwargs) -> None:
         OTPCode.objects.create( ## put in the save method in CustomUser Model

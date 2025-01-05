@@ -13,11 +13,13 @@ import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from app.admin_panel.forms import DeliveryCompanyForm
 
+# login required decorator renamed to shorter name
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
 
-
+@login_required_m
 class CardUrlView(View):
     def get(self,request,slug):
         organization = Organization.objects.select_related('organization_type').get(card_url=slug)
@@ -26,6 +28,7 @@ class CardUrlView(View):
         return render(request,'admin_panel/QR_Info.html',context={'organization':organization,'shareek_phonenumber':shareek_phonenumber,'branches':branches})
 
 
+@login_required_m
 class ListOrganizationType(CustomListBaseView):
     model = OrganizationType
     context_object_name = 'types'
@@ -40,7 +43,7 @@ class ListOrganizationType(CustomListBaseView):
         return queryset
 
 
-
+@login_required_m
 class CreateOrganizationType(generic.CreateView):
     model = OrganizationType
     template_name = 'admin_panel/organization/type_form.html'
@@ -48,6 +51,7 @@ class CreateOrganizationType(generic.CreateView):
     success_url = '/dashboard/organization/types'
 
 
+@login_required_m
 class UpdateOrganizationType(generic.UpdateView):
     model = OrganizationType
     template_name = 'admin_panel/organization/type_form.html'
@@ -56,7 +60,7 @@ class UpdateOrganizationType(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+@login_required_m
 class DeleteOrganizationType(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
@@ -66,8 +70,7 @@ class DeleteOrganizationType(View):
         return HttpResponseRedirect(reverse('organization-types'))
 
 
-
-
+@login_required_m
 class ListOrganizationsView(CustomListBaseView):
     model = Organization
     context_object_name = 'organizations'
@@ -88,6 +91,7 @@ class ListOrganizationsView(CustomListBaseView):
         return context
 
 
+@login_required_m
 class OrganizationInfoView(generic.UpdateView):
     model = Organization
     fields = ['name','logo','website','description','commercial_register_id','description']
@@ -103,6 +107,7 @@ class OrganizationInfoView(generic.UpdateView):
         return queryset
 
 
+@login_required_m
 class CreateOrganizationView(generic.CreateView):
     model = Organization
     template_name = 'admin_panel/organization/info/organization_info.html'
@@ -110,6 +115,7 @@ class CreateOrganizationView(generic.CreateView):
     success_url = '/dashboard/organization/organizations'
 
 
+@login_required_m
 class ListCatalogsView(CustomListBaseView):
     model = Catalog
     context_object_name = 'catalogs'
@@ -130,12 +136,14 @@ class ListCatalogsView(CustomListBaseView):
         return queryset
 
 
+@login_required_m
 class CreateCatalogView(generic.CreateView):
     model = Catalog
     template_name = 'admin_panel/organization/catalogs/catalog_form.html'
     fields = ['file', 'organization', 'catalog_type']
     success_url = '/dashboard/organization/catalogs'
 
+@login_required_m
 class UpdateCatalogView(generic.UpdateView):
     model = Catalog
     template_name = 'admin_panel/organization/catalogs/catalog_form.html'
@@ -143,6 +151,7 @@ class UpdateCatalogView(generic.UpdateView):
     success_url = '/dashboard/organization/catalogs'
     pk_url_kwarg = 'id'
 
+@login_required_m
 class DeleteCatalogView(View):
     def post(self, request):
             selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
@@ -152,7 +161,7 @@ class DeleteCatalogView(View):
             return HttpResponseRedirect(reverse('catalogs'))
 
 
-
+@login_required_m
 class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
     model = DeliveryCompany
     context_object_name = 'companies'
@@ -167,12 +176,14 @@ class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
         return queryset
         
 
+@login_required_m
 class CreateDeliveryCompany(generic.CreateView):
     model = DeliveryCompany
     template_name = 'admin_panel/links/delivery_company_form.html'
     fields = ['name','icon']
     success_url = '/dashboard/organization/delivery-companies'
 
+@login_required_m
 class UpdateDeliveryCompany(generic.UpdateView):
     model = DeliveryCompany
     template_name = 'admin_panel/links/delivery_company_form.html'
@@ -180,6 +191,7 @@ class UpdateDeliveryCompany(generic.UpdateView):
     success_url = '/dashboard/organization/delivery-companies'
     pk_url_kwarg = 'id'
 
+@login_required_m
 class DeleteDeliveryCompany(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
@@ -189,8 +201,7 @@ class DeleteDeliveryCompany(View):
         return HttpResponseRedirect(reverse('delivery-companies'))
 
 
-
-
+@login_required_m
 class ListDeliveryLinksView(CustomListBaseView):
     model = DeliveryCompanyUrl
     context_object_name = 'links'
@@ -211,12 +222,14 @@ class ListDeliveryLinksView(CustomListBaseView):
         return context
 
 
+@login_required_m
 class CreateDeliveryLinkView(generic.CreateView):
     model = DeliveryCompanyUrl
     template_name = 'admin_panel/links/delivery/delivery_link_form.html'
     fields = ['url', 'delivery_company','active' ,'organization']
     success_url = '/dashboard/organization/delivery-links'
 
+@login_required_m
 class UpdateDeliveryLinkView(generic.UpdateView):
     model = DeliveryCompanyUrl
     template_name = 'admin_panel/links/delivery/delivery_link_form.html'
@@ -224,19 +237,16 @@ class UpdateDeliveryLinkView(generic.UpdateView):
     success_url = '/dashboard/organization/delivery-links'
     pk_url_kwarg = 'id'
 
+@login_required_m
 class DeleteDeliveryLinkView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             DeliveryCompanyUrl.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('delivery-links'))
 
 
-
-
-
-
+@login_required_m
 class ListSocialMedia(CustomListBaseView):
     model = SocialMedia
     context_object_name = 'socials'
@@ -250,33 +260,31 @@ class ListSocialMedia(CustomListBaseView):
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
         
+@login_required_m
 class CreateSocialMedia(generic.CreateView):
     model = SocialMedia
-    template_name = 'admin_panel/links/add_social_media.html'
+    template_name = 'admin_panel/links/social_media_form.html'
     fields = ['name', 'icon']
     success_url = '/dashboard/organization/social-media'
 
+@login_required_m
 class DeleteSocialMedia(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             SocialMedia.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('social-media'))
 
+@login_required_m
 class UpdateSocialMedia(generic.UpdateView):
     model = SocialMedia
     template_name = 'admin_panel/links/social_media_form.html'
-    fields = ['name', 'icon']
-    success_url = '/dashboard/links/social-media/'
+    fields = ['name','icon']
+    success_url = '/dashboard/organization/social-media/'
     pk_url_kwarg = 'id'
 
 
-
-
-
-
-
+@login_required_m
 class ListSocialLinksView(CustomListBaseView):
     model = SocialMediaUrl
     context_object_name = 'links'
@@ -297,12 +305,14 @@ class ListSocialLinksView(CustomListBaseView):
         return context
 
 
+@login_required_m
 class CreateSocialLinkView(generic.CreateView):
     model = SocialMediaUrl
     template_name = 'admin_panel/links/social/social_link_form.html'
     fields = ['url', 'social_media','active','organization']
     success_url = '/dashboard/organization/social-links'
 
+@login_required_m
 class UpdateSocialLinkView(generic.UpdateView):
     model = SocialMediaUrl
     template_name = 'admin_panel/links/social/social_link_form.html'
@@ -310,6 +320,7 @@ class UpdateSocialLinkView(generic.UpdateView):
     success_url = '/dashboard/organization/social-links'
     pk_url_kwarg = 'id'
 
+@login_required_m
 class DeleteSocialLinkView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
@@ -319,20 +330,19 @@ class DeleteSocialLinkView(View):
         return HttpResponseRedirect(reverse('social-links'))
 
 
-
-
-
-
+@login_required_m
 class ListBranches(CustomListBaseView,generic.ListView):
     model = Branch
     template_name = 'branch_list.html'
 
+@login_required_m
 class CreateBranch(generic.CreateView):
     model = Branch
     template_name = 'branch_form.html'
     fields = ['name', 'address', 'phone', 'email', 'organization']
     success_url = '/admin/branches/'
 
+@login_required_m
 class DeleteBranch(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
@@ -342,6 +352,7 @@ class DeleteBranch(View):
         return HttpResponseRedirect(reverse('branches'))
 
 
+@login_required_m
 class UpdateBranch(generic.UpdateView):
     model = Branch
     template_name = 'branch_form.html'
@@ -350,8 +361,7 @@ class UpdateBranch(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 
-
-
+@login_required_m
 class ListClientOffers(CustomListBaseView,generic.ListView):
     model = ClientOffer
     context_object_name = 'offers'
@@ -366,12 +376,14 @@ class ListClientOffers(CustomListBaseView,generic.ListView):
         return queryset
         
 
+@login_required_m
 class CreateClientOffer(generic.CreateView):
     model = ClientOffer
     template_name = 'admin_panel/organization/offers/client_offer_form.html'
     fields = ['expiresAt', 'content', 'organization','template']
     success_url = '/dashboard/organization/client-offers'
 
+@login_required_m
 class UpdateClientOffer(generic.UpdateView):
     model = ClientOffer
     template_name = 'admin_panel/organization/offers/client_offer_form.html'
@@ -379,18 +391,16 @@ class UpdateClientOffer(generic.UpdateView):
     success_url = '/dashboard/organization/client-offers'
     pk_url_kwarg = 'id'
 
+@login_required_m
 class DeleteClientOffer(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             ClientOffer.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('client-offers'))
 
 
-
-
-
+@login_required_m
 class ListServiceOffers(CustomListBaseView,generic.ListView):
     model = ServiceOffer
     context_object_name = 'offers'
@@ -398,19 +408,21 @@ class ListServiceOffers(CustomListBaseView,generic.ListView):
     template_name = 'admin_panel/organization/offers/service_offers.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset().select_related('organization','template')
+        queryset = super().get_queryset().select_related('organization')
         search_query = self.request.GET.get('q')
         if search_query:
             queryset = queryset.filter(organization__name__icontains=search_query)
         return queryset
         
 
+@login_required_m
 class CreateServiceOffer(generic.CreateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
     fields = ['content', 'organization','expiresAt']
     success_url = '/dashboard/organization/service-offers'
 
+@login_required_m
 class UpdateServiceOffer(generic.UpdateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
@@ -419,11 +431,10 @@ class UpdateServiceOffer(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 
+@login_required_m
 class DeleteServiceOffer(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             ServiceOffer.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('service-offers'))
-

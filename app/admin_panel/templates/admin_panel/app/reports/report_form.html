@@ -1,0 +1,51 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة سؤال {% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="{% url 'reports' %}">التبليغات</a>
+        <i class="separator fas fa-chevron-left"></i>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+            <div class="form-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.client.label }} :</label>
+                        {{ form.client}}
+                        {% if form.client.errors %}
+                            <div class="error">{{ form.client.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ form.organization.label }} :</label>
+                        {{ form.organization }}
+                        {% if form.organization.errors %}
+                            <div class="error">{{ form.organization.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.content.label }} :</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                            <div class="error">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </form>
+</div>
+{% endblock %}

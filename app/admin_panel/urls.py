@@ -43,7 +43,7 @@ OrganizationPatterns=[
     path('social-media/delete' , organization_views.DeleteSocialMedia.as_view() , name="delete-social-media"),
 
     path('delivery-companies' , organization_views.ListDeliveryCompanies.as_view() , name="delivery-companies"),
-    path('delivery-companies/create/' , organization_views.CreateDeliveryCompany.as_view() , name="add-delivery-company"),
+    path('delivery-companies/add/' , organization_views.CreateDeliveryCompany.as_view() , name="add-delivery-company"),
     path('delivery-companies/<int:id>/info/' , organization_views.UpdateDeliveryCompany.as_view() , name="delivery-company-info"),
     path('delivery-companies/delete/' , organization_views.DeleteDeliveryCompany.as_view() , name="delete-delivery-company"),
 
@@ -83,8 +83,8 @@ OrganizationPatterns=[
     path('subscriptions/delete' , app_views.DeleteSubscriptionView.as_view() , name="delete-subscription"),
 
     path('reports' , app_views.ListReportsView.as_view() , name="reports"),
-    path('reports/<int:id>' , app_views.GetReportView.as_view() , name="get-report"),
-    path('reports/<int:id>/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
+    path('reports/<int:id>/info' , app_views.GetReportView.as_view() , name="report-info"),
+    path('reports/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
 
     path('common-questions' , app_views.CommonQuestionsView.as_view() , name="common-questions"),
     path('common-questions/add' , app_views.CreateQuestionView.as_view() , name="add-common-question"),

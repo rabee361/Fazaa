@@ -57,7 +57,7 @@ class LoginView(View):
             context['password_error'] = True
             return render(request, 'admin_panel/login.html', context=context)
 
-
+@login_required_m
 class LogoutView(View):
     def post(self, request):
         logout(request)
@@ -76,10 +76,12 @@ class DashboardView(View):
         clients = user_counts['clients']
         shareeks = user_counts['shareeks']
         organizations = Organization.objects.count()
+        organization_types = OrganizationType.objects.count()
         delivery_companies = DeliveryCompany.objects.count()
         delivery_companies_urls = DeliveryCompanyUrl.objects.count()
         social_media = SocialMedia.objects.count()
         social_media_urls = SocialMediaUrl.objects.count()
+        common_questions = CommonQuestion.objects.count()
         context = {
             'admins':admins,
             'clients':clients,
@@ -89,10 +91,13 @@ class DashboardView(View):
             'delivery_companies_urls':delivery_companies_urls,
             'social_media_urls':social_media_urls,
             'social_media':social_media,
+            'organization_types':organization_types,
+            'common_questions':common_questions,
         }
         return render(request, 'admin_panel/dashboard.html',context=context)
 
 
+@login_required_m
 class ListClientsView(CustomListBaseView):
     model = CustomUser
     context_object_name = 'clients'
@@ -102,12 +107,14 @@ class ListClientsView(CustomListBaseView):
     def get_queryset(self):
         return super().get_queryset().filter(user_type='CLIENT')
 
+@login_required_m
 class CreateClientView(generic.CreateView):
     model = CustomUser
     form_class = ClientForm
     template_name = 'admin_panel/users/clients/client_form.html'
     success_url = '/dashboard/users/clients'
 
+@login_required_m
 class ClientInfoView(generic.UpdateView):
     model = CustomUser
     template_name = 'admin_panel/users/clients/client_form.html'
@@ -115,19 +122,18 @@ class ClientInfoView(generic.UpdateView):
     success_url = '/dashboard/users/clients'
     pk_url_kwarg = 'id'
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+@login_required_m
 class DeleteClientView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             CustomUser.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('clients'))
 
 
 
 
-
+@login_required_m
 class ListShareeksView(CustomListBaseView,generic.ListView):
     model = CustomUser
     context_object_name = 'shareeks'
@@ -138,12 +144,14 @@ class ListShareeksView(CustomListBaseView,generic.ListView):
         return super().get_queryset().filter(user_type='SHAREEK')
 
 
+@login_required_m
 class CreateShareekView(generic.CreateView):
     model = Shareek
     form_class = ShareekForm
     template_name = 'admin_panel/users/shareeks/shareek_form.html'
-    success_url = 'users/shareek/'
+    success_url = '/dashboard/users/shareeks/'
 
+@login_required_m
 class ShareekInfoView(generic.UpdateView):
     model = Shareek
     form_class = ShareekForm
@@ -151,17 +159,17 @@ class ShareekInfoView(generic.UpdateView):
     success_url = '/dashboard/users/shareeks/'
     pk_url_kwarg = 'id'
 
-
+@login_required_m
 class DeleteShareekView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             CustomUser.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('shareeks'))
 
 
 
+@login_required_m
 class ListAdminsView(CustomListBaseView,generic.ListView):
     model = CustomUser
     context_object_name = 'admins'
@@ -171,7 +179,7 @@ class ListAdminsView(CustomListBaseView,generic.ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user_type='ADMIN')
 
-
+@login_required_m
 class CreateAdminView(View):
     def get(self,request):
         form = AdminForm()
@@ -183,11 +191,11 @@ class CreateAdminView(View):
             user.user_type = 'ADMIN'
             user.is_superuser = True
             user.save()
-            print(form.errors)
             return redirect('admins')
         return render(request,'admin_panel/users/admins/admin_form.html',{'form':form})
 
 
+@login_required_m
 class UpdateAdminView(generic.UpdateView):
     model = CustomUser
     template_name = 'admin_panel/users/admins/admin_form.html'
@@ -195,11 +203,11 @@ class UpdateAdminView(generic.UpdateView):
     success_url = '/dashboard/users/admins/'
     pk_url_kwarg = 'id'
 
+@login_required_m
 class DeleteAdminView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             CustomUser.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('admins'))
 
