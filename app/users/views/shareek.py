@@ -42,11 +42,11 @@ class ShareekSignUpView(APIView):
 class ShareekRegisterView(BaseAPIView):
 
     @transaction.atomic
-    def post(self ,request):
-        ShareekRegisterSerializer(data = request.data).is_valid(raise_exception=True)
+    def post(self, request):
+        ShareekRegisterSerializer(data=request.data).is_valid(raise_exception=True)
         user = request.user
-        user.email = request.data.get('email',None)
-        user.full_name = request.data.get('full_name',None)
+        user.email = request.data.get('email', None)
+        user.full_name = request.data.get('full_name', None)
         user.save()
         
         # Check if the organization already exists or create a new one

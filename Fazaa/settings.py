@@ -138,8 +138,9 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '1000/day',
         'user': '10000/day'
-    }
+    },
 
+    'EXCEPTION_HANDLER': 'utils.exception_handlers.custom_exception_handler',
 }
 
 # Password validation
