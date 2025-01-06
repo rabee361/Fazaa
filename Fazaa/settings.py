@@ -33,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENVIRONMENT = env('ENVIRONMENT')
-
+print(ENVIRONMENT)
 ALLOWED_HOSTS = [
     '145.223.80.125',
     '127.0.0.1',
@@ -101,29 +101,29 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if ENVIRONMENT:
-    DATABASES = {
-        'default': {
-            'ENGINE': env('DEV_DB_ENGINE'),
-            'NAME': env('DEV_DB_NAME'),
-            'USER': env('DEV_DB_USER'),
-            'PASSWORD': env('DEV_DB_PASSWORD'),
-            'HOST': env('DEV_DB_HOST'),
-            'PORT': env('DEV_DB_PORT'),
-        }
-    }
+# if ENVIRONMENT:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': env('DEV_DB_ENGINE'),
+#             'NAME': env('DEV_DB_NAME'),
+#             'USER': env('DEV_DB_USER'),
+#             'PASSWORD': env('DEV_DB_PASSWORD'),
+#             'HOST': env('DEV_DB_HOST'),
+#             'PORT': env('DEV_DB_PORT'),
+#         }
+#     }
 
-else:  # production
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'postgres',
-            'USER': 'postgres', 
-            'PASSWORD': 'postgres',
-            'HOST': 'db',
-            'PORT': '5432',
-        }
+# else:  # production
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'postgres',
+        'USER': 'postgres', 
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
     }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
