@@ -17,9 +17,9 @@ services:
     env_file:
       - ./.env
     environment:
-      - POSTGRES_PASSWORD=${PROD_DB_PASSWORD}
-      - POSTGRES_NAME=${PROD_DB_NAME}
-      - POSTGRES_DB=${PROD_DB_NAME}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - db
       - redis
@@ -33,10 +33,9 @@ services:
     env_file:
       - ./Fazaa/.env
     environment:
-      - POSTGRES_HOST=${PROD_DB_HOST}
-      - POSTGRES_PASSWORD=${PROD_DB_PASSWORD}
-      - POSTGRES_NAME=${PROD_DB_NAME}
-      - POSTGRES_DB=${PROD_DB_NAME}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
