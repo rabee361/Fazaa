@@ -5,11 +5,7 @@ db.sqlite3
 django.log
 media
 staticfiles
-
-celerybeat-schedule.* 
-__pycache__/
-*.py[cod]
-*$py.class
-
+*.pyc
+__pycache__
 *.sqlite
 *.sqlite3
