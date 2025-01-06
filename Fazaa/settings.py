@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'app.admin_panel',
     'app.users',
     'app.base',
@@ -105,6 +106,10 @@ if ENVIRONMENT:
         'default': {
             'ENGINE': env('DEV_DB_ENGINE'),
             'NAME': env('DEV_DB_NAME'),
+            'USER': env('DEV_DB_USER'),
+            'PASSWORD': env('DEV_DB_PASSWORD'),
+            'HOST': env('DEV_DB_HOST'),
+            'PORT': env('DEV_DB_PORT'),
         }
     }
 

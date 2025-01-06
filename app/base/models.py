@@ -4,8 +4,8 @@ from django.db import models
 from django.core.validators import MinValueValidator , MaxValueValidator
 from utils.helper import generateShortUrl
 from django.core.exceptions import ValidationError
+from django.contrib.gis.db import models as gis_models
 # Create your models here.
-
 
  
 
@@ -52,11 +52,10 @@ class Organization(models.Model):
         return f"/website/{self.website_short_url}/"
 
 
-class Branch(models.Model):
+class Branch(gis_models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
     name = models.CharField(max_length=255 , verbose_name='الاسم') # default method for settings name ex: org-branch2
-    long = models.FloatField(verbose_name='الطول')
-    lat = models.FloatField(verbose_name='العرض')
+    location = gis_models.PointField(srid=4326 , verbose_name='الموقع')
     description = models.CharField(max_length=255,null=True ,blank=True , verbose_name='الوصف')
 
     def __str__(self) -> str:

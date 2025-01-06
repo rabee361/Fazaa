@@ -37,7 +37,7 @@ class OrganizationTypeAdmin(admin.ModelAdmin):
 
 
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'organization', 'long', 'lat']
+    list_display = ['id', 'name', 'organization', 'location']
     list_filter = ['organization']
     search_fields = ['name', 'description']
 

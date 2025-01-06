@@ -10,6 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from utils.views import BaseAPIView
 from django.shortcuts import redirect
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.measure import D
 # Create your views here.
 
 
@@ -27,9 +30,29 @@ class OrganizationTypes(BaseAPIView,generics.ListAPIView):
 
 
 class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
-    queryset = Organization.objects.all()
     pagination_class = CustomPagination
-    serializer_class = OrganizationListSerializer
+    serializer_class = BranchSerializer
+
+    def get_queryset(self):
+        queryset = Branch.objects.all()
+        distance = self.request.query_params.get('distance', None)
+
+        if distance:
+            try:
+                distance = float(distance)
+
+                user_location = Point(40.7128, 74.0060 , srid=4326)
+                
+                queryset = queryset.filter(
+                    location__distance_lte=(user_location, D(km=distance))
+                ).annotate(
+                    distance=Distance('location', user_location)
+                ).order_by('distance').distinct()
+
+            except ValueError:
+                pass
+
+        return queryset
 
 
 class GetOrganizationView(BaseAPIView, generics.RetrieveAPIView):

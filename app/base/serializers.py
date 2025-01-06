@@ -13,6 +13,10 @@ class OrganizationListSerializer(ModelSerializer):
         fields = ['id','name','description','logo']
 
 
+class BranchSerializer(ModelSerializer):
+    class Meta:
+        model = Branch
+        fields = ['id','name']
 
 
 class OrganizationSerializer(ModelSerializer):
