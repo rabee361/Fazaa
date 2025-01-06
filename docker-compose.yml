@@ -31,7 +31,7 @@ services:
     image: postgis/postgis:15-3.3
     container_name: fazaa_db_1
     env_file:
-      - ./Fazaa/.env
+      - ./.env
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
