@@ -1,11 +1,11 @@
-.bak
-.dat
-.dir
-db.sqlite3
-django.log
-media
-staticfiles
-*.pyc
-__pycache__
-*.sqlite
-*.sqlite3
+# .bak
+# .dat
+# .dir
+# db.sqlite3
+# django.log
+# media
+# staticfiles
+# *.pyc
+# __pycache__
+# *.sqlite
+# *.sqlite3
