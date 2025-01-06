@@ -41,10 +41,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const url = this.getAttribute('data-url');
             
             try {
-                await navigator.clipboard.writeText(url);
-                showToast('تم نسخ الرابط بنجاح');
+                // Try modern clipboard API first
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(url);
+                    showToast('تم نسخ الرابط بنجاح');
+                } else {
+                    // Fallback for older browsers and non-HTTPS contexts
+                    const textArea = document.createElement('textarea');
+                    textArea.value = url;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+
+                    try {
+                        document.execCommand('copy');
+                        textArea.remove();
+                        showToast('تم نسخ الرابط بنجاح');
+                    } catch (err) {
+                        textArea.remove();
+                        showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
+                        // Show the URL in a selectable format
+                        showSelectableUrl(url);
+                    }
+                }
             } catch (err) {
-                showToast('حدث خطأ أثناء نسخ الرابط');
+                showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
+                // Show the URL in a selectable format
+                showSelectableUrl(url);
             }
         });
     });
@@ -97,4 +123,45 @@ function showToast(message) {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
     }, 3000);
+}
+
+// Add this new function to show a selectable URL when copy fails
+function showSelectableUrl(url) {
+    // Remove existing modal if any
+    const existingModal = document.querySelector('.url-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'url-modal';
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'url-modal-content';
+    
+    const urlInput = document.createElement('input');
+    urlInput.type = 'text';
+    urlInput.value = url;
+    urlInput.readOnly = true;
+    urlInput.className = 'url-input';
+    
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'إغلاق';
+    closeButton.className = 'modal-close-btn';
+    
+    modalContent.appendChild(urlInput);
+    modalContent.appendChild(closeButton);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+
+    // Select the URL text
+    urlInput.focus();
+    urlInput.select();
+
+    // Close modal on button click or outside click
+    closeButton.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
 }
