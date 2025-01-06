@@ -1,8 +1,6 @@
 .git 
 .gitignore
 .vscode
-.env
-*.env.local
 *.sqlite3
 *.sqlite
 *.log
