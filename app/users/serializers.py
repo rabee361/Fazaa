@@ -36,8 +36,9 @@ class LoginSerializer(Serializer):
 
 
 class SignUpUserSerializer(ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True,validators=[validate_required_field])
+    password2 = serializers.CharField(write_only=True,validators=[validate_required_field])
+    phonenumber = serializers.CharField(validators=[validate_required_field,validate_phone_number])
 
     class Meta:
         model = CustomUser
@@ -47,18 +48,10 @@ class SignUpUserSerializer(ModelSerializer):
         phonenumber = data.get('phonenumber')
         password = data.get('password')
         password2 = data.get('password2')
-        
-        # Validate phone number format and uniqueness
-        validate_phone_format(phonenumber)
-        validate_phone_unique(phonenumber)
-        
+            
         # Validate passwords
         validate_password_match(password, password2)
         validate_password_strength(password)
-
-        validate_required_field(phonenumber, "رقم الهاتف")
-        validate_required_field(password, "كلمة المرور")
-        validate_required_field(password2, "تأكيد كلمة المرور")
             
         return data
 
@@ -109,12 +102,16 @@ class UpdateClientSerializer(ModelSerializer):
 
 
 class ResetPasswordSerializer(Serializer):
-    password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
+    password = serializers.CharField(required=True , error_messages={
+        'required': 'كلمة المرور مطلوبة',
+        'blank': 'كلمة المرور مطلوبة'
+    })
+    new_password = serializers.CharField(required=True , error_messages={
+        'required': 'كلمة المرور الجديدة مطلوبة',
+        'blank': 'كلمة المرور الجديدة مطلوبة'
+    })
 
     def validate(self, data):
-        validate_required_field(data['password'], "كلمة المرور")
-        validate_required_field(data['new_password'], "كلمة المرور الجديدة")
         validate_password_match(data['password'], data['new_password'])
         validate_password_strength(data['new_password'])
         return data
@@ -126,18 +123,26 @@ class ResetPasswordSerializer(Serializer):
 
 
 class ShareekRegisterSerializer(serializers.Serializer):
-    full_name = serializers.CharField(required=True, allow_blank=True)
+    full_name = serializers.CharField(validators=[validate_required_field],error_messages={
+        'required': 'الاسم الكامل مطلوب',
+        'blank': 'الاسم الكامل مطلوب'
+    })
     job = serializers.CharField(required=False, allow_blank=True)
     email = serializers.EmailField(required=False, allow_blank=True)
-    organization_type = serializers.IntegerField()
-    organization_name = serializers.CharField(required=True)
+    organization_type = serializers.IntegerField(error_messages={
+        'required': 'نوع المنظمة مطلوب',
+        'null': 'نوع المنظمة مطلوب',
+        'blank': 'نوع المنظمة مطلوب'
+    })
+    organization_name = serializers.CharField(error_messages={
+        'required': 'اسم المنظمة مطلوب',
+        'blank': 'اسم المنظمة مطلوب',
+        'null': 'اسم المنظمة مطلوب'
+    })
 
     def validate(self, data):
-        validate_required_field(data['full_name'], "الاسم الكامل")
-        validate_required_field(data['organization_name'], "اسم المنظمة")
-        type_id = data['organization_type']
-        validate_required_field(type_id, "نوع المنظمة")
-        validate_organizzation_type(type_id)
+        type_id = data.get('organization_type')
+        validate_organization_type(type_id)
         return data
 
 

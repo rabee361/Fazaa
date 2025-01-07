@@ -117,10 +117,10 @@ AUTH_USER_MODEL = 'users.CustomUser'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
+        'NAME': 'fazaa_db',
         'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
+        'PASSWORD': 'rabee123',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

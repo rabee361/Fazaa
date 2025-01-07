@@ -19,7 +19,7 @@ class OrganizationType(models.Model):
 
 class Organization(models.Model):
     commercial_register_id = models.IntegerField(null=True , blank=True , verbose_name='رقم السجل التجاري')
-    logo = models.ImageField(upload_to='media/organizations/logos/', default='media/images/organizations/logos/default.png', verbose_name='الشعار')
+    logo = models.ImageField(upload_to='media/organizations/logos/', default='media/images/default.jpg', verbose_name='الشعار')
     name = models.CharField(max_length=255, verbose_name='الاسم')
     description = models.CharField(max_length=255 , null=True, blank=True, verbose_name='المعلومات التعريفية')
     organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True, verbose_name='نوع المنظمة')
@@ -118,7 +118,7 @@ class Catalog(models.Model):
 
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
-    icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/social_media/default_media.png',verbose_name='الصورة')
+    icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/default.jpg',verbose_name='الصورة')
 
     def clean(self):
         if self.icon and self.icon.size > 2 * 1024 * 1024:  # 2MB in bytes
@@ -157,7 +157,7 @@ class   SocialMediaUrl(models.Model):
 
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255,verbose_name='الاسم')
-    icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/delivery_company/default_company.png',verbose_name='الصورة')
+    icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/default.jpg',verbose_name='الصورة')
 
     def clean(self):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 2MB in bytes
@@ -244,7 +244,7 @@ class ClientOffer(models.Model):
 class ContactUs(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     link = models.CharField(max_length=255 , verbose_name='الرابط')
-    icon = models.ImageField(upload_to='media/images/about_us/', default='images/about_us/default_about_us.png', verbose_name='الشعار')
+    icon = models.ImageField(upload_to='media/images/about_us/', default='media/images/default.jpg', verbose_name='الشعار')
 
     def __str__(self) -> str:
         return self.name
