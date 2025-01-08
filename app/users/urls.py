@@ -16,6 +16,7 @@ ShareekPatterns = [
     path('reset-password/' , common.ResetPasswordView.as_view()),
     path('update/<int:pk>/' , shareek.UpdateShareekView.as_view()),
     path('delete/' , shareek.DeleteShareekView.as_view()),
+    path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
 ]
 
 
@@ -31,6 +32,7 @@ ClientPatterns = [
     path('reset-password/' , common.ResetPasswordView.as_view()),
     path('update/<int:pk>/' , client.UpdateClientView.as_view()),
     path('delete/' , client.DeleteClientView.as_view()),
+    path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
 ]
 
 

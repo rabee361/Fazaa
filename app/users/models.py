@@ -28,6 +28,8 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     get_notifications = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True, verbose_name="مفعل")   
+    long = models.FloatField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
 
     objects = CustomUserManager()
     USERNAME_FIELD = 'phonenumber'

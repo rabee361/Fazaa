@@ -79,9 +79,15 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
 
 
 class CatalogSerializer(ModelSerializer):
+    short_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = Catalog
-        fields = 'all'
+        fields = ['id','short_url','catalog_type','organization']
+
+    def get_short_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.get_absolute_url())
 
 
 class ReelsGallerySerializer(ModelSerializer):

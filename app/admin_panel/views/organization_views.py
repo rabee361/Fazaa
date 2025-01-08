@@ -74,7 +74,7 @@ class DeleteOrganizationType(View):
 class ListOrganizationsView(CustomListBaseView):
     model = Organization
     context_object_name = 'organizations'
-    context_fields = ['id','name','organization_type','commercial_register_id','createdAt','card_url']
+    context_fields = ['id','name','organization_type','card_url']
     template_name = 'admin_panel/organization/info/organizations.html'
 
     def get_queryset(self):
@@ -94,7 +94,7 @@ class ListOrganizationsView(CustomListBaseView):
 @login_required_m
 class OrganizationInfoView(generic.UpdateView):
     model = Organization
-    fields = ['name','logo','website','description','commercial_register_id','description']
+    fields = ['name','logo','website','description','organization_type','commercial_register_id']
     template_name = 'admin_panel/organization/info/organization_info.html'
     success_url = '/dashboard/organization/organizations'
     pk_url_kwarg = 'id'

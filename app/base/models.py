@@ -5,8 +5,9 @@ from django.core.validators import MinValueValidator , MaxValueValidator
 from utils.helper import generateShortUrl
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
+from django.utils import timezone
+from datetime import datetime
 # Create your models here.
-
  
 
 class OrganizationType(models.Model):
@@ -71,6 +72,18 @@ class ImageGallery(models.Model):
     def clean(self):
         if self.image and self.image.size > 2 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        
+        # Check if organization has reached daily limit of 20 reels
+        today = timezone.now().date()
+        today_reels_count = ImageGallery.objects.filter(
+            organization=self.organization,
+            createdAt__date=today
+        ).values('id').count()
+
+        if today_reels_count >= 20:
+            raise ValidationError('لا يمكن إضافة أكثر من 20 صورة في اليوم')
+
+
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
@@ -80,6 +93,16 @@ class ReelsGallery(models.Model):
     def clean(self):
         if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes
             raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
+        
+        # Check if organization has reached daily limit of 20 reels
+        today = timezone.now().date()
+        today_reels_count = ReelsGallery.objects.filter(
+            organization=self.organization,
+            createdAt__date=today
+        ).count()
+        
+        if today_reels_count >= 20:
+            raise ValidationError('لا يمكن إضافة أكثر من 20 فيديو في اليوم')
 
 
 class Catalog(models.Model):

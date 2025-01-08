@@ -155,3 +155,17 @@ class NotificationsView(generics.ListAPIView,BaseAPIView):
         return Notification.objects.filter(user=user)
 
 
+
+
+class UpdateLocationView(BaseAPIView):
+    def post(self,request,user_id):
+        user = CustomUser.objects.get(id=user_id)
+        new_long = request.data.get('long',None)
+        new_lat = request.data.get('lat',None)
+        if new_long and new_lat:
+            user.long = new_long
+            user.lat = new_lat
+            user.save()
+            return Response({"message":"تم تحديث الموقع بنجاح"} , status=status.HTTP_200_OK)
+        else:
+            return Response({"error":"الرجاء إدخال الموقع"} , status=status.HTTP_400_BAD_REQUEST)

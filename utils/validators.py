@@ -14,10 +14,18 @@ def validate_phone_number(value):
     return value
 
 
+def validate_phone_format(value):
+    try:
+        RegexValidator(regex=r'^\d{7,20}$')(value)
+    except ValidationError:
+        raise ValidationError("رقم الهاتف يجب أن يكون بين 7 و 20 رقماً")
+    return value
+
 def validate_password_match(password1, password2):
     if password1 != password2:
         raise ValidationError("كلمات المرور غير متطابقة")
     return True
+
 
 def validate_password_strength(password):
     try:
@@ -26,10 +34,12 @@ def validate_password_strength(password):
         raise ValidationError("كلمة المرور يجب أن تكون أكثر من 8 أحرف و تحوي رموز و أرقام")
     return password
 
+
 def validate_required_field(value):
     if not value or len(str(value).strip()) == 0:
         raise ValidationError(f"{value} مطلوب")
     return value
+
 
 def validate_organization_type(type_id):
     try:

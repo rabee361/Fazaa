@@ -190,7 +190,7 @@ class CatalogView(BaseAPIView):
 
     def get(self,request,id):
         catalogs = Catalog.objects.filter(organization__id=id)
-        serializer = CatalogSerializer(catalogs , many=True)
+        serializer = CatalogSerializer(catalogs , many=True , context={'request':request})
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 
