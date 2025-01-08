@@ -19,22 +19,6 @@ class BranchSerializer(ModelSerializer):
         fields = ['id','name']
 
 
-class OrganizationSerializer(ModelSerializer):
-    website_short_url = serializers.SerializerMethodField()
-    card_url = serializers.SerializerMethodField()
-    class Meta:
-        model = Organization
-        fields = ['id','name','description','organization_type','website','website_short_url','card_url']
-    
-    def get_website_short_url(self,obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.get_absolute_website_url())
-
-    def get_card_url(self,obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.get_absolute_card_url())
-
-
 
 
 class OrganizationTypeSerializer(ModelSerializer):
@@ -94,6 +78,10 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
         return request.build_absolute_uri(obj.get_absolute_url())
 
 
+class CatalogSerializer(ModelSerializer):
+    class Meta:
+        model = Catalog
+        fields = 'all'
 
 
 class ReelsGallerySerializer(ModelSerializer):
@@ -107,11 +95,6 @@ class ImagesGallerySerializer(ModelSerializer):
         model = ImageGallery
         fields = '__all__'
 
-
-class CatalogSerializer(ModelSerializer):
-    class Meta:
-        model = Catalog
-        fields = '__all__'
 
 
 # class NotificationSerializer(ModelSerializer):
@@ -161,4 +144,62 @@ class ReportSerializer(ModelSerializer):
     class Meta:
         model = Report
         fields = '__all__'
+
+
+
+
+
+
+
+class CatalogUrlsSerializer(ModelSerializer):
+    short_url = serializers.SerializerMethodField()
+    class Meta:
+        model = Catalog
+        fields = ['catalog_type','short_url']
+
+    def get_short_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.get_absolute_url())
+
+
+class SocialUrlSerializer(ModelSerializer):
+    short_url = serializers.SerializerMethodField()
+    name = serializers.CharField(source='social_media.name')
+    icon = serializers.ImageField(source='social_media.icon')
+    class Meta:
+        model = SocialMediaUrl
+        fields = ['short_url','name','icon']
+
+    def get_short_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.get_absolute_url())
+
+
+class DeliveryUrlSerializer(ModelSerializer):
+    short_url = serializers.SerializerMethodField()
+    name = serializers.CharField(source='delivery_company.name')
+    icon = serializers.ImageField(source='delivery_company.icon')
+    class Meta:
+        model = DeliveryCompanyUrl
+        fields = ['short_url','name','icon']
+
+    def get_short_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.get_absolute_url())
+
+
+class OrganizationSerializer(ModelSerializer):
+    website_short_url = serializers.SerializerMethodField()
+    card_url = serializers.SerializerMethodField()
+    class Meta:
+        model = Organization
+        fields = ['id','name','description','organization_type','website_short_url','card_url']
+    
+    def get_website_short_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.get_absolute_website_url())
+
+    def get_card_url(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.get_absolute_card_url())
 

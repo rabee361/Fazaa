@@ -41,7 +41,7 @@ class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
             try:
                 distance = float(distance)
 
-                user_location = Point(40.7128, 74.0060 , srid=4326)
+                user_location = Point(35.882744 , 34.885522, srid=4326)
                 
                 queryset = queryset.filter(
                     location__distance_lte=(user_location, D(km=distance))
@@ -55,9 +55,28 @@ class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
         return queryset
 
 
-class GetOrganizationView(BaseAPIView, generics.RetrieveAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+class GetOrganizationView(BaseAPIView):
+    def get(self,request,pk):
+
+        organization = Organization.objects.get(id=pk)
+
+        socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
+
+        delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
+
+        catalogs = Catalog.objects.filter(organization__id=pk)
+
+        serializer = OrganizationSerializer(organization, many=False , context={'request':request})
+
+        data = {
+            **serializer.data,
+            'socials': SocialUrlSerializer(socials, many=True , context={'request':request}).data,
+            'delivery': DeliveryUrlSerializer(delivery, many=True , context={'request':request}).data,
+            'catalogs': CatalogUrlsSerializer(catalogs, many=True , context={'request':request}).data
+        }
+
+        return Response(data , status=status.HTTP_200_OK)
+
 
 
 class DeleteOrganizationView(generics.DestroyAPIView):
@@ -71,7 +90,7 @@ class SocialMediaUrlView(BaseAPIView):
         socials = SocialMediaUrl.objects.filter(organization__id=pk)
         serializer = SocialMediaUrlSerializer(socials , many=True , context={'request':request})
         return Response(serializer.data , status=status.HTTP_200_OK)
-    
+
 
 class UpdateSocialMediaUrlView(BaseAPIView , generics.UpdateAPIView):
     queryset = SocialMediaUrl.objects.all()

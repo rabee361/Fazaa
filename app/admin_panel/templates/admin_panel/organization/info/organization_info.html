@@ -6,10 +6,10 @@
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
+        <a href="{% url 'organizations' %}">المنظمات</a>
         <i class="separator fas fa-chevron-left"></i>
-        <a href="{% url 'organizations' %}">المنشآت</a>
+        <span>معلومات منظمة</span>
         <i class="separator fas fa-chevron-left"></i>
-        <span>إضافة منشأة</span>
     </nav>
 </div>
 
@@ -18,6 +18,7 @@
         {% csrf_token %}
         <div class="form-container">
             <div class="form-grid">
+
                 <div class="form-section">
                     <div class="form-group">
                         <label>{{ form.website.label }} :</label>
@@ -28,28 +29,43 @@
                         <label>{{ form.name.label }} :</label>
                         {{ form.name }}
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>{{ form.logo.label }} :</label>
-                    <div class="image-upload">
-                        {{ form.logo }}
-                        <div class="upload-placeholder">اختر صورة</div>
+                    <div class="form-group">
+                        <label>{{ form.description.label }} :</label>
+                        {{ form.description }}
                     </div>
-                    {% if form.logo.errors %}
-                        <div class="error">{{ form.logo.errors }}</div>
-                    {% endif %}
+                    
+                    <div class="form-group">
+                        <label>{{ form.organization_type.label }} :</label>
+                        {{ form.organization_type }}
+                    </div>
+
                 </div>
 
-                <div class="form-group">
-                    <label>{{ form.commercial_register_id.label }} :</label>
-                    {{ form.commercial_register_id }}
+                <div class="form-sction">
+                    <div class="form-group">
+                        <label>{{ form.logo.label }} :</label>
+                        <div class="image-upload">
+                            {{ form.logo }}
+                            <div class="upload-placeholder">اختر صورة</div>
+                        </div>
+                        {% if form.logo.errors %}
+                            <div class="error-message">
+                                {% for error in form.logo.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="form-group">
+                        <label>{{ form.commercial_register_id.label }} :</label>
+                        {{ form.commercial_register_id }}
+                    </div>
+
+                    
                 </div>
 
-                <div class="form-group">
-                    <label>{{ form.description.label }} :</label>
-                    {{ form.description }}
-                </div>
 
             </div>
         </div>

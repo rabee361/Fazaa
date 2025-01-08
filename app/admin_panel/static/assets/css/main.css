@@ -1246,3 +1246,23 @@ input[type="checkbox"] {
     /* cursor: pointer; */
     accent-color: var(--accent-color);
 }
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+
+.image-upload {
+    border: 2px dashed var(--border-color);
+    padding: 1rem;
+    border-radius: 4px;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.image-upload.has-error {
+    border-color: #dc3545;
+}

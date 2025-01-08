@@ -72,7 +72,6 @@ class ImageGallery(models.Model):
         if self.image and self.image.size > 2 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
 
-
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     video = models.FileField(upload_to='media/images/reels_galleries/')
@@ -92,8 +91,7 @@ class Catalog(models.Model):
     catalog_type = models.CharField(max_length=255 , choices=CATALOG_TYPES.choices , verbose_name='النوع')
     file = models.FileField(upload_to='media/images/catalogs/',verbose_name='الملف')
     short_url = models.SlugField(max_length=300 , default=generateShortUrl , verbose_name='الرابط المختصر')
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name="المنظمة")
-    createdAt = models.DateTimeField(auto_now_add=True , verbose_name="تاريخ الإنشاء")
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name="المنظمة", related_name='catalogs')
 
     def clean(self):
         if self.file and self.file.size > 10 * 1024 * 1024:  # 10MB in bytes
@@ -141,7 +139,7 @@ class SocialMedia(models.Model):
 
 
 class   SocialMediaUrl(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة")
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة", related_name='socials')
     social_media = models.ForeignKey(SocialMedia, on_delete=models.CASCADE , verbose_name= "موقع التواصل الاجتماعي")
     url = models.URLField(max_length=300, null=True , blank=True , verbose_name= "الرابط")
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
@@ -179,7 +177,7 @@ class DeliveryCompany(models.Model):
 
 
 class DeliveryCompanyUrl(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة")
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة" , related_name='delivery')
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE , verbose_name= "شركة التوصيل")
     url = models.URLField(max_length=300 , null=True , blank=True , verbose_name= "الرابط")
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")

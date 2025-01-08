@@ -13,7 +13,7 @@ import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from app.admin_panel.forms import DeliveryCompanyForm
+from app.admin_panel.forms import *
 
 # login required decorator renamed to shorter name
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
@@ -140,7 +140,7 @@ class ListCatalogsView(CustomListBaseView):
 class CreateCatalogView(generic.CreateView):
     model = Catalog
     template_name = 'admin_panel/organization/catalogs/catalog_form.html'
-    fields = ['file', 'organization', 'catalog_type']
+    form_class = CatalogForm
     success_url = '/dashboard/organization/catalogs'
 
 @login_required_m

@@ -1,15 +1,15 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}إضافة كاتالوج{% endblock %}
+{% block title %}معلومات كاتالوج{% endblock %}
 
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
-        <i class="separator fas fa-chevron-left"></i>
         <a href="{% url 'catalogs' %}">الكتالوجات</a>
         <i class="separator fas fa-chevron-left"></i>
-        <span>إضافة كاتالوج</span>
+        <span>معلومات كاتالوج</span>
+        <i class="separator fas fa-chevron-left"></i>
     </nav>
 </div>
 
@@ -29,16 +29,22 @@
                         {{ form.organization }}
                     </div>
                 </div>
-    
-                <div class="form-group">
-                    <label>{{ form.file.label }} :</label>
-                    <div class="image-upload">
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.file.label }} :</label>
+                        <div class="image-upload">
                         {{ form.file }}
-                        <div class="upload-placeholder">اختر ملف الكتالوج</div>
+                        <div class="upload-placeholder">اختر ملف</div>
                     </div>
                     {% if form.file.errors %}
-                        <div class="error">{{ form.file.errors }}</div>
-                    {% endif %}
+                        <div class="error-message">
+                            {% for error in form.file.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
     
             </div>

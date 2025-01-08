@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 from utils.forms import *
-
+from leaflet.admin import LeafletGeoAdmin
 # Register your models here.
 
 
@@ -36,7 +36,7 @@ class OrganizationTypeAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-class BranchAdmin(admin.ModelAdmin):
+class BranchAdmin(LeafletGeoAdmin):
     list_display = ['id', 'name', 'organization', 'location']
     list_filter = ['organization']
     search_fields = ['name', 'description']
@@ -55,8 +55,8 @@ class ReelsGalleryAdmin(admin.ModelAdmin):
 
 
 class CatalogAdmin(admin.ModelAdmin):
-    list_display = ['id', 'organization', 'file', 'createdAt']
-    list_filter = ['organization', 'createdAt']
+    list_display = ['id', 'organization', 'file']
+    list_filter = ['organization']
 
 
 

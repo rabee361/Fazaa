@@ -1,14 +1,15 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}إضافة تواصل اجتماعي{% endblock %}
+{% block title %}معلومات تواصل اجتماعي{% endblock %}
 
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
-        <a href="{% url 'social-media' %}">أنواع التواصل الاجتماعي</a>
         <i class="separator fas fa-chevron-left"></i>
-        <span>إضافة تواصل اجتماعي</span>
+        <a href="{% url 'social-media' %}">روابط التواصل الاجتماعي</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>معلومات رابط </span>
     </nav>
 </div>
 

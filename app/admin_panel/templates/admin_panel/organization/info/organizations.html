@@ -4,8 +4,8 @@
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <i class="separator fas fa-chevron-left"></i>
             <a href="{% url 'organizations' %}">معلومات تعريفية</a>
+            <i class="separator fas fa-chevron-left"></i>
         </nav>
     </div>
 
@@ -39,7 +39,6 @@
                             <td>{{ organization.id }}</td>
                             <td>{{ organization.name }}</td>    
                             <td>{{ organization.organization_type.name }}</td>
-                            <td>{{ organization.commercial_register_id }}</td>
                             <td>{{ organization.createdAt }}</td>
                             <td onclick="event.stopPropagation();">
                                 <div class="copy-btn-wrapper">

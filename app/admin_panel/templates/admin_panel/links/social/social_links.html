@@ -1,12 +1,13 @@
 {% extends 'admin_panel/base.html' %}
 
+{% block title %}روابط التواصل الاجتماعية{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="content-header">
         <nav class="breadcrumb">
-            <a href="{% url 'social-links' %}">روابط التواصل الاجتماعية</a>
             <i class="separator fas fa-chevron-left"></i>
-            <span>إضافة رابط تواصل اجتماعي</span> 
+            <a href="{% url 'social-links' %}">روابط التواصل الاجتماعية</a>
         </nav>
     </div>
 

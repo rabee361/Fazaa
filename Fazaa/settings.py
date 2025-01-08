@@ -59,11 +59,21 @@ INSTALLED_APPS = [
     'app.base',
     # extrernal libraries
     'silk',
+    'leaflet',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'fcm_django',
 ]
+
+# django leaflet settings
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (39.694819, -8.130229),
+    'DEFAULT_ZOOM': 6,
+    'MAX_ZOOM': 20,
+    'MIN_ZOOM':3,
+    'SCALE': 'both'
+}
 
 MIDDLEWARE = [
     'silk.middleware.SilkyMiddleware',
@@ -117,10 +127,10 @@ AUTH_USER_MODEL = 'users.CustomUser'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
+        'NAME': 'fazaa_db',
         'USER': 'postgres', 
-        'PASSWORD': 'postgers',
-        'HOST': 'db',
+        'PASSWORD': 'rabee123',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

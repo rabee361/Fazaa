@@ -1,14 +1,15 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}إضافة شركة توصيل{% endblock %}
+{% block title %}معلومات شركة توصيل{% endblock %}
 
 {% block content %}
 <div class="content-header">
     <nav class="breadcrumb">
         <a href="{% url 'delivery-companies' %}">شركات التوصيل</a>
         <i class="separator fas fa-chevron-left"></i>
-        <span>إضافة شركة توصيل</span>
+        <span>معلومات شركة توصيل</span>
+        <i class="separator fas fa-chevron-left"></i>
     </nav>
 </div>
 
@@ -24,13 +25,17 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>{{ form.icon.label }}</label>
+                    <label>{{ form.icon.label }} :</label>
                     <div class="image-upload">
                         {{ form.icon }}
-                        <div class="upload-placeholder">اختر صورة</div>
+                        <div class="upload-placeholder">اختر أيقونة</div>
                     </div>
                     {% if form.icon.errors %}
-                        <div class="error">{{ form.icon.errors }}</div>
+                        <div class="error-message">
+                            {% for error in form.icon.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
 

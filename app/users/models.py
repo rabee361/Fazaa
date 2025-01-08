@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     username = None
     first_name = None
     last_name = None
-    phonenumber = models.CharField(db_index=True ,max_length=20, verbose_name='الهاتف')
+    phonenumber = models.CharField(db_index=True, unique=True ,max_length=20, verbose_name='الهاتف')
     full_name = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
     email = models.EmailField(null=True , blank=True, verbose_name='البريد الالكتروني')
     image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg' , verbose_name="الصورة الشخصية")
@@ -33,8 +33,8 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'phonenumber'
 
     def clean(self):
-        if self.image and self.image.size > 10 * 1024 * 1024:  # 10MB in bytes
-            raise ValidationError('حجم الصورة يجب أن لا يتجاوز 10 ميجابايت')
+        if self.image and self.image.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
 
     def save(self , *args , **kwargs) -> None:
         OTPCode.objects.create( ## put in the save method in CustomUser Model
