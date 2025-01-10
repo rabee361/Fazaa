@@ -122,7 +122,7 @@ if ENVIRONMENT:
         }
     }
 
-else:  # production
+if not ENVIRONMENT: # production
     DATABASES = {
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.postgis',
