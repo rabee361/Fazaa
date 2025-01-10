@@ -110,29 +110,29 @@ WSGI_APPLICATION = 'Fazaa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# if ENVIRONMENT:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': env('DEV_DB_ENGINE'),
-#             'NAME': env('DEV_DB_NAME'),
-#             'USER': env('DEV_DB_USER'),
-#             'PASSWORD': env('DEV_DB_PASSWORD'),
-#             'HOST': env('DEV_DB_HOST'),
-#             'PORT': env('DEV_DB_PORT'),
-#         }
-#     }
-
-# else:  # production
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+if ENVIRONMENT:
+    DATABASES = {
+        'default': {
+            'ENGINE': env('DEV_DB_ENGINE'),
+            'NAME': env('DEV_DB_NAME'),
+            'USER': env('DEV_DB_USER'),
+            'PASSWORD': env('DEV_DB_PASSWORD'),
+            'HOST': env('DEV_DB_HOST'),
+            'PORT': env('DEV_DB_PORT'),
+        }
     }
-}
+
+else:  # production
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'postgres',
+            'USER': 'postgres', 
+            'PASSWORD': 'postgres',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
+    }
 
 AUTH_USER_MODEL = 'users.User'
 
