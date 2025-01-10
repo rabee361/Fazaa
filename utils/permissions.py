@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from app.users.models import Client , Shareek
+from users.models import Client, Shareek
 
 class IsClientUser(BasePermission):
     def has_permission(self, request, view):

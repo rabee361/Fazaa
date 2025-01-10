@@ -54,9 +54,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'app.admin_panel',
-    'app.users',
-    'app.base',
+    'base',
+    'admin_panel',
+    'users',
     # extrernal libraries
     'silk',
     'leaflet',
@@ -105,7 +105,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Fazaa.wsgi.application'
-AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # Database
@@ -134,6 +133,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -172,7 +173,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'app.users.backends.PhoneNumberBackend',
+    'users.backends.PhoneNumberBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend as fallback
 ]
 
@@ -204,7 +205,7 @@ STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles')
 STATIC_URL = '/staticfiles/'
 
 STATICFILES_DIRS = [    
-    os.path.join(BASE_DIR , 'app' , 'admin_panel' , 'static'),
+    os.path.join(BASE_DIR , 'admin_panel' , 'static'),
 ]
 
 # Default primary key field type

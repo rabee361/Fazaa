@@ -1,16 +1,18 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from app.users.models import CustomUser
 from django.contrib.auth.password_validation import validate_password
-from app.users.models import OrganizationType
+from users.models import OrganizationType
+
 
 def validate_phone_number(value):
-    try:
-        RegexValidator(regex=r'^\d{7,20}$')(value)
-    except ValidationError:
+    # Check if value contains only digits
+    if not str(value).isdigit():
+        raise ValidationError("رقم الهاتف يجب أن يحتوي على أرقام فقط")
+        
+    # Check length is between 7 and 20 digits
+    if not (7 <= len(str(value)) <= 20):
         raise ValidationError("رقم الهاتف يجب أن يكون بين 7 و 20 رقماً")
-    if CustomUser.objects.filter(phonenumber=value).exists():
-        raise ValidationError("يوجد حساب بهذا الرقم , الرجاء استخدام رقم اخر")
+    
     return value
 
 
