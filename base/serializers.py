@@ -39,6 +39,11 @@ class SocialMediaSerializer(ModelSerializer):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.icon.url)
 
+    def validate_icon(self, icon):
+        if icon and icon.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise serializers.ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
+        
+
 
 class SocialMediaUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
@@ -64,7 +69,11 @@ class DeliveryCompanySerializer(ModelSerializer):
     def get_icon(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.icon.url)
-
+    
+    def validate_icon(self, icon):
+        if icon and icon.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise serializers.ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
+        
 
 
 class DeliveryCompanyUrlSerializer(ModelSerializer):
@@ -96,10 +105,43 @@ class ReelsGallerySerializer(ModelSerializer):
         fields = '__all__'
 
 
+    def validate_reel(self, reel):
+        if reel and reel.size > 25 * 1024 * 1024:  # 25MB in bytes
+            raise serializers.ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
+        
+        # Check if organization has reached daily limit of 20 reels
+        today = timezone.now().date()
+        today_reels_count = ReelsGallery.objects.filter(
+            organization=self.initial_data['organization'],
+            createdAt__date=today
+        ).values('id').count()
+
+        if today_reels_count >= 10:
+            raise serializers.ValidationError('لا يمكن إضافة أكثر من 10 فيديو في اليوم')
+            
+        return reel
+
+
 class ImagesGallerySerializer(ModelSerializer):
     class Meta:
         model = ImageGallery
         fields = '__all__'
+
+    def validate_image(self, image):
+        if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        
+        # Check if organization has reached daily limit of 20 images
+        today = timezone.now().date()
+        today_images_count = ImageGallery.objects.filter(
+            organization=self.initial_data['organization'],
+            createdAt__date=today
+        ).values('id').count()
+
+        if today_images_count >= 20:
+            raise serializers.ValidationError('لا يمكن إضافة أكثر من 20 صورة في اليوم')
+            
+        return image
 
 
 
@@ -130,6 +172,11 @@ class TemplateSerializer(serializers.ModelSerializer):
         model = Template
         fields = '__all__'
 
+    def validate_template(self, template):
+        if template and template.size > 5 * 1024 * 1024:  # 5MB in bytes
+            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 5 ميجابايت')
+        
+        return template
 
 
 class TermsPrivacySerializer(serializers.ModelSerializer):
@@ -154,6 +201,15 @@ class ReportSerializer(ModelSerializer):
     def validate_client(self,value):
         if not User.objects.filter(id=value, user_type='CLIENT').exists():
             raise serializers.ValidationError('لا يوجد عميل بهذا الرقم')
+        
+        today = timezone.now().date()
+        reports = Report.objects.filter(
+            client=value,
+            createdAt__date=today
+        )
+        if reports.count() >= 5:
+            raise serializers.ValidationError('لا يمكنك إضافة أكثر من 5 تقارير في اليوم الواحد')
+
         return value
 
 

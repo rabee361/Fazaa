@@ -93,6 +93,11 @@ class UpdateClientSerializer(ModelSerializer):
         validate_required_field(data['phonenumber'], "رقم الهاتف")
         return data
 
+    def validate_image(self, image):
+        if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+
+
     def update(self, instance, validated_data):
         if 'image' in validated_data and validated_data['image'] is None:
             validated_data.pop('image')
@@ -166,6 +171,10 @@ class UpdateShareekSerializer(UpdateClientSerializer):
             raise serializers.ValidationError({"error": "لا يوجد منظمة من هذا النوع"})
         return super().validate(data)
 
+    def validate_image(self, image):
+        if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
+            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        
     def update(self, instance, validated_data):
         # Handle organization-related fields if they exist in validated_data
         shareek = Shareek.objects.get(user=instance)
@@ -177,7 +186,6 @@ class UpdateShareekSerializer(UpdateClientSerializer):
                 commercial_register_id=validated_data.pop('commercial_register_id', None),
                 job=validated_data.pop('job', None)
             )
-
         # Remove any None/empty values from validated_data
         validated_data = {k:v for k,v in validated_data.items() if v not in [None, '']}
         
