@@ -126,10 +126,10 @@ WSGI_APPLICATION = 'Fazaa.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'fazaa_db',
+        'NAME': 'postgres',
         'USER': 'postgres', 
-        'PASSWORD': 'rabee123',
-        'HOST': 'localhost',
+        'PASSWORD': 'postgers',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
