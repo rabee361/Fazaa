@@ -2,10 +2,11 @@ from django import forms
 from django.core.validators import RegexValidator
 from users.models import Shareek, User, Organization, OrganizationType
 from base.models import SocialMedia, DeliveryCompany, Catalog
-
+from django.db import transaction
 
 
 class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(), required=True ,label="كلمة المرور")
     confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, label='تأكيد كلمة المرور')
     class Meta:
         model = User
@@ -27,14 +28,32 @@ class UserForm(forms.ModelForm):
         return cleaned_data
 
 
+
+
+
+class UpdateUserForm(UserForm):
+    class Meta:
+        model = User
+        fields = ['full_name','phonenumber','email','image']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image and hasattr(image, 'size'):
+            if image.size > 2 * 1024 * 1024:  # 2MB in bytes
+                raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        return image
+
+
 class ShareekForm(UserForm):
     job = forms.CharField(max_length=255, required=True, label='الوظيفة')
     organization_type = forms.ModelChoiceField(queryset=OrganizationType.objects.all(), required=True, label='نوع المنظمة')
     organization_name = forms.CharField(max_length=255, required=True, label='اسم المنظمة')
 
+    @transaction.atomic
     def save(self):
-        user =  super().save()
+        user = super().save()
         user.user_type = 'SHAREEK'
+        user.save()
         organization = Organization.objects.create(
             name=self.cleaned_data['organization_name'],
             organization_type=OrganizationType.objects.get(id=self.cleaned_data['organization_type'].id),
@@ -74,8 +93,8 @@ class OrganizationInfoForm(forms.ModelForm):
         return logo
 
 
-class SocialMediaform(forms.ModelForm):    
-    class Meta:
+class SocialMediaForm(forms.ModelForm):    
+    class Meta: 
         model = SocialMedia
         fields = ['name','icon']
 
@@ -112,3 +131,68 @@ class CatalogForm(forms.ModelForm):
             if file.size > 10 * 1024 * 1024:  # 2MB in bytes
                 raise forms.ValidationError('حجم الملف يجب أن لا يتجاوز 10   0 ميجابايت')
         return file
+
+
+
+
+
+class UpdateAdminForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['full_name','phonenumber','email','image']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image and hasattr(image, 'size'):
+            if image.size > 2 * 1024 * 1024:  # 2MB in bytes
+                raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        return image
+
+
+
+class UpdateShareekForm(forms.ModelForm):
+    job = forms.CharField(max_length=255, required=True, label='الوظيفة')
+    organization_type = forms.ModelChoiceField(queryset=OrganizationType.objects.all(), required=True, label='نوع المنظمة')
+    organization_name = forms.CharField(max_length=255, required=True, label='اسم المنظمة')
+
+    class Meta:
+        model = User
+        fields = ['full_name','phonenumber','email','image', 'job','organization_type','organization_name']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image and hasattr(image, 'size'):
+            if image.size > 2 * 1024 * 1024:  # 2MB in bytes
+                raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        return image
+    
+    def save(self):
+        user = super().save()
+        shareek = Shareek.objects.get(
+            user=user,
+        )
+
+        if shareek:
+            organization = Organization.objects.get(id = shareek.organization.id)
+            shareek.job = self.cleaned_data['job']
+            shareek.organization = organization
+            shareek.save()
+
+            organization.name = self.cleaned_data['organization_name']
+            organization.organization_type = OrganizationType.objects.get(id=self.cleaned_data['organization_type'].id)
+            organization.save()
+
+        return shareek
+
+
+class UpdateClientForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['full_name','phonenumber','email','image','is_active']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image and hasattr(image, 'size'):
+            if image.size > 2 * 1024 * 1024:  # 2MB in bytes
+                raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+        return image

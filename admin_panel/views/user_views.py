@@ -1,4 +1,5 @@
 from dataclasses import Field
+from django.forms import BaseModelForm
 from django.views import generic
 from django.views import View
 from base.models import *
@@ -10,7 +11,7 @@ from django.utils.decorators import method_decorator
 from utils.views import CustomListBaseView
 from admin_panel.forms import *
 import json
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.db.models import Count, Q
@@ -117,10 +118,16 @@ class CreateClientView(generic.CreateView):
 @login_required_m
 class ClientInfoView(generic.UpdateView):
     model = User
-    template_name = 'admin_panel/users/clients/client_form.html'
-    fields = ['full_name','phonenumber','email','get_notifications','image']
+    template_name = 'admin_panel/users/clients/update_client.html'
+    form_class = UpdateClientForm
     success_url = '/dashboard/users/clients'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = self.object.image
+        return context
+
 
 @login_required_m
 class DeleteClientView(View):
@@ -149,15 +156,21 @@ class CreateShareekView(generic.CreateView):
     model = Shareek
     form_class = ShareekForm
     template_name = 'admin_panel/users/shareeks/shareek_form.html'
-    success_url = '/dashboard/users/shareeks/'
+    success_url = '/dashboard/users/shareek'
 
 @login_required_m
 class ShareekInfoView(generic.UpdateView):
-    model = Shareek
-    form_class = ShareekForm
-    template_name = 'admin_panel/users/shareeks/shareek_form.html'
-    success_url = '/dashboard/users/shareeks/'
+    model = User
+    form_class = UpdateShareekForm
+    template_name = 'admin_panel/users/shareeks/update_shareek.html'
+    success_url = '/dashboard/users/shareek'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = self.object.image
+        return context
+
 
 @login_required_m
 class DeleteShareekView(View):
@@ -196,12 +209,18 @@ class CreateAdminView(View):
 
 
 @login_required_m
-class UpdateAdminView(generic.UpdateView):
+class AdminInfoView(generic.UpdateView):
     model = User
-    template_name = 'admin_panel/users/admins/admin_form.html'
-    fields = ['full_name','phonenumber','email','get_notifications','image']
-    success_url = '/dashboard/users/admins/'
+    template_name = 'admin_panel/users/admins/update_admin.html'
+    form_class = UpdateAdminForm
+    success_url = '/dashboard/users/admins'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = self.object.image
+        return context
+
 
 @login_required_m
 class DeleteAdminView(View):

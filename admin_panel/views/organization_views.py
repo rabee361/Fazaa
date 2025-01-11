@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from admin_panel.forms import *
+from django.views.generic.edit import UpdateView
 
 # login required decorator renamed to shorter name
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
@@ -186,10 +187,15 @@ class CreateDeliveryCompany(generic.CreateView):
 @login_required_m
 class UpdateDeliveryCompany(generic.UpdateView):
     model = DeliveryCompany
-    template_name = 'admin_panel/links/delivery_company_form.html'
-    fields = ['name','icon']
+    template_name = 'admin_panel/links/update_delivery_company.html'
+    form_class = DeliveryCompanyForm
     success_url = '/dashboard/organization/delivery-companies'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['icon'] = self.object.icon
+        return context
 
 @login_required_m
 class DeleteDeliveryCompany(View):
@@ -275,14 +281,19 @@ class DeleteSocialMedia(View):
             SocialMedia.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('social-media'))
 
+
 @login_required_m
 class UpdateSocialMedia(generic.UpdateView):
     model = SocialMedia
-    template_name = 'admin_panel/links/social_media_form.html'
-    fields = ['name','icon']
-    success_url = '/dashboard/organization/social-media/'
+    template_name = 'admin_panel/links/update_social_media.html'
+    form_class = SocialMediaForm
+    success_url = '/dashboard/organization/social-media'
     pk_url_kwarg = 'id'
 
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['icon'] = self.object.icon
+        return context
 
 @login_required_m
 class ListSocialLinksView(CustomListBaseView):

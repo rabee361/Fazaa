@@ -130,7 +130,6 @@ class SocialMedia(models.Model):
 
     def save(self, *args, **kwargs):        
         if not self.pk:
-            super().save(*args, **kwargs)
             organizations = Organization.objects.all()
             for org in organizations:
                 social , created = SocialMediaUrl.objects.get_or_create(
@@ -138,6 +137,7 @@ class SocialMedia(models.Model):
                     social_media=self,
                     active=False
                 )
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
@@ -169,7 +169,6 @@ class DeliveryCompany(models.Model):
 
     def save(self, *args, **kwargs):        
         if not self.pk:
-            super().save(*args, **kwargs)
             organizations = Organization.objects.all()
             for org in organizations:
                 delivery , created = DeliveryCompanyUrl.objects.get_or_create(
@@ -177,6 +176,7 @@ class DeliveryCompany(models.Model):
                     delivery_company=self,
                     active=False
                 )
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
