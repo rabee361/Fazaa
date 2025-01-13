@@ -3,11 +3,16 @@ from django.core.validators import RegexValidator
 from users.models import Shareek, User, Organization, OrganizationType
 from base.models import SocialMedia, DeliveryCompany, Catalog
 from django.db import transaction
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(), required=True ,label="كلمة المرور")
     confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, label='تأكيد كلمة المرور')
+    phonenumber = forms.CharField(
+        validators=[RegexValidator(r'^\d{7,20}$', message='يجب أن يحتوي رقم الهاتف على أرقام فقط وأن يكون طوله بين 7 و 20 رقم')],
+        label='رقم الهاتف'
+    )
     class Meta:
         model = User
         fields = ['full_name','phonenumber','email','password','confirm_password','image']
@@ -28,7 +33,33 @@ class UserForm(forms.ModelForm):
         return cleaned_data
 
 
+class ChangePasswordForm(forms.Form):
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}), 
+        required=True, 
+        label='كلمة المرور الجديدة'
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}), 
+        required=True, 
+        label='تأكيد كلمة المرور الجديدة'
+    )
 
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('new_password1')
+        password2 = cleaned_data.get('new_password2')
+
+        if not password1 or not password2:
+            raise forms.ValidationError('جميع الحقول مطلوبة')
+
+        if password1 != password2:
+            raise forms.ValidationError('كلمات المرور غير متطابقة')
+
+        if len(password1) < 8:
+            raise forms.ValidationError('كلمة المرور يجب أن تكون أكثر من 8 أحرف')
+
+        return cleaned_data
 
 
 class UpdateUserForm(UserForm):
@@ -196,3 +227,6 @@ class UpdateClientForm(forms.ModelForm):
             if image.size > 2 * 1024 * 1024:  # 2MB in bytes
                 raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
         return image
+
+
+

@@ -69,11 +69,13 @@
             <button class="btn btn-brown">
                 حفظ
             </button>
-            <button class="btn btn-white">
+            <a href="{% url 'change-password' user.id %}" class="btn btn-brown">
+                تغيير كلمة السر
+            </a>
+            <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-white">
                 إلغاء
-            </button>
+            </a>
         </div>
-
 
 
     </form>

@@ -18,6 +18,8 @@ UsersPatterns=[
     path('admins/add/' , user_views.CreateAdminView.as_view() , name="add-admin"),
     path('admins/<int:id>/info/' , user_views.AdminInfoView.as_view() , name="admin-info"),
     path('admins/delete/' , user_views.DeleteAdminView.as_view() , name="delete-admin"),
+
+    path('change-password/<int:user_id>/' , user_views.ChangePasswordView.as_view() , name="change-password"),
 ]
 
 

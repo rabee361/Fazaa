@@ -1,5 +1,3 @@
-from dataclasses import Field
-from django.forms import BaseModelForm
 from django.views import generic
 from django.views import View
 from base.models import *
@@ -11,10 +9,11 @@ from django.utils.decorators import method_decorator
 from utils.views import CustomListBaseView
 from admin_panel.forms import *
 import json
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.contrib import messages
 from django.db.models import Count, Q
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
 
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
@@ -229,4 +228,29 @@ class DeleteAdminView(View):
         if selected_ids:
             User.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('admins'))
+
+
+
+class ChangePasswordView(View):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        form = ChangePasswordForm()
+        return render(request, 'admin_panel/users/change_password.html', {
+            'form': form,
+            'user': user
+        })
+        
+    def post(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        form = ChangePasswordForm(data=request.POST)
+        print(form.is_valid())
+
+        if form.is_valid():
+            user.set_password(form.cleaned_data['new_password1'])
+            user.save()
+            return redirect('dashboard')
+        return render(request, 'admin_panel/users/change_password.html', {
+            'form': form,
+            'user': user
+        })
 

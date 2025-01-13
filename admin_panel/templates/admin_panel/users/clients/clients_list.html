@@ -12,17 +12,28 @@
         </nav>
     </div>
 
-    <div class="search-container d-flex justify-content-center">
-        <form method="get" class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-        </form>
+    <div class="actions">
+        <div class="search-container d-flex justify-content-center">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
+            
+        <div class="actions-dropdown">
+            <select id="bulkAction" onchange="handleBulkAction(this.value)">
+                <option value="" selected disabled>اختر إجراء...</option>
+                <option value="delete">حذف المستخدمين المحددين</option>
+                <option value="deactivate">إلغاء تفعيل المستخدمين المحددين</option>
+                <option value="activate">تفعيل المستخدمين المحددين</option>
+            </select>
+        </div>
     </div>
-
-
+    
     <form id="deleteForm" method="POST" action="{% url 'delete-client' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
+        <input type="hidden" name="action_type" id="actionType">
         
         <div class="table-container">
             <div class="table-responsive">
@@ -55,9 +66,6 @@
                 <a href="{% url 'add-client' %}" class="btn btn-brown">
                     إضافة
                 </a>
-                <button type="submit" class="btn btn-brown" id="deleteBtn">
-                    حذف
-                </button>
             </div>
         </div>
 
@@ -66,4 +74,25 @@
     </form>
 </div>
 
+<script>
+function handleBulkAction(action) {
+    const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+    const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+    
+    if (selectedIds.length === 0) {
+        alert('الرجاء تحديد مستخدم واحد على الأقل');
+        document.getElementById('bulkAction').selectedIndex = 0;
+        return;
+    }
+
+    document.getElementById('selectedIds').value = JSON.stringify(selectedIds);
+    document.getElementById('actionType').value = action;
+    
+    if (confirm('هل أنت متأكد من تنفيذ هذا الإجراء؟')) {
+        document.getElementById('deleteForm').submit();
+    } else {
+        document.getElementById('bulkAction').selectedIndex = 0;
+    }
+}
+</script>
 {% endblock %}
