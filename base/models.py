@@ -127,16 +127,22 @@ class SocialMedia(models.Model):
         if self.icon and self.icon.size > 2 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
-    def save(self, *args, **kwargs):        
-        if not self.pk:
+    def save(self, *args, **kwargs):
+        # First save the SocialMedia instance
+        super().save(*args, **kwargs)
+        
+        # Then create the related SocialMediaUrl objects
+        if not hasattr(self, '_creating_urls'):  # Prevent infinite recursion
+            self._creating_urls = True
             organizations = Organization.objects.all()
             for org in organizations:
-                social , created = SocialMediaUrl.objects.get_or_create(
+                social, created = SocialMediaUrl.objects.get_or_create(
                     organization=org,
                     social_media=self,
-                    active=False
+                    defaults={'active': False}
                 )
-        super().save(*args, **kwargs)
+            delattr(self, '_creating_urls')
+
 
     def __str__(self) -> str:
         return self.name
@@ -166,16 +172,19 @@ class DeliveryCompany(models.Model):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
-    def save(self, *args, **kwargs):        
-        if not self.pk:
-            organizations = Organization.objects.all()
-            for org in organizations:
-                delivery , created = DeliveryCompanyUrl.objects.get_or_create(
-                    organization=org,
-                    delivery_company=self,
-                    active=False
-                )
+    def save(self, *args, **kwargs):       
         super().save(*args, **kwargs)
+        if not hasattr(self, '_creating_urls'):  # Prevent infinite recursion
+            if not self.pk:
+                organizations = Organization.objects.all()
+                for org in organizations:
+                    delivery , created = DeliveryCompanyUrl.objects.get_or_create(
+                        organization=org,
+                        delivery_company=self,
+                        active=False
+                    )
+
+            delattr(self, '_creating_urls')
 
     def __str__(self) -> str:
         return self.name
