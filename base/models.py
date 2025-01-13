@@ -92,7 +92,6 @@ class ReelsGallery(models.Model):
         if today_reels_count >= 20:
             raise ValidationError('لا يمكن إضافة أكثر من 20 فيديو في اليوم')
 
-
 class Catalog(models.Model):
     catalog_type = models.CharField(max_length=255 , choices=CATALOG_TYPES.choices , verbose_name='النوع')
     file = models.FileField(upload_to='media/images/catalogs/',verbose_name='الملف')

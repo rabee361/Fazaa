@@ -173,7 +173,7 @@ class UpdateShareekSerializer(UpdateClientSerializer):
 
     def validate_image(self, image):
         if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
-            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+            raise serializers.ValidationError({"error":"حجم الصورة يجب أن لا يتجاوز 2 ميجابايت"})
         
     def update(self, instance, validated_data):
         # Handle organization-related fields if they exist in validated_data

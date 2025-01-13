@@ -13,12 +13,25 @@
         </nav>
     </div>
 
-    <div class="search-container d-flex justify-content-center">
-        <form method="get" class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-        </form>
+
+    <div class="actions">
+        <div class="search-container d-flex justify-content-center">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
+
+        <div class="actions-dropdown">
+            <select id="bulkAction" onchange="handleBulkAction(this.value)">
+                <option value="" selected disabled>اختر إجراء...</option>
+                <option value="delete">حذف المستخدمين المحددين</option>
+                <option value="deactivate">إلغاء تفعيل المستخدمين المحددين</option>
+                <option value="activate">تفعيل المستخدمين المحددين</option>
+            </select>
+        </div>
     </div>
+
 
     <form id="deleteForm" method="POST" action="{% url 'delete-shareek' %}">
         {% csrf_token %}
@@ -55,9 +68,6 @@
                 <a href="{% url 'add-shareek' %}" class="btn btn-brown">
                     إضافة
                 </a>
-                <button type="submit" class="btn btn-brown" id="deleteBtn">
-                    حذف
-                </button>
             </div>
         </div>
 

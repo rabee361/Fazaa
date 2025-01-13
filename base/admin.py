@@ -35,39 +35,32 @@ class OrganizationTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name','createdAt']
     search_fields = ['name']
 
-
 class BranchAdmin(LeafletGeoAdmin):
     list_display = ['id', 'name', 'organization', 'location']
     list_filter = ['organization']
     search_fields = ['name', 'description']
 
 
-
-
 class ImageGalleryAdmin(admin.ModelAdmin):
     list_display = ['id', 'organization', 'image', 'createdAt']
     list_filter = ['organization', 'createdAt']
-
 
 class ReelsGalleryAdmin(admin.ModelAdmin):
     list_display = ['id', 'organization', 'video', 'createdAt']
     list_filter = ['organization', 'createdAt']
 
-
 class CatalogAdmin(admin.ModelAdmin):
-    list_display = ['id', 'organization', 'file']
+    list_display = ['id', 'organization' ,'catalog_type', 'file']
     list_filter = ['organization']
-
-
 
 class TemplateAdmin(admin.ModelAdmin):
     list_display = ['id', 'createdAt']
 
 class ServiceOfferAdmin(admin.ModelAdmin):
-    list_display = ['id','organization__name','content','expiresAt']
+    list_display = ['id','organization__name','expiresAt']
 
 class ClientOfferAdmin(admin.ModelAdmin):
-    list_display = ['id','organization__name','content','expiresAt']
+    list_display = ['id','organization__name','expiresAt']
 
 
 class ReportAdmin(admin.ModelAdmin):
