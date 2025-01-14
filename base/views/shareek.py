@@ -143,9 +143,9 @@ class DeleteReelsView(generics.DestroyAPIView):
     def delete(self,request,id):
         try:
             ReelsGallery.objects.get(id=id).delete()
-            return Response({"message":["تم الحذف بنجاح"]})
+            return Response({"message":"تم الحذف بنجاح"})
         except ReelsGallery.DoesNotExist:
-            return Response({"error":["الفيديو غير موجود"]})
+            return Response({"error":"الفيديو غير موجود"})
 
 
 
@@ -169,9 +169,9 @@ class DeleteGalleryView(generics.DestroyAPIView):
     def delete(self,request,id):
         try:
             ImageGallery.objects.get(id=id).delete()
-            return Response({"message":["تم الحذف بنجاح"]})
+            return Response({"message":"تم الحذف بنجاح"})
         except ImageGallery.DoesNotExist:
-            return Response({"error":["الصورة غير موجود"]})
+            return Response({"error":"الصورة غير موجود"})
 
 
 
@@ -194,9 +194,9 @@ class DeleteCatalogView(generics.DestroyAPIView):
     def delete(self,request,id):
         try:
             Catalog.objects.get(id=id).delete()
-            return Response({"message":["تم الحذف بنجاح"]})
+            return Response({"message":"تم الحذف بنجاح"})
         except Catalog.DoesNotExist:
-            return Response({"error":["الكاتالوج غير موجود"]})
+            return Response({"error":"الكاتالوج غير موجود"})
 
 
 class CreateCatalogView(generics.CreateAPIView):
@@ -227,9 +227,9 @@ class DeleteClientOffer(generics.DestroyAPIView):
     def delete(self,request,id):
         try:
             ClientOffer.objects.get(id=id).delete()
-            return Response({"message":["تم الحذف بنجاح"]})
+            return Response({"message":"تم الحذف بنجاح"})
         except ClientOffer.DoesNotExist:
-            return Response({"error":["العرض غير موجود"]})
+            return Response({"error":"العرض غير موجود"})
 
 
 
@@ -253,9 +253,9 @@ class DeleteServiceOffer(BaseAPIView):
     def delete(self,request,id):
         try:
             ServiceOffer.objects.get(id=id).delete()
-            return Response({"message":["تم الحذف بنجاح"]})
+            return Response({"message":"تم الحذف بنجاح"})
         except ServiceOffer.DoesNotExist:
-            return Response({"error":["العرض غير موجود"]})
+            return Response({"error":"العرض غير موجود"})
 
 
 

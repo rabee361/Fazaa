@@ -70,7 +70,7 @@ class ShareekRegisterView(BaseAPIView):
             })
         else:
             # If Shareek already exists, return an error response
-            return Response({"error": {"يوجد شريك مسجل بهذا الرقم "}}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "يوجد شريك مسجل بهذا الرقم "}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
