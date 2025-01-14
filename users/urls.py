@@ -8,7 +8,7 @@ ShareekPatterns = [
     path('register-shareek/' , shareek.ShareekRegisterView.as_view()),
     path('login/' , common.LoginView.as_view()),
     path('logout/' , common.LogoutView.as_view()), 
-    path('token/refresh/' , jwt_views.TokenRefreshView.as_view()),
+    path('token/refresh/' , common.RefreshTokenView.as_view()),
     path('forget-password-otp/' , common.ForgetPasswordOTPView.as_view()),
     path('signup-otp/' , common.SignUpOTPView.as_view()),
     # path('reset-password-otp/' , common.ResetPasswordOTPView.as_view() , name="reset-password-otp"),

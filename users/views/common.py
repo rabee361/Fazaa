@@ -22,6 +22,22 @@ from utils.views import BaseAPIView
 
 
 
+
+
+
+class RefreshTokenView(BaseAPIView):
+    def post(self,request):
+        refresh = request.data.get('refresh')
+        if not refresh:
+            return Response({"error":"الرجاء إدخال التوكين"},status=status.HTTP_400_BAD_REQUEST)
+        try:
+            token = RefreshToken(refresh)
+            return Response({"access":str(token.access_token)},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error":"حدث خطأ ما"},status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class LoginView(APIView):
     def post(self, request):
         # validate the data
@@ -118,14 +134,17 @@ class ResetPasswordOTPView(BaseAPIView):
 class OTPVerificationView(APIView):
     def post(self,request):
         code = self.request.data.get('code',None)
-        if code:
-            otp_code = OTPCode.objects.get(code=code)
-            if otp_code and otp_code.createdAt >= timezone.localtime() - timezone.timedelta(minutes=15):
-                otp_code.is_used = True
-                otp_code.save()
-                return Response({'message':'تم التحقق بنجاح'} , status=status.HTTP_200_OK)
-            else:
-                return Response({'error':'رمز التحقق غير موجود أو منتهي الصلاحية'} , status=status.HTTP_400_BAD_REQUEST)
+        if code: 
+            try:
+                otp_code = OTPCode.objects.get(code=code)
+                if otp_code and otp_code.createdAt >= timezone.localtime() - timezone.timedelta(minutes=15):
+                    otp_code.is_used = True
+                    otp_code.save()
+                    return Response({'message':'تم التحقق بنجاح'} , status=status.HTTP_200_OK)
+                else:
+                    return Response({'error':'رمز التحقق منتهي الصلاحية'} , status=status.HTTP_400_BAD_REQUEST)
+            except OTPCode.DoesNotExist:
+                return Response({'error':'رمز التحقق غير موجود'} , status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'error':'أدخل رمز التحقق'} , status=status.HTTP_400_BAD_REQUEST)
 

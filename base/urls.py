@@ -30,12 +30,12 @@ urlpatterns = [
     path('catalog/<int:id>/delete/' , shareek.DeleteCatalogView.as_view()),
 
     path('organization/<int:id>/client-offers/' , shareek.ClientOfferView.as_view()),
-    path('client-offer/create' , shareek.CreateClientOffer.as_view()),
+    path('client-offer/create/' , shareek.CreateClientOffer.as_view()),
     path('client-offers/<int:id>/delete/' , shareek.DeleteClientOffer.as_view()),
     path('client-offers/<int:id>/update/' , shareek.UpdateClientOffer.as_view()),
 
     path('organization/<int:id>/service-offers/' , shareek.ServiceOfferView.as_view()),
-    path('service-offer/create' , shareek.CreateServiceOffer.as_view()),
+    path('service-offer/create/' , shareek.CreateServiceOffer.as_view()),
     path('service-offers/<int:id>/delete/' , shareek.DeleteServiceOffer.as_view()),
     path('service-offers/<int:id>/update/' , shareek.UpdateServiceOffer.as_view()),
 

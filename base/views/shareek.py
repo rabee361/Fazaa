@@ -199,10 +199,23 @@ class DeleteCatalogView(generics.DestroyAPIView):
             return Response({"error":"الكاتالوج غير موجود"})
 
 
-class CreateCatalogView(generics.CreateAPIView):
-    serializer_class = CatalogSerializer
-    queryset = Catalog.objects.all()
-
+class CreateCatalogView(BaseAPIView):
+    def post(self,request):
+        file = request.FILES.get('file' ,None)
+        catalog_type = request.data.get('catalog_type', None)
+        organization = request.data.get('organization', None)
+        if not file or not catalog_type or not organization:
+            return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            Organization.objects.get(id=organization)
+            serializer = CatalogSerializer(data=request.data , context={'request':request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"data":serializer.data} , status=status.HTTP_201_CREATED)
+            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        except Organization.DoesNotExist:
+            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -213,12 +226,26 @@ class ClientOfferView(generics.ListAPIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 
-class CreateClientOffer(generics.CreateAPIView):
-    queryset = ClientOffer
-    serializer_class = ClientOfferSerializer
+class CreateClientOffer(BaseAPIView):
+    def post(self,request):
+        image = request.FILES.get('image' ,None)
+        organization = request.data.get('organization', None)
+        if not image or not organization:
+            return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            Organization.objects.get(id=organization)
+            serializer = ClientOfferSerializer(data=request.data , context={'request':request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"data":serializer.data} , status=status.HTTP_201_CREATED)
+            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        except Organization.DoesNotExist:
+            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
 
 
-class UpdateClientOffer(generics.ListAPIView):
+
+class UpdateClientOffer(generics.UpdateAPIView):
     queryset = ClientOffer
     serializer_class = ClientOfferSerializer
 
@@ -241,8 +268,22 @@ class ServiceOfferView(generics.ListAPIView):
     
 
 class CreateServiceOffer(generics.CreateAPIView):
-    queryset = ServiceOffer
-    serializer_class = ServiceOfferSerializer
+    def post(self,request):
+        image = request.FILES.get('image' ,None)
+        organization = request.data.get('organization', None)
+        if not image or not organization:
+            return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            Organization.objects.get(id=organization)
+            serializer = ServiceOfferSerializer(data=request.data , context={'request':request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"data":serializer.data} , status=status.HTTP_201_CREATED)
+            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        except Organization.DoesNotExist:
+            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UpdateServiceOffer(generics.ListAPIView):

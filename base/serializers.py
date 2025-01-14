@@ -85,8 +85,9 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
     def get_short_url(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.get_absolute_url())
+    
 
-
+    
 class CatalogSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
     
