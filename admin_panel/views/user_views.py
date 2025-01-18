@@ -157,6 +157,7 @@ class CreateShareekView(generic.CreateView):
     template_name = 'admin_panel/users/shareeks/shareek_form.html'
     success_url = '/dashboard/users/shareek'
 
+
 @login_required_m
 class ShareekInfoView(generic.UpdateView):
     model = User
@@ -208,6 +209,49 @@ class CreateAdminView(View):
 
 
 @login_required_m
+class BulkActionView(View):
+    def post(self, request):
+        try:
+            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+            action = request.POST.get('action', '')
+            
+            if not selected_ids:
+                messages.error(request, 'الرجاء اختيار عنصر واحد على الأقل')
+                return self.get_redirect_url(request)
+                
+            users = User.objects.filter(id__in=selected_ids)
+            if not users.exists():
+                messages.error(request, 'لم يتم العثور على المستخدمين المحددين')
+                return self.get_redirect_url(request)
+
+            if action == 'delete':
+                users.delete()
+            elif action == 'deactivate':
+                users.update(is_active=False)
+            elif action == 'activate':
+                users.update(is_active=True)
+            else:
+                messages.error(request, 'إجراء غير صالح')
+                
+        except json.JSONDecodeError:
+            messages.error(request, 'حدث خطأ أثناء معالجة الطلب')
+        except Exception as e:
+            messages.error(request, f'حدث خطأ: {str(e)}')
+            
+        return self.get_redirect_url(request)
+
+    def get_redirect_url(self, request):
+        # Get the referer URL to determine which list we came from
+        referer = request.META.get('HTTP_REFERER', '')
+        if 'clients' in referer:
+            return redirect('clients')
+        elif 'shareek' in referer:
+            return redirect('shareeks')
+        else:
+            return redirect('admins')
+
+
+@login_required_m
 class AdminInfoView(generic.UpdateView):
     model = User
     template_name = 'admin_panel/users/admins/update_admin.html'
@@ -219,16 +263,6 @@ class AdminInfoView(generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context['image'] = self.object.image
         return context
-
-
-@login_required_m
-class DeleteAdminView(View):
-    def post(self, request):
-        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
-            User.objects.filter(id__in=selected_ids).delete()
-        return HttpResponseRedirect(reverse('admins'))
-
 
 
 class ChangePasswordView(View):
@@ -243,7 +277,6 @@ class ChangePasswordView(View):
     def post(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         form = ChangePasswordForm(data=request.POST)
-        print(form.is_valid())
 
         if form.is_valid():
             user.set_password(form.cleaned_data['new_password1'])

@@ -1345,3 +1345,76 @@ input[type="checkbox"] {
     justify-items: center;
     align-items: center;
 }
+
+.action-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-go {
+    height: 38px;
+    padding: 0 15px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-go:hover {
+    background-color: #ac8559;
+}
+
+.btn-go:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Update existing media queries for responsiveness */
+@media (max-width: 768px) {
+    .actions-dropdown select {
+        width: 150px;
+        height: 30px;
+        font-size: 0.8rem;
+        padding: 4px 25px 4px 8px;
+        background-position: left 8px center;
+        border-radius: 7px;
+    }
+
+    .btn-go {
+        height: 30px;
+        padding: 0 10px;
+        font-size: 0.8rem;
+        border-radius: 7px;
+    }
+
+    .action-controls {
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .actions-dropdown select {
+        width: 100px;
+        height: 28px;
+        font-size: 0.75rem;
+        padding: 3px 20px 3px 6px;
+        background-position: left 6px center;
+        background-size: 10px;
+        border-radius: 7px;
+    }
+
+    .btn-go {
+        height: 28px;
+        padding: 0 8px;
+        font-size: 0.75rem;
+        border-radius: 7px;
+    }
+
+    .action-controls {
+        gap: 4px;
+    }
+}

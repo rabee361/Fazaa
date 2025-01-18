@@ -227,12 +227,14 @@ class ClientOfferView(generics.ListAPIView):
     
 
 class CreateClientOffer(BaseAPIView):
-    def post(self,request):
-        image = request.FILES.get('image' ,None)
+    def post(self,request): 
+        content = request.data.get('content', None)
+        expiresAt = request.data.get('expiresAt', None)
         organization = request.data.get('organization', None)
-        if not image or not organization:
+        template = request.data.get('template', None)
+        if not content or not expiresAt or not organization or not template:
             return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
-        
+            
         try:
             Organization.objects.get(id=organization)
             serializer = ClientOfferSerializer(data=request.data , context={'request':request})
@@ -267,11 +269,13 @@ class ServiceOfferView(generics.ListAPIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 
-class CreateServiceOffer(generics.CreateAPIView):
-    def post(self,request):
-        image = request.FILES.get('image' ,None)
+class CreateServiceOffer(BaseAPIView):
+    def post(self,request): 
+        content = request.data.get('content', None)
+        expiresAt = request.data.get('expiresAt', None)
+        organizations = request.data.get('organizations', None)
         organization = request.data.get('organization', None)
-        if not image or not organization:
+        if not content or not expiresAt or not organizations or not organization:
             return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
         
         try:

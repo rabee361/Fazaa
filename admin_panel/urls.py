@@ -7,19 +7,21 @@ UsersPatterns=[
     path('clients' , user_views.ListClientsView.as_view() , name="clients"),
     path('clients/add/' , user_views.CreateClientView.as_view() , name="add-client"),
     path('clients/<int:id>/info/' , user_views.ClientInfoView.as_view() , name="client-info"),
-    path('clients/delete/' , user_views.DeleteClientView.as_view() , name="delete-client"),
+    path('clients/action/' , user_views.BulkActionView.as_view() , name="bulk-action"),
 
     path('shareek' , user_views.ListShareeksView.as_view() , name="shareeks"),
     path('shareek/add/' , user_views.CreateShareekView.as_view() , name="add-shareek"),
     path('shareek/<int:id>/update/' , user_views.ShareekInfoView.as_view() , name="shareek-info"),
-    path('shareek/delete/' , user_views.DeleteShareekView.as_view() , name="delete-shareek"),
+    path('shareek/action/' , user_views.BulkActionView.as_view() , name="bulk-action"),
 
     path('admins' , user_views.ListAdminsView.as_view() , name="admins"),
     path('admins/add/' , user_views.CreateAdminView.as_view() , name="add-admin"),
     path('admins/<int:id>/info/' , user_views.AdminInfoView.as_view() , name="admin-info"),
-    path('admins/delete/' , user_views.DeleteAdminView.as_view() , name="delete-admin"),
+    path('admins/action/' , user_views.BulkActionView.as_view() , name="bulk-action"),
 
     path('change-password/<int:user_id>/' , user_views.ChangePasswordView.as_view() , name="change-password"),
+
+    path('bulk-action/', user_views.BulkActionView.as_view(), name="bulk-action"),
 ]
 
 

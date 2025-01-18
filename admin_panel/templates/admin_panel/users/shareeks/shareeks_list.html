@@ -23,19 +23,23 @@
         </div>
 
         <div class="actions-dropdown">
-            <select id="bulkAction" onchange="handleBulkAction(this.value)">
-                <option value="" selected disabled>اختر إجراء...</option>
-                <option value="delete">حذف المستخدمين المحددين</option>
-                <option value="deactivate">إلغاء تفعيل المستخدمين المحددين</option>
-                <option value="activate">تفعيل المستخدمين المحددين</option>
-            </select>
+            <div class="action-controls">
+                <select id="bulkAction">
+                    <option value="" selected disabled>اختر إجراء...</option>
+                    <option value="delete">حذف</option>
+                    <option value="deactivate">إلغاء تفعيل</option>
+                    <option value="activate">تفعيل</option>
+                </select>
+                <button type="button" class="btn-go" onclick="executeBulkAction()">تنفيذ</button>
+            </div>
         </div>
     </div>
 
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-shareek' %}">
+    <form id="bulkActionForm" method="POST" action="{% url 'bulk-action' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
+        <input type="hidden" name="action" id="selectedAction">
         
         <div class="table-container">
             <div class="table-responsive">

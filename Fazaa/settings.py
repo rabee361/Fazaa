@@ -33,7 +33,6 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENVIRONMENT = env('ENVIRONMENT', default=False)
-print(ENVIRONMENT)
 ALLOWED_HOSTS = [
     '145.223.80.125',
     '127.0.0.1',

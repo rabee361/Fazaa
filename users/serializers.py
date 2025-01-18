@@ -38,7 +38,6 @@ class LoginSerializer(Serializer):
 class SignUpUserSerializer(ModelSerializer):
     password = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)  
-
     class Meta:
         model = User
         fields = ['id', 'full_name', 'phonenumber', 'user_type', 'password2', 'password']
@@ -47,7 +46,6 @@ class SignUpUserSerializer(ModelSerializer):
         phonenumber = data.get('phonenumber' , None)
         password = data.get('password' , None)
         password2 = data.get('password2' , None)
-        print(phonenumber , password , password2)
         if not phonenumber or not password or not password2:
             raise serializers.ValidationError({"error": "رقم الهاتف وكلمة المرور مطلوب"})
 
