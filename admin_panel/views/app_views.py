@@ -17,28 +17,40 @@ login_required_m =  method_decorator(login_required, name="dispatch")
 class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
         social = SocialMediaUrl.objects.get(short_url=slug)
-        return redirect(social.url)
+        if social.active and social.url:
+            return redirect(social.url)
+        else:
+            return redirect('404')
 
 
 @login_required_m
 class WebsiteSlugUrlView(View):
     def get(self,request,slug):
         organization = Organization.objects.get(website_short_url=slug)
-        return redirect(organization.website)
+        if organization.website_short_url:
+            return redirect(organization.website)
+        else:
+            return redirect('404')
 
 
 @login_required_m
 class DeliverySlugUrlView(View):
     def get(self,request,slug):
         delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
-        return redirect(delivery.url)
+        if delivery.active and delivery.url:
+            return redirect(delivery.url)
+        else:
+            return redirect('404')
 
 
 @login_required_m
 class CatalogSlugUrlView(View):
     def get(self,request,slug):
         catalog = Catalog.objects.get(short_url=slug)
-        return redirect(catalog.file.url)
+        if catalog.short_url:
+            return redirect(catalog.file.url)
+        else:
+            return redirect('404')
 
 
 @login_required_m
@@ -207,9 +219,9 @@ class DeleteSubscriptionView(View):
 
 class handler404(View):
     def get(self, request):
-        return render(request, 'admin_panel/404.html')
+        return render(request, '404.html')
 
 class handler500(View):
     def get(self, request):
-        return render(request, 'admin_panel/500.html')
+        return render(request, '500.html')
 

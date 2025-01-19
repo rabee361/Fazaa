@@ -118,4 +118,6 @@ urlpatterns = [
     path('social/<slug:slug>/' , app_views.SocialMediaSlugUrlView.as_view()),
     path('website/<slug:slug>/' , app_views.WebsiteSlugUrlView.as_view()),
     path('delivery/<slug:slug>/' , app_views.DeliverySlugUrlView.as_view()),  
+    path('404/' , app_views.handler404.as_view() , name="404"),
+    path('500/' , app_views.handler500.as_view() , name="500"),
 ]
