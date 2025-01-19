@@ -13,67 +13,94 @@
 
     <div class="stats-grid">
         <!-- First Row -->
-        <div class="stat-card">
+        <a href="{% url 'clients' %}" class="stat-card">
             <h3>جميع العملاء</h3>
             <div class="stat-number">{{clients}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'shareeks' %}" class="stat-card">
             <h3>جميع الشركاء</h3>
             <div class="stat-number">{{shareeks}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'admins' %}" class="stat-card">
             <h3>جميع الأدمن</h3>
             <div class="stat-number">{{admins}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'organizations' %}" class="stat-card">
             <h3>جميع المنظمات</h3>
             <div class="stat-number">{{organizations}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
 
         <!-- Second Row -->
-        <div class="stat-card">
+        <a href="{% url 'social-links' %}" class="stat-card">
             <h3>روابط تواصل اجتماعي</h3>
             <div class="stat-number">{{social_media_urls}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'delivery-links' %}" class="stat-card">
             <h3>برامج التوصيل</h3>
             <div class="stat-number">{{delivery_companies_urls}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'social-media' %}" class="stat-card">
             <h3>تواصل اجتماعي</h3>
             <div class="stat-number">{{social_media}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'delivery-companies' %}" class="stat-card">
             <h3>روابط برامج توصيل</h3>
             <div class="stat-number">{{delivery_companies_urls}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
 
         <!-- Third Row -->
-        <div class="stat-card">
+        <a href="{% url 'organization-types' %}" class="stat-card">
             <h3>أنواع المنظمات</h3>
             <div class="stat-number">{{organization_types}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
         
-        <div class="stat-card">
+        <a href="{% url 'common-questions' %}" class="stat-card">
             <h3>الأسئلة الشائعة</h3>
             <div class="stat-number">{{common_questions}}</div>
             <div class="stat-wave"></div>
-        </div>
+        </a>
     </div>
 </div>
+
+<style>
+/* Add these styles to make the cards look clickable and handle hover states */
+.stat-card {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure text color doesn't change on hover */
+.stat-card h3,
+.stat-card .stat-number {
+    color: var(--text-primary);
+    transition: color 0.5s ease;
+}
+
+.stat-card:hover h3,
+.stat-card:hover .stat-number {
+    color: var(--accent-color);
+}
+</style>
 {% endblock %}

@@ -799,7 +799,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 100px);
+    min-height: 100vh;
     background-color: var(--bg-primary);
     padding: 20px;
 }
@@ -811,6 +811,18 @@
     background-color: var(--bg-secondary);
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.error-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(to right, var(--accent-color), #d4c4b4);
 }
 
 .error-code {
@@ -820,14 +832,16 @@
     margin: 0;
     line-height: 1;
     text-shadow: 2px 2px 4px rgba(166, 144, 118, 0.3);
+    animation: fadeInDown 0.5s ease-out;
 }
 
 .error-divider {
     width: 80px;
     height: 4px;
-    background-color: var(--accent-color);
+    background: linear-gradient(to right, var(--accent-color), #d4c4b4);
     margin: 20px auto;
     border-radius: 2px;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .error-title {
@@ -835,41 +849,71 @@
     font-size: 24px;
     margin: 20px 0 10px;
     font-weight: 600;
+    animation: fadeIn 1s ease-out;
 }
 
 .error-message {
     color: var(--text-secondary);
     font-size: 16px;
     margin-bottom: 30px;
+    animation: fadeIn 1.2s ease-out;
 }
 
 .error-button {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background-color: var(--accent-color);
+    background: linear-gradient(to right, var(--accent-color), #d4c4b4);
     color: white;
     padding: 12px 30px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 500;
-    transition: transform 0.3s ease, background-color 0.5s ease;
+    transition: all 0.3s ease;
+    animation: fadeIn 1.4s ease-out;
 }
 
 .error-button:hover {
-    background-color: #ac8559;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(166, 144, 118, 0.3);
+    box-shadow: 0 4px 12px rgba(166, 144, 118, 0.4);
+    background: linear-gradient(to right, #a17f4f, #c4b4a4);
 }
 
 .error-button i {
     font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.error-button:hover i {
+    transform: translateX(-4px);
+}
+
+/* Add animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Media Query for Mobile Devices */
 @media (max-width: 768px) {
     .error-container {
-        padding: 20px;
+        padding: 30px 20px;
+        margin: 20px;
     }
 
     .error-code {
@@ -886,6 +930,7 @@
 
     .error-button {
         padding: 10px 20px;
+        font-size: 14px;
     }
 }
 

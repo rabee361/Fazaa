@@ -118,7 +118,6 @@ class Catalog(models.Model):
 
     
 
-
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/default.jpg',verbose_name='الصورة')
@@ -128,28 +127,31 @@ class SocialMedia(models.Model):
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
     def save(self, *args, **kwargs):
-        # First save the SocialMedia instance
-        super().save(*args, **kwargs)
-        
-        # Then create the related SocialMediaUrl objects
-        if not hasattr(self, '_creating_urls'):  # Prevent infinite recursion
+        creating_urls = getattr(self, '_creating_urls', False)
+        if not creating_urls:
             self._creating_urls = True
-            organizations = Organization.objects.all()
-            for org in organizations:
-                social, created = SocialMediaUrl.objects.get_or_create(
-                    organization=org,
-                    social_media=self,
-                    defaults={'active': False}
-                )
-            delattr(self, '_creating_urls')
-
+            try:
+                super().save(*args, **kwargs)
+                if not self.pk:
+                    organizations = Organization.objects.all()
+                    for org in organizations:
+                        SocialMediaUrl.objects.get_or_create(
+                            organization=org,
+                            social_media=self,
+                            defaults={'active': False}
+                        )
+            finally:
+                self._creating_urls = False
+        else:
+            super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
 
 
 
-class   SocialMediaUrl(models.Model):
+
+class SocialMediaUrl(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة", related_name='socials')
     social_media = models.ForeignKey(SocialMedia, on_delete=models.CASCADE , verbose_name= "موقع التواصل الاجتماعي")
     url = models.URLField(max_length=300, null=True , blank=True , verbose_name= "الرابط")
@@ -164,6 +166,7 @@ class   SocialMediaUrl(models.Model):
         return f"/social/{self.short_url}/"
 
 
+
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255,verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/default.jpg',verbose_name='الصورة')
@@ -172,19 +175,24 @@ class DeliveryCompany(models.Model):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
-    def save(self, *args, **kwargs):       
-        super().save(*args, **kwargs)
-        if not hasattr(self, '_creating_urls'):  # Prevent infinite recursion
-            if not self.pk:
-                organizations = Organization.objects.all()
-                for org in organizations:
-                    delivery , created = DeliveryCompanyUrl.objects.get_or_create(
-                        organization=org,
-                        delivery_company=self,
-                        active=False
-                    )
-
-            delattr(self, '_creating_urls')
+    def save(self, *args, **kwargs):
+        creating_urls = getattr(self, '_creating_urls', False)
+        if not creating_urls:
+            self._creating_urls = True
+            try:
+                super().save(*args, **kwargs)
+                if not self.pk:
+                    organizations = Organization.objects.all()
+                    for org in organizations:
+                        DeliveryCompanyUrl.objects.get_or_create(
+                            organization=org,
+                            delivery_company=self,
+                            defaults={'active': False}
+                        )
+            finally:
+                self._creating_urls = False
+        else:
+            super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name

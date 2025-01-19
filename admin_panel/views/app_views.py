@@ -203,3 +203,13 @@ class DeleteSubscriptionView(View):
                 Subscription.objects.filter(id__in=selected_ids).delete()
             messages.success(request, 'تم حذف العناصر المحددة بنجاح')
             return HttpResponseRedirect(reverse('subscriptions'))
+
+
+class handler404(View):
+    def get(self, request):
+        return render(request, 'admin_panel/404.html')
+
+class handler500(View):
+    def get(self, request):
+        return render(request, 'admin_panel/500.html')
+

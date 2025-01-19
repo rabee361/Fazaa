@@ -18,8 +18,8 @@ urlpatterns = [
     path('shareek/organization/<int:pk>/delivery-url/update/' , shareek.UpdateDeliveryUrlView.as_view()),
 
     path('shareek/organization/<int:id>/reels/' , shareek.ReelsView.as_view()),
-    path('shareek/reels/create/' , shareek.CreateReelsView.as_view()),
-    path('shareek/reels/<int:id>/delete/' , shareek.DeleteReelsView.as_view()),
+    path('shareek/organization/reels/create/' , shareek.CreateReelsView.as_view()),
+    path('shareek/organization/reels/<int:id>/delete/' , shareek.DeleteReelsView.as_view()),
 
     path('shareek/organization/<int:id>/gallery/' , shareek.GalleryView.as_view()),
     path('shareek/organization/gallery/create/' , shareek.CreateGalleryView.as_view()),

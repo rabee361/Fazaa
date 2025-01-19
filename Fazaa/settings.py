@@ -31,7 +31,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
 ENVIRONMENT = env('ENVIRONMENT', default=False)
 ALLOWED_HOSTS = [
     '145.223.80.125',
@@ -175,6 +176,9 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.PhoneNumberBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend as fallback
 ]
+
+handler404 = 'admin_panel.views.handler404'
+handler500 = 'admin_panel.views.handler500'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

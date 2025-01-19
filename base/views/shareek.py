@@ -212,7 +212,7 @@ class CreateCatalogView(BaseAPIView):
             serializer = CatalogSerializer(data=request.data , context={'request':request})
             if serializer.is_valid():
                 serializer.save()
-                return Response({"data":serializer.data} , status=status.HTTP_201_CREATED)
+                return Response({serializer.data} , status=status.HTTP_201_CREATED)
             return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
         except Organization.DoesNotExist:
             return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
@@ -240,7 +240,7 @@ class CreateClientOffer(BaseAPIView):
             serializer = ClientOfferSerializer(data=request.data , context={'request':request})
             if serializer.is_valid():
                 serializer.save()
-                return Response({"data":serializer.data} , status=status.HTTP_201_CREATED)
+                return Response({serializer.data} , status=status.HTTP_201_CREATED)
             return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
         except Organization.DoesNotExist:
             return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
@@ -283,7 +283,7 @@ class CreateServiceOffer(BaseAPIView):
             serializer = ServiceOfferSerializer(data=request.data , context={'request':request})
             if serializer.is_valid():
                 serializer.save()
-                return Response({"data":serializer.data} , status=status.HTTP_201_CREATED)
+                return Response({serializer.data} , status=status.HTTP_201_CREATED)
             return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
         except Organization.DoesNotExist:
             return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
