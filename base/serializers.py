@@ -58,6 +58,12 @@ class SocialMediaUrlSerializer(ModelSerializer):
 
 
 
+class SocialMediaUrlUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = SocialMediaUrl
+        fields = ['id', 'organization', 'social_media', 'url', 'short_url', 'active', 'createdAt']
+        read_only_fields = ['id', 'organization', 'social_media', 'short_url', 'createdAt']
+
 
 
 
@@ -86,6 +92,15 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.get_absolute_url())
     
+
+
+class DeliveryUrlUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = DeliveryCompanyUrl
+        fields = ['id', 'organization', 'delivery_company', 'url', 'short_url', 'active', 'createdAt']
+        read_only_fields = ['id', 'organization', 'delivery_company', 'short_url', 'createdAt']
+
+
 
     
 class CatalogSerializer(ModelSerializer):

@@ -89,7 +89,7 @@ class SocialMediaUrlView(BaseAPIView):
 
 class UpdateSocialMediaUrlView(BaseAPIView , generics.UpdateAPIView):
     queryset = SocialMediaUrl.objects.all()
-    serializer_class = SocialMediaUrlSerializer
+    serializer_class = SocialMediaUrlUpdateSerializer
 
 
 
@@ -109,7 +109,7 @@ class DeliveryUrlView(BaseAPIView):
 
 
 class UpdateDeliveryUrlView(generics.UpdateAPIView):
-    serializer_class = DeliveryCompanyUrlSerializer
+    serializer_class = DeliveryUrlUpdateSerializer
     queryset = DeliveryCompanyUrl.objects.all()
 
 
