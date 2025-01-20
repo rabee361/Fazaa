@@ -47,6 +47,7 @@ class ShareekRegisterView(BaseAPIView):
         user = request.user
         user.email = request.data.get('email', None)
         user.full_name = request.data.get('full_name', None)
+        user.user_type = 'SHAREEK'
         user.save()
         
         # Check if the organization already exists or create a new one

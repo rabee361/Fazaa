@@ -18,7 +18,7 @@ class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
         social = SocialMediaUrl.objects.get(short_url=slug)
         if social.active and social.url:
-            return redirect(social.url)
+            return redirect(social.url) 
         else:
             return redirect('404')
 
