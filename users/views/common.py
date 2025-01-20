@@ -84,7 +84,7 @@ class SignUpOTPView(BaseAPIView):
         phonenumber = self.request.data.get('phonenumber',None)
         if phonenumber is None:
             return Response({"error":'الرجاء إدخال رقم الهاتف'})
-        if OTPCode.checkLimit(phonenumber):
+        if not OTPCode.checkLimit(phonenumber):
             otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type='SIGNUP')
             #send the code to the user over whatsapp
             #send_code()

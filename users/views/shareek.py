@@ -27,6 +27,7 @@ class ShareekSignUpView(APIView):
         serializer = SignUpShareekSerializer(data = request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
+            user.create_signup_otp()
             data = serializer.data
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}

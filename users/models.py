@@ -47,14 +47,16 @@ class User(AbstractUser):
         if self.image and self.image.size > 2 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
 
-    def save(self , *args , **kwargs) -> None:
-        OTPCode.objects.create( ## put in the save method in User Model
-            phonenumber=self.phonenumber,
-            full_name=self.full_name,
-            code_type='SIGNUP'
-        )
-        return super().save(*args, **kwargs)   
-    
+    def create_signup_otp(self, *args, **kwargs):
+        code = OTPCode.objects.filter(phonenumber=self.phonenumber, expiresAt__date=timezone.now().date(), is_used=False).first()
+        if not code:
+            otp = OTPCode.objects.create(
+                code_type='SIGNUP',
+                phonenumber=self.phonenumber,
+                full_name=self.full_name
+            )
+            return otp
+
     class Meta:
         ordering = ['-id']
 
@@ -72,6 +74,7 @@ class OTPCode(models.Model):
     code_type = models.CharField(max_length=20, choices=CodeTypes.choices , default=CodeTypes.SIGNUP)
     is_used = models.BooleanField(default=False)
 
+    @staticmethod
     def checkLimit(phonenumber):
         return OTPCode.objects.filter(phonenumber=phonenumber,createdAt__gt=timezone.localtime()-timezone.timedelta(minutes=15)).count() >= 5 
 
