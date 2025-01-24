@@ -1,19 +1,17 @@
-from django.urls import path , include
+from django.urls import path
 from .views import shareek , client , common
 
 
 urlpatterns = [
     path('shareek/organization/types' , shareek.OrganizationTypes.as_view()),
-    # path('organization/<int:id>' , shareek.UpdateOrganizationView.as_view()),
     path('shareek/organization/<int:id>/delete' , shareek.DeleteOrganizationView.as_view()),
+    path('shareek/organization/<int:id>/update/' , shareek.UpdateOrganizationView.as_view()),
     path('shareek/organizations' , shareek.OrganizatinosListView.as_view()),
     path('shareek/organization/<int:pk>' , shareek.GetOrganizationView.as_view()),
 
-    # path('social-media/' , shareek.SocialMediaView.as_view()),
     path('shareek/organization/<int:pk>/social-url/' , shareek.SocialMediaUrlView.as_view()),
     path('shareek/organization/<int:pk>/social-urls/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
 
-    # path('delivery-companies/' , shareek.DeliveryCompanyView.as_view()),
     path('shareek/organization/<int:pk>/delivery-url/' , shareek.DeliveryUrlView.as_view()),
     path('shareek/organization/<int:pk>/delivery-url/update/' , shareek.UpdateDeliveryUrlView.as_view()),
 

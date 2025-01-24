@@ -286,3 +286,11 @@ class OrganizationSerializer(ModelSerializer):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.get_absolute_card_url())
 
+
+
+class UpdateOrganizationSerializer(ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ['logo','description','website']
+
+    

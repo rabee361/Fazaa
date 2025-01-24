@@ -80,6 +80,28 @@ class DeleteOrganizationView(generics.DestroyAPIView):
 
 
 
+class UpdateOrganizationView(BaseAPIView):
+    def put(self,request,id):
+        try:
+            branches = request.data.get('branches', None)
+            organization = Organization.objects.get(id=id)
+            serializer = UpdateOrganizationSerializer(organization , data=request.data)
+
+            if branches:
+                Branch.objects.filter(organization=organization).delete()
+                branch_points = [Branch(
+                    organization=organization,
+                    location=Point(float(branch['longitude']), float(branch['latitude']), srid=4326),
+                ) for branch in branches]
+                Branch.objects.bulk_create(branch_points)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data , status=status.HTTP_200_OK)
+            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        except Organization.DoesNotExist:
+            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
+
 class SocialMediaUrlView(BaseAPIView):
     def get(self,request,pk):
         socials = SocialMediaUrl.objects.filter(organization__id=pk)
