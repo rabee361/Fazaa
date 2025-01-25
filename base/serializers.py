@@ -208,6 +208,16 @@ class CommonQuestionsSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class ContactUsSerializer(ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = '__all__'
+
+    def get_image(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.image.url)
+
+
 
 class ReportSerializer(ModelSerializer):
     class Meta:

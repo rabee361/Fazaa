@@ -73,6 +73,12 @@ class CommonQuestionAdmin(admin.ModelAdmin):
     list_display = ['id', 'question', 'answer', 'createdAt']
     search_fields = ['question', 'answer']
 
+class TermsPrivacyAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'content', 'createdAt']
+
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+
 
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(OrganizationType, OrganizationTypeAdmin)
@@ -90,3 +96,5 @@ admin.site.register(ServiceOffer, ServiceOfferAdmin)
 admin.site.register(Template, TemplateAdmin)
 admin.site.register(Report, ReportAdmin)
 admin.site.register(CommonQuestion, CommonQuestionAdmin)
+admin.site.register(TermsPrivacy, TermsPrivacyAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)

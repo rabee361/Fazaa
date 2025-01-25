@@ -39,8 +39,9 @@ urlpatterns = [
 
     path('shareek/templates/' , shareek.TemplatesView.as_view()),
 
-    path('terms-privacy/' , common.TermsPrivacyView.as_view()),
-    path('common-questions/' , common.CommonQuestionsView.as_view()),
+    path('terms-privacy' , common.TermsPrivacyView.as_view()),
+    path('contact-us' , common.ContactUsView.as_view()),
+    path('common-questions' , common.CommonQuestionsView.as_view()),
 
     path('reports/create/' , client.CreateReportView.as_view()),
     path('reports/<int:user_id>' , client.ReportListView.as_view()),
