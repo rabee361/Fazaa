@@ -1,0 +1,64 @@
+
+
+<!-- First Row -->
+<a href="{% url 'clients' %}" class="stat-card">
+    <h3>جميع العملاء</h3>
+    <div class="stat-number">{{clients}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'shareeks' %}" class="stat-card">
+    <h3>جميع الشركاء</h3>
+    <div class="stat-number">{{shareeks}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'admins' %}" class="stat-card">
+    <h3>جميع الأدمن</h3>
+    <div class="stat-number">{{admins}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'organizations' %}" class="stat-card">
+    <h3>جميع المنظمات</h3>
+    <div class="stat-number">{{organizations}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<!-- Second Row -->
+<a href="{% url 'social-links' %}" class="stat-card">
+    <h3>روابط تواصل اجتماعي</h3>
+    <div class="stat-number">{{social_media_urls}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'delivery-links' %}" class="stat-card">
+    <h3>برامج التوصيل</h3>
+    <div class="stat-number">{{delivery_companies_urls}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'social-media' %}" class="stat-card">
+    <h3>تواصل اجتماعي</h3>
+    <div class="stat-number">{{social_media}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'delivery-companies' %}" class="stat-card">
+    <h3>روابط برامج توصيل</h3>
+    <div class="stat-number">{{delivery_companies_urls}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<!-- Third Row -->
+<a href="{% url 'organization-types' %}" class="stat-card">
+    <h3>أنواع المنظمات</h3>
+    <div class="stat-number">{{organization_types}}</div>
+    <div class="stat-wave"></div>
+</a>
+
+<a href="{% url 'common-questions' %}" class="stat-card">
+    <h3>الأسئلة الشائعة</h3>
+    <div class="stat-number">{{common_questions}}</div>
+    <div class="stat-wave"></div>
+</a>

@@ -63,8 +63,46 @@ class LogoutView(View):
         logout(request)
         return redirect('login')
 
-@login_required_m
+# @login_required_m
+# class DashboardView(View):
+#     def get(self, request):
+        
+#         user_counts = User.objects.aggregate(
+#             admins=Count('id', filter=Q(user_type='ADMIN')),
+#             clients=Count('id', filter=Q(user_type='CLIENT')), 
+#             shareeks=Count('id', filter=Q(user_type='SHAREEK'))
+#         )
+#         admins = user_counts['admins']
+#         clients = user_counts['clients']
+#         shareeks = user_counts['shareeks']
+#         organizations = Organization.objects.count()
+#         organization_types = OrganizationType.objects.count()
+#         delivery_companies = DeliveryCompany.objects.count()
+#         delivery_companies_urls = DeliveryCompanyUrl.objects.count()
+#         social_media = SocialMedia.objects.count()
+#         social_media_urls = SocialMediaUrl.objects.count()
+#         common_questions = CommonQuestion.objects.count()
+#         context = {
+#             'admins':admins,
+#             'clients':clients,
+#             'shareeks':shareeks,
+#             'organizations':organizations,
+#             'delivery_companies':delivery_companies,
+#             'delivery_companies_urls':delivery_companies_urls,
+#             'social_media_urls':social_media_urls,
+#             'social_media':social_media,
+#             'organization_types':organization_types,
+#             'common_questions':common_questions,
+#         }
+#         return render(request, 'admin_panel/dashboard.html',context=context)
+
+
 class DashboardView(View):
+    def get(self, request):
+        return render(request, 'admin_panel/dashboard.html',context={})
+
+
+class DashboardPartialView(View):
     def get(self, request):
         
         user_counts = User.objects.aggregate(
@@ -94,7 +132,8 @@ class DashboardView(View):
             'organization_types':organization_types,
             'common_questions':common_questions,
         }
-        return render(request, 'admin_panel/dashboard.html',context=context)
+        return render(request, 'admin_panel/partials/dashboard_partial.html',context=context)
+
 
 
 @login_required_m

@@ -105,4 +105,4 @@ class DeleteShareekView(BaseAPIView):
         shareek.organization.delete()
         shareek.delete()
         user.delete()
-        return Response({'message':'user deleted'},status=status.HTTP_200_OK)
+        return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)

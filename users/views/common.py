@@ -186,3 +186,12 @@ class UpdateLocationView(BaseAPIView):
             return Response({"message":'تم تحديث الموقع بنجاح'} , status=status.HTTP_200_OK)
         else:
             return Response({"error":'الرجاء إدخال الموقع'} , status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class DeleteAccountView(APIView):
+    def delete(self,request,user_id):
+        user = User.objects.get(id=user_id)
+        user.delete()
+        return Response({"message":"تم حذف الحساب بنجاح"} , status=status.HTTP_204_NO_CONTENT)

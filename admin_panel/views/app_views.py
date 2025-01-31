@@ -86,6 +86,17 @@ class DeleteReportView(View):
         return HttpResponseRedirect(reverse('reports'))
 
 
+class ListSupportChatsView(View):
+    model = SupportChat
+    context_object_name = 'chats'
+    template_name = 'admin_panel/app/chats.html'
+
+
+class ListMessagesView(View):
+    def get(self,request,chat_id):
+        messages = Message.objects.filter(chat_id=chat_id)
+        return 
+
 @login_required_m
 class CommonQuestionsView(CustomListBaseView):
     model = CommonQuestion

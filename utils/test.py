@@ -3,11 +3,8 @@ from utils.helper import getRandomPhonenumber, getRandomEmail, getRandomPassword
 
 #function to create client user
 def create_client():
-    user=User.objects.create(phonenumber=getRandomPhonenumber(),
-                                  full_name='test',
-                                  user_type='CLIENT',
-                                  password='client123@@',
-                                  email=getRandomEmail())
+    user=User.objects.create(phonenumber=getRandomPhonenumber(),full_name='test',user_type='CLIENT',password='client123@@',email=getRandomEmail())
+    
     #hash password
     user.set_password(user.password)
     user.save()
@@ -32,4 +29,6 @@ def create_shareek():
 
     shareek=Shareek.objects.create(user=user,job='test',organization=organization)
     return user
+
+
 

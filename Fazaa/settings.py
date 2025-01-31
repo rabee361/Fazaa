@@ -119,6 +119,10 @@ if ENVIRONMENT:
             'PASSWORD': env('DEV_DB_PASSWORD'),
             'HOST': env('DEV_DB_HOST'),
             'PORT': env('DEV_DB_PORT'),
+        },
+        'test': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test.sqlite3',
         }
     }
 

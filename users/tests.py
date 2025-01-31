@@ -1,17 +1,18 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase
 from utils.test import create_client , create_shareek
-from users.models import User
-from users.serializers import UserSerializer
+from users.models import OTPCode
 # Create your tests here.
 
 
 
 
 
-class SignUpShareekTestCase(APITestCase):
+class AuthenticationTestCase(APITestCase):
     def setUp(self):
-       self.clientUser= create_shareek()
+       self.client_refresh_token = ''
+       self.shareek_refresh_token = ''
+       self.client_access_token = ''
+       self.shareek_access_token = ''
 
     def test_signup_shareek(self):
         data={
@@ -19,72 +20,90 @@ class SignUpShareekTestCase(APITestCase):
             'password':'shareek123@@',
             'password2':'shareek123@@'
         }   
-        response = self.client.post('/api/auth/shareek/sign-up/',data)
+        response = self.client.post('/api/auth/shareek/sign-up/',data, format='json')
+        self.shareek_refresh_token = response.json()['tokens']['refresh']
         self.assertEqual(response.status_code, 200)
-
-
-
-class LoginShareekTestCase(APITestCase):
-    def setUp(self):
-       self.clientUser= create_shareek()
-
-    def test_signup_shareek(self):
-        data={
-            'phonenumber':self.clientUser.phonenumber,
-            'password':'shareek123@@'
-        }
-        response = self.client.post('/api/auth/shareek/login/',data)
+        response = self.client.post('/api/auth/shareek/token/refresh/',{'refresh':self.shareek_refresh_token} , format='json')
         self.assertEqual(response.status_code, 200)
-
-
- 
-class SignUpClientTestCase(APITestCase):
-    def setUp(self):
-       self.clientUser= create_client()
+        self.shareek_access_token = response.json()['access']
+        response = self.client.delete(f'/api/auth/shareek/delete/', headers={'Authorization':f'Bearer {self.shareek_access_token}'}, format='json')
+        self.assertEqual(response.status_code, 200)
 
     def test_signup_client(self):
         data = {
-            'phonenumber': '0554455345',
+            'phonenumber': '0554455346',
             'password':'client123@@',
             'password2':'client123@@'
         }
-        response = self.client.post('/api/auth/client/sign-up/',data)
+        response = self.client.post('/api/auth/client/sign-up/',data, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.client_refresh_token = response.json()['tokens']['refresh']
+        response = self.client.post('/api/auth/client/token/refresh/',{'refresh':self.client_refresh_token} , format='json')
+        self.assertEqual(response.status_code, 200)
+        self.client_access_token = response.json()['access']
+        response = self.client.delete(f'/api/auth/client/delete/', headers={'Authorization':f'Bearer {self.client_access_token}'}, format='json')
         self.assertEqual(response.status_code, 200)
 
 
 
-class LoginClientTestCase(APITestCase):
+
+
+
+
+
+
+
+ 
+class LoginTestCase(APITestCase):
     def setUp(self):
-       self.clientUser= create_client()
+       self.shareek_user = create_shareek()
+       self.client_user = create_client()
+
+    def test_login_shareek(self):
+        data={
+            'phonenumber':self.shareek_user.phonenumber,
+            'password':'shareek123@@'
+        }
+        response = self.client.post('/api/auth/shareek/login/',data, format='json')
+        self.assertEqual(response.status_code, 200)
 
     def test_login_client(self):
         data={
-            'phonenumber':self.clientUser.phonenumber,
+            'phonenumber':self.client_user.phonenumber,
             'password':'client123@@'
         }
-        response = self.client.post('/api/auth/client/login/',data)
+        response = self.client.post('/api/auth/client/login/',data , format='json')
         self.assertEqual(response.status_code, 200)
 
 
-# class ListOrganizationTestCase(APITestCase):
-#     def setUp(self):
-#        self.clientUser= create_client()
-
-#     def test_get_services(self):
-#         # auth client user
-#         self.client.force_authenticate(user=self.clientUser)
-#         response = self.client.post('/service/client/get_services')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json()['isSuccess'],True)
-#         self.assertEqual(len(response.json()['data']),Service.objects.all().count())
-#         self.assertEqual(response.json()['data'],ServiceSerializer(Service.objects.all(),many=True).data)
 
 
-# class OrderConfigTestCase(APITestCase):
-#     def  setUp(self):
-#        self.clientUser= create_client()
-#     def test_get_order_config(self):
-#         # auth client user
-#         self.client.force_authenticate(user=self.clientUser)
-#         response = self.client.get('/auth/client/app_config')
-#         self.assertEqual(response.status_code, 200)
+class TestOTP(APITestCase):
+    def setUp(self):
+        self.client_user = create_client()
+        self.shareek_user = create_shareek()
+
+    def test_otp_signup_client(self):
+        response = self.client.post('/api/auth/client/signup-otp/',{'phonenumber':self.client_user.phonenumber}, format='json')
+        code = OTPCode.objects.get(phonenumber=self.client_user.phonenumber).code
+        code_verification = self.client.post('/api/auth/client/verify-otp/',{'code':code}, format='json')
+        self.assertEqual(code_verification.status_code, 200)
+
+    def test_otp_forget_password_client(self):
+        response = self.client.post('/api/auth/client/forget-password-otp/',{'phonenumber':self.client_user.phonenumber}, format='json')
+        code = OTPCode.objects.get(phonenumber=self.client_user.phonenumber).code
+        code_verification = self.client.post('/api/auth/client/verify-otp/',{'code':code}, format='json')
+        self.assertEqual(code_verification.status_code, 200)
+
+    def test_otp_signup_shareek(self):
+        response = self.client.post('/api/auth/shareek/signup-otp/',{'phonenumber':self.shareek_user.phonenumber}, format='json')
+        code = OTPCode.objects.get(phonenumber=self.shareek_user.phonenumber).code
+        code_verification = self.client.post('/api/auth/shareek/verify-otp/',{'code':code}, format='json')
+        self.assertEqual(code_verification.status_code, 200)
+
+    def test_otp_forget_password_shareek(self):
+        response = self.client.post('/api/auth/shareek/forget-password-otp/',{'phonenumber':self.shareek_user.phonenumber}, format='json')
+        code = OTPCode.objects.get(phonenumber=self.shareek_user.phonenumber).code
+        code_verification = self.client.post('/api/auth/shareek/verify-otp/',{'code':code}, format='json')
+        self.assertEqual(code_verification.status_code, 200)
+
