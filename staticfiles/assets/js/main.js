@@ -170,6 +170,59 @@ function showSelectableUrl(url) {
 
 
 
+function executeBulkAction() {
+    const bulkActionForm = document.getElementById('bulkActionForm');
+    if (!bulkActionForm) {
+        console.error('Bulk action form not found');
+        return;
+    }
+
+    const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+    const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+    const action = document.getElementById('bulkAction').value;
+
+    if (selectedIds.length === 0) {
+        alert('الرجاء اختيار عنصر واحد على الأقل');
+        return;
+    }
+
+    if (!action) {
+        alert('الرجاء اختيار إجراء');
+        return;
+    }
+
+    if (action === 'delete' && !confirm('هل أنت متأكد من حذف العناصر المحددة؟')) {
+        return;
+    }
+
+    document.getElementById('selectedIds').value = JSON.stringify(selectedIds);
+    document.getElementById('selectedAction').value = action;
+    bulkActionForm.submit();
+}
+
+// Initialize bulk action functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        });
+    }
+
+    // Initialize row checkboxes
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
+            if (selectAll) {
+                selectAll.checked = allChecked;
+            }
+        });
+    });
+});
+
+
 
 
         // Theme switching functionality
