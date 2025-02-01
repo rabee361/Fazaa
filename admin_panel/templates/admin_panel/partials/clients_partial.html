@@ -1,0 +1,9 @@
+{% for client in clients %}
+<tr onclick="clickHandler(event)" data-link="{% url 'client-info' client.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ client.id }}"></td>
+    <td>{{ client.id }}</td>
+    <td>{{ client.full_name }}</td>
+    <td>{{ client.phonenumber }}</td>
+    <td>{% if client.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
+</tr>
+{% endfor %}

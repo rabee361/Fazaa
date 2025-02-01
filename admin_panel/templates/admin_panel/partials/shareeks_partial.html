@@ -1,0 +1,9 @@
+{% for shareek in shareeks %}
+<tr onclick="clickHandler(event)" data-link="{% url 'shareek-info' shareek.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ shareek.id }}"></td>
+    <td>{{ shareek.id }}</td>
+    <td>{{ shareek.full_name }}</td>
+    <td>{{ shareek.phonenumber }}</td>
+    <td>{% if shareek.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
+</tr>
+{% endfor %}

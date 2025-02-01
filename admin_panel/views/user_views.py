@@ -143,7 +143,13 @@ class ListClientsView(CustomListBaseView):
     template_name = 'admin_panel/users/clients/clients_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(user_type='CLIENT')
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/clients_partial.html'
+        if q:
+            return super().get_queryset().filter(Q(full_name__icontains=q) | Q(phonenumber__icontains=q), user_type='CLIENT')
+        else:
+            return super().get_queryset().filter(user_type='CLIENT')
 
 @login_required_m
 class CreateClientView(generic.CreateView):
@@ -185,8 +191,13 @@ class ListShareeksView(CustomListBaseView,generic.ListView):
     template_name = 'admin_panel/users/shareeks/shareeks_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(user_type='SHAREEK')
-
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/shareeks_partial.html'
+        if q:
+            return super().get_queryset().filter(Q(full_name__istartswith=q) | Q(phonenumber__istartswith=q), user_type='SHAREEK')
+        else:
+            return super().get_queryset().filter(user_type='SHAREEK')
 
 @login_required_m
 class CreateShareekView(generic.CreateView):
@@ -228,7 +239,13 @@ class ListAdminsView(CustomListBaseView,generic.ListView):
     template_name = 'admin_panel/users/admins/admins_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(user_type='ADMIN')
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/admins_partial.html'
+        if q:
+            return super().get_queryset().filter(Q(full_name__istartswith=q) | Q(phonenumber__istartswith=q), user_type='ADMIN')
+        else:
+            return super().get_queryset().filter(user_type='ADMIN')
 
 @login_required_m
 class CreateAdminView(View):

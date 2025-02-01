@@ -16,9 +16,10 @@
         <div class="search-container">
             <form method="get" class="search-box">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+                <input hx-get="{% url 'admins' %}" hx-push-url="true" hx-target="#admin-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
             </form>
         </div>
+
 
         <div class="actions-dropdown">
             <div class="action-controls">
@@ -49,19 +50,12 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for admin in admins %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'admin-info' admin.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ admin.id }}"></td>
-                            <td>{{ admin.id }}</td>
-                            <td>{{ admin.full_name }}</td>
-                            <td>{{ admin.phonenumber }}</td>
-                            <td>{% if admin.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="admin-partial">
+                        {% include 'admin_panel/partials/admins_partial.html' %}
                     </tbody>
                 </table>
             </div>
+
         </div>
 
         <div class="table-controls">

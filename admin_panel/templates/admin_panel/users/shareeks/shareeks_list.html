@@ -18,9 +18,10 @@
         <div class="search-container d-flex justify-content-center">
             <form method="get" class="search-box">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+                <input hx-get="{% url 'shareeks' %}" hx-push-url="true" hx-target="#shareek-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
             </form>
         </div>
+
 
         <div class="actions-dropdown">
             <div class="action-controls">
@@ -52,19 +53,12 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for shareek in shareeks %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'shareek-info' shareek.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ shareek.id }}"></td>
-                            <td>{{ shareek.id }}</td>
-                            <td>{{ shareek.full_name }}</td>
-                            <td>{{ shareek.phonenumber }}</td>
-                            <td>{% if shareek.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="shareek-partial">
+                        {% include 'admin_panel/partials/shareeks_partial.html' %}
                     </tbody>
                 </table>
             </div>
+
         </div>
 
         <div class="table-controls">

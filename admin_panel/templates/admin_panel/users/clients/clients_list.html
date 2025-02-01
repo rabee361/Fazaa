@@ -16,10 +16,12 @@
         <div class="search-container d-flex justify-content-center">
             <form method="get" class="search-box">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+                <input hx-get="{% url 'clients' %}" hx-push-url="true" hx-target="#client-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
             </form>
         </div>
             
+
+
         <div class="actions-dropdown">
             <div class="action-controls">
                 <select id="bulkAction">
@@ -49,16 +51,8 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for client in clients %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'client-info' client.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ client.id }}"></td>
-                            <td>{{ client.id }}</td>
-                            <td>{{ client.full_name }}</td>
-                            <td>{{ client.phonenumber }}</td>
-                            <td>{% if client.is_active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="client-partial">
+                        {% include 'admin_panel/partials/clients_partial.html' %}
                     </tbody>
                 </table>
             </div>
