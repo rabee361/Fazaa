@@ -16,7 +16,7 @@
         <div class="search-container d-flex justify-content-center">
             <form method="get" class="search-box">
                 <i class="fas fa-search search-icon"></i>
-                <input hx-get="{% url 'clients' %}" hx-push-url="true" hx-target="#client-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+                <input hx-get="{% url 'clients' %}" hx-push-url="true" hx-target="#client-partial" hx-swap="innerHTML" hx-trigger="keyup changed " type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
             </form>
         </div>
             

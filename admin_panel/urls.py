@@ -22,6 +22,9 @@ UsersPatterns=[
     path('change-password/<int:user_id>/' , user_views.ChangePasswordView.as_view() , name="change-password"),
 
     path('bulk-action/', user_views.BulkActionView.as_view(), name="bulk-action"),
+
+    path('chats' , app_views.ListSupportChatsView.as_view() , name="chats"),
+    path('<int:chat_id>/messages' , app_views.ListMessagesView.as_view() , name="messages"),
 ]
 
 
@@ -89,9 +92,6 @@ OrganizationPatterns=[
     path('reports' , app_views.ListReportsView.as_view() , name="reports"),
     path('reports/<int:id>/info' , app_views.GetReportView.as_view() , name="report-info"),
     path('reports/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
-
-    path('chats' , app_views.ListSupportChatsView.as_view() , name="chats"),
-    path('<int:chat_id>/messages' , app_views.ListMessagesView.as_view() , name="messages"),
 
     path('common-questions' , app_views.CommonQuestionsView.as_view() , name="common-questions"),
     path('common-questions/add' , app_views.CreateQuestionView.as_view() , name="add-common-question"),

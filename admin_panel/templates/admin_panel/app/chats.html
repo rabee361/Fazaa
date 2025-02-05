@@ -1,8 +1,105 @@
-{% extends 'base' %}
+{% extends 'admin_panel/base.html' %}
+{% load static %}
 
 {% block title %} الدعم {% endblock %}
 
 {% block content %}
+<div class="chat-container">
+    <!-- Chat List Sidebar -->
+    <div class="chat-list">
+        <div class="chat-list-header">
+            <div class="chat-header-content">
+                <h3>المحادثات</h3>
+                <div class="chat-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="بحث...">
+                </div>
+            </div>
+        </div>
+        <div class="chat-list-content">
+            <!-- Sample chat items - Replace with dynamic data -->
+            {% for chat in chats %} 
+            <div class="chat-item">
+                <img src="{% static 'assets/images/placeholder.jpg' %}" alt="User" class="chat-avatar">
+                <div class="chat-info">
+                    <h4>{{chat.user.full_name}}</h4>
+                </div>
+                <span class="chat-time">{{chat.last_message|date:"H:i"}}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
+    <!-- Chat Messages Area -->
+    <div class="chat-messages">
+        <div class="chat-messages-header">
+            <div class="current-chat-info">
+                <img src="{% static 'assets/images/placeholder.jpg' %}" alt="User" class="chat-avatar">
+                <div>
+                    <h3>ali ali</h3>
+                    <span class="status online">متصل</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="messages-container">
+            <!-- Sample messages - Replace with dynamic data -->
+            <div class="message received">
+                <div class="message-content">
+                    <p>مرحباً، كيف يمكنني المساعدة؟</p>
+                    <span class="message-time">12:25</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+            <div class="message sent">
+                <div class="message-content">
+                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
+                    <span class="message-time">12:27</span>
+                </div>
+            </div>
+        </div>
 
+        <div class="chat-input">
+            <input type="text" placeholder="اكتب رسالتك هنا...">
+            <button class="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
 {% endblock %}

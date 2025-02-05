@@ -140,6 +140,9 @@ class Message(models.Model):
     content = models.CharField(max_length=255)
     createdAt = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f"{self.sender.full_name} - {self.chat.user.full_name}"
+
 
 
 

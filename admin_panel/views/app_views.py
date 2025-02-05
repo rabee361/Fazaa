@@ -9,8 +9,10 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
+from django.db.models import Max
 
 login_required_m =  method_decorator(login_required, name="dispatch")
+
 
 
 @login_required_m
@@ -87,9 +89,12 @@ class DeleteReportView(View):
 
 
 class ListSupportChatsView(View):
-    model = SupportChat
-    context_object_name = 'chats'
-    template_name = 'admin_panel/app/chats.html'
+    def get(self, request):
+        chats = SupportChat.objects.select_related('user').annotate(last_message=Max('message__createdAt')).all()
+        context = {
+            'chats': chats,
+        }
+        return render(request, 'admin_panel/app/chats.html' , context=context)
 
 
 class ListMessagesView(View):

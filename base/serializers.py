@@ -299,8 +299,27 @@ class OrganizationSerializer(ModelSerializer):
 
 
 class UpdateOrganizationSerializer(ModelSerializer):
+    branches = serializers.ListField(write_only=True)
     class Meta:
         model = Organization
-        fields = ['logo','description','website']
+        fields = ['logo','description','website','branches']
 
+
+    def validate_branches(self,value):
+        if len(value) == 0:
+            raise serializers.ValidationError('يجب إضافة على الأقل فرع واحد')
+        return value
     
+    def update(self, instance, validated_data):
+        branches = validated_data.get('branches')
+        instance = super().update(instance, validated_data)
+        print(branches)
+        for branch in branches:
+            print(branch)
+            print("RRRRRRRRRRRRRRRRR")
+            if isinstance(branch, dict):
+                Branch.objects.create(organization=instance, **branch)
+            else:
+                raise serializers.ValidationError('يجب إضافة فرع بشكل صالح')
+        return instance
+

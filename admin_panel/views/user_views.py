@@ -104,6 +104,8 @@ class DashboardView(View):
 
 class DashboardPartialView(View):
     def get(self, request):
+        import time
+        time.sleep(1)
         user_counts = User.objects.aggregate(
             admins=Count('id', filter=Q(user_type='ADMIN')),
             clients=Count('id', filter=Q(user_type='CLIENT')), 

@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'fcm_django',
+    'channels',
 ]
 
 # django leaflet settings
@@ -74,6 +75,24 @@ LEAFLET_CONFIG = {
     'MIN_ZOOM':3,
     'SCALE': 'both'
 }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
+
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#     }
+# }
+
 
 MIDDLEWARE = [
     'silk.middleware.SilkyMiddleware',
@@ -106,6 +125,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Fazaa.wsgi.application'
+ASGI_APPLICATION = 'Fazaa.asgi.application'
 
 
 # Database
@@ -126,7 +146,8 @@ if ENVIRONMENT:
             'NAME': 'test.sqlite3',
         }
     }
-
+    print("Running in development using SQLite")
+    
 if not ENVIRONMENT: # production
     DATABASES = {
         'default': {
@@ -138,6 +159,7 @@ if not ENVIRONMENT: # production
             'PORT': '5432',
         }
     }
+    print("Running in production using PostgresQL")
 
 AUTH_USER_MODEL = 'users.User'
 
