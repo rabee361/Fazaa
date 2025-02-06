@@ -10,10 +10,10 @@ urlpatterns = [
     path('shareek/organization/<int:pk>' , shareek.GetOrganizationView.as_view()),
 
     path('shareek/organization/<int:pk>/social-url/' , shareek.SocialMediaUrlView.as_view()),
-    path('shareek/organization/<int:pk>/social-urls/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
+    path('shareek/organization/social-urls/<int:pk>/update/' , shareek.UpdateSocialMediaUrlView.as_view()),
 
     path('shareek/organization/<int:pk>/delivery-url/' , shareek.DeliveryUrlView.as_view()),
-    path('shareek/organization/<int:pk>/delivery-url/update/' , shareek.UpdateDeliveryUrlView.as_view()),
+    path('shareek/organization/delivery-url/<int:pk>/update/' , shareek.UpdateDeliveryUrlView.as_view()),
 
     path('shareek/organization/<int:id>/reels/' , shareek.ReelsView.as_view()),
     path('shareek/organization/reels/create/' , shareek.CreateReelsView.as_view()),
