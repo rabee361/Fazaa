@@ -49,9 +49,11 @@ class SocialMediaUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
     social_media = SocialMediaSerializer()
     icon = serializers.ImageField(source='social_media.icon', read_only=True)
+    name = serializers.CharField(source='social_media.name', read_only=True)
     class Meta:
         model = SocialMediaUrl 
-        fields = ['id','organization','short_url','social_media','active','icon']
+        fields = ['id','organization','short_url','social_media','active','icon','name']
+
 
     def get_icon(self,obj):
         request = self.context.get('request')
@@ -93,13 +95,15 @@ class DeliveryCompanySerializer(ModelSerializer):
 class DeliveryCompanyUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
     icon = serializers.ImageField(source='delivery_company.icon', read_only=True)
+    name = serializers.CharField(source='delivery_company.name', read_only=True)
     class Meta:
         model = DeliveryCompanyUrl
-        fields = ['id','organization','short_url','delivery_company','active','icon']
+        fields = ['id','organization','short_url','delivery_company','active','icon','name']
     
     def get_icon(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.delivery_company.icon.url)
+
 
     def get_short_url(self,obj):
         request = self.context.get('request')
