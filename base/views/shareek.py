@@ -115,7 +115,7 @@ class SocialMediaView(BaseAPIView , generics.ListAPIView):
 class DeliveryUrlView(BaseAPIView):
     def get(self,request,pk):
         companies = DeliveryCompanyUrl.objects.filter(organization__id=pk)
-        serializer = DeliveryCompanyUrlSerializer(companies , many=True)
+        serializer = DeliveryCompanyUrlSerializer(companies , many=True , context={'request':request})
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 
