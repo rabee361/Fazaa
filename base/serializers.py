@@ -54,7 +54,10 @@ class SocialMediaUrlSerializer(ModelSerializer):
     
     def get_short_url(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.get_absolute_url())
+        if obj.url:
+            return f"http://145.223.80.125:8080/social/{obj.short_url}/"
+        return None
+
 
 
 
@@ -81,7 +84,6 @@ class DeliveryCompanySerializer(ModelSerializer):
             raise serializers.ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
         
 
-
 class DeliveryCompanyUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
     class Meta:
@@ -90,8 +92,16 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
     
     def get_short_url(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.get_absolute_url())
-    
+        if obj.url:
+            return f"http://145.223.80.125:8080/delivery/{obj.short_url}/"
+        return None
+
+
+
+
+
+
+
 
 
 class DeliveryUrlUpdateSerializer(ModelSerializer):
@@ -112,7 +122,10 @@ class CatalogSerializer(ModelSerializer):
 
     def get_short_url(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.get_absolute_url())
+        if obj.file:
+            return f"http://145.223.80.125:8080/catalog/{obj.short_url}/"
+        return None
+
 
 
 class ReelsGallerySerializer(ModelSerializer):
@@ -150,8 +163,10 @@ class ImagesGallerySerializer(ModelSerializer):
 
     def get_image(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url)
-
+        if obj.image:
+            return request.build_absolute_uri(obj.image.url)
+        return None
+    
     def validate_image(self, image):
         if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
 
@@ -225,7 +240,8 @@ class ContactUsSerializer(ModelSerializer):
 
     def get_image(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url)
+        if obj.image:
+            return request.build_absolute_uri(obj.image.url)
 
 
 
