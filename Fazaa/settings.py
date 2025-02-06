@@ -125,7 +125,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Fazaa.wsgi.application'
-ASGI_APPLICATION = 'Fazaa.asgi.application'
+# ASGI_APPLICATION = 'Fazaa.asgi.application'
 
 
 # Database

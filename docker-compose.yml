@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: daphne -u /tmp/daphne.sock Fazaa.asgi:application
+    command: gunicorn Fazaa.wsgi:application --bind 0.0.0.0:8000
     container_name: fazaa_web_1
     volumes:
       - .:/home/app
@@ -26,26 +26,7 @@ services:
     networks:
       - fazaa_network
 
-  # Add a new service for Daphne
-  daphne:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: daphne -b 0.0.0.0 -p 8001 Fazaa.asgi:application
-    container_name: fazaa_daphne_1
-    volumes:
-      - .:/home/app
-    ports:
-      - 8001:8001
-    restart: always
-    env_file:
-      - ./.env
-    depends_on:
-      - web
-      - redis
-    networks:
-      - fazaa_network
-
+ 
   db:
     image: postgis/postgis:15-3.3
     container_name: fazaa_db_1
