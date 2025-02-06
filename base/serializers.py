@@ -116,10 +116,14 @@ class CatalogSerializer(ModelSerializer):
 
 
 class ReelsGallerySerializer(ModelSerializer):
+    video = serializers.SerializerMethodField()
     class Meta:
         model = ReelsGallery
         fields = '__all__'
 
+    def get_video(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.video.url)
 
     def validate_reel(self, reel):
         if reel and reel.size > 25 * 1024 * 1024:  # 25MB in bytes
@@ -138,13 +142,19 @@ class ReelsGallerySerializer(ModelSerializer):
         return reel
 
 
+
 class ImagesGallerySerializer(ModelSerializer):
     class Meta:
         model = ImageGallery
         fields = '__all__'
 
+    def get_image(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.image.url)
+
     def validate_image(self, image):
         if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
+
             raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
         
         # Check if organization has reached daily limit of 20 images

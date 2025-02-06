@@ -142,7 +142,7 @@ class ReelsView(BaseAPIView):
     
     def get(self,request,id):
         reels = ReelsGallery.objects.filter(organization__id=id)
-        serializer = ReelsGallerySerializer(reels , many=True)
+        serializer = ReelsGallerySerializer(reels , many=True, context={'request':self.request})
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 
@@ -168,7 +168,7 @@ class GalleryView(BaseAPIView):
 
     def get(self,request,id):
         gallery = ImageGallery.objects.filter(organization__id=id)
-        serializer = ImagesGallerySerializer(gallery , many=True)
+        serializer = ImagesGallerySerializer(gallery , many=True, context={'request':self.request})
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 
