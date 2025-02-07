@@ -37,6 +37,10 @@ class Organization(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    @property
+    def branches(self):
+        return Branch.objects.filter(organization=self)
+    
     def create_social_media(self):
         social_medias = SocialMedia.objects.all()
         for social in social_medias:

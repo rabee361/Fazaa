@@ -1,9 +1,8 @@
-from rest_framework.serializers import ModelSerializer , Serializer
+from rest_framework.serializers import ModelSerializer
 from .models import *
 from rest_framework import serializers
-from django.contrib.auth import authenticate
 from users.models import User
-
+from django.contrib.gis.geos import Point
 
 
 
@@ -14,14 +13,21 @@ class OrganizationListSerializer(ModelSerializer):
 
 
 class BranchSerializer(ModelSerializer):
+    location = serializers.SerializerMethodField()
     class Meta:
         model = Branch
-        fields = ['id','name']
+        fields = ['id','name','location']
+
+    def get_location(self,obj):
+        return {"longitude":obj.location.x, "latitude":obj.location.y}
+
+
 
 
 
 
 class OrganizationTypeSerializer(ModelSerializer):
+
     class Meta:
         model = OrganizationType
         fields = ['id','name']
@@ -339,13 +345,14 @@ class OrganizationSerializer(ModelSerializer):
         return request.build_absolute_uri(obj.get_absolute_card_url())
 
 
-
 class UpdateOrganizationSerializer(ModelSerializer):
-    branches = serializers.ListField(write_only=True)
+    branches = serializers.SerializerMethodField()
     class Meta:
         model = Organization
         fields = ['logo','description','website','branches']
 
+    def get_branches(self,obj):
+        return BranchSerializer(obj.branches, many=True).data
 
     def validate_branches(self,value):
         if len(value) == 0:
@@ -355,13 +362,13 @@ class UpdateOrganizationSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         branches = validated_data.get('branches')
         instance = super().update(instance, validated_data)
-        print(branches)
-        for branch in branches:
-            print(branch)
-            print("RRRRRRRRRRRRRRRRR")
-            if isinstance(branch, dict):
-                Branch.objects.create(organization=instance, **branch)
+        if branches:
+            for branch in branches:
+                if isinstance(branch, dict):
+                    point = Point(branch['longitude'], branch['latitude'])
+                    Branch.objects.get_or_create(organization=instance, location=point)
             else:
                 raise serializers.ValidationError('يجب إضافة فرع بشكل صالح')
+
         return instance
 
