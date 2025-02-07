@@ -15,7 +15,7 @@ login_required_m =  method_decorator(login_required, name="dispatch")
 
 
 
-@login_required_m
+# @login_required_m
 class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
         social = SocialMediaUrl.objects.get(short_url=slug)
@@ -25,7 +25,7 @@ class SocialMediaSlugUrlView(View):
             return redirect('404')
 
 
-@login_required_m
+# @login_required_m
 class WebsiteSlugUrlView(View):
     def get(self,request,slug):
         organization = Organization.objects.get(website_short_url=slug)
@@ -35,7 +35,7 @@ class WebsiteSlugUrlView(View):
             return redirect('404')
 
 
-@login_required_m
+# @login_required_m
 class DeliverySlugUrlView(View):
     def get(self,request,slug):
         delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
@@ -45,7 +45,7 @@ class DeliverySlugUrlView(View):
             return redirect('404')
 
 
-@login_required_m
+# @login_required_m
 class CatalogSlugUrlView(View):
     def get(self,request,slug):
         catalog = Catalog.objects.get(short_url=slug)

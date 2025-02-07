@@ -20,7 +20,7 @@ from django.views.generic.edit import UpdateView
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
 
-@login_required_m
+# @login_required_m
 class CardUrlView(View):
     def get(self,request,slug):
         organization = Organization.objects.select_related('organization_type').get(card_url=slug)
