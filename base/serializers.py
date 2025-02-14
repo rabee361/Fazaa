@@ -162,8 +162,8 @@ class ReelsGallerySerializer(ModelSerializer):
             return request.build_absolute_uri(obj.video.url)
         return None
 
-    def validate_reel(self, reel):
-        if reel and reel.size > 25 * 1024 * 1024:  # 25MB in bytes
+    def validate_video(self, video):
+        if video and video.size > 25 * 1024 * 1024:  # 25MB in bytes
             raise serializers.ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
         
         # Check if organization has reached daily limit of 20 reels
@@ -176,7 +176,7 @@ class ReelsGallerySerializer(ModelSerializer):
         if today_reels_count >= 10:
             raise serializers.ValidationError('لا يمكن إضافة أكثر من 10 فيديو في اليوم')
             
-        return reel
+        return video
 
 
 
