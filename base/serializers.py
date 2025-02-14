@@ -151,7 +151,6 @@ class CatalogSerializer(ModelSerializer):
 
 
 class ReelsGallerySerializer(ModelSerializer):
-    video = serializers.SerializerMethodField()
     class Meta:
         model = ReelsGallery
         fields = '__all__'
