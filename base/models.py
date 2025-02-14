@@ -82,19 +82,19 @@ class ReelsGallery(models.Model):
     video = models.FileField(upload_to='media/images/reels_galleries/')
     createdAt = models.DateTimeField(auto_now_add=True)
 
-    def clean(self):
-        if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes
-            raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
+    # def clean(self):
+    #     if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes
+    #         raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
         
-        # Check if organization has reached daily limit of 20 reels
-        today = timezone.now().date()
-        today_reels_count = ReelsGallery.objects.filter(
-            organization=self.organization,
-            createdAt__date=today
-        ).count()
+    #     # Check if organization has reached daily limit of 20 reels
+    #     today = timezone.now().date()
+    #     today_reels_count = ReelsGallery.objects.filter(
+    #         organization=self.organization,
+    #         createdAt__date=today
+    #     ).count()
         
-        if today_reels_count >= 20:
-            raise ValidationError('لا يمكن إضافة أكثر من 20 فيديو في اليوم')
+    #     if today_reels_count >= 20:
+    #         raise ValidationError('لا يمكن إضافة أكثر من 20 فيديو في اليوم')
 
 class Catalog(models.Model):
     catalog_type = models.CharField(max_length=255 , choices=CATALOG_TYPES.choices , verbose_name='النوع')
