@@ -158,7 +158,9 @@ class ReelsGallerySerializer(ModelSerializer):
 
     def get_video(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.video.url)
+        if obj.video:
+            return request.build_absolute_uri(obj.video.url)
+        return None
 
     def validate_reel(self, reel):
         if reel and reel.size > 25 * 1024 * 1024:  # 25MB in bytes
