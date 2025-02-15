@@ -84,7 +84,7 @@ class UpdateOrganizationView(BaseAPIView):
     def put(self,request,id):
         try:
             organization = Organization.objects.get(id=id)
-            serializer = UpdateOrganizationSerializer(organization , data=request.data)
+            serializer = UpdateOrganizationSerializer(organization , data=request.data , context={'request':request})
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data , status=status.HTTP_200_OK)

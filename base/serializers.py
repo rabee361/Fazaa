@@ -347,13 +347,21 @@ class OrganizationSerializer(ModelSerializer):
 
 
 class UpdateOrganizationSerializer(ModelSerializer):
-    branches = serializers.SerializerMethodField()
+    branches = serializers.ListField(child=serializers.DictField(), required=False)
+    logo = serializers.SerializerMethodField()
+    
     class Meta:
         model = Organization
         fields = ['logo','description','website','branches']
-
-    def get_branches(self,obj):
-        return BranchSerializer(obj.branches, many=True).data
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['branches'] = BranchSerializer(Branch.objects.filter(organization=instance), many=True).data
+        return data
+    
+    def get_logo(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.logo.url)
 
     def validate_branches(self,value):
         if len(value) == 0:
@@ -361,15 +369,16 @@ class UpdateOrganizationSerializer(ModelSerializer):
         return value
     
     def update(self, instance, validated_data):
-        branches = validated_data.get('branches')
-        instance = super().update(instance, validated_data)
-        if branches:
-            for branch in branches:
-                if isinstance(branch, dict):
-                    point = Point(branch['longitude'], branch['latitude'])
-                    Branch.objects.get_or_create(organization=instance, location=point)
-            else:
-                raise serializers.ValidationError('يجب إضافة فرع بشكل صالح')
-
+        instance.logo = validated_data.get('logo', instance.logo)
+        instance.description = validated_data.get('description', instance.description) 
+        instance.website = validated_data.get('website', instance.website)
+        branches = validated_data.get('branches', None)
+        for branch in branches:
+            if isinstance(branch, dict):
+                point = Point(branch['longitude'], branch['latitude'])
+                branch, created = Branch.objects.get_or_create(organization=instance, location=point)
+                if created:
+                    branch.name = f"{instance.name} - فرع {branch.id}"
+                    branch.save()
+        instance.save()
         return instance
-
