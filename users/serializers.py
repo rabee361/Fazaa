@@ -47,7 +47,7 @@ class SignUpUserSerializer(ModelSerializer):
         password = data.get('password' , None)
         password2 = data.get('password2' , None)
         if not phonenumber or not password or not password2:
-            raise serializers.ValidationError({"error": "رقم الهاتف وكلمة المرور مطلوب"})
+            raise ErrorResult({"error": "رقم الهاتف وكلمة المرور مطلوب"})
 
         # Validate passwords
         validate_password_match(password, password2)
@@ -92,9 +92,8 @@ class UpdateClientSerializer(ModelSerializer):
         return data
 
     def validate_image(self, image):
-        if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
-            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
-
+        validate_image_size(image)
+        validate_image_extension(image)
 
     def update(self, instance, validated_data):
         if 'image' in validated_data and validated_data['image'] is None:
@@ -166,13 +165,13 @@ class UpdateShareekSerializer(UpdateClientSerializer):
             OrganizationType.objects.get(id=type_id)
         except OrganizationType.DoesNotExist:
             # Return single error message instead of list
-            raise serializers.ValidationError({"error": "لا يوجد منظمة من هذا النوع"})
+            raise ErrorResult({"error": "لا يوجد منظمة من هذا النوع"})
         return super().validate(data)
 
     def validate_image(self, image):
-        if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
-            raise serializers.ValidationError({"error":"حجم الصورة يجب أن لا يتجاوز 2 ميجابايت"})
-        
+        validate_image_size(image)
+        validate_image_extension(image)
+
     def update(self, instance, validated_data):
         # Handle organization-related fields if they exist in validated_data
         shareek = Shareek.objects.get(user=instance)

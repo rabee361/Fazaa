@@ -3,9 +3,9 @@ from .models import *
 from rest_framework import serializers
 from users.models import User
 from django.contrib.gis.geos import Point
-
-
-
+from utils.validators import validate_catalog_size, validate_video_extension, validate_catalog_extension, validate_video_size, validate_image_size, validate_image_extension
+from utils.exception_handlers import ErrorResult
+from django.utils import timezone
 class OrganizationListSerializer(ModelSerializer):
     class Meta:
         model = Organization
@@ -46,8 +46,8 @@ class SocialMediaSerializer(ModelSerializer):
         return request.build_absolute_uri(obj.icon.url)
 
     def validate_icon(self, icon):
-        if icon and icon.size > 2 * 1024 * 1024:  # 2MB in bytes
-            raise serializers.ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
+        validate_image_size(icon)
+        validate_image_extension(icon)
         
 
 
@@ -94,8 +94,8 @@ class DeliveryCompanySerializer(ModelSerializer):
         return request.build_absolute_uri(obj.icon.url)
     
     def validate_icon(self, icon):
-        if icon and icon.size > 2 * 1024 * 1024:  # 2MB in bytes
-            raise serializers.ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
+        validate_image_size(icon)
+        validate_image_extension(icon)
         
 
 class DeliveryCompanyUrlSerializer(ModelSerializer):
@@ -140,13 +140,18 @@ class CatalogSerializer(ModelSerializer):
     
     class Meta:
         model = Catalog
-        fields = ['id','short_url','catalog_type','organization']
+        fields = ['id','short_url','catalog_type','organization','file']
 
     def get_short_url(self,obj):
         request = self.context.get('request')
         if obj.file:
             return f"http://145.223.80.125:8080/catalog/{obj.short_url}/"
         return None
+    
+    def validate(self, attrs):
+        validate_catalog_size(attrs['file'])
+        validate_catalog_extension(attrs['file'])
+        return attrs
 
 
 
@@ -162,9 +167,8 @@ class ReelsGallerySerializer(ModelSerializer):
         return None
 
     def validate_video(self, video):
-        if video and video.size > 25 * 1024 * 1024:  # 25MB in bytes
-            raise serializers.ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
-        
+        validate_video_extension(video)
+        validate_video_size(video)
         # Check if organization has reached daily limit of 20 reels
         today = timezone.now().date()
         today_reels_count = ReelsGallery.objects.filter(
@@ -173,13 +177,14 @@ class ReelsGallerySerializer(ModelSerializer):
         ).values('id').count()
 
         if today_reels_count >= 10:
-            raise serializers.ValidationError('لا يمكن إضافة أكثر من 10 فيديو في اليوم')
+            raise ErrorResult({'error':'لا يمكن إضافة أكثر من 10 فيديو في اليوم'})
             
         return video
 
 
 
 class ImagesGallerySerializer(ModelSerializer):
+
     class Meta:
         model = ImageGallery
         fields = '__all__'
@@ -191,10 +196,8 @@ class ImagesGallerySerializer(ModelSerializer):
         return None
     
     def validate_image(self, image):
-        if image and image.size > 2 * 1024 * 1024:  # 2MB in bytes
-
-            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
-        
+        validate_image_size(image)
+        validate_image_extension(image)
         # Check if organization has reached daily limit of 20 images
         today = timezone.now().date()
         today_images_count = ImageGallery.objects.filter(
@@ -203,7 +206,7 @@ class ImagesGallerySerializer(ModelSerializer):
         ).values('id').count()
 
         if today_images_count >= 20:
-            raise serializers.ValidationError('لا يمكن إضافة أكثر من 20 صورة في اليوم')
+            raise ErrorResult({'error':'لا يمكن إضافة أكثر من 20 صورة في اليوم'})
             
         return image
 
@@ -237,8 +240,8 @@ class TemplateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate_template(self, template):
-        if template and template.size > 5 * 1024 * 1024:  # 5MB in bytes
-            raise serializers.ValidationError('حجم الصورة يجب أن لا يتجاوز 5 ميجابايت')
+        validate_image_size(template)
+        validate_image_extension(template)
         
         return template
 
@@ -275,7 +278,7 @@ class ReportSerializer(ModelSerializer):
     
     def validate_client(self,value):
         if not User.objects.filter(id=value, user_type='CLIENT').exists():
-            raise serializers.ValidationError('لا يوجد عميل بهذا الرقم')
+            raise ErrorResult({'error':'لا يوجد عميل بهذا الرقم'})
         
         today = timezone.now().date()
         reports = Report.objects.filter(
@@ -283,7 +286,7 @@ class ReportSerializer(ModelSerializer):
             createdAt__date=today
         )
         if reports.count() >= 5:
-            raise serializers.ValidationError('لا يمكنك إضافة أكثر من 5 تقارير في اليوم الواحد')
+            raise ErrorResult({'error':'لا يمكنك إضافة أكثر من 5 تقارير في اليوم الواحد'})
 
         return value
 
@@ -365,7 +368,7 @@ class UpdateOrganizationSerializer(ModelSerializer):
 
     def validate_branches(self,value):
         if len(value) == 0:
-            raise serializers.ValidationError('يجب إضافة على الأقل فرع واحد')
+            raise ErrorResult({'error':'عليك إضافة فرع واحد على الأقل'})
         return value
     
     def update(self, instance, validated_data):
