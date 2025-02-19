@@ -63,6 +63,12 @@ class GetOrganizationView(BaseAPIView):
 
         organization = Organization.objects.get(id=pk)
 
+        service_offers = ServiceOffer.objects.filter(organization__id=pk)
+
+        branches = Branch.objects.filter(organization__id=pk)
+
+        gallery = ImageGallery.objects.filter(organization__id=pk)
+
         socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
 
         delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
@@ -73,9 +79,12 @@ class GetOrganizationView(BaseAPIView):
 
         data = {
             **serializer.data,
+            'gallery': ImagesGallerySerializer(gallery, many=True, context={'request':request}).data,
             'socials': SocialUrlSerializer(socials, many=True , context={'request':request}).data,
             'delivery': DeliveryUrlSerializer(delivery, many=True , context={'request':request}).data,
-            'catalogs': CatalogUrlsSerializer(catalogs, many=True , context={'request':request}).data
+            'catalogs': CatalogUrlsSerializer(catalogs, many=True , context={'request':request}).data,
+            'service_offers': ServiceOfferSerializer(service_offers, many=True , context={'request':request}).data,
+            'branches': BranchSerializer(branches , many=True).data
         }
 
         return Response(data , status=status.HTTP_200_OK)
