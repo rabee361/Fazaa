@@ -5,7 +5,11 @@
 # media
 # staticfiles
 *.pyc
+.pyc
 __pycache__/
+**/__pycache__/
+*.pyo
+*.pyd
 *.sqlite
 *.sqlite3
 .env

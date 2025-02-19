@@ -154,7 +154,6 @@ class UpdateShareekSerializer(UpdateClientSerializer):
     organization_type = serializers.IntegerField(required=False)
     organization_name = serializers.CharField(required=False, allow_blank=True)
     commercial_register_id = serializers.CharField(required=False, allow_blank=True)
-
     class Meta:
         model = User
         fields = ['full_name','phonenumber','email','image','job','organization_type','organization_name','commercial_register_id']

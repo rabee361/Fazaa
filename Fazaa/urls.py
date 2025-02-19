@@ -10,7 +10,7 @@ APIPatterns = [
 
 urlpatterns = [
     path("silk/", include("silk.urls", namespace="silk")),
-    path('admin/', admin.site.urls),
+    path('supersecureadmin/', admin.site.urls),
     path('', include('admin_panel.urls')),
     path('api/' , include(APIPatterns)),
 ]

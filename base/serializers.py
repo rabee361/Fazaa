@@ -376,12 +376,13 @@ class UpdateOrganizationSerializer(ModelSerializer):
         instance.description = validated_data.get('description', instance.description) 
         instance.website = validated_data.get('website', instance.website)
         branches = validated_data.get('branches', None)
-        for branch in branches:
-            if isinstance(branch, dict):
-                point = Point(branch['longitude'], branch['latitude'])
-                branch, created = Branch.objects.get_or_create(organization=instance, location=point)
-                if created:
-                    branch.name = f"{instance.name} - فرع {branch.id}"
-                    branch.save()
+        if branches:
+            for branch in branches:
+                if isinstance(branch, dict):
+                    point = Point(branch['longitude'], branch['latitude'])
+                    branch, created = Branch.objects.get_or_create(organization=instance, location=point)
+                    if created:
+                        branch.name = f"{instance.name} - فرع {branch.id}"
+                        branch.save()
         instance.save()
         return instance
