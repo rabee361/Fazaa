@@ -349,22 +349,33 @@ class OrganizationSerializer(ModelSerializer):
         return request.build_absolute_uri(obj.get_absolute_card_url())
 
 
+class UpdateOrganizationLogoSerializer(ModelSerializer):
+    logo = serializers.SerializerMethodField()
+    class Meta:
+        model = Organization
+        fields = ['logo']
+
+    def validate_logo(self, logo):
+        validate_image_size(logo)
+        validate_image_extension(logo)
+        return logo
+    
+    def get_logo(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.logo.url)
+
+
 class UpdateOrganizationSerializer(ModelSerializer):
     branches = serializers.ListField(child=serializers.DictField(), required=False)
-    logo = serializers.SerializerMethodField()
     
     class Meta:
         model = Organization
-        fields = ['logo','description','website','branches']
+        fields = ['description','website','branches']
     
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['branches'] = BranchSerializer(Branch.objects.filter(organization=instance), many=True).data
         return data
-    
-    def get_logo(self,obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.logo.url)
 
     def validate_branches(self,value):
         if len(value) == 0:
@@ -372,7 +383,6 @@ class UpdateOrganizationSerializer(ModelSerializer):
         return value
     
     def update(self, instance, validated_data):
-        instance.logo = validated_data.get('logo', instance.logo)
         instance.description = validated_data.get('description', instance.description) 
         instance.website = validated_data.get('website', instance.website)
         branches = validated_data.get('branches', None)

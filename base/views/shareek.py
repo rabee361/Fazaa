@@ -91,6 +91,11 @@ class GetOrganizationView(BaseAPIView):
 
 
 
+class UpdateOrganizationLogoView(generics.UpdateAPIView):
+    queryset = Organization.objects.all()
+    serializer_class = UpdateOrganizationLogoSerializer
+
+
 class DeleteOrganizationView(generics.DestroyAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
