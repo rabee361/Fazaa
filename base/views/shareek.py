@@ -50,6 +50,14 @@ class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
         return queryset
 
 
+
+class OrganizationInfoView(BaseAPIView):
+    def get(self,request,id):
+        organization = Organization.objects.get(id=id)
+        serializer = OrganizationSerializer(organization , context={'request':request})
+        return Response(serializer.data , status=status.HTTP_200_OK)
+
+
 class GetOrganizationView(BaseAPIView):
     def get(self,request,pk):
 
