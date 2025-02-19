@@ -12,6 +12,7 @@ from django.shortcuts import redirect
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.measure import D
+from rest_framework.pagination import PageNumberPagination
 from utils.pagination import CustomPagination
 # Create your views here.
 
@@ -94,6 +95,18 @@ class GetOrganizationView(BaseAPIView):
 class UpdateOrganizationLogoView(generics.UpdateAPIView):
     queryset = Organization.objects.all()
     serializer_class = UpdateOrganizationLogoSerializer
+
+class AvailableOffersView(BaseAPIView):
+    def get(self,request,pk):
+        try:
+            organization = Organization.objects.get(id=pk)
+            offers = ServiceOffer.objects.filter(organizations=organization.organization_type)
+            paginator = CustomPagination()
+            paginated_offers = paginator.paginate_queryset(offers, request)
+            serializer = ServiceOfferSerializer(paginated_offers, many=True, context={'request':request})
+            return paginator.get_paginated_response(serializer.data)
+        except Organization.DoesNotExist:
+            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteOrganizationView(generics.DestroyAPIView):
