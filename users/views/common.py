@@ -54,7 +54,7 @@ class LoginView(APIView):
             device_type = request.data.get('device_type','android')
             token = RefreshToken.for_user(user)
             data = {
-                **UserSerializer(instance=user).data,
+                **UserSerializer(instance=user, context={'request': request}).data,
                 'refresh':str(token),
                 'access':str(token.access_token),
             }
