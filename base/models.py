@@ -26,8 +26,8 @@ class Organization(models.Model):
     description = models.CharField(max_length=255 , null=True, blank=True, verbose_name='المعلومات التعريفية')
     organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True, verbose_name='نوع المنظمة')
     website = models.CharField(max_length=300 , null=True, blank=True, verbose_name='الموقع الإلكتروني')
-    website_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='الرابط المختصر')
-    card_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='الرابط المختصر')
+    website_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='اختصار الموقع الإلكتروني')
+    card_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='البطاقة التعريفية')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
 
     def clean(self):
@@ -214,11 +214,10 @@ class DeliveryCompanyUrl(models.Model):
         return f"/delivery/{self.short_url}/"
 
 
-
 class Template(models.Model):
-    name = models.CharField(max_length=255)
-    template = models.ImageField(upload_to='media/images/templates/')
-    createdAt = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255, verbose_name='الاسم')
+    template = models.ImageField(upload_to='media/images/templates/', verbose_name='القالب')
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
 
     def __str__(self) -> str:
         return self.name

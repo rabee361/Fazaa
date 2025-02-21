@@ -21,7 +21,7 @@ class User(AbstractUser):
         unique=True,
         max_length=20, 
         verbose_name='الهاتف',
-        validators=[validate_phone_number],
+        validators=[RegexValidator(r'^\d{7,20}$', message='يجب أن يحتوي رقم الهاتف على أرقام فقط وأن يكون طوله بين 7 و 20 رقم')],
         null=False,
         blank=False,
         error_messages={

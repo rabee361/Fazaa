@@ -1,0 +1,62 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}معلومات قالب{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="{% url 'offer-templates' %}">قوالب العروض</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>معلومات قالب</span>
+        <i class="separator fas fa-chevron-left"></i>
+    </nav>
+</div>
+
+<div class="content-body">
+
+        <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+
+            <div class="form-grid">
+
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.name.label }}:</label>
+                        {{ form.name }}
+                    </div>
+                </div>
+                <div class="form-sction">
+                    <div class="form-group">
+                        <label>{{ form.template.label }} :</label>
+                        <div class="image-upload">
+                            {{ form.template }}
+                            <div class="upload-placeholder">اختر ملف</div>
+                        </div>
+                        {% if form.template.errors %}
+                        <div class="error-message">
+                            {% for error in form.template.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-button-container">
+            <button class="btn btn-brown">
+                حفظ
+            </button>
+            <a href="{% url 'offer-templates' %}" class="btn btn-white">
+                إلغاء
+            </a>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}

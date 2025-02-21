@@ -1,18 +1,32 @@
 from django import forms
 from django.core.validators import RegexValidator
 from users.models import Shareek, User, Organization, OrganizationType
-from base.models import SocialMedia, DeliveryCompany, Catalog
+from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer
 from django.db import transaction
 from django.contrib.auth.forms import PasswordChangeForm
-
+from django.core.exceptions import ValidationError
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(), required=True ,label="كلمة المرور")
-    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, label='تأكيد كلمة المرور')
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}), 
+        required=True,
+        label="كلمة المرور"
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
+        required=True, 
+        label='تأكيد كلمة المرور'
+    )
     phonenumber = forms.CharField(
         validators=[RegexValidator(r'^\d{7,20}$', message='يجب أن يحتوي رقم الهاتف على أرقام فقط وأن يكون طوله بين 7 و 20 رقم')],
         label='رقم الهاتف'
     )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'autocomplete': 'off'}),
+        required=False,
+        label='البريد الالكتروني'
+    )
+
     class Meta:
         model = User
         fields = ['full_name','phonenumber','email','password','confirm_password','image']
@@ -29,7 +43,7 @@ class UserForm(forms.ModelForm):
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
         if password != confirm_password:
-            raise forms.ValidationError('كلمة المرور غير متطابقة')
+            self.add_error('password', "كلمتا المرور غير متطابقتين")
         return cleaned_data
 
 
@@ -95,9 +109,6 @@ class ShareekForm(UserForm):
             organization=organization,
         )
         return shareek
-
-
-
 
 class AdminForm(UserForm):
     class Meta:
@@ -227,6 +238,26 @@ class UpdateClientForm(forms.ModelForm):
             if image.size > 2 * 1024 * 1024:  # 2MB in bytes
                 raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
         return image
+
+
+class ClientOfferForm(forms.ModelForm):
+    class Meta:
+        model = ClientOffer
+        fields = ['content', 'expiresAt', 'organization', 'template']
+        widgets = {
+            'expiresAt': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control',
+                }
+            )
+        }
+        labels = {
+            'content': 'المحتوى',
+            'expiresAt': 'تاريخ الانتهاء',
+            'organization': 'المنظمة',
+            'template': 'القالب'
+        }
 
 
 

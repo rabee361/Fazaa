@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="content-header">
+            <nav class="breadcrumb">
+                <a href="{% url 'offer-templates' %}">عروض القوالب</a>
+                <i class="separator fas fa-chevron-left"></i>
+            </nav>
+        </div>
+
+        <div class="search-container d-flex justify-content-center">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
+
+        <form id="deleteForm" method="POST" action="{% url 'delete-offer-template' %}">
+            {% csrf_token %}
+            <input type="hidden" name="selected_ids" id="selectedIds">
+
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" class="select-all-checkbox"></th>
+                                {% for field in field_names %}
+                                <th>{{ field }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for template in templates %}
+                            <tr onclick="clickHandler(event)" data-link="{% url 'offer-template-info' template.id %}">
+                                <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ template.id }}"></td>
+                                <td>{{ template.id }}</td>
+                                <td>{{ template.name }}</td>
+                                <td>{{ template.createdAt }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="table-controls">
+                <div class="action-button-container">
+                    <a href="{% url 'add-offer-template' %}" class="btn btn-brown">
+                        إضافة
+                    </a>
+                    <button type="submit" class="btn btn-brown" id="deleteBtn">
+                        حذف
+                    </button>
+                </div>
+            </div>
+
+            {% include 'admin_panel/pagination.html' %}
+
+        </form>
+
+
+    </div>
+{% endblock %}

@@ -19,14 +19,16 @@ from django.views.generic.edit import UpdateView
 # login required decorator renamed to shorter name
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
-
 # @login_required_m
 class CardUrlView(View):
     def get(self,request,slug):
-        organization = Organization.objects.select_related('organization_type').get(card_url=slug)
-        shareek_phonenumber = organization.shareeks.first().user.phonenumber
-        branches = Branch.objects.filter(organization=organization)
-        return render(request,'admin_panel/QR_Info.html',context={'organization':organization,'shareek_phonenumber':shareek_phonenumber,'branches':branches})
+        try:
+            organization = Organization.objects.select_related('organization_type').get(card_url=slug)
+            shareek_phonenumber = organization.shareeks.first().user.phonenumber
+            branches = Branch.objects.filter(organization=organization)
+            return render(request,'admin_panel/QR_Info.html',context={'organization':organization,'shareek_phonenumber':shareek_phonenumber,'branches':branches})
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
 
 @login_required_m
@@ -391,14 +393,14 @@ class ListClientOffers(CustomListBaseView,generic.ListView):
 class CreateClientOffer(generic.CreateView):
     model = ClientOffer
     template_name = 'admin_panel/organization/offers/client_offer_form.html'
-    fields = ['expiresAt', 'content', 'organization','template']
+    form_class = ClientOfferForm
     success_url = '/dashboard/organization/client-offers'
 
 @login_required_m
 class UpdateClientOffer(generic.UpdateView):
     model = ClientOffer
     template_name = 'admin_panel/organization/offers/client_offer_form.html'
-    fields = ['expiresAt', 'content', 'organization','template']
+    form_class = ClientOfferForm
     success_url = '/dashboard/organization/client-offers'
     pk_url_kwarg = 'id'
 
@@ -449,3 +451,34 @@ class DeleteServiceOffer(View):
         if selected_ids:
             ServiceOffer.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('service-offers'))
+
+
+class ListOfferTemplates(CustomListBaseView):
+    model = Template
+    context_object_name = 'templates'
+    context_fields = ['id','name','createdAt']
+    template_name = 'admin_panel/organization/offers/offer_templates.html'
+    
+
+class CreateOfferTemplate(generic.CreateView):
+    model = Template
+    template_name = 'admin_panel/organization/offers/offer_template_form.html'
+    fields = ['name','template']
+    success_url = '/dashboard/organization/offer-templates'
+
+
+class UpdateOfferTemplate(generic.UpdateView):
+    model = Template
+    template_name = 'admin_panel/organization/offers/offer_template_form.html'
+    fields = ['name','template']
+    success_url = '/dashboard/organization/offer-templates'
+    pk_url_kwarg = 'id'
+
+
+class DeleteOfferTemplate(View):
+    def post(self, request):
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        if selected_ids:
+            Template.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('offer-templates'))
+

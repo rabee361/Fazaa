@@ -14,45 +14,43 @@ from django.db.models import Max
 login_required_m =  method_decorator(login_required, name="dispatch")
 
 
-
-# @login_required_m
 class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
-        social = SocialMediaUrl.objects.get(short_url=slug)
-        if social.active and social.url:
+        try:
+            social = SocialMediaUrl.objects.get(short_url=slug)
+            assert social.active and social.url
             return redirect(social.url) 
-        else:
-            return redirect('404')
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
-
-# @login_required_m
 class WebsiteSlugUrlView(View):
     def get(self,request,slug):
-        organization = Organization.objects.get(website_short_url=slug)
-        if organization.website_short_url:
+        try:
+            organization = Organization.objects.get(website_short_url=slug)
+            assert organization.website_short_url
             return redirect(organization.website)
-        else:
-            return redirect('404')
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
 
-# @login_required_m
 class DeliverySlugUrlView(View):
     def get(self,request,slug):
-        delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
-        if delivery.active and delivery.url:
+        try:
+            delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
+            assert delivery.active and delivery.url
             return redirect(delivery.url)
-        else:
-            return redirect('404')
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
 
-# @login_required_m
 class CatalogSlugUrlView(View):
     def get(self,request,slug):
-        catalog = Catalog.objects.get(short_url=slug)
-        if catalog.short_url:
+        try:
+            catalog = Catalog.objects.get(short_url=slug)
+            assert catalog.short_url
             return redirect(catalog.file.url)
-        else:
-            return redirect('404')
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
 
 @login_required_m
