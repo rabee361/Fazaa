@@ -345,11 +345,15 @@ class OrganizationSerializer(ModelSerializer):
     card_url = serializers.SerializerMethodField()
     class Meta:
         model = Organization
-        fields = ['id','name','description','organization_type','website_short_url','card_url']
+        fields = ['id','name','description','organization_type','logo','website_short_url','card_url']
     
     def get_website_short_url(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.get_absolute_website_url())
+
+    def get_logo(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.logo.url)
 
     def get_card_url(self,obj):
         request = self.context.get('request')
