@@ -9,13 +9,14 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from utils.views import BaseAPIView
 from django.shortcuts import redirect
+from users.models import Shareek
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.measure import D
 from rest_framework.pagination import PageNumberPagination
 from utils.pagination import CustomPagination
+from users.serializers import UserSerializer
 # Create your views here.
-
 
 
 
@@ -61,25 +62,24 @@ class OrganizationInfoView(BaseAPIView):
 
 class GetOrganizationView(BaseAPIView):
     def get(self,request,pk):
-
         organization = Organization.objects.get(id=pk)
-
         service_offers = ServiceOffer.objects.filter(organization__id=pk)
-
         branches = Branch.objects.filter(organization__id=pk)
-
         gallery = ImageGallery.objects.filter(organization__id=pk)
-
         socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
-
         delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
-
         catalogs = Catalog.objects.filter(organization__id=pk)
 
-        serializer = OrganizationSerializer(organization, many=False , context={'request':request})
+        try:
+            shareek_user = Shareek.objects.select_related('user').filter(organization=organization).first().user
+            shareek_user_serializer = UserSerializer(shareek_user, many=False, context={'request':request})
+        except Shareek.DoesNotExist:
+            return ErrorResult("لا يوجد شريك مرتبط بهذه المنظمة")
+        organization_serializer = OrganizationSerializer(organization, many=False , context={'request':request})
 
         data = {
-            **serializer.data,
+            **shareek_user_serializer.data,
+            **organization_serializer.data,
             'gallery': ImagesGallerySerializer(gallery, many=True, context={'request':request}).data,
             'socials': SocialUrlSerializer(socials, many=True , context={'request':request}).data,
             'delivery': DeliveryUrlSerializer(delivery, many=True , context={'request':request}).data,

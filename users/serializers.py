@@ -13,7 +13,7 @@ class UserSerializer(ModelSerializer):
     image = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id','full_name','phonenumber','user_type','image']
+        fields = ['id','full_name','phonenumber','email','user_type','image']
 
     def get_image(self,obj):
         request = self.context.get('request')
@@ -197,7 +197,7 @@ class UpdateShareekSerializer(UpdateClientSerializer):
 class ShareekSerializer(ModelSerializer):
     class Meta:
         model = Shareek
-        fields = '__all__'  
+        fields = '__all__'
 
 
 class ClientSerializer(ModelSerializer):

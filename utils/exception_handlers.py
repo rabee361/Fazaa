@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError,APIException
 
 
 class ErrorResult(APIException):
-
+    
     def __init__(self, message='error occurred', code="ERROR",status=400):
         self.default_detail=message
         self.default_code=code

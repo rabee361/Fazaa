@@ -100,9 +100,12 @@ class UpdateShareekView(BaseAPIView):
 class DeleteShareekView(BaseAPIView):
     @transaction.atomic
     def delete(self,request):
-        user = request.user
-        shareek = Shareek.objects.get(user=user)
-        shareek.organization.delete()
-        shareek.delete()
-        user.delete()
-        return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)
+        try:
+            user = request.user
+            shareek = Shareek.objects.get(user=user)
+            shareek.organization.delete()
+            shareek.delete()
+            user.delete()
+            return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)
+        except Shareek.DoesNotExist:
+            raise ErrorResult("لا يوجد شريك مسجل بهذه المعلومات" ,status=404)
