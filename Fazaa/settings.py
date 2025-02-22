@@ -290,32 +290,31 @@ SIMPLE_JWT = {
 
 # firebase settigns
 
-# class CustomFirebaseCredentials(credentials.ApplicationDefault):
-#     def __init__(self, account_file_path: str):
-#         super().__init__()
-#         self._account_file_path = account_file_path
+class CustomFirebaseCredentials(credentials.ApplicationDefault):
+    def __init__(self, account_file_path: str):
+        super().__init__()
+        self._account_file_path = account_file_path
 
-#     def _load_credential(self):
-#         if not self._g_credential:
-#             self._g_credential, self._project_id = load_credentials_from_file(self._account_file_path,
-#                                                                               scopes=credentials._scopes)
-
-
-# custom_credentials = CustomFirebaseCredentials('nouralhj-2fb2e-firebase-adminsdk-u62ua-ac6ae82050.json.json')
-# FIREBASE_MESSAGING_APP = initialize_app(custom_credentials, options={'projectId': 'nouralhj-2fb2e'}, name='messaging')
+    def _load_credential(self):
+        if not self._g_credential:
+            self._g_credential, self._project_id = load_credentials_from_file(self._account_file_path,scopes=credentials._scopes)
 
 
-# FCM_DJANGO_SETTINGS = {
-#      # an instance of firebase_admin.App to be used as default for all fcm-django requests
-#      # default: None (the default Firebase app)
-#     "DEFAULT_FIREBASE_APP": FIREBASE_MESSAGING_APP,
-#      # default: _('FCM Django')
-#     "APP_VERBOSE_NAME": "Notification Devices",
-#      # true if you want to have only one active device per registered user at a time
-#      # default: False
-#     "ONE_DEVICE_PER_USER": False,
-#      # devices to which notifications cannot be sent,
-#      # are deleted upon receiving error response from FCM
-#      # default: False
-#     "DELETE_INACTIVE_DEVICES": False,
-# }
+custom_credentials = CustomFirebaseCredentials('fazaa-45ccd-firebase-adminsdk-fbsvc-a5bb2db8cd.json')
+FIREBASE_MESSAGING_APP = initialize_app(custom_credentials, options={'projectId': 'fazaa-45ccd'}, name='messaging')
+
+
+FCM_DJANGO_SETTINGS = {
+     # an instance of firebase_admin.App to be used as default for all fcm-django requests
+     # default: None (the default Firebase app)
+    "DEFAULT_FIREBASE_APP": FIREBASE_MESSAGING_APP,
+     # default: _('FCM Django')
+    "APP_VERBOSE_NAME": "Notification Devices",
+     # true if you want to have only one active device per registered user at a time
+     # default: False
+    "ONE_DEVICE_PER_USER": False,
+     # devices to which notifications cannot be sent,
+     # are deleted upon receiving error response from FCM
+     # default: False
+    "DELETE_INACTIVE_DEVICES": False,
+}
