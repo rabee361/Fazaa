@@ -37,6 +37,24 @@ class RefreshTokenView(BaseAPIView):
             return Response({"error":"حدث خطأ ما"},status=status.HTTP_400_BAD_REQUEST)
 
 
+class RefreshFirebaseToken(BaseAPIView):
+
+    def post(self,request):
+        token = request.data['firebase-token']
+        user_id = request.data['user_id']
+        try:
+            user = User.objects.get(id=user_id)
+            device = FCMDevice.objects.get(user=user)
+            device.registration_id = token
+            device.save()
+        except User.DoesNotExist:
+            return ErrorResult("المستخدم غير موجود",status=404)
+
+        return Response({
+            "msg" : "firebase token changed successfully"
+        },status=status.HTTP_200_OK)
+
+
 
 class LoginView(APIView):
     def post(self, request):
