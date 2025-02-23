@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from utils.permissions import *
+from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from utils.views import BaseAPIView
 from utils.pagination import CustomPagination
@@ -181,18 +182,16 @@ class ResetPasswordView(BaseAPIView):
 
 
 
-class NotificationsView(BaseAPIView):
-    def get(self, request):
-        try:
-            user = request.user
-            notifications = Notification.objects.filter(user=user)
-            paginator = CustomPagination()
-            paginated_notifications = paginator.paginate_queryset(notifications, request)
-            serializer = NotificationSerializer(instance=paginated_notifications, many=True)
-            return paginator.get_paginated_response(serializer.data)
-            
-        except:
-            return ErrorResult("لا يوجد مستخدم بهذه المعلومات", status=404)
+class NotificationsView(generics.ListAPIView,BaseAPIView):
+    serializer_class = NotificationSerializer
+    queryset = Notification.objects.all()
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        notifications = Notification.objects.filter(user=user)
+        return notifications
+
 
 
 

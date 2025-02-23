@@ -36,6 +36,7 @@ ClientPatterns = [
     path('update/<int:pk>/' , client.UpdateClientView.as_view()),
     path('delete/' , client.DeleteClientView.as_view()),
     path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
+    path('notifications/' , common.NotificationsView.as_view()),
 ]
 
 
