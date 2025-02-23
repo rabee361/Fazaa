@@ -190,13 +190,15 @@ class ResetPasswordView(BaseAPIView):
 
 
 
-class NotificationsView(generics.ListAPIView,BaseAPIView):
-    serializer_class = NotificationSerializer
-    queryset = Notification.objects.all()
-
-    def get_queryset(self,request):
-        user = request.user
-        return Notification.objects.filter(user=user)
+class NotificationsView(BaseAPIView):
+    def get(self,request):
+        try:
+            user = request.user
+            notifications = Notification.objects.filter(user=user)
+            serializer = NotificationSerializer(instance=notifications,many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return ErrorResult("لا يوجد مستخدم بهذه المعلومات" , status=404)
 
 
 

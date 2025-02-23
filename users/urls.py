@@ -18,6 +18,7 @@ ShareekPatterns = [
     path('update/<int:pk>/' , shareek.UpdateShareekView.as_view()),
     path('delete/' , shareek.DeleteShareekView.as_view()),
     path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
+    path('notifications/' , common.NotificationsView.as_view()),
 ]
 
 
