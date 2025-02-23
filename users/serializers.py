@@ -216,7 +216,7 @@ class NotificationSerializer(ModelSerializer):
 class UserNotificationSerializer(ModelSerializer):
     class Meta:
         model = UserNotification
-        fields = '__all__'
+        exclude = ['user']
 
 
 
