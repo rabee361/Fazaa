@@ -46,6 +46,10 @@ class NotificationAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content']
 
 
+class UserNotificationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'title', 'createdAt']
+
+
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ['id', 'cost', 'duration']
@@ -63,3 +67,7 @@ admin.site.register(OTPCode, OTPCodeAdmin)
 admin.site.register(SupportChat, SupportChatAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(Notification, NotificationAdmin)
+admin.site.register(UserNotification, UserNotificationAdmin)
+
+
+
