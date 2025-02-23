@@ -146,7 +146,6 @@ class Message(models.Model):
 
 
 
-
 class Notification(models.Model):
     title = models.CharField(max_length=255 , verbose_name='العنوان')
     body = models.CharField(max_length=255 , verbose_name='النص')

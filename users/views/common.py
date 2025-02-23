@@ -184,12 +184,11 @@ class ResetPasswordView(BaseAPIView):
 
 class NotificationsView(generics.ListAPIView,BaseAPIView):
     serializer_class = NotificationSerializer
-    queryset = Notification.objects.all()
     pagination_class = CustomPagination
 
     def get_queryset(self):
         user = self.request.user
-        notifications = Notification.objects.filter(user=user)
+        notifications = UserNotification.objects.filter(user=user)
         return notifications
 
 
