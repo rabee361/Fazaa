@@ -3,22 +3,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..serializers import *
 from ..models import *
-from base.models import CommonQuestion
-from base.serializers import CommonQuestionsSerializer
 from fcm_django.models import FCMDevice
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
 from rest_framework import status
-from rest_framework.permissions import AllowAny , IsAuthenticated
 from utils.permissions import *
 from rest_framework_simplejwt.tokens import RefreshToken
-from utils.helper import generate_code
-from django.shortcuts import get_object_or_404
-from django.db import transaction
-from django.contrib.auth import logout
 from utils.views import BaseAPIView
-# Create your views here.
+from utils.pagination import CustomPagination
 
 
 
@@ -189,16 +181,18 @@ class ResetPasswordView(BaseAPIView):
 
 
 
-
 class NotificationsView(BaseAPIView):
-    def get(self,request):
+    def get(self, request):
         try:
             user = request.user
             notifications = Notification.objects.filter(user=user)
-            serializer = NotificationSerializer(instance=notifications,many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            paginator = CustomPagination()
+            paginated_notifications = paginator.paginate_queryset(notifications, request)
+            serializer = NotificationSerializer(instance=paginated_notifications, many=True)
+            return paginator.get_paginated_response(serializer.data)
+            
         except:
-            return ErrorResult("لا يوجد مستخدم بهذه المعلومات" , status=404)
+            return ErrorResult("لا يوجد مستخدم بهذه المعلومات", status=404)
 
 
 
