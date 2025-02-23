@@ -52,6 +52,15 @@ class LoginView(APIView):
             # set the device token for notification 
             device_token = request.data.get('device_token',None)
             device_type = request.data.get('device_type','android')
+            try:
+                device_tok = FCMDevice.objects.get(registration_id=device_token ,type=device_type)
+                device_tok.user = user
+                device_tok.save()
+            except:
+                if device_token and device_token != '':
+                    FCMDevice.objects.create(user=user , registration_id=device_token ,type='android')
+                else:
+                    pass
             token = RefreshToken.for_user(user)
             data = {
                 **UserSerializer(instance=user, context={'request': request}).data,
