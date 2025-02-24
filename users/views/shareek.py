@@ -76,6 +76,23 @@ class ShareekRegisterView(BaseAPIView):
 
 
 
+class ShareekInfoView(BaseAPIView):
+    def get(self,request,id):
+        try:
+            shareek = Shareek.objects.select_related('organization','user').get(user__id=id)
+            user = shareek.user
+            organization = shareek.organization
+            return Response({
+                **ShareekSerializer(instance=shareek).data,
+                **UserSerializer(instance=user, context={'request':request}).data,
+                'organization_name': organization.name,
+                'organization_type': organization.organization_type.name,
+                'organization_type_id': organization.organization_type.id,
+            },status=status.HTTP_200_OK)
+        except Shareek.DoesNotExist:
+            raise ErrorResult({"error":"لا يوجد شريك مسجل بهذه المعلومات"} ,status=404)
+
+
 class UpdateShareekView(BaseAPIView):
     @transaction.atomic
     def put(self ,request,pk):

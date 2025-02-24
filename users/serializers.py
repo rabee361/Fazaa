@@ -197,7 +197,7 @@ class UpdateShareekSerializer(UpdateClientSerializer):
 class ShareekSerializer(ModelSerializer):
     class Meta:
         model = Shareek
-        fields = '__all__'
+        exclude = ['user']
 
 
 class ClientSerializer(ModelSerializer):

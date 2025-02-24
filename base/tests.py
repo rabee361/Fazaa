@@ -55,3 +55,10 @@ class TestOrganizationUploads(APITestCase):
 
 
 
+class TestOrganizationInfo(APITestCase):
+    def setUp(self):
+        self.shareek = create_shareek()
+
+    def test_organization_info(self):
+        response = self.client.get(f'/api/shareek/organization/{self.shareek.id}/info/')
+        self.assertEqual(response.status_code, 200)
