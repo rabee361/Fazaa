@@ -88,6 +88,7 @@ class ShareekInfoView(BaseAPIView):
                 'organization_name': organization.name,
                 'organization_type': organization.organization_type.name,
                 'organization_type_id': organization.organization_type.id,
+                'commercial_register_id': organization.commercial_register_id,
             },status=status.HTTP_200_OK)
         except Shareek.DoesNotExist:
             raise ErrorResult({"error":"لا يوجد شريك مسجل بهذه المعلومات"} ,status=404)
