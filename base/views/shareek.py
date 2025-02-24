@@ -52,12 +52,19 @@ class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
         return queryset
 
 
-
 class OrganizationInfoView(BaseAPIView):
-    def get(self,request,id):
-        organization = Organization.objects.get(id=id)
-        serializer = OrganizationSerializer(organization , context={'request':request})
-        return Response(serializer.data , status=status.HTTP_200_OK)
+    def get(self, request, id):
+        try:
+            organization = Organization.objects.prefetch_related('branch_set').get(id=id)
+            serializer = OrganizationSerializer(organization, context={'request': request})
+            branches_serializer = BranchSerializer(organization.branch_set.all(), many=True)
+            return Response({
+                **serializer.data,
+                'branches': branches_serializer.data
+            }, status=status.HTTP_200_OK)
+            
+        except Organization.DoesNotExist:
+            raise ErrorResult({'error': 'لا يوجد منظمة بهذا الرقم'}, status=404)
 
 
 class GetOrganizationView(BaseAPIView):
