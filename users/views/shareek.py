@@ -98,7 +98,7 @@ class UpdateShareekView(BaseAPIView):
     @transaction.atomic
     def put(self ,request,pk):
         user = get_object_or_404(User,pk=pk)
-        serializer = UpdateShareekSerializer(user,data=request.data)
+        serializer = UpdateShareekSerializer(user,data=request.data , context={'request':request})
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             shareek = Shareek.objects.get(user=user)

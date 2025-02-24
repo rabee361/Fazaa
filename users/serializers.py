@@ -159,6 +159,8 @@ class UpdateShareekSerializer(UpdateClientSerializer):
     organization_type = serializers.IntegerField(required=False)
     organization_name = serializers.CharField(required=False, allow_blank=True)
     commercial_register_id = serializers.CharField(required=False, allow_blank=True)
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ['full_name','phonenumber','email','image','job','organization_type','organization_name','commercial_register_id']
@@ -175,6 +177,10 @@ class UpdateShareekSerializer(UpdateClientSerializer):
     def validate_image(self, image):
         validate_image_size(image)
         validate_image_extension(image)
+
+    def get_image(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.image.url)
 
     def update(self, instance, validated_data):
         # Handle organization-related fields if they exist in validated_data

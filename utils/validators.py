@@ -37,9 +37,9 @@ def validate_password_strength(password):
     return password
 
 
-def validate_required_field(value):
+def validate_required_field(value, field_name):
     if not value or len(str(value).strip()) == 0:
-        raise ErrorResult({"error":f"{value} مطلوب"})
+        raise ErrorResult({"error":f"{field_name} مطلوب"})
     return value
 
 
