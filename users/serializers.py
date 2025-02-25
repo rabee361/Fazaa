@@ -175,8 +175,9 @@ class UpdateShareekSerializer(UpdateClientSerializer):
         return super().validate(data)
 
     def validate_image(self, image):
-        validate_image_size(image)
-        validate_image_extension(image)
+        if image:
+            validate_image_size(image)
+            validate_image_extension(image)
 
     def get_image(self,obj):
         request = self.context.get('request')

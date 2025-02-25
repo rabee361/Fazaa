@@ -1,0 +1,15 @@
+{% for link in links %}
+<tr onclick="clickHandler(event)" data-link="{% url 'social-link-info' link.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ link.id }}"></td>
+    <td>{{ link.id }}</td>
+    <td>{{ link.organization.name }}</td>
+    <td>{{ link.social_media.name }}</td>
+    <td>{% if link.active %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
+    <td onclick="event.stopPropagation();">
+        <div class="copy-btn-wrapper">
+            <input type="button" class="copy-btn" data-url="{{ link.short_url}}" value="" title="نسخ الرابط">
+            <i class="fas fa-copy"></i>
+        </div>
+    </td>
+</tr>
+{% endfor %}

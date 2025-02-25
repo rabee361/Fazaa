@@ -9,15 +9,17 @@
         </nav>
     </div>
 
-    <div class="search-container d-flex justify-content-center">
-        <form method="get" class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-        </form>
+
+    <div class="actions">
+        <div class="search-container">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input hx-get="{% url 'organizations' %}" hx-push-url="true" hx-target="#organizations-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
     </div>
 
-
-    <form id="deleteForm" method="POST" action="">
+    <form id="bulkActionForm" method="POST" action="">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
         
@@ -32,21 +34,8 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for organization in organizations %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'organization-info' organization.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ organization.id }}"></td>
-                            <td>{{ organization.id }}</td>
-                            <td>{{ organization.name }}</td>    
-                            <td>{{ organization.organization_type.name }}</td>
-                            <td onclick="event.stopPropagation();">
-                                <div class="copy-btn-wrapper">
-                                    <input type="button" class="copy-btn" data-url="{{ organization.card_url}}" value="" title="نسخ الرابط">
-                                    <i class="fas fa-copy"></i>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="organizations-partial">
+                        {% include 'admin_panel/partials/organizations_partial.html' %}
                     </tbody>
                 </table>
             </div>

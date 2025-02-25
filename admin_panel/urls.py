@@ -72,12 +72,12 @@ OrganizationPatterns=[
     path('delivery-links' , organization_views.ListDeliveryLinksView.as_view() , name="delivery-links"),
     path('delivery-links/add/' , organization_views.CreateDeliveryLinkView.as_view() , name="add-delivery-link"),
     path('delivery-links/<int:id>/info/' , organization_views.UpdateDeliveryLinkView.as_view() , name="delivery-link-info"),
-    path('delivery-links/delete/' , organization_views.DeleteDeliveryLinkView.as_view() , name="delete-delivery-link"),
+    path('delivery-links/action/' , organization_views.DeliveryLinkBulkActionView.as_view() , name="delivery-bulk-action"),
 
     path('social-links' , organization_views.ListSocialLinksView.as_view() , name="social-links"),
     path('social-links/add' , organization_views.CreateSocialLinkView.as_view() , name="add-social-link"),
     path('social-links/<int:id>/info' , organization_views.UpdateSocialLinkView.as_view() , name="social-link-info"),
-    path('social-links/delete' , organization_views.DeleteSocialLinkView.as_view() , name="delete-social-link"),
+    path('social-links/action/' , organization_views.SocialUrlBulkActionView.as_view() , name="social-bulk-action"),
 
     # path('organization/<int:id>/branches/' , organization_views.ListBranches.as_view() , name="branches"),
     # path('organization/<int:id>/branches/create/' , organization_views.CreateBranch.as_view() , name="create-branch"),

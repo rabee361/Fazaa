@@ -1,0 +1,14 @@
+{% for organization in organizations %}
+<tr onclick="clickHandler(event)" data-link="{% url 'organization-info' organization.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ organization.id }}"></td>
+    <td>{{ organization.id }}</td>
+    <td>{{ organization.name }}</td>    
+    <td>{{ organization.organization_type.name }}</td>
+    <td onclick="event.stopPropagation();">
+        <div class="copy-btn-wrapper">
+            <input type="button" class="copy-btn" data-url="{{ organization.card_url}}" value="" title="نسخ الرابط">
+            <i class="fas fa-copy"></i>
+        </div>
+    </td>
+</tr>
+{% endfor %}

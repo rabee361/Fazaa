@@ -16,30 +16,4 @@
     </div>
 </div>
 
-<style>
-/* Add these styles to make the cards look clickable and handle hover states */
-.stat-card {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Ensure text color doesn't change on hover */
-.stat-card h3,
-.stat-card .stat-number {
-    color: var(--text-primary);
-    transition: color 0.5s ease;
-}
-
-.stat-card:hover h3,
-.stat-card:hover .stat-number {
-    color: var(--accent-color);
-}
-</style>
 {% endblock %}

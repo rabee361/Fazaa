@@ -110,7 +110,7 @@ class UpdateShareekView(BaseAPIView):
                 'commercial_register_id': shareek.organization.commercial_register_id,
             },status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return ErrorResult(serializer.errors,status=400)
         
 
 

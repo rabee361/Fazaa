@@ -87,6 +87,16 @@ class ListOrganizationsView(CustomListBaseView):
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
 
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        queryset = super().get_queryset().select_related('organization_type')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/organizations_partial.html'
+        if q:
+            return queryset.filter(name__istartswith=q)
+        else:
+            return queryset
+
     def get_context_data(self):
         context = super().get_context_data()
         for organization in context['organizations']:
@@ -169,7 +179,7 @@ class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
     model = DeliveryCompany
     context_object_name = 'companies'
     context_fields=['id','name','icon']
-    template_name = 'admin_panel/links/delivery_company_list.html'
+    template_name = 'admin_panel/links/delivery/delivery_company_list.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -182,14 +192,14 @@ class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
 @login_required_m
 class CreateDeliveryCompany(generic.CreateView):
     model = DeliveryCompany
-    template_name = 'admin_panel/links/delivery_company_form.html'
+    template_name = 'admin_panel/links/delivery/delivery_company_form.html'
     fields = ['name','icon']
     success_url = '/dashboard/organization/delivery-companies'
 
 @login_required_m
 class UpdateDeliveryCompany(generic.UpdateView):
     model = DeliveryCompany
-    template_name = 'admin_panel/links/update_delivery_company.html'
+    template_name = 'admin_panel/links/delivery/delivery_company_form.html'
     form_class = DeliveryCompanyForm
     success_url = '/dashboard/organization/delivery-companies'
     pk_url_kwarg = 'id'
@@ -215,13 +225,16 @@ class ListDeliveryLinksView(CustomListBaseView):
     context_object_name = 'links'
     context_fields = ['id','organization','delivery_company','active','short_url']
     template_name = 'admin_panel/links/delivery/delivey_links.html'
-
+    
     def get_queryset(self):
+        q = self.request.GET.get('q', '')
         queryset = super().get_queryset().select_related('organization','delivery_company')
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(organization__name__icontains=search_query)
-        return queryset
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/delivery_links_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
     
     def get_context_data(self):
         context = super().get_context_data()
@@ -246,11 +259,16 @@ class UpdateDeliveryLinkView(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteDeliveryLinkView(View):
+class DeliveryLinkBulkActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             DeliveryCompanyUrl.objects.filter(id__in=selected_ids).delete()
+        elif action == 'activate':
+            DeliveryCompanyUrl.objects.filter(id__in=selected_ids).update(active=True)
+        elif action == 'deactivate':
+            DeliveryCompanyUrl.objects.filter(id__in=selected_ids).update(active=False)
         return HttpResponseRedirect(reverse('delivery-links'))
 
 
@@ -259,7 +277,7 @@ class ListSocialMedia(CustomListBaseView):
     model = SocialMedia
     context_object_name = 'socials'
     context_fields = ['id','name','icon']
-    template_name = 'admin_panel/links/social_media_list.html'
+    template_name = 'admin_panel/links/social/social_media_list.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -268,10 +286,11 @@ class ListSocialMedia(CustomListBaseView):
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
         
+
 @login_required_m
 class CreateSocialMedia(generic.CreateView):
     model = SocialMedia
-    template_name = 'admin_panel/links/social_media_form.html'
+    template_name = 'admin_panel/links/social/social_media_form.html'
     fields = ['name', 'icon']
     success_url = '/dashboard/organization/social-media'
 
@@ -287,7 +306,7 @@ class DeleteSocialMedia(View):
 @login_required_m
 class UpdateSocialMedia(generic.UpdateView):
     model = SocialMedia
-    template_name = 'admin_panel/links/update_social_media.html'
+    template_name = 'admin_panel/links/social/update_social_media.html'
     form_class = SocialMediaForm
     success_url = '/dashboard/organization/social-media'
     pk_url_kwarg = 'id'
@@ -306,10 +325,13 @@ class ListSocialLinksView(CustomListBaseView):
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related('organization','social_media')
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(organization__name__icontains=search_query)
-        return queryset
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/social_links_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
 
     def get_context_data(self):
         context = super().get_context_data()
@@ -334,12 +356,16 @@ class UpdateSocialLinkView(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteSocialLinkView(View):
+class SocialUrlBulkActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             SocialMediaUrl.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
+        elif action == 'activate':
+            SocialMediaUrl.objects.filter(id__in=selected_ids).update(active=True)
+        elif action == 'deactivate':
+            SocialMediaUrl.objects.filter(id__in=selected_ids).update(active=False)
         return HttpResponseRedirect(reverse('social-links'))
 
 
