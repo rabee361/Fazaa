@@ -1,63 +1,40 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    const deleteForm = document.getElementById('bulkActionForm');
-    const deleteBtn = document.getElementById('deleteBtn');
-    const selectedIdsInput = document.getElementById('selectedIds');
+document.querySelectorAll('.copy-btn').forEach(button => {
+    button.addEventListener('click', async function(e) {
+        e.stopPropagation(); // Prevent row click event
+        const url = this.getAttribute('data-url');
+        
+        try {
+            // Try modern clipboard API first
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(url);
+                showToast('تم نسخ الرابط بنجاح');
+            } else {
+                // Fallback for older browsers and non-HTTPS contexts
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
 
-    selectAllCheckbox.addEventListener('change', function() {
-        rowCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    });
-
-    rowCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
-            selectAllCheckbox.checked = allChecked;
-        });
-    });
-
-
-    // Handle copy button clicks
-    document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('click', async function(e) {
-            e.stopPropagation(); // Prevent row click event
-            const url = this.getAttribute('data-url');
-            
-            try {
-                // Try modern clipboard API first
-                if (navigator.clipboard && window.isSecureContext) {
-                    await navigator.clipboard.writeText(url);
+                try {
+                    document.execCommand('copy');
+                    textArea.remove();
                     showToast('تم نسخ الرابط بنجاح');
-                } else {
-                    // Fallback for older browsers and non-HTTPS contexts
-                    const textArea = document.createElement('textarea');
-                    textArea.value = url;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    textArea.style.top = '-999999px';
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-
-                    try {
-                        document.execCommand('copy');
-                        textArea.remove();
-                        showToast('تم نسخ الرابط بنجاح');
-                    } catch (err) {
-                        textArea.remove();
-                        showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
-                        // Show the URL in a selectable format
-                        showSelectableUrl(url);
-                    }
+                } catch (err) {
+                    textArea.remove();
+                    showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
+                    // Show the URL in a selectable format
+                    showSelectableUrl(url);
                 }
-            } catch (err) {
-                showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
-                // Show the URL in a selectable format
-                showSelectableUrl(url);
             }
-        });
+        } catch (err) {
+            showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
+            // Show the URL in a selectable format
+            showSelectableUrl(url);
+        }
     });
 });
 
@@ -152,9 +129,6 @@ function showSelectableUrl(url) {
 }
 
 
-
-
-
 function executeBulkAction() {
     const bulkActionForm = document.getElementById('bulkActionForm');
     if (!bulkActionForm) {
@@ -210,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-        // Theme switching functionality
+// Theme switching functionality
 document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
@@ -240,9 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-
-
-
 
 
 
