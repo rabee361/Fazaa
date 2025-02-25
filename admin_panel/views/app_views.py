@@ -163,7 +163,7 @@ class DeleteNotificationView(View):
 class ContactUsView(CustomListBaseView):
     model = ContactUs
     context_object_name = 'contact_us'
-    context_fields = ['id','name','link','icon']
+    context_fields = ['id','name','icon']
     template_name = 'admin_panel/app/contact_us/contact_us.html'
 
 @login_required_m

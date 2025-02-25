@@ -69,7 +69,6 @@ class DeleteOrganizationType(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             OrganizationType.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('organization-types'))
 
 
@@ -143,10 +142,13 @@ class ListCatalogsView(CustomListBaseView):
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related('organization')
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(organization__name__icontains=search_query)
-        return queryset
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/catalogs_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
 
 
 @login_required_m
@@ -215,7 +217,6 @@ class DeleteDeliveryCompany(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             DeliveryCompany.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('delivery-companies'))
 
 
