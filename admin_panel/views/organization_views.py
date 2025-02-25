@@ -165,13 +165,13 @@ class UpdateCatalogView(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteCatalogView(View):
+class CatalogBulkActionView(View):
     def post(self, request):
-            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-            if selected_ids:
-                Catalog.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
-            return HttpResponseRedirect(reverse('catalogs'))
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            Catalog.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('catalogs'))
 
 
 @login_required_m

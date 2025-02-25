@@ -42,7 +42,7 @@ OrganizationPatterns=[
     path('catalogs' , organization_views.ListCatalogsView.as_view() , name="catalogs"),
     path('catalogs/add/' , organization_views.CreateCatalogView.as_view() , name="add-catalog"),
     path('catalogs/<int:id>/info/' , organization_views.UpdateCatalogView.as_view() , name="catalog-info"),
-    path('catalogs/delete/' , organization_views.DeleteCatalogView.as_view() , name="delete-catalog"),
+    path('catalogs/action/' , organization_views.CatalogBulkActionView.as_view() , name="catalog-bulk-action"),
 
     path('social-media' , organization_views.ListSocialMedia.as_view() , name="social-media"),
     path('social-media/add' , organization_views.CreateSocialMedia.as_view() , name="add-social-media"),

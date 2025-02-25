@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const selectAllCheckbox = document.getElementById('selectAll');
     const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    const deleteForm = document.getElementById('deleteForm');
+    const deleteForm = document.getElementById('bulkActionForm');
     const deleteBtn = document.getElementById('deleteBtn');
     const selectedIdsInput = document.getElementById('selectedIds');
 
@@ -18,21 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    deleteForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
-        
-        if (selectedCheckboxes.length === 0) {
-            alert('الرجاء تحديد عنصر واحد على الأقل للحذف');
-            return;
-        }
-
-        if (confirm('هل أنت متأكد من حذف العناصر المحددة؟')) {
-            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
-            selectedIdsInput.value = JSON.stringify(selectedIds);
-            this.submit();
-        }
-    });
 
     // Handle copy button clicks
     document.querySelectorAll('.copy-btn').forEach(button => {
