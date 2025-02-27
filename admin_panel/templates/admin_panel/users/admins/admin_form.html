@@ -31,7 +31,12 @@
 
                     <div class="form-group">
                         <label>{{ form.password.label }}</label>
-                        {{ form.password }}
+                        <div class="password-field">
+                            {{ form.password }}
+                            <button type="button" class="password-toggle" data-target="{{ form.password.id_for_label }}">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
                         {% if form.password.errors %}
                             <div class="error">{{ form.password.errors }}</div>
                         {% endif %}
@@ -39,7 +44,12 @@
 
                     <div class="form-group">
                         <label>{{ form.confirm_password.label }}</label>
-                        {{ form.confirm_password }}
+                        <div class="password-field">
+                            {{ form.confirm_password }}
+                            <button type="button" class="password-toggle" data-target="{{ form.confirm_password.id_for_label }}">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
                         {% if form.confirm_password.errors %}
                             <div class="error">{{ form.confirm_password.errors }}</div>
                         {% endif %}

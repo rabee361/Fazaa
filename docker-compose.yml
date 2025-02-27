@@ -25,6 +25,9 @@ services:
       - redis
     networks:
       - fazaa_network
+    logging:
+      options:
+        max-size: 50m
 
  
   db:
@@ -57,6 +60,9 @@ services:
       - fazaa_network
     volumes:
       - redis_data:/data
+    logging:
+      options:
+        max-size: 50m
 
   nginx:
     image: nginx
@@ -73,6 +79,9 @@ services:
     restart: always
     networks:
       - fazaa_network
+    logging:
+      options:
+        max-size: 50m
 
 
 networks:

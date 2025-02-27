@@ -1758,3 +1758,43 @@ input[type="checkbox"] {
         font-size: 12px;
     }
 }
+
+/* Password field styles */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    flex: 1;
+}
+
+.password-toggle {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #333;
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
+[data-theme="dark"] .password-toggle {
+    color: #999;
+}
+
+[data-theme="dark"] .password-toggle:hover {
+    color: #fff;
+}

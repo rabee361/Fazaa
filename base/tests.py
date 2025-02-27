@@ -20,7 +20,7 @@ class TestOrganizationUploads(APITestCase):
             'file': upload_file,
             'organization': organization.id
         }
-        response = self.client.post('/api/shareek/organization/catalogs/create/', data)
+        response = self.client.post('/api/shareek/organization/catalogss/create/', data)
         self.assertEqual(response.status_code, 201)
 
         response = self.client.get(f'/api/shareek/organization/{organization.id}/catalogs/')
@@ -50,8 +50,6 @@ class TestOrganizationUploads(APITestCase):
         delivery_url = DeliveryCompanyUrl.objects.filter(organization=organization).first()
         response = self.client.put(f'/api/shareek/organization/delivery-url/{delivery_url.id}/update/', data)
         self.assertEqual(response.status_code, 200)
-
-
 
 
 
