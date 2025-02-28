@@ -183,6 +183,16 @@ class ListImagesGalleryView(CustomListBaseView):
     context_fields = ['id','organization','createdAt']
     template_name = 'admin_panel/organization/gallery/images_gallery.html'
 
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        queryset = super().get_queryset().select_related('organization')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/images_gallery_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
+
 class CreateImageGalleryView(generic.CreateView):
     model = ImageGallery
     template_name = 'admin_panel/organization/gallery/image_gallery_form.html'
@@ -214,6 +224,16 @@ class ListReelsGalleryView(CustomListBaseView):
     context_object_name = 'reels'
     context_fields = ['id','organization','createdAt']
     template_name = 'admin_panel/organization/gallery/reels_gallery.html'
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        queryset = super().get_queryset().select_related('organization')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/reels_gallery_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
 
 class CreateReelGalleryView(generic.CreateView):
     model = ReelsGallery
