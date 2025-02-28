@@ -191,10 +191,15 @@ class CreateImageGalleryView(generic.CreateView):
 
 class UpdateImageGalleryView(generic.UpdateView):
     model = ImageGallery
-    template_name = 'admin_panel/organization/gallery/image_gallery_form.html'
+    template_name = 'admin_panel/organization/gallery/update_image_gallery.html'
     fields = ['image','organization']
     success_url = '/dashboard/organization/images-gallery'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = self.object.image
+        return context
 
 class ImageGalleryBulkActionView(View):
     def post(self, request):
@@ -218,10 +223,15 @@ class CreateReelGalleryView(generic.CreateView):
 
 class UpdateReelGalleryView(generic.UpdateView):
     model = ReelsGallery
-    template_name = 'admin_panel/organization/gallery/reel_gallery_form.html'
+    template_name = 'admin_panel/organization/gallery/update_reel_gallery.html'
     fields = ['video','organization']
     success_url = '/dashboard/organization/reels-gallery'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['video'] = self.object.video
+        return context
 
 class ReelGalleryBulkActionView(View):
     def post(self, request):
