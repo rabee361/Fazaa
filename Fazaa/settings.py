@@ -178,7 +178,7 @@ REST_FRAMEWORK = {
         'user': '10000/day'
     },
 
-    # 'EXCEPTION_HANDLER': "base.exception_handlers.custom_exception_handler"
+    'EXCEPTION_HANDLER': "utils.exception_handlers.custom_exception_handler"
 }   
 
 # Password validation

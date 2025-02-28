@@ -8,7 +8,7 @@ from django.contrib.auth.admin import UserAdmin
 
 
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('phonenumber', 'full_name', 'email', 'is_active')
+    list_display = ('id','phonenumber', 'full_name', 'email', 'is_active')
     search_fields = ('phonenumber', 'full_name', 'email')
     list_filter = ('user_type', 'is_active')
     ordering = ('-id',)

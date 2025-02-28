@@ -8,7 +8,6 @@ from django.utils import timezone
 from django.db import transaction
 from base.models import OrganizationType , Organization
 from django.core.exceptions import ValidationError
-from utils.validators import validate_phone_number
 from utils.types import UserType , CodeTypes
 
 class User(AbstractUser):
@@ -46,6 +45,9 @@ class User(AbstractUser):
     def clean(self):
         if self.image and self.image.size > 2 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
+
+        if self.image and not self.image.name.endswith(('.jpg', '.jpeg', '.png','webp')):
+            raise ValidationError('يجب أن يكون الصورة بصيغة jpg أو jpeg أو png أو webp')
 
     def create_signup_otp(self, *args, **kwargs):
         code = OTPCode.objects.filter(phonenumber=self.phonenumber, expiresAt__date=timezone.now().date(), is_used=False).first()

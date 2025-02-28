@@ -82,10 +82,9 @@ class SignUpShareekSerializer(SignUpUserSerializer):
         user = User.objects.create_user(**validated_data, user_type='SHAREEK')
         return user
 
-
 class UpdateClientSerializer(ModelSerializer):
     email = serializers.EmailField(required=False, allow_blank=True)
-    image = serializers.ImageField(required=False, allow_null=True)
+    image = serializers.ImageField(required=False)
     
     class Meta:
         model = User
@@ -95,18 +94,6 @@ class UpdateClientSerializer(ModelSerializer):
         validate_required_field(data['full_name'], "الاسم الكامل")
         validate_required_field(data['phonenumber'], "رقم الهاتف")
         return data
-
-    def validate_image(self, image):
-        validate_image_size(image)
-        validate_image_extension(image)
-
-    def update(self, instance, validated_data):
-        if 'image' in validated_data and validated_data['image'] is None:
-            validated_data.pop('image')
-        return super().update(instance, validated_data)
-
-
-
 
 
 class ResetPasswordSerializer(Serializer):
@@ -159,7 +146,6 @@ class UpdateShareekSerializer(UpdateClientSerializer):
     organization_type = serializers.IntegerField(required=False)
     organization_name = serializers.CharField(required=False, allow_blank=True)
     commercial_register_id = serializers.CharField(required=False, allow_blank=True)
-    image = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -173,15 +159,6 @@ class UpdateShareekSerializer(UpdateClientSerializer):
             # Return single error message instead of list
             raise ErrorResult({"error": "لا يوجد منظمة من هذا النوع"})
         return super().validate(data)
-
-    def validate_image(self, image):
-        if image:
-            validate_image_size(image)
-            validate_image_extension(image)
-
-    def get_image(self,obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url)
 
     def update(self, instance, validated_data):
         # Handle organization-related fields if they exist in validated_data
