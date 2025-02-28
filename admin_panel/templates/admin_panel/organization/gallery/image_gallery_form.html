@@ -27,14 +27,17 @@
                 
                 <div class="form-section">
                     <div class="form-group">
-                        <label>{{ form.image.label }}</label>
+                        <label>{{ form.image.label }} :</label>
                         <div class="image-upload">
-                            <input type="file" name="image" id="image" class="my-img">
-                            <img src="{{ image.url }}" alt="image" name="image" id="image" width="50" height="50">
-                            <div class="upload-placeholder">اختر صورة</div>
+                        {{ form.image }}
+                        <div class="upload-placeholder">اختر صورة</div>
+                    </div>
+                    {% if form.image.errors %}
+                        <div class="error-message">
+                            {% for error in form.image.errors %}
+                                {{ error }}
+                            {% endfor %}
                         </div>
-                        {% if form.image.errors %}
-                            <div class="error">{{ form.image.errors }}</div>
                         {% endif %}
                     </div>
                 </div>

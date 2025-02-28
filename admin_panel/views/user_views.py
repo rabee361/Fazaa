@@ -255,6 +255,7 @@ class CreateAdminView(View):
     def get(self,request):
         form = AdminForm()
         return render (request, 'admin_panel/users/admins/admin_form.html',{'form':form})
+    
     def post(self,request):
         form = AdminForm(request.POST,request.FILES)
         if form.is_valid():
