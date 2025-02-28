@@ -176,6 +176,67 @@ class CatalogBulkActionView(View):
         return HttpResponseRedirect(reverse('catalogs'))
 
 
+
+class ListImagesGalleryView(CustomListBaseView):
+    model = ImageGallery
+    context_object_name = 'images'
+    context_fields = ['id','organization','createdAt']
+    template_name = 'admin_panel/organization/gallery/images_gallery.html'
+
+class CreateImageGalleryView(generic.CreateView):
+    model = ImageGallery
+    template_name = 'admin_panel/organization/gallery/image_gallery_form.html'
+    fields = ['image','organization']
+    success_url = '/dashboard/organization/images-gallery'
+
+class UpdateImageGalleryView(generic.UpdateView):
+    model = ImageGallery
+    template_name = 'admin_panel/organization/gallery/image_gallery_form.html'
+    fields = ['image','organization']
+    success_url = '/dashboard/organization/images-gallery'
+    pk_url_kwarg = 'id'
+
+class ImageGalleryBulkActionView(View):
+    def post(self, request):
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            ImageGallery.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('images-gallery'))
+
+class ListReelsGalleryView(CustomListBaseView):
+    model = ReelsGallery
+    context_object_name = 'reels'
+    context_fields = ['id','organization','createdAt']
+    template_name = 'admin_panel/organization/gallery/reels_gallery.html'
+
+class CreateReelGalleryView(generic.CreateView):
+    model = ReelsGallery
+    template_name = 'admin_panel/organization/gallery/reel_gallery_form.html'
+    fields = ['video','organization']
+    success_url = '/dashboard/organization/reels-gallery'
+
+class UpdateReelGalleryView(generic.UpdateView):
+    model = ReelsGallery
+    template_name = 'admin_panel/organization/gallery/reel_gallery_form.html'
+    fields = ['video','organization']
+    success_url = '/dashboard/organization/reels-gallery'
+    pk_url_kwarg = 'id'
+
+class ReelGalleryBulkActionView(View):
+    def post(self, request):
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            ReelsGallery.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('reels-gallery'))
+
+
+
+
+
+
+
 @login_required_m
 class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
     model = DeliveryCompany

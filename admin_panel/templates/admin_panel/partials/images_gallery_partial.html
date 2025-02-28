@@ -1,0 +1,13 @@
+{% for image in images %}
+<tr onclick="clickHandler(event)" data-link="{% url 'image-info' image.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ image.id }}"></td>
+    <td>{{ image.id }}</td>
+    <td>{{ image.organization }}</td>
+    <td>{{ image.createdAt }}</td>
+    <td onclick="event.stopPropagation();">
+        <a href="{{ image.image.url }}" target="_blank" class="btn btn-sm btn-primary">
+            <i class="fas fa-eye"></i>
+        </a>
+    </td>
+</tr>
+{% endfor %}

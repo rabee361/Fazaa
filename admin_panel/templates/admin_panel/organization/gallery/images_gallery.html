@@ -1,0 +1,77 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}معرض الصور{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-header">
+        <nav class="breadcrumb">
+            <i class="separator fas fa-chevron-left"></i>
+            <a href="{% url 'images-gallery' %}">معرض الصور</a>
+        </nav>
+    </div>
+
+    <div class="actions">
+        <div class="search-container">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>   
+                <input hx-get="{% url 'images-gallery' %}" hx-push-url="true" hx-target="#images-gallery-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
+
+        <div class="actions-dropdown">
+            <div class="action-controls">
+                <select id="bulkAction">
+                    <option value="" selected disabled>اختر إجراء...</option>
+                    <option value="delete">حذف</option>
+                </select>
+                <button type="button" class="btn-go" onclick="executeBulkAction()">تنفيذ</button>
+            </div>
+        </div>
+    </div>
+
+
+    <form id="bulkActionForm" method="POST" action="{% url 'image-gallery-bulk-action' %}">
+        {% csrf_token %}
+        <input type="hidden" name="selected_ids" id="selectedIds">
+        <input type="hidden" name="action" id="selectedAction">
+        
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" class="select-all-checkbox"></th>
+                            {% for field in field_names %}
+                            <th>{{ field }}</th>
+                            {% endfor %}
+                            <th>
+                                 عرض
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="images-gallery-partial">
+                        {% include 'admin_panel/partials/images_gallery_partial.html' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-controls">
+            <div class="action-button-container">
+                <a href="{% url 'add-image' %}" class="btn btn-brown">
+                    إضافة
+                </a>
+                <button type="submit" class="btn btn-brown" id="deleteBtn">
+                    حذف
+                </button>
+            </div>
+        </div>    
+
+        {% include 'admin_panel/pagination.html' %}
+
+    </form>
+</div>
+
+{% endblock %}

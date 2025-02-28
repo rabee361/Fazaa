@@ -65,19 +65,18 @@ class Branch(gis_models.Model):
         return self.name
     
 
-
 class ImageGallery(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/images/image_galleries/')
-    createdAt = models.DateTimeField(auto_now_add=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
+    image = models.ImageField(upload_to='media/images/image_galleries/', verbose_name='الصورة')
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 
 
 
 
 class ReelsGallery(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    video = models.FileField(upload_to='media/images/reels_galleries/')
-    createdAt = models.DateTimeField(auto_now_add=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
+    video = models.FileField(upload_to='media/images/reels_galleries/', verbose_name='الفيديو')
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 
     # def clean(self):
     #     if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes

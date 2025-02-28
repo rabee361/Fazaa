@@ -44,6 +44,15 @@ OrganizationPatterns=[
     path('catalogs/<int:id>/info/' , organization_views.UpdateCatalogView.as_view() , name="catalog-info"),
     path('catalogs/action/' , organization_views.CatalogBulkActionView.as_view() , name="catalog-bulk-action"),
 
+    path('images-gallery' , organization_views.ListImagesGalleryView.as_view() , name="images-gallery"),
+    path('images-gallery/add/' , organization_views.CreateImageGalleryView.as_view() , name="add-image"),
+    path('images-gallery/<int:id>/info/' , organization_views.UpdateImageGalleryView.as_view() , name="image-info"),
+    path('images-gallery/action/' , organization_views.ImageGalleryBulkActionView.as_view() , name="image-gallery-bulk-action"),
+    path('reels-gallery' , organization_views.ListReelsGalleryView.as_view() , name="reels-gallery"),
+    path('reels-gallery/add/' , organization_views.CreateReelGalleryView.as_view() , name="add-reel"),
+    path('reels-gallery/<int:id>/info/' , organization_views.UpdateReelGalleryView.as_view() , name="reel-info"),
+    path('reels-gallery/action/' , organization_views.ReelGalleryBulkActionView.as_view() , name="reel-gallery-bulk-action"),
+
     path('social-media' , organization_views.ListSocialMedia.as_view() , name="social-media"),
     path('social-media/add' , organization_views.CreateSocialMedia.as_view() , name="add-social-media"),
     path('social-media/<int:id>/info' , organization_views.UpdateSocialMedia.as_view() , name="social-media-info"),

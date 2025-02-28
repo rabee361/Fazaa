@@ -1,0 +1,13 @@
+{% for reel in reels %}
+<tr onclick="clickHandler(event)" data-link="{% url 'reel-info' reel.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ reel.id }}"></td>
+    <td>{{ reel.id }}</td>
+    <td>{{ reel.organization }}</td>
+    <td>{{ reel.createdAt }}</td>
+    <td onclick="event.stopPropagation();">
+        <a href="{{ reel.video.url }}" target="_blank" class="btn btn-sm btn-primary">
+            <i class="fas fa-eye"></i>
+        </a>
+    </td>
+</tr>
+{% endfor %}
