@@ -148,17 +148,21 @@ class ResetPasswordOTPView(BaseAPIView):
             raise serializers.ValidationError({'error':'أدخل رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class OTPVerificationView(APIView):
     def post(self,request):
         code = self.request.data.get('code',None)
         if code: 
             try:
                 otp_code = OTPCode.objects.get(code=code)
+                try:
+                    user = User.objects.get(phonenumber=otp_code.phonenumber)
+                except User.DoesNotExist:
+                    user = None
                 if otp_code and otp_code.createdAt >= timezone.localtime() - timezone.timedelta(minutes=15):
-                    otp_code.is_used = True
-                    otp_code.save()
-                    return Response({'message':'تم التحقق بنجاح'} , status=status.HTTP_200_OK)
+                    with transaction.atomic():
+                        otp_code.is_used = True
+                        otp_code.save()
+                    return Response({'message':'تم التحقق بنجاح', 'user_id':user.id} , status=status.HTTP_200_OK)
                 else:
                     return Response({'error':'رمز التحقق منتهي الصلاحية'} , status=status.HTTP_400_BAD_REQUEST)
             except OTPCode.DoesNotExist:
@@ -168,15 +172,25 @@ class OTPVerificationView(APIView):
 
 
 
-class ResetPasswordView(BaseAPIView):
+class ChangePasswordView(BaseAPIView):
     def post(self,request):
-        ResetPasswordSerializer(data=request.data).is_valid(raise_exception=True)
         password = request.data.get('password')
+        new_password = request.data.get('new_password')
+        ChangePasswordSerializer(data=request.data).is_valid(raise_exception=True)
         if request.user.check_password(password):
-            return Response({"error":'كلمة المرور غير صحيحة'})
-        
-        user = request.user
-        user.set_password(password)
+            user = request.user
+            user.set_password(new_password)
+            user.save()
+            return Response({"message":'تم تغيير كلمة السر بنجاح'} , status=status.HTTP_200_OK)
+        else:
+            return Response({"error":'كلمة المرور غير صحيحة'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResetPasswordView(APIView):
+    def post(self,request,user_id):
+        ResetPasswordSerializer(data=request.data).is_valid(raise_exception=True)
+        user = User.objects.get(id=user_id)
+        user.set_password(request.data.get('new_password'))
         user.save()
         return Response({"message":'تم تغيير كلمة السر بنجاح'} , status=status.HTTP_200_OK)
 

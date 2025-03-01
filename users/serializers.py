@@ -96,7 +96,7 @@ class UpdateClientSerializer(ModelSerializer):
         return data
 
 
-class ResetPasswordSerializer(Serializer):
+class ChangePasswordSerializer(Serializer):
     password = serializers.CharField(required=True , error_messages={
         'required': 'كلمة المرور مطلوبة',
         'blank': 'كلمة المرور مطلوبة'
@@ -105,11 +105,34 @@ class ResetPasswordSerializer(Serializer):
         'required': 'كلمة المرور الجديدة مطلوبة',
         'blank': 'كلمة المرور الجديدة مطلوبة'
     })
+    confirm_password = serializers.CharField(required=True , error_messages={
+        'required': 'تأكيد كلمة المرور مطلوب',
+        'blank': 'تأكيد كلمة المرور مطلوب'
+    })
 
     def validate(self, data):
-        validate_password_match(data['password'], data['new_password'])
+        validate_password_match(data['confirm_password'], data['new_password'])
         validate_password_strength(data['new_password'])
         return data
+
+
+
+
+class ResetPasswordSerializer(Serializer):  
+    new_password = serializers.CharField(required=True , error_messages={
+        'required': 'كلمة المرور مطلوبة',
+        'blank': 'كلمة المرور مطلوبة'
+    })
+    confirm_password = serializers.CharField(required=True , error_messages={
+        'required': 'تأكيد كلمة المرور مطلوب',
+        'blank': 'تأكيد كلمة المرور مطلوب'
+    })
+
+    def validate(self, attrs):
+        validate_password_match(attrs['confirm_password'], attrs['new_password'])
+        validate_password_strength(attrs['new_password'])
+        return attrs
+
 
 
 
