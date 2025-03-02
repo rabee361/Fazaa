@@ -68,7 +68,8 @@ class ShareekRegisterView(BaseAPIView):
                 organization=organization
             )
             return Response({
-                **UserSerializer(instance=shareek.user).data,
+                **UserSerializer(instance=shareek.user, context={'request':request}).data,
+                'job': shareek.job,
                 'organization_name': organization.name,
                 'organization_type': organization.organization_type.name,
                 'commercial_register_id': organization.commercial_register_id,

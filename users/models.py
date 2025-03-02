@@ -95,15 +95,16 @@ class Client(models.Model):
 class Shareek(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True, related_name='shareeks')
-    job = models.CharField(max_length=255)
+    job = models.CharField(max_length=255, null=True, blank=True)
 
     @transaction.atomic 
     def create_organization(commercial_register_id ,organization_type ,organization_name ,**args):
-        organization_type = OrganizationType.objects.get(id=organization_type)
+        print(organization_type)
+        organization_type = OrganizationType.objects.get(id=organization_type[0])
         organization = Organization.objects.create(
-            name=organization_name,
+            name=organization_name[0],
             organization_type=organization_type,
-            commercial_register_id=commercial_register_id
+            commercial_register_id=commercial_register_id[0]
         )
         organization.create_social_media()
         organization.create_delivery_company()

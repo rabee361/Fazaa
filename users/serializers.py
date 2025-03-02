@@ -16,8 +16,10 @@ class UserSerializer(ModelSerializer):
         fields = ['id','full_name','phonenumber','email','user_type','image']
 
     def get_image(self,obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url)
+        if obj.image:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.image.url)
+        return None
 
 
 class LoginSerializer(Serializer):
