@@ -141,7 +141,7 @@ class ResetPasswordSerializer(Serializer):
 
 
 class ShareekRegisterSerializer(serializers.Serializer):
-    full_name = serializers.CharField(validators=[validate_required_field],error_messages={
+    full_name = serializers.CharField(error_messages={
         'required': 'الاسم الكامل مطلوب',
         'blank': 'الاسم الكامل مطلوب'
     })
