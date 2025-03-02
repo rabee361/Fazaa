@@ -157,6 +157,7 @@ class ShareekRegisterSerializer(serializers.Serializer):
         'blank': 'اسم المنظمة مطلوب',
         'null': 'اسم المنظمة مطلوب'
     })
+    image = serializers.ImageField(required=False)
 
     def validate(self, data):
         type_id = data.get('organization_type')

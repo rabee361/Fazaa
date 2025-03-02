@@ -45,9 +45,12 @@ class ShareekRegisterView(BaseAPIView):
     @transaction.atomic
     def post(self, request):
         ShareekRegisterSerializer(data=request.data).is_valid(raise_exception=True)
+        image = request.data.get('image', None)
         user = request.user
         user.email = request.data.get('email', None)
         user.full_name = request.data.get('full_name', None)
+        if image:
+            user.image = image
         user.user_type = 'SHAREEK'
         user.save()
         
