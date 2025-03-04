@@ -31,9 +31,10 @@ class ShareekSignUpView(APIView):
             data = serializer.data
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}
+            otp_code = OTPCode.objects.create(phonenumber=user.phonenumber , code_type='SIGNUP')
             # send FCM token to the user
             # send it to client over sms
-            return Response(data, status=status.HTTP_200_OK)
+            return Response({**data , "code":otp_code.code}, status=status.HTTP_200_OK)
         else:
             return Response({'error': serializer.errors.values()}, status=status.HTTP_400_BAD_REQUEST)
 
