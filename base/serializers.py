@@ -223,7 +223,7 @@ class ImagesGallerySerializer(ModelSerializer):
 
 class ServiceOfferSerializer(serializers.ModelSerializer):
     organization_logo = serializers.SerializerMethodField()
-    organization_name = serializers.CharField(source='organization.name')
+    organization_name = serializers.CharField(source='organization.name', read_only=True)
     class Meta:
         model = ServiceOffer
         fields = '__all__'
