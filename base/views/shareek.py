@@ -282,22 +282,22 @@ class ClientOfferView(generics.ListAPIView):
 
 class CreateClientOffer(BaseAPIView):
     def post(self,request): 
-        content = request.data.get('content', None)
-        expiresAt = request.data.get('expiresAt', None)
-        organization = request.data.get('organization', None)
-        template = request.data.get('template', None)
-        if not content or not expiresAt or not organization or not template:
-            return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
+        # content = request.data.get('content', None)
+        # expiresAt = request.data.get('expiresAt', None)
+        # organization = request.data.get('organization', None)
+        # template = request.data.get('template', None)
+        # if not content or not expiresAt or not organization or not template:
+        #     return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
             
-        try:
-            Organization.objects.get(id=organization)
-            serializer = ClientOfferSerializer(data=request.data , context={'request':request})
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data , status=status.HTTP_201_CREATED)
-            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
-        except Organization.DoesNotExist:
-            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
+        # try:
+        #     Organization.objects.get(id=organization)
+        serializer = ClientOfferSerializer(data=request.data , context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data , status=status.HTTP_201_CREATED)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        # except Organization.DoesNotExist:
+        #     return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -325,22 +325,11 @@ class ServiceOfferView(generics.ListAPIView):
 
 class CreateServiceOffer(BaseAPIView):
     def post(self,request): 
-        content = request.data.get('content', None)
-        expiresAt = request.data.get('expiresAt', None)
-        organizations = request.data.get('organizations', None)
-        organization = request.data.get('organization', None)
-        if not content or not expiresAt or not organizations or not organization:
-            return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            Organization.objects.get(id=organization)
-            serializer = ServiceOfferSerializer(data=request.data , context={'request':request})
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data , status=status.HTTP_201_CREATED)
-            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
-        except Organization.DoesNotExist:
-            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
+        serializer = ServiceOfferSerializer(data=request.data , context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data , status=status.HTTP_201_CREATED)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
 
 
 
