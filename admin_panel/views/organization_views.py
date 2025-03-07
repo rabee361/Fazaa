@@ -550,14 +550,14 @@ class ListServiceOffers(CustomListBaseView,generic.ListView):
 class CreateServiceOffer(generic.CreateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
-    fields = ['content', 'organization','expiresAt']
+    form_class = ServiceOfferForm
     success_url = '/dashboard/organization/service-offers'
 
 @login_required_m
 class UpdateServiceOffer(generic.UpdateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
-    fields = ['content', 'organization','expiresAt']
+    form_class = ServiceOfferForm
     success_url = '/dashboard/organization/service-offers'
     pk_url_kwarg = 'id'
 

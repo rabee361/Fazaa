@@ -22,13 +22,13 @@
                 <div class="form-section">
 
                     <div class="form-group">
-                        <label>{{ form.content.label }}:</label>
-                        {{ form.content }}
-                    </div>
-
-                    <div class="form-group">
                         <label>{{ form.expiresAt.label }}:</label>
                         {{ form.expiresAt }}
+                        {% if form.expiresAt.errors %}
+                        <div class="form-errors">
+                            {{ form.expiresAt.errors }}
+                        </div>
+                        {% endif %}
                     </div>
 
                 </div>

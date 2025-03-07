@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from users.models import Shareek, User, Organization, OrganizationType
-from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer
+from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer , ServiceOffer
 from django.db import transaction
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
@@ -257,6 +257,25 @@ class ClientOfferForm(forms.ModelForm):
             'expiresAt': 'تاريخ الانتهاء',
             'organization': 'المنظمة',
             'template': 'القالب'
+        }
+
+
+class ServiceOfferForm(forms.ModelForm):
+    class Meta:
+        model = ServiceOffer
+        fields = ['content', 'expiresAt', 'organization']
+        widgets = {
+            'expiresAt': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control',
+                }
+            )
+        }
+        labels = {
+            'content': 'المحتوى',
+            'expiresAt': 'تاريخ الانتهاء',
+            'organization': 'المنظمة',
         }
 
 
