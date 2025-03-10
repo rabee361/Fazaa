@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
 from django.utils import timezone
 from datetime import datetime
+from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
 from utils.types import CATALOG_TYPES
 # Create your models here.
  
@@ -17,6 +18,9 @@ class OrganizationType(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    class Meta:
+        ordering = ['-id']
 
 
 class Organization(models.Model):
@@ -70,13 +74,17 @@ class ImageGallery(models.Model):
     image = models.ImageField(upload_to='media/images/image_galleries/', verbose_name='الصورة')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 
-
+    class Meta:
+        ordering = ['-id']  
 
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
     video = models.FileField(upload_to='media/images/reels_galleries/', verbose_name='الفيديو')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
+
+    class Meta:
+        ordering = ['-id']  
 
     # def clean(self):
     #     if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes
@@ -116,8 +124,8 @@ class Catalog(models.Model):
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.catalog_type}"
 
-    
-
+    class Meta:
+        ordering = ['-id']  
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/default.jpg',verbose_name='الصورة')
@@ -126,27 +134,20 @@ class SocialMedia(models.Model):
         if self.icon and self.icon.size > 2 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
-    def save(self, *args, **kwargs):
-        creating_urls = getattr(self, '_creating_urls', False)
-        if not creating_urls:
-            self._creating_urls = True
-            try:
-                super().save(*args, **kwargs)
-                if not self.pk:
-                    organizations = Organization.objects.all()
-                    for org in organizations:
-                        SocialMediaUrl.objects.get_or_create(
-                            organization=org,
-                            social_media=self,
-                            defaults={'active': False}
-                        )
-            finally:
-                self._creating_urls = False
-        else:
-            super().save(*args, **kwargs)
+    def create_social_urls(self):
+        organizations = Organization.objects.all()
+        for org in organizations:
+            SocialMediaUrl.objects.get_or_create(
+                organization=org,
+                social_media=self,
+                defaults={'active': False}
+            )
 
     def __str__(self) -> str:
         return self.name
+    
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -158,6 +159,9 @@ class SocialMediaUrl(models.Model):
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
     active = models.BooleanField(default=False , verbose_name= "مفعل")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
+    deleted = models.BooleanField(default=False , verbose_name= "محذوف")
+
+    objects = SocialMediaUrlManager()
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.social_media.name}"
@@ -165,6 +169,8 @@ class SocialMediaUrl(models.Model):
     def get_absolute_url(self):
         return f"/social/{self.short_url}/"
 
+    class Meta:
+        ordering = ['-id']
 
 
 class DeliveryCompany(models.Model):
@@ -175,29 +181,20 @@ class DeliveryCompany(models.Model):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 2MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
 
-    def save(self, *args, **kwargs):
-        creating_urls = getattr(self, '_creating_urls', False)
-        if not creating_urls:
-            self._creating_urls = True
-            try:
-                super().save(*args, **kwargs)
-                if not self.pk:
-                    organizations = Organization.objects.all()
-                    for org in organizations:
-                        DeliveryCompanyUrl.objects.get_or_create(
-                            organization=org,
-                            delivery_company=self,
-                            defaults={'active': False}
-                        )
-            finally:
-                self._creating_urls = False
-        else:
-            super().save(*args, **kwargs)
+    def create_delivery_urls(self):
+        organizations = Organization.objects.all()
+        for org in organizations:
+            DeliveryCompanyUrl.objects.get_or_create(
+                organization=org,
+                delivery_company=self,
+                defaults={'active': False}
+            )
 
     def __str__(self) -> str:
         return self.name
-
-
+    
+    class Meta: 
+        ordering = ['-id']
 class DeliveryCompanyUrl(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة" , related_name='delivery')
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE , verbose_name= "شركة التوصيل")
@@ -205,14 +202,24 @@ class DeliveryCompanyUrl(models.Model):
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
     active = models.BooleanField(default=False , verbose_name= "مفعل")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
+    deleted = models.BooleanField(default=False , verbose_name= "محذوف")
+
+    objects = DeliveryCompanyUrlManager()
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.delivery_company.name}"
 
     def get_absolute_url(self):
         return f"/delivery/{self.short_url}/"
+    
+    def delete_delivery_url(self, *args, **kwargs):
+        self.deleted = True
+        self.active = False
+        self.url = None
+        self.save()
 
-
+    class Meta:
+        ordering = ['-id']
 class Template(models.Model):
     name = models.CharField(max_length=255, verbose_name='الاسم')
     template = models.ImageField(upload_to='media/images/templates/', verbose_name='القالب')
@@ -225,6 +232,8 @@ class Template(models.Model):
         if self.template and self.template.size > 5 * 1024 * 1024:  # 5MB in bytes
             raise ValidationError('حجم القالب يجب أن لا يتجاوز 5 ميجابايت')
 
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -239,8 +248,8 @@ class ServiceOffer(models.Model):
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.id}"
 
-
-
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -254,7 +263,9 @@ class ClientOffer(models.Model):
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.id}"
-
+    
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -268,6 +279,8 @@ class ContactUs(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -276,6 +289,8 @@ class TermsPrivacy(models.Model):
     content = models.CharField(max_length=255)
     createdAt = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -287,6 +302,9 @@ class CommonQuestion(models.Model):
     def __str__(self) -> str:
         return self.question
     
+    class Meta:
+        ordering = ['-id']
+
 
 class Report(models.Model):
     client = models.IntegerField(verbose_name='العميل')
@@ -305,3 +323,6 @@ class Subscription(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} - {self.price}"
+
+    class Meta:
+        ordering = ['-id']

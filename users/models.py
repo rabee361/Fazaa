@@ -91,6 +91,8 @@ class Client(models.Model):
     def __str__(self) -> str:
         return f"{self.user.phonenumber} - {self.user.full_name}" 
     
+    class Meta:
+        ordering = ['-id']
 
 class Shareek(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -127,6 +129,8 @@ class Shareek(models.Model):
     def __str__(self) -> str:
         return f"{self.user.full_name} - {self.user.id}"
 
+    class Meta:
+        ordering = ['-id']
 
 
 
@@ -157,6 +161,8 @@ class Notification(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    class Meta:
+        ordering = ['-id']
 
 
 

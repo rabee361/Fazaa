@@ -297,6 +297,11 @@ class CreateDeliveryCompany(generic.CreateView):
     fields = ['name','icon']
     success_url = '/dashboard/organization/delivery-companies'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.create_delivery_urls()
+        return response 
+
 @login_required_m
 class UpdateDeliveryCompany(generic.UpdateView):
     model = DeliveryCompany
@@ -365,7 +370,7 @@ class DeliveryLinkBulkActionView(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
         if action == 'delete':
-            DeliveryCompanyUrl.objects.filter(id__in=selected_ids).delete()
+            DeliveryCompanyUrl.objects.filter(id__in=selected_ids).delete_delivery_url()
         elif action == 'activate':
             DeliveryCompanyUrl.objects.filter(id__in=selected_ids).update(active=True)
         elif action == 'deactivate':
@@ -398,6 +403,11 @@ class CreateSocialMedia(generic.CreateView):
     template_name = 'admin_panel/links/social/social_media_form.html'
     fields = ['name', 'icon']
     success_url = '/dashboard/organization/social-media'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.create_social_urls()
+        return response
 
 @login_required_m
 class SocialMediaActionView(View):
@@ -435,7 +445,7 @@ class ListSocialLinksView(CustomListBaseView):
         if self.request.htmx:
             self.template_name = 'admin_panel/partials/social_links_partial.html'
         if q:
-            return queryset.filter(organization__name__icontains=q)
+            return queryset.filter(organization__name__icontains=q , deleted=False)
         else:
             return queryset
 
@@ -467,7 +477,7 @@ class SocialUrlBulkActionView(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
         if action == 'delete':
-            SocialMediaUrl.objects.filter(id__in=selected_ids).delete()
+            SocialMediaUrl.objects.filter(id__in=selected_ids).delete_social_url()
         elif action == 'activate':
             SocialMediaUrl.objects.filter(id__in=selected_ids).update(active=True)
         elif action == 'deactivate':
@@ -493,7 +503,6 @@ class DeleteBranch(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             Branch.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('branches'))
 
 

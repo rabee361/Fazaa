@@ -82,7 +82,6 @@ class DeleteReportView(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
             Report.objects.filter(id__in=selected_ids).delete()
-        messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('reports'))
 
 
@@ -164,7 +163,6 @@ class DeleteNotificationView(View):
             selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
             if selected_ids:
                 Notification.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
             return HttpResponseRedirect(reverse('notifications'))
 
 
