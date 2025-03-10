@@ -1,3 +1,4 @@
+from django.forms import BaseModelForm
 from django.views import View , generic
 from users.models import *
 from base.models import *
@@ -6,10 +7,12 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import redirect , render
 from utils.views import CustomListBaseView
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import json
 from django.db.models import Max
+from utils.notifications import send_client_notification , send_shareek_notification , send_all_notification
+from admin_panel.forms import NotificationForm
 
 login_required_m =  method_decorator(login_required, name="dispatch")
 
@@ -150,11 +153,26 @@ class BaseNotificationsView(CustomListBaseView):
 
 
 @login_required_m
-class SendNotificationView(generic.CreateView):
-    model = Notification
-    template_name = 'admin_panel/notifications/send_notification.html'
-    fields = ['title','body']
-    success_url = '/dashboard/organization/notifications'
+class SendNotificationView(View):
+    def get(self, request): 
+        form = NotificationForm()
+        return render(request, 'admin_panel/notifications/send_notification.html', {'form': form})
+    
+    def post(self, request):
+        form = NotificationForm(request.POST)
+        if form.is_valid():
+            recipient_type = form.cleaned_data['recipient_type']
+            
+            if recipient_type == 'all':
+                send_all_notification()
+            elif recipient_type == 'clients':
+                send_client_notification()
+            elif recipient_type == 'shareeks':
+                send_shareek_notification()
+            form.save()
+            return HttpResponseRedirect(reverse('notifications'))
+        
+        return render(request, 'admin_panel/notifications/send_notification.html', {'form': form})
 
 
 @login_required_m

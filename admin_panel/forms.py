@@ -1,10 +1,9 @@
 from django import forms
 from django.core.validators import RegexValidator
-from users.models import Shareek, User, Organization, OrganizationType
+from users.models import Shareek, User, Organization, OrganizationType, Notification
 from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer , ServiceOffer
 from django.db import transaction
-from django.contrib.auth.forms import PasswordChangeForm
-from django.core.exceptions import ValidationError
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(
@@ -288,6 +287,19 @@ class ServiceOfferForm(forms.ModelForm):
             'expiresAt': 'تاريخ الانتهاء',
             'organization': 'المنظمة',
         }
+
+
+class NotificationForm(forms.ModelForm):
+    RECIPIENT_CHOICES = [
+        ('all', 'الجميع'),
+        ('clients', 'العملاء'),
+        ('shareeks', 'الشركاء'),
+    ]
+    recipient_type = forms.ChoiceField(choices=RECIPIENT_CHOICES, label='المستلمون')
+
+    class Meta:
+        model = Notification
+        fields = ['title','body','recipient_type']
 
 
 

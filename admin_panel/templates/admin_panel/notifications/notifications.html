@@ -18,7 +18,7 @@
     </div>
 
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-notification' %}">
+    <form id="deleteForm" method="POST" action="#">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
         
@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                         {% for notification in notifications %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'notification-info' notification.id %}">
+                        <tr>
                             <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ notification.id }}"></td>
                             <td>{{ notification.id }}</td>
                             <td>{{ notification.title }}</td>
