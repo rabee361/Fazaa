@@ -3,43 +3,25 @@ from django.db.models import Q
 from users.models import UserType
 from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message, Notification
+from firebase_admin.messaging import UnregisteredError
 
 
-def send_client_notification(title,body):
-    users = User.objects.filter(Q(is_active=True) & Q(user_type=UserType.CLIENT))
+def send_users_notification(title,body,recipient_type):
+    if recipient_type == 'all':
+        users = User.objects.filter(Q(is_active=True))
+    elif recipient_type == 'clients':
+        users = User.objects.filter(Q(is_active=True) & Q(user_type=UserType.CLIENT))
+    elif recipient_type == 'shareeks':
+        users = User.objects.filter(Q(is_active=True) & Q(user_type=UserType.SHAREEK))
     for user in users:
         devices = FCMDevice.objects.filter(user=user)
         for device in devices:
-            device.send_message(Message(
-                notification=Notification(
-                    title=title,
-                    body=body
-                )
-            ))
-
-
-def send_shareek_notification(title,body):
-    users = User.objects.filter(Q(is_active=True) & Q(user_type=UserType.SHAREEK))
-    for user in users:
-        devices = FCMDevice.objects.filter(user=user)
-        for device in devices:
-            device.send_message(Message(
-                notification=Notification(
-                    title=title,
-                    body=body
-                )
-            ))
-
-
-def send_all_notification(title,body):
-    users = User.objects.filter(Q(is_active=True))
-    for user in users:
-        devices = FCMDevice.objects.filter(user=user)
-        for device in devices:
-            device.send_message(Message(
-                notification=Notification(
-                    title=title,
-                    body=body
-                )
-            ))
-
+            try:
+                device.send_message(Message(
+                    notification=Notification(
+                        title=title,
+                        body=body
+                    )
+                ))
+            except UnregisteredError as e:
+                pass

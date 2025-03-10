@@ -11,10 +11,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 import json
 from django.db.models import Max
-from utils.notifications import send_client_notification , send_shareek_notification , send_all_notification
+from utils.notifications import send_users_notification
 from admin_panel.forms import NotificationForm
 
-login_required_m =  method_decorator(login_required, name="dispatch")
+login_required_m =  method_decorator(login_required(login_url='login'), name="dispatch")
 
 
 class SocialMediaSlugUrlView(View):
@@ -164,13 +164,14 @@ class SendNotificationView(View):
             recipient_type = form.cleaned_data['recipient_type']
             title = form.cleaned_data['title']
             body = form.cleaned_data['body']
+            recipient_type = form.cleaned_data['recipient_type']
 
             if recipient_type == 'all':
-                send_all_notification(title,body)
+                send_users_notification(title,body,recipient_type)
             elif recipient_type == 'clients':
-                send_client_notification(title,body)
+                send_users_notification(title,body,recipient_type)
             elif recipient_type == 'shareeks':
-                send_shareek_notification(title,body)
+                send_users_notification(title,body,recipient_type)
             form.save()
             return HttpResponseRedirect(reverse('notifications'))
         

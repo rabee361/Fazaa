@@ -4,22 +4,17 @@ from utils import permissions
 from base.models import *
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
 from utils.views import CustomListBaseView
-from django.shortcuts import render , redirect
+from django.shortcuts import render
 from django.views import View
-from django.core.paginator import Paginator
 import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.contrib import messages
 from admin_panel.forms import *
-from django.views.generic.edit import UpdateView
 
 # login required decorator renamed to shorter name
 login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
 
-# @login_required_m
 class CardUrlView(View):
     def get(self,request,slug):
         try:
