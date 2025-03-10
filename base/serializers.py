@@ -222,17 +222,10 @@ class ImagesGallerySerializer(ModelSerializer):
 
 
 class ServiceOfferSerializer(serializers.ModelSerializer):
-    organization_logo = serializers.SerializerMethodField()
-    organization_name = serializers.CharField(source='organization.name', read_only=True)
     class Meta:
         model = ServiceOffer
         fields = '__all__'
     
-    def get_organization_logo(self , obj):
-        request = self.context.get('request')
-        if obj.organization.logo:
-            return request.build_absolute_uri(obj.organization.logo.url)
-        return None
 
 
 class ClientOfferSerializer(serializers.ModelSerializer):

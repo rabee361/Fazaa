@@ -321,7 +321,7 @@ class ServiceOfferView(generics.ListAPIView):
         offers = ServiceOffer.objects.filter(organization__id=id)
         serializer = ServiceOfferSerializer(offers , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
-    
+
 
 class CreateServiceOffer(BaseAPIView):
     def post(self,request): 
