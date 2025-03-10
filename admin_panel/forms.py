@@ -201,6 +201,17 @@ class UpdateShareekForm(forms.ModelForm):
         model = User
         fields = ['full_name','phonenumber','email','image', 'job','organization_type','organization_name']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            try:
+                shareek = Shareek.objects.get(user=self.instance)
+                self.fields['job'].initial = shareek.job
+                self.fields['organization_name'].initial = shareek.organization.name
+                self.fields['organization_type'].initial = shareek.organization.organization_type
+            except Shareek.DoesNotExist:
+                pass
+
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image and hasattr(image, 'size'):

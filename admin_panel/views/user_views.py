@@ -184,10 +184,10 @@ class ShareekInfoView(generic.UpdateView):
     success_url = '/dashboard/users/shareek'
     pk_url_kwarg = 'id'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['image'] = self.object.image
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['image'] = self.object.image
+    #     return context
 
 
 @login_required_m

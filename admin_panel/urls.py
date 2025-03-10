@@ -35,9 +35,7 @@ OrganizationPatterns=[
     path('types/action' , organization_views.OrganizationTypesBulkActionView.as_view() ,name="organization-types-action"),
 
     path('organizations' , organization_views.ListOrganizationsView.as_view() , name="organizations"),
-    # path('organizations/add' , organization_views.CreateOrganizationView.as_view() , name="add-organization"),
     path('organizations/<int:id>/info' , organization_views.OrganizationInfoView.as_view() , name="organization-info"),
-    # path('organizations/delete' , organization_views.DeleteOrganizationView.as_view() , name="delete-organization"),
 
     path('catalogs' , organization_views.ListCatalogsView.as_view() , name="catalogs"),
     path('catalogs/add/' , organization_views.CreateCatalogView.as_view() , name="add-catalog"),
