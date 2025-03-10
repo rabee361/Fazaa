@@ -162,13 +162,15 @@ class SendNotificationView(View):
         form = NotificationForm(request.POST)
         if form.is_valid():
             recipient_type = form.cleaned_data['recipient_type']
-            
+            title = form.cleaned_data['title']
+            body = form.cleaned_data['body']
+
             if recipient_type == 'all':
-                send_all_notification()
+                send_all_notification(title,body)
             elif recipient_type == 'clients':
-                send_client_notification()
+                send_client_notification(title,body)
             elif recipient_type == 'shareeks':
-                send_shareek_notification()
+                send_shareek_notification(title,body)
             form.save()
             return HttpResponseRedirect(reverse('notifications'))
         
