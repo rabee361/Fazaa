@@ -3,7 +3,7 @@ from django.db.models import Q
 from users.models import UserType
 from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message, Notification
-from firebase_admin.messaging import UnregisteredError
+from firebase_admin.messaging import UnregisteredError , InvalidArgumentError
 
 
 def send_users_notification(title,body,recipient_type):
@@ -24,4 +24,6 @@ def send_users_notification(title,body,recipient_type):
                     )
                 ))
             except UnregisteredError as e:
+                pass
+            except InvalidArgumentError as e:
                 pass
