@@ -39,11 +39,14 @@ class ListOrganizationType(CustomListBaseView):
     template_name = 'admin_panel/organization/types.html'
 
     def get_queryset(self):
+        q = self.request.GET.get('q', '')
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-        return queryset
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/types_partial.html'
+        if q:
+            return queryset.filter(name__icontains=q)
+        else:
+            return queryset
 
 
 @login_required_m
@@ -64,10 +67,11 @@ class UpdateOrganizationType(generic.UpdateView):
 
 
 @login_required_m
-class DeleteOrganizationType(View):
+class OrganizationTypesBulkActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             OrganizationType.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('organization-types'))
 
@@ -276,10 +280,14 @@ class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-        return queryset
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/delivery_companies_partial.html'
+        if q:
+            return queryset.filter(name__icontains=q)
+        else:
+            return queryset
+
         
 
 @login_required_m
@@ -303,10 +311,11 @@ class UpdateDeliveryCompany(generic.UpdateView):
         return context
 
 @login_required_m
-class DeleteDeliveryCompany(View):
+class DeliveryCompanyActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             DeliveryCompany.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('delivery-companies'))
 
@@ -373,10 +382,14 @@ class ListSocialMedia(CustomListBaseView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-        return queryset
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/social_media_partial.html'
+        if q:
+            return queryset.filter(name__icontains=q)
+        else:
+            return queryset
+
         
 
 @login_required_m
@@ -387,10 +400,11 @@ class CreateSocialMedia(generic.CreateView):
     success_url = '/dashboard/organization/social-media'
 
 @login_required_m
-class DeleteSocialMedia(View):
+class SocialMediaActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             SocialMedia.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('social-media'))
 
@@ -500,11 +514,14 @@ class ListClientOffers(CustomListBaseView,generic.ListView):
     template_name = 'admin_panel/organization/offers/client_offers.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset().select_related('organization','template')
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(organization__name__icontains=search_query)
-        return queryset
+        queryset = super().get_queryset().select_related('organization')
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/client_offers_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
         
 
 @login_required_m
@@ -523,10 +540,11 @@ class UpdateClientOffer(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteClientOffer(View):
+class ClientOfferBulkActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             ClientOffer.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('client-offers'))
 
@@ -540,10 +558,13 @@ class ListServiceOffers(CustomListBaseView,generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related('organization')
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(organization__name__icontains=search_query)
-        return queryset
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/service_offers_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
         
 
 @login_required_m
@@ -563,10 +584,11 @@ class UpdateServiceOffer(generic.UpdateView):
 
 
 @login_required_m
-class DeleteServiceOffer(View):
+class ServiceOfferBulkActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':  
             ServiceOffer.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('service-offers'))
 

@@ -50,15 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCopyButtons();
 });
 
-// If you're using AJAX to load content, call initializeCopyButtons after the content is loaded
-// For example, if you have a function that loads the table:
-// function loadTable() {
-//     // ... AJAX call to load table ...
-//     .then(() => {
-//         initializeCopyButtons();
-//     });
-// }
-
 function clickHandler(event) {
     if (!event.target.closest('.checkbox-cell')) {
         window.location.href = event.currentTarget.getAttribute('data-link');

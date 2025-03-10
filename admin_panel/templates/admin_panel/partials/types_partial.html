@@ -1,0 +1,7 @@
+{% for type in types %}
+<tr onclick="clickHandler(event)" data-link="{% url 'organization-type-info' type.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ type.id }}"></td>
+    <td>{{ type.id }}</td>
+    <td>{{ type.name }}</td>
+</tr>
+{% endfor %}

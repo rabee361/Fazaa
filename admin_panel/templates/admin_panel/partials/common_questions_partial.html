@@ -1,0 +1,7 @@
+{% for common_question in common_questions %}
+<tr onclick="clickHandler(event)" data-link="{% url 'common-question-info' common_question.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ common_question.id }}"></td>
+    <td>{{ common_question.id }}</td>
+    <td>{{ common_question.question }}</td>
+</tr>
+{% endfor %}

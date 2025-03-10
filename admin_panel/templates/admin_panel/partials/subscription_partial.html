@@ -1,0 +1,9 @@
+{% for subscription in subscriptions %}
+<tr onclick="clickHandler(event)" data-link="{% url 'subscription-info' subscription.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ subscription.id }}"></td>
+    <td>{{ subscription.id }}</td>
+    <td>{{ subscription.name }}</td>
+    <td>{{ subscription.days }}</td>
+    <td>{{ subscription.price }}</td>
+</tr>
+{% endfor %}

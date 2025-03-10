@@ -11,16 +11,31 @@
             </nav>
         </div>
 
-        <div class="search-container d-flex justify-content-center">
-            <form method="get" class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-            </form>
-        </div>
 
-        <form id="deleteForm" method="POST" action="{% url 'delete-client-offer' %}">
+        <div class="actions">
+            <div class="search-container">
+                <form method="get" class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input hx-get="{% url 'client-offers' %}" hx-push-url="true" hx-target="#client-offers-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+                </form>
+            </div>
+    
+            <div class="actions-dropdown">
+                <div class="action-controls">
+                    <select id="bulkAction">
+                        <option value="" selected disabled>اختر إجراء...</option>
+                        <option value="delete">حذف</option>
+                    </select>
+                    <button type="button" class="btn-go" onclick="executeBulkAction()">تنفيذ</button>
+                </div>
+            </div>
+        </div>
+    
+
+        <form id="bulkActionForm" method="POST" action="{% url 'client-offer-action' %}">
             {% csrf_token %}
             <input type="hidden" name="selected_ids" id="selectedIds">
+            <input type="hidden" name="action" id="selectedAction">
 
             <div class="table-container">
                 <div class="table-responsive">
@@ -33,16 +48,8 @@
                                 {% endfor %}
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for offer in offers %}
-                            <tr onclick="clickHandler(event)" data-link="{% url 'client-offer-info' offer.id %}">
-                                <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ offer.id }}"></td>
-                                <td>{{ offer.id }}</td>
-                                <td>{{ offer.organization.name }}</td>
-                                <td>{{ offer.createdAt }}</td>
-                                <td>{{ offer.expiresAt }}</td>
-                            </tr>
-                            {% endfor %}
+                        <tbody id="client-offers-partial">
+                            {% include 'admin_panel/partials/client_offers_partial.html' %}
                         </tbody>
                     </table>
                 </div>
@@ -53,9 +60,6 @@
                     <a href="{% url 'add-client-offer' %}" class="btn btn-brown">
                         إضافة
                     </a>
-                    <button type="submit" class="btn btn-brown" id="deleteBtn">
-                        حذف
-                    </button>
                 </div>
             </div>
 

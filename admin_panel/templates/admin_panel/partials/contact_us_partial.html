@@ -1,0 +1,8 @@
+{% for contact in contact_us %}
+<tr onclick="clickHandler(event)" data-link="{% url 'contact-us-info' contact.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ contact.id }}"></td>
+    <td>{{ contact.id }}</td>
+    <td>{{ contact.name }}</td>
+    <td><img width="30px" height="30px" src="{{ contact.icon.url }}" alt=""></td>
+</tr>
+{% endfor %}

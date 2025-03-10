@@ -11,17 +11,31 @@
         </nav>
     </div>
 
-    <div class="search-container d-flex justify-content-center">
-        <form method="get" class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
-        </form>
+    <div class="actions">
+        <div class="search-container">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input hx-get="{% url 'contact-us' %}" hx-push-url="true" hx-target="#contact-us-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
+
+        <div class="actions-dropdown">
+            <div class="action-controls">
+                <select id="bulkAction">
+                    <option value="" selected disabled>اختر إجراء...</option>
+                    <option value="delete">حذف</option>
+                </select>
+                <button type="button" class="btn-go" onclick="executeBulkAction()">تنفيذ</button>
+            </div>
+        </div>
     </div>
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-contact-us' %}">
+
+    <form id="bulkActionForm" method="POST" action="{% url 'contact-us-action' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
-        
+        <input type="hidden" name="action" id="selectedAction">
+
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -33,15 +47,8 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for contact in contact_us %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'contact-us-info' contact.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ contact.id }}"></td>
-                            <td>{{ contact.id }}</td>
-                            <td>{{ contact.name }}</td>
-                            <td><img width="30px" height="30px" src="{{ contact.icon.url }}" alt=""></td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="contact-us-partial">
+                        {% include 'admin_panel/partials/contact_us_partial.html' %}
                     </tbody>
                 </table>
             </div>
@@ -52,9 +59,6 @@
                 <a href="{% url 'add-contact-us' %}" class="btn btn-brown">
                     إضافة
                 </a>
-                <button type="submit" class="btn btn-brown" id="deleteBtn">
-                    حذف
-                </button>
             </div>
         </div>
 

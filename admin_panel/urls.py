@@ -32,7 +32,7 @@ OrganizationPatterns=[
     path('types' , organization_views.ListOrganizationType.as_view() , name="organization-types"),
     path('types/add' , organization_views.CreateOrganizationType.as_view() , name="add-organization-type"),
     path('types/<int:id>/update' , organization_views.UpdateOrganizationType.as_view() , name="organization-type-info"),
-    path('types/delete' , organization_views.DeleteOrganizationType.as_view() ,name="delete-organization-type"),
+    path('types/action' , organization_views.OrganizationTypesBulkActionView.as_view() ,name="organization-types-action"),
 
     path('organizations' , organization_views.ListOrganizationsView.as_view() , name="organizations"),
     # path('organizations/add' , organization_views.CreateOrganizationView.as_view() , name="add-organization"),
@@ -57,22 +57,22 @@ OrganizationPatterns=[
     path('social-media' , organization_views.ListSocialMedia.as_view() , name="social-media"),
     path('social-media/add' , organization_views.CreateSocialMedia.as_view() , name="add-social-media"),
     path('social-media/<int:id>/info' , organization_views.UpdateSocialMedia.as_view() , name="social-media-info"),
-    path('social-media/delete' , organization_views.DeleteSocialMedia.as_view() , name="delete-social-media"),
+    path('social-media/action' , organization_views.SocialMediaActionView.as_view() , name="social-media-action"),
 
     path('delivery-companies' , organization_views.ListDeliveryCompanies.as_view() , name="delivery-companies"),
     path('delivery-companies/add/' , organization_views.CreateDeliveryCompany.as_view() , name="add-delivery-company"),
     path('delivery-companies/<int:id>/info/' , organization_views.UpdateDeliveryCompany.as_view() , name="delivery-company-info"),
-    path('delivery-companies/delete/' , organization_views.DeleteDeliveryCompany.as_view() , name="delete-delivery-company"),
+    path('delivery-companies/action' , organization_views.DeliveryCompanyActionView.as_view() , name="delivery-company-action"),
 
     path('client-offers' , organization_views.ListClientOffers.as_view() , name="client-offers"),
     path('client-offers/add/' , organization_views.CreateClientOffer.as_view() , name="add-client-offer"),
     path('client-offers/<int:id>/update/' , organization_views.UpdateClientOffer.as_view() , name="client-offer-info"),
-    path('client-offers/delete/' , organization_views.DeleteClientOffer.as_view() , name="delete-client-offer"),
+    path('client-offers/action/' , organization_views.ClientOfferBulkActionView.as_view() , name="client-offer-action"),
 
     path('service-offers' , organization_views.ListServiceOffers.as_view() , name="service-offers"),
     path('service-offers/add/' , organization_views.CreateServiceOffer.as_view() , name="add-service-offer"),
     path('service-offers/<int:id>/update/' , organization_views.UpdateServiceOffer.as_view() , name="service-offer-info"),
-    path('service-offers/delete/' , organization_views.DeleteServiceOffer.as_view() , name="delete-service-offer"),
+    path('service-offers/action/' , organization_views.ServiceOfferBulkActionView.as_view() , name="service-offer-action"),
 
     path('offer-templates' , organization_views.ListOfferTemplates.as_view() , name="offer-templates"),
     path('offer-templates/add/' , organization_views.CreateOfferTemplate.as_view() , name="add-offer-template"),
@@ -97,12 +97,12 @@ OrganizationPatterns=[
     path('contact-us' , app_views.ContactUsView.as_view() , name="contact-us"),
     path('contact-us/add' , app_views.CreateContactUsView.as_view() , name="add-contact-us"),
     path('contact-us/<int:id>/info' , app_views.UpdateContactUsView.as_view() , name="contact-us-info"),
-    path('contact-us/delete' , app_views.DeleteContactUsView.as_view() , name="delete-contact-us"),
+    path('contact-us/action/' , app_views.ContactUsBulkActionView.as_view() , name="contact-us-action"),
 
     path('subscriptions' , app_views.ListSubscriptionsView.as_view() , name="subscriptions"),
     path('subscriptions/add' , app_views.CreateSubscriptionView.as_view() , name="add-subscription"),
     path('subscriptions/<int:id>/info' , app_views.SubscriptionInfoView.as_view() , name="subscription-info"),
-    path('subscriptions/delete' , app_views.DeleteSubscriptionView.as_view() , name="delete-subscription"),
+    path('subscriptions/action/' , app_views.SubscriptionBulkActionView.as_view() , name="subscription-action"),
 
     path('reports' , app_views.ListReportsView.as_view() , name="reports"),
     path('reports/<int:id>/info' , app_views.GetReportView.as_view() , name="report-info"),
@@ -111,7 +111,7 @@ OrganizationPatterns=[
     path('common-questions' , app_views.CommonQuestionsView.as_view() , name="common-questions"),
     path('common-questions/add' , app_views.CreateQuestionView.as_view() , name="add-common-question"),
     path('common-questions/<int:id>/info' , app_views.UpdateQuestionView.as_view() , name="common-question-info"),
-    path('common-questions/delete' , app_views.DeleteQuestionView.as_view() , name="delete-common-question"),
+    path('common-questions/action/' , app_views.CommonQuestionBulkActionView.as_view() , name="common-question-action"),
 
     path('notifications' , app_views.BaseNotificationsView.as_view() , name="notifications"),
     path('notifications/send/' , app_views.SendNotificationView.as_view() , name="send-notification"),

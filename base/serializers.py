@@ -225,7 +225,7 @@ class ServiceOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceOffer
         fields = '__all__'
-    
+
 
 
 class ClientOfferSerializer(serializers.ModelSerializer):

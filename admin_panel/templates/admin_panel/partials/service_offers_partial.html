@@ -1,0 +1,9 @@
+{% for offer in offers %}
+<tr onclick="clickHandler(event)" data-link="{% url 'service-offer-info' offer.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ offer.id }}"></td>
+    <td>{{ offer.id }}</td>
+    <td>{{ offer.organization.name }}</td>
+    <td>{{ offer.createdAt }}</td>
+    <td>{{ offer.expiresAt }}</td>
+</tr>
+{% endfor %}

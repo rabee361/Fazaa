@@ -107,7 +107,16 @@ class CommonQuestionsView(CustomListBaseView):
     context_fields = ['id','question']
     template_name = 'admin_panel/app/common_questions/common_questions.html'
 
-
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/common_questions_partial.html'
+        if q:
+            return queryset.filter(question__icontains=q)
+        else:
+            return queryset
+        
 @login_required_m
 class CreateQuestionView(generic.CreateView):
     model = CommonQuestion
@@ -124,12 +133,12 @@ class UpdateQuestionView(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteQuestionView(View):
+class CommonQuestionBulkActionView(View):
     def post(self, request):    
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
+        action = request.POST.get('action')
+        if action == 'delete':
             CommonQuestion.objects.filter(id__in=selected_ids).delete()
-        messages.success(request, 'تم حذف العناصر المحددة بنجاح')
         return HttpResponseRedirect(reverse('common-questions'))
 
 
@@ -166,6 +175,16 @@ class ContactUsView(CustomListBaseView):
     context_fields = ['id','name','icon']
     template_name = 'admin_panel/app/contact_us/contact_us.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/contact_us_partial.html'
+        if q:
+            return queryset.filter(name__icontains=q)
+        else:
+            return queryset
+
 @login_required_m
 class CreateContactUsView(generic.CreateView):
     model = ContactUs
@@ -183,13 +202,13 @@ class UpdateContactUsView(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteContactUsView(View):
+class ContactUsBulkActionView(View):
     def post(self, request):
-            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-            if selected_ids:
-                ContactUs.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
-            return HttpResponseRedirect(reverse('contact-us'))
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            ContactUs.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('contact-us'))
 
 
 @login_required_m
@@ -201,10 +220,13 @@ class ListSubscriptionsView(CustomListBaseView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('q')
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-        return queryset
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/subscriptions_partial.html'
+        if q:
+            return queryset.filter(name__icontains=q)
+        else:
+            return queryset
 
 @login_required_m
 class CreateSubscriptionView(generic.CreateView):
@@ -222,13 +244,13 @@ class SubscriptionInfoView(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 @login_required_m
-class DeleteSubscriptionView(View):
+class SubscriptionBulkActionView(View):
     def post(self, request):
-            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-            if selected_ids:
-                Subscription.objects.filter(id__in=selected_ids).delete()
-            messages.success(request, 'تم حذف العناصر المحددة بنجاح')
-            return HttpResponseRedirect(reverse('subscriptions'))
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            Subscription.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('subscriptions'))
 
 
 class handler404(View):

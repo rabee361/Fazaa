@@ -1,0 +1,8 @@
+{% for social in socials %}
+<tr onclick="clickHandler(event)" data-link="{% url 'social-media-info' social.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ social.id }}"></td>
+    <td>{{ social.id }}</td>
+    <td>{{ social.name }}</td>
+    <td><img width="30px" height="30px" src="{{ social.icon.url }}" alt=""></td>
+</tr>
+{% endfor %}

@@ -18,10 +18,12 @@
         </form>
     </div>
 
-    <form id="deleteForm" method="POST" action="{% url 'delete-subscription' %}">
+    <form id="bulkActionForm" method="POST" action="{% url 'subscription-action' %}">
         {% csrf_token %}
         <input type="hidden" name="selected_ids" id="selectedIds">
+        <input type="hidden" name="action" id="selectedAction">
         
+
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -33,16 +35,8 @@
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for subscription in subscriptions %}
-                        <tr onclick="clickHandler(event)" data-link="{% url 'subscription-info' subscription.id %}">
-                            <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ subscription.id }}"></td>
-                            <td>{{ subscription.id }}</td>
-                            <td>{{ subscription.name }}</td>
-                            <td>{{ subscription.days }}</td>
-                            <td>{{ subscription.price }}</td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="subscriptions-partial">
+                        {% include 'admin_panel/partials/subscription_partial.html' %}
                     </tbody>
                 </table>
             </div>
@@ -53,9 +47,6 @@
                 <a href="{% url 'add-subscription' %}" class="btn btn-brown">
                     إضافة
                 </a>
-                <button type="submit" class="btn btn-brown" id="deleteBtn">
-                    حذف
-                </button>
             </div>
         </div>
 
