@@ -218,9 +218,6 @@ class ImagesGallerySerializer(ModelSerializer):
 #         fields = '__all__'
 
 
-
-
-
 class ServiceOfferSerializer(serializers.ModelSerializer):
     organization_name = serializers.CharField(source='organization.name', read_only=True)
     organization_logo = serializers.SerializerMethodField()
@@ -233,12 +230,10 @@ class ServiceOfferSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(obj.organization.logo.url)
 
 
-
 class ClientOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientOffer
         fields = '__all__'
-
 
 
 class TemplateSerializer(serializers.ModelSerializer):

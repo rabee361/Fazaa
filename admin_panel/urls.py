@@ -48,7 +48,7 @@ OrganizationPatterns=[
     path('images-gallery/add/' , organization_views.CreateImageGalleryView.as_view() , name="add-image"),
     path('images-gallery/<int:id>/info/' , organization_views.UpdateImageGalleryView.as_view() , name="image-info"),
     path('images-gallery/action/' , organization_views.ImageGalleryBulkActionView.as_view() , name="image-gallery-bulk-action"),
-    
+
     path('reels-gallery' , organization_views.ListReelsGalleryView.as_view() , name="reels-gallery"),
     path('reels-gallery/add/' , organization_views.CreateReelGalleryView.as_view() , name="add-reel"),
     path('reels-gallery/<int:id>/info/' , organization_views.UpdateReelGalleryView.as_view() , name="reel-info"),

@@ -2,24 +2,24 @@ from django.db import models
 
 class DeliveryCompanyUrlManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(deleted=False)
+        return super().get_queryset()
     
-    def delete_delivery_url(self, ids=None):
-        # For queryset bulk operations
-        queryset = self.get_queryset()
+    def delete_delivery_urls(self, ids=None):
         if ids:
-            queryset = queryset.filter(id__in=ids)
-        return queryset.update(deleted=True, active=False, url=None)
+            queryset = self.get_queryset().filter(id__in=ids)
+            return queryset.update(deleted=True, active=False, url=None)
+        else:
+            return self.get_queryset().update(deleted=True, active=False, url=None)
 
 
 class SocialMediaUrlManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(deleted=False)
+        return super().get_queryset()
     
-    def delete_social_url(self, ids=None):
-        # For queryset bulk operations
-        queryset = self.get_queryset()
+    def delete_social_urls(self, ids=None):
         if ids:
-            queryset = queryset.filter(id__in=ids)
-        return queryset.update(deleted=True, active=False, url=None)
+            queryset = self.get_queryset().filter(id__in=ids)
+            return queryset.update(deleted=True, active=False, url=None)
+        else:
+            return self.get_queryset().update(deleted=True, active=False, url=None)
 

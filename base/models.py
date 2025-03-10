@@ -169,6 +169,11 @@ class SocialMediaUrl(models.Model):
     def get_absolute_url(self):
         return f"/social/{self.short_url}/"
 
+    def save(self, *args, **kwargs):
+        if self.url:
+            self.deleted = False
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ['-id']
 
@@ -195,6 +200,8 @@ class DeliveryCompany(models.Model):
     
     class Meta: 
         ordering = ['-id']
+
+
 class DeliveryCompanyUrl(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name= "المنظمة" , related_name='delivery')
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE , verbose_name= "شركة التوصيل")
@@ -211,15 +218,16 @@ class DeliveryCompanyUrl(models.Model):
 
     def get_absolute_url(self):
         return f"/delivery/{self.short_url}/"
-    
-    def delete_delivery_url(self, *args, **kwargs):
-        self.deleted = True
-        self.active = False
-        self.url = None
-        self.save()
+
+    def save(self, *args, **kwargs):
+        if self.url:
+            self.deleted = False
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['-id']
+
+
 class Template(models.Model):
     name = models.CharField(max_length=255, verbose_name='الاسم')
     template = models.ImageField(upload_to='media/images/templates/', verbose_name='القالب')
@@ -250,7 +258,6 @@ class ServiceOffer(models.Model):
 
     class Meta:
         ordering = ['-id']
-
 
 
 

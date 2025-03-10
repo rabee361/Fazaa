@@ -334,7 +334,7 @@ class ListDeliveryLinksView(CustomListBaseView):
     
     def get_queryset(self):
         q = self.request.GET.get('q', '')
-        queryset = super().get_queryset().select_related('organization','delivery_company')
+        queryset = super().get_queryset().select_related('organization','delivery_company').filter(deleted=False)
         if self.request.htmx:
             self.template_name = 'admin_panel/partials/delivery_links_partial.html'
         if q:
@@ -370,7 +370,7 @@ class DeliveryLinkBulkActionView(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
         if action == 'delete':
-            DeliveryCompanyUrl.objects.filter(id__in=selected_ids).delete_delivery_url()
+            DeliveryCompanyUrl.objects.delete_delivery_urls(selected_ids)
         elif action == 'activate':
             DeliveryCompanyUrl.objects.filter(id__in=selected_ids).update(active=True)
         elif action == 'deactivate':
@@ -440,7 +440,7 @@ class ListSocialLinksView(CustomListBaseView):
     template_name = 'admin_panel/links/social/social_links.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset().select_related('organization','social_media')
+        queryset = super().get_queryset().select_related('organization','social_media').filter(deleted=False)
         q = self.request.GET.get('q', '')
         if self.request.htmx:
             self.template_name = 'admin_panel/partials/social_links_partial.html'
@@ -477,7 +477,7 @@ class SocialUrlBulkActionView(View):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
         if action == 'delete':
-            SocialMediaUrl.objects.filter(id__in=selected_ids).delete_social_url()
+            SocialMediaUrl.objects.delete_social_urls(selected_ids)
         elif action == 'activate':
             SocialMediaUrl.objects.filter(id__in=selected_ids).update(active=True)
         elif action == 'deactivate':
