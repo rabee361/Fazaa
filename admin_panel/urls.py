@@ -87,10 +87,10 @@ OrganizationPatterns=[
     path('social-links/<int:id>/info' , organization_views.UpdateSocialLinkView.as_view() , name="social-link-info"),
     path('social-links/action/' , organization_views.SocialUrlBulkActionView.as_view() , name="social-bulk-action"),
 
-    path('organization/<int:id>/branches/' , organization_views.ListBranches.as_view() , name="branches"),
-    path('organization/<int:id>/branches/create/' , organization_views.CreateBranch.as_view() , name="create-branch"),
-    path('organization/<int:id>/branches/<int:id>/update/' , organization_views.UpdateBranch.as_view() , name="update-branch"),
-    path('organization/<int:id>/branches/<int:id>/delete/' , organization_views.DeleteBranch.as_view() , name="delete-branch"),
+    path('branches/' , organization_views.ListBranches.as_view() , name="branches"),
+    path('branches/add/' , organization_views.CreateBranch.as_view() , name="add-branch"),
+    path('branches/<int:id>/info/' , organization_views.UpdateBranch.as_view() , name="branch-info"),
+    path('branches/action/' , organization_views.BranchActionView.as_view() , name="branch-action"),
 
     path('contact-us' , app_views.ContactUsView.as_view() , name="contact-us"),
     path('contact-us/add' , app_views.CreateContactUsView.as_view() , name="add-contact-us"),

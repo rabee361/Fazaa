@@ -63,7 +63,10 @@ class Branch(gis_models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم') # default method for settings name ex: org-branch2
     location = gis_models.PointField(srid=4326 , verbose_name='الموقع')
     description = models.CharField(max_length=255,null=True ,blank=True , verbose_name='الوصف')
-    # short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name='الرابط المختصر')
+    short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name='الرابط المختصر')
+
+    def get_absolute_url(self):
+        return f"/branch/{self.short_url}/"
 
     def __str__(self) -> str:
         return self.name

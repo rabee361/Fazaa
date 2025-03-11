@@ -483,30 +483,50 @@ class SocialUrlBulkActionView(View):
 @login_required_m
 class ListBranches(CustomListBaseView,generic.ListView):
     model = Branch
-    template_name = 'branch_list.html'
+    context_object_name = 'branches'
+    context_fields = ['id','organization','description','short_url']
+    template_name = 'admin_panel/organization/branches/branches.html'
+    success_url = '/dashboard/organization/branches'
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset().select_related('organization')
+    #     q = self.request.GET.get('q', '')
+    #     if self.request.htmx:
+    #         self.template_name = 'admin_panel/partials/branches_partial.html'
+    #     if q:
+    #         return queryset.filter(organization__name__icontains=q)
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        for branch in context['branches']:
+            branch.short_url = self.request.build_absolute_uri(branch.get_absolute_url())
+        return context
+
 
 @login_required_m
 class CreateBranch(generic.CreateView):
     model = Branch
-    template_name = 'branch_form.html'
-    fields = ['name', 'address', 'phone', 'email', 'organization']
-    success_url = '/admin/branches/'
+    template_name = 'admin_panel/organization/branches/branch_form.html'
+    fields = ['description', 'location', 'organization']
+    success_url = '/dashboard/organization/branches'
 
 @login_required_m
-class DeleteBranch(View):
+class BranchActionView(View):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
-            Branch.objects.filter(id__in=selected_ids).delete()
+        action = request.POST.get('action')
+        if action == 'delete':
+            # Branch.objects.filter(id__in=selected_ids).delete()
+            pass
         return HttpResponseRedirect(reverse('branches'))
 
 
 @login_required_m
 class UpdateBranch(generic.UpdateView):
     model = Branch
-    template_name = 'branch_form.html'
-    fields = ['name', 'address', 'phone', 'email', 'organization']
-    success_url = '/admin/branches/'
+    template_name = 'admin_panel/organization/branches/branch_form.html'
+    fields = ['description', 'location', 'organization']
+    success_url = '/dashboard/organization/branches'
     pk_url_kwarg = 'id'
 
 

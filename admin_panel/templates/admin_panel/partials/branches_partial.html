@@ -1,0 +1,14 @@
+{% for branch in branches %}
+<tr onclick="clickHandler(event)" data-link="{% url 'branch-info' branch.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ branch.id }}"></td>
+    <td>{{ branch.id }}</td>
+    <td>{{ branch.organization }}</td>
+    <td>{{ branch.description }}</td>
+    <td onclick="event.stopPropagation();">
+        <div class="copy-btn-wrapper">
+            <input type="button" class="copy-btn" data-url="{{ branch.short_url}}" value="" title="نسخ الرابط">
+            <i class="fas fa-copy"></i>
+        </div>
+    </td>
+</tr>
+{% endfor %}

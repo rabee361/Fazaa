@@ -1,0 +1,55 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}معلومات فرع{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <a href="{% url 'branches' %}">الفروع</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>معلومات فرع</span>
+        <i class="separator fas fa-chevron-left"></i>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+            <div class="form-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.description.label }} :</label>
+                        {{ form.description }}
+                    </div>
+    
+                    <div class="form-group">
+                        <label>{{ form.organization.label }} :</label>
+                        {{ form.organization }}
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.location.label }} :</label>
+                        {{ form.location }}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="form-button-container">
+            <button class="btn btn-brown">
+                حفظ
+            </button>
+            <a href="{% url 'catalogs' %}" class="btn btn-white">
+                إلغاء
+            </a>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}
