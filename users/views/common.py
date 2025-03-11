@@ -207,6 +207,25 @@ class NotificationsView(generics.ListAPIView,BaseAPIView):
 
 
 
+class ActivateNotificationsView(APIView):
+    def post(self,request,user_id):
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error":'المستخدم غير موجود'} , status=status.HTTP_404_NOT_FOUND)
+        
+        get_notifications = request.data.get('get_notifications','deactivate')
+        if get_notifications == 'activate':
+            user.get_notifications = True
+        elif get_notifications == 'deactivate':
+            user.get_notifications = False
+        else:
+            return Response({"error":'الرجاء إدخال قيمة صحيحة'} , status=status.HTTP_400_BAD_REQUEST)
+        user.save()
+        return Response({"message":'تم تحديث الإعدادات بنجاح'} , status=status.HTTP_200_OK)
+
+
+
 
 class UpdateLocationView(BaseAPIView):
     def post(self,request,user_id):

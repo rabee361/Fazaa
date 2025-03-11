@@ -21,6 +21,7 @@ ShareekPatterns = [
     path('delete/' , shareek.DeleteShareekView.as_view()),
     path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
     path('notifications/' , common.NotificationsView.as_view()),
+    path('activate-notifications/<int:user_id>/' , common.ActivateNotificationsView.as_view()),
 ]
 
 
@@ -40,6 +41,7 @@ ClientPatterns = [
     path('delete/' , client.DeleteClientView.as_view()),
     path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
     path('notifications/' , common.NotificationsView.as_view()),
+    path('activate-notifications/<int:user_id>/' , common.ActivateNotificationsView.as_view()),
 ]
 
 
