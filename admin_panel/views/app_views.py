@@ -179,12 +179,13 @@ class SendNotificationView(View):
 
 
 @login_required_m
-class DeleteNotificationView(View):
+class NotificationBulkActionView(View):
     def post(self, request):
-            selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-            if selected_ids:
-                Notification.objects.filter(id__in=selected_ids).delete()
-            return HttpResponseRedirect(reverse('notifications'))
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            Notification.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('notifications'))
 
 
 @login_required_m

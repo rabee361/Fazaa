@@ -87,10 +87,10 @@ OrganizationPatterns=[
     path('social-links/<int:id>/info' , organization_views.UpdateSocialLinkView.as_view() , name="social-link-info"),
     path('social-links/action/' , organization_views.SocialUrlBulkActionView.as_view() , name="social-bulk-action"),
 
-    # path('organization/<int:id>/branches/' , organization_views.ListBranches.as_view() , name="branches"),
-    # path('organization/<int:id>/branches/create/' , organization_views.CreateBranch.as_view() , name="create-branch"),
-    # path('organization/<int:id>/branches/<int:id>/update/' , organization_views.UpdateBranch.as_view() , name="update-branch"),
-    # path('organization/<int:id>/branches/<int:id>/delete/' , organization_views.DeleteBranch.as_view() , name="delete-branch"),
+    path('organization/<int:id>/branches/' , organization_views.ListBranches.as_view() , name="branches"),
+    path('organization/<int:id>/branches/create/' , organization_views.CreateBranch.as_view() , name="create-branch"),
+    path('organization/<int:id>/branches/<int:id>/update/' , organization_views.UpdateBranch.as_view() , name="update-branch"),
+    path('organization/<int:id>/branches/<int:id>/delete/' , organization_views.DeleteBranch.as_view() , name="delete-branch"),
 
     path('contact-us' , app_views.ContactUsView.as_view() , name="contact-us"),
     path('contact-us/add' , app_views.CreateContactUsView.as_view() , name="add-contact-us"),
@@ -113,7 +113,7 @@ OrganizationPatterns=[
 
     path('notifications' , app_views.BaseNotificationsView.as_view() , name="notifications"),
     path('notifications/send/' , app_views.SendNotificationView.as_view() , name="send-notification"),
-    path('notifications/delete/' , app_views.DeleteNotificationView.as_view() , name="delete-notification"),
+    path('notifications/action/' , app_views.NotificationBulkActionView.as_view() , name="notification-action"),
 ]
 
 

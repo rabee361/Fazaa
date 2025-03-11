@@ -1,0 +1,8 @@
+{% for notification in notifications %}
+<tr>
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ notification.id }}"></td>
+    <td>{{ notification.id }}</td>
+    <td>{{ notification.title }}</td>
+    <td>{{ notification.createdAt }}</td>
+</tr>
+{% endfor %}
