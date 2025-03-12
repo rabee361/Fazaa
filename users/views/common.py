@@ -27,7 +27,7 @@ class RefreshTokenView(BaseAPIView):
             token = RefreshToken(refresh)
             return Response({"access":str(token.access_token)},status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error":"حدث خطأ ما"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":"حدث خطأ ما"},status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RefreshFirebaseToken(BaseAPIView):
@@ -105,7 +105,7 @@ class SignUpOTPView(BaseAPIView):
         if phonenumber is None:
             return Response({"error":'الرجاء إدخال رقم الهاتف'})
         if not OTPCode.checkLimit(phonenumber):
-            otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type='SIGNUP')
+            otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.SIGNUP)
             #send the code to the user over whatsapp
             #send_code()
             return Response({'message':'تم ارسال رمز التحقق'} , status=status.HTTP_200_OK)
@@ -120,7 +120,7 @@ class ForgetPasswordOTPView(BaseAPIView):
         phonenumber = self.request.data.get('phonenumber',None)
         if phonenumber:
             if not OTPCode.checkLimit(phonenumber):
-                otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type='FORGET_PASSWORD')
+                otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.FORGET_PASSWORD)
                 #send the code to the user over sms
                 #send_code()
                 return Response({'message':'تم ارسال رمز التحقق'} , status=status.HTTP_200_OK)
@@ -137,8 +137,8 @@ class ResetPasswordOTPView(BaseAPIView):
     def post(self,request):
         phonenumber = self.request.data.get('phonenumber',None)
         if phonenumber:
-            if OTPCode.checkLimit(phonenumber):
-                otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type='RESET_PASSWORD')
+            if not OTPCode.checkLimit(phonenumber):
+                otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.RESET_PASSWORD)
                 #send the code to the user over sms
                 #send_code()
                 return Response({'message':'تم ارسال رمز التحقق'} , status=status.HTTP_200_OK)
@@ -146,6 +146,7 @@ class ResetPasswordOTPView(BaseAPIView):
                 return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
         else:
             raise serializers.ValidationError({'error':'أدخل رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class OTPVerificationView(APIView):

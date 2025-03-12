@@ -20,7 +20,7 @@ class TestOrganizationUploads(APITestCase):
             'file': upload_file,
             'organization': organization.id
         }
-        response = self.client.post('/api/shareek/organization/catalogss/create/', data)
+        response = self.client.post('/api/shareek/organization/catalogs/create/', data)
         self.assertEqual(response.status_code, 201)
 
         response = self.client.get(f'/api/shareek/organization/{organization.id}/catalogs/')
