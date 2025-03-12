@@ -6,6 +6,8 @@ from django.contrib.gis.geos import Point
 from utils.validators import validate_catalog_size, validate_video_extension, validate_catalog_extension, validate_video_size, validate_image_size, validate_image_extension
 from utils.exception_handlers import ErrorResult
 from django.utils import timezone
+import os
+
 class OrganizationListSerializer(ModelSerializer):
     class Meta:
         model = Organization
@@ -137,16 +139,19 @@ class DeliveryUrlUpdateSerializer(ModelSerializer):
     
 class CatalogSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
-    
+    file_name = serializers.SerializerMethodField()
     class Meta:
         model = Catalog
-        fields = ['id','short_url','catalog_type','organization','file']
+        fields = ['id','short_url','catalog_type','organization','file','file_name']
 
     def get_short_url(self,obj):
         request = self.context.get('request')
         if obj.file:
             return f"http://145.223.80.125:8080/catalog/{obj.short_url}/"
         return None
+    
+    def get_file_name(self, obj):
+        return os.path.basename(obj.file.name)
     
     def validate(self, attrs):
         validate_catalog_size(attrs['file'])

@@ -101,7 +101,6 @@ class Shareek(models.Model):
 
     @transaction.atomic 
     def create_organization(commercial_register_id ,organization_type ,organization_name ,**args):
-        print(organization_type)
         organization_type = OrganizationType.objects.get(id=organization_type[0])
         organization = Organization.objects.create(
             name=organization_name[0],

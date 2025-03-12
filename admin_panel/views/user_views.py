@@ -41,10 +41,8 @@ class LoginView(View):
             if not password:
                 context['password_error'] = True
             return render(request, 'admin_panel/login.html', context=context)
-        print(phonenumber,password)
         user = authenticate(request, phonenumber=phonenumber, password=password)
         if user:
-            print(user)
             login(request, user)
             if not remember_me:
                 request.session.set_expiry(60*60*4)  # 4 hours
