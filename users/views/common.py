@@ -123,7 +123,7 @@ class ForgetPasswordOTPView(BaseAPIView):
                 otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.FORGET_PASSWORD)
                 #send the code to the user over sms
                 #send_code()
-                return Response({'message':'تم ارسال رمز التحقق' , "code":otp_code.code} , status=status.HTTP_200_OK)
+                return Response({'message':'تم ارسال رمز التحقق' , "code":f'{otp_code.code}'} , status=status.HTTP_200_OK)
             else:
                 return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -141,7 +141,7 @@ class ResetPasswordOTPView(BaseAPIView):
                 otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.RESET_PASSWORD)
                 #send the code to the user over sms
                 #send_code()
-                return Response({'message':'تم ارسال رمز التحقق' , "code":otp_code.code} , status=status.HTTP_200_OK)
+                return Response({'message':'تم ارسال رمز التحقق' , "code":f'{otp_code.code}'} , status=status.HTTP_200_OK)
             else:
                 return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
         else:
