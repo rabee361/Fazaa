@@ -149,7 +149,7 @@ class CatalogSerializer(ModelSerializer):
         if obj.file:
             return f"http://145.223.80.125:8080/catalog/{obj.short_url}/"
         return None
-    
+
     def get_file_name(self, obj):
         return os.path.basename(obj.file.name)
     
@@ -344,7 +344,7 @@ class OrganizationSerializer(ModelSerializer):
     card_url = serializers.SerializerMethodField()
     class Meta:
         model = Organization
-        fields = ['id','name','description','organization_type','logo','website_short_url','card_url']
+        fields = ['id','name','description','organization_type','logo','website','website_short_url','card_url']
     
     def get_website_short_url(self,obj):
         request = self.context.get('request')
