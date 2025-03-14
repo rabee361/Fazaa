@@ -169,16 +169,16 @@ class ShareekRegisterSerializer(serializers.Serializer):
 
 class UpdateShareekSerializer(UpdateClientSerializer):
     job = serializers.CharField(required=False, allow_blank=True)
-    organization_type = serializers.IntegerField(required=False)
+    organization_type_id = serializers.IntegerField(required=False)
     organization_name = serializers.CharField(required=False, allow_blank=True)
     commercial_register_id = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ['full_name','phonenumber','email','image','job','organization_type','organization_name','commercial_register_id']
+        fields = ['full_name','phonenumber','email','image','job','organization_type_id','organization_name','commercial_register_id']
     
     def validate(self, data):
-        type_id = data['organization_type']
+        type_id = data['organization_type_id']
         try:
             OrganizationType.objects.get(id=type_id)
         except OrganizationType.DoesNotExist:
@@ -189,8 +189,8 @@ class UpdateShareekSerializer(UpdateClientSerializer):
     def update(self, instance, validated_data):
         # Handle organization-related fields if they exist in validated_data
         shareek = Shareek.objects.get(user=instance)
-        if any(field in validated_data for field in ['organization_type', 'organization_name', 'commercial_register_id', 'job']):
-            org_type = OrganizationType.objects.get(id=validated_data.pop('organization_type', None))
+        if any(field in validated_data for field in ['organization_type_id', 'organization_name', 'commercial_register_id', 'job']):
+            org_type = OrganizationType.objects.get(id=validated_data.pop('organization_type_id', None))
             shareek.update_organization(
                 organization_type=org_type,
                 organization_name=validated_data.pop('organization_name', None), 

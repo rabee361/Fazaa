@@ -31,6 +31,19 @@ class AuthenticationTestCase(APITestCase):
         response = self.client.post('/api/auth/shareek/token/refresh/',{'refresh':self.shareek_refresh_token} , format='json')
         self.assertEqual(response.status_code, 200)
         self.shareek_access_token = response.json()['access']
+
+        sahreek_data = {
+            'email': 'test@test.com',
+            'full_name': 'test',
+            # 'logo': 'test.com',
+            'organization_name': 'test',
+            'organization_type': 1,
+            'job': 'manager',
+        }
+
+        self.client.post('/api/auth/shareek/register-shareek/', sahreek_data, format='json')
+
+
         repsonse = self.client.post(f'/api/auth/shareek/logout/' , headers={'Authorization':f'Bearer {self.client_access_token}'}, format='json')
         # need to complete the shareek registration first
         # response = self.client.delete(f'/api/auth/shareek/delete/', headers={'Authorization':f'Bearer {self.shareek_access_token}'}, format='json')
