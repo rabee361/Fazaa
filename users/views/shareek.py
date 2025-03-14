@@ -111,7 +111,7 @@ class UpdateShareekView(BaseAPIView):
                 **serializer.data,
                 'job': shareek.job,
                 'organization_name': shareek.organization.name,
-                'organization_type_id': shareek.organization.organization_type.name,
+                'organization_type_id': shareek.organization.organization_type.id,
                 'commercial_register_id': shareek.organization.commercial_register_id,
             },status=status.HTTP_200_OK)
         else:
