@@ -6,14 +6,13 @@ from fcm_django.models import FCMDevice
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
+from django.contrib.gis.measure import D
 from utils.views import BaseAPIView
 from django.shortcuts import redirect
 from users.models import Shareek
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.measure import D
-from rest_framework.pagination import PageNumberPagination
 from utils.pagination import CustomPagination
 from users.serializers import UserSerializer
 # Create your views here.
@@ -107,7 +106,7 @@ class AvailableOffersView(BaseAPIView):
     def get(self,request,pk):
         try:
             organization = Organization.objects.get(id=pk)
-            offers = ServiceOffer.objects.filter(organizations=organization.organization_type)
+            offers = ServiceOffer.objects.filter(Q(organizations=organization.organization_type) | Q(organization__id__ne=organization.id))
             paginator = CustomPagination()
             paginated_offers = paginator.paginate_queryset(offers, request)
             serializer = ServiceOfferSerializer(paginated_offers, many=True, context={'request':request})

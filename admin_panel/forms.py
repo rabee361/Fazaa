@@ -273,7 +273,7 @@ class ClientOfferForm(forms.ModelForm):
 class ServiceOfferForm(forms.ModelForm):
     class Meta:
         model = ServiceOffer
-        fields = ['content', 'expiresAt', 'organization']
+        fields = ['content', 'expiresAt', 'organization','organizations']
         widgets = {
             'expiresAt': forms.DateInput(
                 attrs={
@@ -286,6 +286,7 @@ class ServiceOfferForm(forms.ModelForm):
             'content': 'المحتوى',
             'expiresAt': 'تاريخ الانتهاء',
             'organization': 'المنظمة',
+            'organizations': 'المنظمات',
         }
 
 

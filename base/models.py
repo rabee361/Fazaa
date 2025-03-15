@@ -57,6 +57,9 @@ class Organization(models.Model):
     def get_absolute_website_url(self):
         return f"/website/{self.website_short_url}/"
 
+    class Meta:
+        ordering = ['-id']
+
 
 class Branch(gis_models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
@@ -129,13 +132,14 @@ class Catalog(models.Model):
 
     class Meta:
         ordering = ['-id']  
+        
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/default.jpg',verbose_name='الصورة')
 
     def clean(self):
-        if self.icon and self.icon.size > 2 * 1024 * 1024:  # 2MB in bytes
-            raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
+        if self.icon and self.icon.size > 1 * 1024 * 1024:  # 1MB in bytes
+            raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 1 ميجابايت')
 
     def create_social_urls(self):
         organizations = Organization.objects.all()
@@ -186,8 +190,8 @@ class DeliveryCompany(models.Model):
     icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/default.jpg',verbose_name='الصورة')
 
     def clean(self):
-        if self.icon and self.icon.size > 1 * 1024 * 1024:  # 2MB in bytes
-            raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 2 ميجابايت')
+        if self.icon and self.icon.size > 1 * 1024 * 1024:  # 1MB in bytes
+            raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 1 ميجابايت')
 
     def create_delivery_urls(self):
         organizations = Organization.objects.all()
@@ -240,12 +244,11 @@ class Template(models.Model):
         return self.name
     
     def clean(self):
-        if self.template and self.template.size > 5 * 1024 * 1024:  # 5MB in bytes
-            raise ValidationError('حجم القالب يجب أن لا يتجاوز 5 ميجابايت')
+        if self.template and self.template.size > 1 * 1024 * 1024:  # 1MB in bytes
+            raise ValidationError('حجم القالب يجب أن لا يتجاوز 1 ميجابايت')
 
     class Meta:
         ordering = ['-id']
-
 
 
 
