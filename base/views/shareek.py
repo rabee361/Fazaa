@@ -145,38 +145,48 @@ class UpdateSocialMediaUrlView(BaseAPIView , generics.UpdateAPIView):
     queryset = SocialMediaUrl.objects.all()
     serializer_class = SocialMediaUrlUpdateSerializer
 
+
+
 class UpdateBulkSocialMediaUrlView(BaseAPIView):
     def post(self, request):
         urls_data = request.data
-        urls = []
-        url_data_dict = {}
-        
-        # Create mapping of id to data for easier lookup
-        for url_data in urls_data:
-            url_id = url_data.get('id')
-            url_data_dict[url_id] = url_data
+        updated_urls = []
+        errors = []
 
         # Get all URLs in a single query
         url_ids = [data.get('id') for data in urls_data]
         existing_urls = SocialMediaUrl.objects.filter(id__in=url_ids)
 
+        # Create mapping of id to URL object for easier lookup
+        url_map = {url.id: url for url in existing_urls}
+
+        # Validate all URLs exist
         if len(existing_urls) != len(urls_data):
             missing_ids = set(url_ids) - set(url.id for url in existing_urls)
             return Response(
-                {"error": f"URLs with ids {list(missing_ids)} do not exist"}, 
+                {"error": f"URLs with ids {list(missing_ids)} do not exist"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Update each URL with its corresponding data
-        for url in existing_urls:
-            url_data = url_data_dict[url.id]
-            urls.append(url)
+        # Update each URL individually
+        for url_data in urls_data:
+            url_id = url_data.get('id')
+            url = url_map[url_id]
+            
+            serializer = SocialMediaUrlUpdateSerializer(url, data=url_data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save()
+                updated_urls.append(serializer.data)
+            else:
+                errors.append({
+                    'id': url_id,
+                    'errors': serializer.errors
+                })
 
-        serializer = SocialMediaUrlUpdateSerializer(urls, data=urls_data, many=True, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if errors:
+            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(updated_urls, status=status.HTTP_200_OK)
 
 
 class SocialMediaView(BaseAPIView , generics.ListAPIView):
