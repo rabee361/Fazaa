@@ -32,5 +32,5 @@ def send_users_notification(title,body,recipient_type):
         notification = UserNotification.objects.create(
             user=user,
             title=title,
-            body=body
+            content=body
         )
