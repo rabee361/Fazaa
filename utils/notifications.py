@@ -14,8 +14,8 @@ def send_users_notification(title,body,recipient_type):
     elif recipient_type == 'shareeks':
         users = User.objects.filter(Q(is_active=True) & Q(user_type=UserType.SHAREEK))
 
-    devices = FCMDevice.objects.filter(user__in=users)
     for user in users:
+        devices = FCMDevice.objects.filter(user=user)
         for device in devices:
             try:
                 device.send_message(Message(
