@@ -1825,3 +1825,86 @@ input[type="checkbox"] {
 .password-toggle-btn:focus {
     outline: none;
 }
+
+
+
+.dropdown-checklist {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-checklist .anchor {
+    position: relative;
+    cursor: pointer;
+    display: block;
+    padding: 0 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    font-size: 0.85rem;
+    height: 35px;
+    line-height: 35px;
+    color: var(--text-primary);
+    box-sizing: border-box;
+}
+
+.dropdown-checklist .anchor:after {
+    content: "";
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid var(--text-primary);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dropdown-checklist .items {
+    display: none;
+    position: absolute;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 2px;
+}
+
+.dropdown-checklist .items li {
+    padding-bottom: 8px;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.dropdown-checklist .items li:hover {
+    background-color: var(--hover-bg);
+}
+
+.dropdown-checklist .items label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    cursor: pointer;
+    direction: rtl;
+}
+
+.dropdown-checklist .items input[type="checkbox"] {
+    margin-right: 0;
+    margin-left: 8px;
+    width: 14px;
+    height: 14px;
+    order: 2;
+}
+
+.dropdown-checklist.visible .items {
+    display: block;
+}
+
+/* Hide the original select element */
+select.dropdown-checklist {
+    display: none !important;
+}

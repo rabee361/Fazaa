@@ -13,14 +13,13 @@
     </nav>
 </div>
 
+
 <div class="content-body">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-container">
             <div class="form-grid">
-
                 <div class="form-section">
-
                     <div class="form-group">
                         <label>{{ form.expiresAt.label }}:</label>
                         {{ form.expiresAt }}
@@ -35,7 +34,6 @@
                         <label>{{ form.content.label }}:</label>
                         {{ form.content }}
                     </div>
-
                 </div>
 
                 <div class="form-section">

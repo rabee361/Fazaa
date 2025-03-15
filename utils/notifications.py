@@ -4,6 +4,7 @@ from users.models import UserType
 from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message, Notification , UnregisteredError
 from firebase_admin.exceptions import InvalidArgumentError
+from users.models import UserNotification
 
 def send_users_notification(title,body,recipient_type):
     if recipient_type == 'all':
@@ -14,15 +15,22 @@ def send_users_notification(title,body,recipient_type):
         users = User.objects.filter(Q(is_active=True) & Q(user_type=UserType.SHAREEK))
 
     devices = FCMDevice.objects.filter(user__in=users)
-    for device in devices:
-        try:
-            device.send_message(Message(
-                notification=Notification(
-                    title=title,
-                    body=body
-                )
-            ))
-        except UnregisteredError as e:
-            pass
-        except InvalidArgumentError as e:
-            pass
+    for user in users:
+        for device in devices:
+            try:
+                device.send_message(Message(
+                    notification=Notification(
+                        title=title,
+                        body=body
+                    )
+                ))
+            except UnregisteredError as e:
+                pass
+            except InvalidArgumentError as e:
+                pass
+        
+        notification = UserNotification.objects.create(
+            user=user,
+            title=title,
+            body=body
+        )

@@ -280,6 +280,11 @@ class ServiceOfferForm(forms.ModelForm):
                     'type': 'date',
                     'class': 'form-control',
                 }
+            ),
+            'organizations': forms.SelectMultiple(
+                attrs={
+                    'class': 'form-control',
+                }
             )
         }
         labels = {
