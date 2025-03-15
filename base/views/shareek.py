@@ -102,11 +102,12 @@ class UpdateOrganizationLogoView(generics.UpdateAPIView):
     queryset = Organization.objects.all()
     serializer_class = UpdateOrganizationLogoSerializer
 
+
 class AvailableOffersView(BaseAPIView):
     def get(self,request,pk):
         try:
-            organization = Organization.objects.get(id=pk)
-            offers = ServiceOffer.objects.filter(Q(organizations=organization.organization_type) | Q(organization__id__ne=organization.id))
+            organization = Organization.objects.select_related('organization_type').get(id=pk)
+            offers = ServiceOffer.objects.prefetch_related('organizations').select_related('organization').filter(Q(organizations=organization.organization_type) | ~Q(organization__id=organization.id))
             paginator = CustomPagination()
             paginated_offers = paginator.paginate_queryset(offers, request)
             serializer = ServiceOfferSerializer(paginated_offers, many=True, context={'request':request})
