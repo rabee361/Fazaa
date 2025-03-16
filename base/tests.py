@@ -38,6 +38,8 @@ class TestOrganizationUploads(APITestCase):
         social_url = SocialMediaUrl.objects.filter(organization=organization).first()
         response = self.client.put(f'/api/shareek/organization/social-urls/{social_url.id}/update/', data)
         self.assertEqual(response.status_code, 200)
+        response = self.client.get(f'/api/shareek/organization/{organization.id}/social-url/')
+        self.assertEqual(response.status_code , 200)
 
     def test_create_delivery_company(self):
         organization = Shareek.objects.get(id=self.shareek.id).organization
@@ -50,6 +52,8 @@ class TestOrganizationUploads(APITestCase):
         delivery_url = DeliveryCompanyUrl.objects.filter(organization=organization).first()
         response = self.client.put(f'/api/shareek/organization/delivery-url/{delivery_url.id}/update/', data)
         self.assertEqual(response.status_code, 200)
+        response = self.client.get(f'/api/shareek/organization/{organization.id}/delivery-url/')
+        self.assertEqual(response.status_code , 200)
 
 
 

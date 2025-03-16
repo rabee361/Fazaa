@@ -25,7 +25,6 @@ class AuthenticationTestCase(APITestCase):
         }   
         response = self.client.post('/api/auth/shareek/sign-up/',data, format='json')
         self.shareek_id = response.data['id']
-        self.assertEqual()
         self.shareek_refresh_token = response.json()['tokens']['refresh']
         self.assertEqual(response.status_code, 200)
         response = self.client.post('/api/auth/shareek/token/refresh/',{'refresh':self.shareek_refresh_token} , format='json')
@@ -33,19 +32,22 @@ class AuthenticationTestCase(APITestCase):
         self.shareek_access_token = response.json()['access']
 
         sahreek_data = {
-            'email': 'test@test.com',
+            'email': 'test@gmail.com',
             'full_name': 'test',
-            # 'logo': 'test.com',
+            # 'image': 'test.com',
             'organization_name': 'test',
             'organization_type': 1,
             'job': 'manager',
+            'commercial_register_id': 234324223
         }
 
-        self.client.post('/api/auth/shareek/register-shareek/', sahreek_data, format='json')
-
-
-        repsonse = self.client.post(f'/api/auth/shareek/logout/' , headers={'Authorization':f'Bearer {self.client_access_token}'}, format='json')
-        # need to complete the shareek registration first
+        response = self.client.post('/api/auth/shareek/register-shareek/', data=sahreek_data, format='json')
+        self.assertEqual(response.status_code , 200)
+        response = self.client.get('/api/auth/shareek/notifications/' , headers={'Authorization':f'Bearer {self.shareek_access_token}'} , format='json')
+        self.assertEqual(response.status_code , 200)
+        response = self.client.post(f'/api/auth/shareek/activate-notifications/{self.shareek_id}/')
+        self.assertEqual(response.status_code , 200)
+        repsonse = self.client.post(f'/api/auth/shareek/logout/' , headers={'Authorization':f'Bearer {self.shareek_access_token}'}, format='json')
         # response = self.client.delete(f'/api/auth/shareek/delete/', headers={'Authorization':f'Bearer {self.shareek_access_token}'}, format='json')
         # self.assertEqual(response.status_code, 200)
 
@@ -62,9 +64,13 @@ class AuthenticationTestCase(APITestCase):
         response = self.client.post('/api/auth/client/token/refresh/',{'refresh':self.client_refresh_token} , format='json')
         self.assertEqual(response.status_code, 200)
         self.client_access_token = response.json()['access']
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/api/auth/client/notifications/' , headers={'Authorization':f'Bearer {self.client_access_token}'} , format='json')
+        self.assertEqual(response.status_code , 200)
+        response = self.client.post(f'/api/auth/client/activate-notifications/{self.client_id}/')
+        self.assertEqual(response.status_code , 200)
         repsonse = self.client.post(f'/api/auth/client/logout/' , headers={'Authorization':f'Bearer {self.client_access_token}'}, format='json')
         response = self.client.delete(f'/api/auth/client/delete/', headers={'Authorization':f'Bearer {self.client_access_token}'}, format='json')
-        self.assertEqual(response.status_code, 200)
 
 
 
