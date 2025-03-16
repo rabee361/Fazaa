@@ -2,8 +2,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <script>
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+    </script>
     <script rel="script" src="{% static 'assets/js/main.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
     <script rel="script" src="{% static 'assets/js/htmx.min.js' %}"></script>
     <meta charset="UTF-8">
     <meta name="description" content="Fazaa Dashboard">

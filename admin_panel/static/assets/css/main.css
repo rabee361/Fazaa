@@ -128,6 +128,7 @@
 .login-text {
     text-align: center;
     margin: 10px;
+    color: var(--text-primary);
 }
 
 .remember-me-checkbox {
