@@ -4,8 +4,11 @@ from django.test.utils import override_settings
 
 class ExampleTestRunner(DiscoverRunner):
     def run_tests(self, *args, **kwargs):
-        with override_settings(**TEST_SETTINGS):
-            return super().run_tests(*args, **kwargs)
+        # Show all warnings once, especially to show
+        DeprecationWarning
+        # messages which Python ignores by default
+        warnings.simplefilter("default")
+        return super().run_tests(*args, **kwargs)
         
     
 TEST_SETTINGS = {

@@ -64,3 +64,59 @@ class TestOrganizationInfo(APITestCase):
     def test_organization_info(self):
         response = self.client.get(f'/api/shareek/organization/{self.shareek.id}/info/')
         self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(f'/api/shareek/organization/types')
+        self.assertEqual(response.status_code, 200)
+
+
+
+class TestOrganizationOffers(APITestCase):
+    def setUp(self) -> None:
+        self.organization = create_organization()
+        self.template = create_template()
+
+    def test_offers(self):
+        response = self.client.get('/api/shareek/templates/')
+        self.assertEqual(response.status_code, 200)
+
+        service_offer_data = {
+            'organization': self.organization.id,
+            'content': 'test',
+            'expiresAt': '2025-01-01',
+            'template': self.template.id
+        }
+
+        client_offer_data = {
+            'organization': self.organization.id,
+            'content': 'test',
+            'expiresAt': '2025-01-01',
+        }
+        response = self.client.post('/api/shareek/organization/service-offers/create/', data=service_offer_data, format='json')
+        self.assertEqual(response.status_code, 201)
+        response = self.client.get(f'/api/shareek/organization/{self.organization.id}/service-offers/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.delete(f'/api/shareek/organization/service-offers/{response.data["id"]}/delete/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post('/api/shareek/organization/client-offers/create/', data=client_offer_data, format='json')
+        self.assertEqual(response.status_code, 201)
+        response = self.client.get(f'/api/shareek/organization/{self.organization.id}/client-offers/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.delete(f'/api/shareek/organization/client-offers/{response.data["id"]}/delete/')
+        self.assertEqual(response.status_code, 200)
+        
+
+        
+class TestCommonInfo(APITestCase):
+    def setUp(self):
+        pass
+
+    def test_common_info(self):
+        response = self.client.get('/api/common-questions')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/api/contact-us')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/api/terms-privacy')
+        self.assertEqual(response.status_code, 200)

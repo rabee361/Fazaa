@@ -42,7 +42,7 @@ class AuthenticationTestCase(APITestCase):
         }
 
         response = self.client.post('/api/auth/shareek/register-shareek/', data=sahreek_data, format='json')
-        self.assertEqual(response.status_code , 200)
+        self.assertEqual(response.status_code , 201)
         response = self.client.get('/api/auth/shareek/notifications/' , headers={'Authorization':f'Bearer {self.shareek_access_token}'} , format='json')
         self.assertEqual(response.status_code , 200)
         response = self.client.post(f'/api/auth/shareek/activate-notifications/{self.shareek_id}/')

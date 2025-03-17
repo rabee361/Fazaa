@@ -74,7 +74,7 @@ class ShareekRegisterView(BaseAPIView):
                 'organization_name': organization.name,
                 'organization_type': organization.organization_type.name,
                 'commercial_register_id': organization.commercial_register_id,
-            })
+            }, status=status.HTTP_201_CREATED)
         else:
             # If Shareek already exists, return an error response
             return Response({"error": "يوجد شريك مسجل بهذا الرقم "}, status=status.HTTP_400_BAD_REQUEST)

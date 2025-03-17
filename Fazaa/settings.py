@@ -243,7 +243,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TEST_RUNNER = "Fazaa.test_runner.ExampleTestRunner"
+# TEST_RUNNER = "Fazaa.test_runner.ExampleTestRunner"
 
 
 
