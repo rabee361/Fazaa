@@ -1,0 +1,70 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %} عن التطبيق {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="content-header">
+        <nav class="breadcrumb">
+            <span>عن التطبيق</span>
+            <i class="separator fas fa-chevron-left"></i>
+        </nav>
+    </div>
+
+    <div class="actions">
+        <div class="search-container">
+            <form method="get" class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input hx-get="{% url 'about-us' %}" hx-push-url="true" hx-target="#about-us-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
+            </form>
+        </div>
+
+        <div class="actions-dropdown">
+            <div class="action-controls">
+                <select id="bulkAction">
+                    <option value="" selected disabled>اختر إجراء...</option>
+                    <option value="delete">حذف</option>
+                </select>
+                <button type="button" class="btn-go" onclick="executeBulkAction()">تنفيذ</button>
+            </div>
+        </div>
+    </div>
+
+
+    <form id="bulkActionForm" method="POST" action="{% url 'about-us-action' %}">
+        {% csrf_token %}
+        <input type="hidden" name="selected_ids" id="selectedIds">
+        <input type="hidden" name="action" id="selectedAction">
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" class="select-all-checkbox"></th>
+                            {% for field in field_names %}
+                            <th>{{ field }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody id="about-us-partial">
+                        {% include 'admin_panel/partials/about_us_partial.html' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-controls">
+            <div class="action-button-container">
+                <a href="{% url 'add-about-us' %}" class="btn btn-brown">
+                    إضافة
+                </a>
+            </div>
+        </div>
+
+        {% include 'admin_panel/pagination.html' %}
+    
+    </form>
+</div>
+
+{% endblock %}

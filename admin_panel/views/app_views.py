@@ -231,6 +231,55 @@ class ContactUsBulkActionView(View):
         return HttpResponseRedirect(reverse('contact-us'))
 
 
+
+@login_required_m
+class AboutUsView(CustomListBaseView):
+    model = AboutUs
+    context_object_name = 'about_us'
+    context_fields = ['id','name','icon']
+    template_name = 'admin_panel/app/about_us/about_us.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/about_us_partial.html'
+        if q:
+            return queryset.filter(name__icontains=q)
+        else:
+            return queryset
+
+@login_required_m
+class CreateAboutUsView(generic.CreateView):
+    model = AboutUs
+    template_name = 'admin_panel/app/about_us/about_us_form.html'
+    fields = ['name','link','icon']
+    success_url = '/dashboard/organization/about-us'
+
+@login_required_m
+class UpdateAboutUsView(generic.UpdateView):
+    model = AboutUs
+    context_object_name = 'about_us'
+    template_name = 'admin_panel/app/about_us/about_us_form.html'
+    fields = ['name','link','icon']
+    success_url = '/dashboard/organization/about-us'
+    pk_url_kwarg = 'id'
+
+@login_required_m
+class AboutUsBulkActionView(View):
+    def post(self, request):
+        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
+        action = request.POST.get('action')
+        if action == 'delete':
+            AboutUs.objects.filter(id__in=selected_ids).delete()
+        return HttpResponseRedirect(reverse('about-us'))
+
+
+
+
+
+
+
 @login_required_m
 class ListSubscriptionsView(CustomListBaseView):
     model = Subscription

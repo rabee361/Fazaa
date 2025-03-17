@@ -10,7 +10,7 @@ from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message, Notification
 
 
-class CreateEmployeeMessage(AsyncWebsocketConsumer):
+class CreateMessage(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.chat_id = self.scope['url_route']['kwargs']['chat_id']
 		self.user_id = self.scope['url_route']['kwargs']['user_id']

@@ -296,6 +296,18 @@ class ContactUs(models.Model):
         ordering = ['-id']
 
 
+class AboutUs(models.Model):
+    name = models.CharField(max_length=255 , verbose_name='الاسم')
+    link = models.CharField(max_length=255 , verbose_name='الرابط')
+    icon = models.ImageField(upload_to='media/images/about_us/', default='media/images/default.jpg', verbose_name='الشعار')
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        ordering = ['-id']
+
+
 
 class TermsPrivacy(models.Model):
     title = models.CharField(max_length=255)

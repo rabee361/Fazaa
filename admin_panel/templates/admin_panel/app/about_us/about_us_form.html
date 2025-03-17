@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}إضافة عن التطبيق {% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <nav class="breadcrumb">
+        <i class="separator fas fa-chevron-left"></i>
+        <a href="{% url 'about-us' %}">عن التطبيق</a>
+        <i class="separator fas fa-chevron-left"></i>
+        <span>إضافة عن التطبيق</span>
+    </nav>
+</div>
+
+<div class="content-body">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+            <div class="form-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.name.label }} :</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="error">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ form.icon.label }} :</label>
+                        <div class="image-upload">
+                            {{ form.icon }}
+                            <div class="upload-placeholder">اختر شعار :</div>
+                        </div>
+                        {% if form.icon.errors %}
+                            <div class="error">{{ form.icon.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>{{ form.link.label }} :</label>
+                        {{ form.link }}
+                        {% if form.link.errors %}
+                            <div class="error">{{ form.link.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="form-button-container">
+            <button class="btn btn-brown">
+                حفظ
+            </button>
+            <a href="{% url 'about-us' %}" class="btn btn-white">
+                إلغاء
+            </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

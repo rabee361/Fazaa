@@ -1,0 +1,8 @@
+{% for about in about_us %}
+<tr onclick="clickHandler(event)" data-link="{% url 'about-us-info' about.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ about.id }}"></td>
+    <td>{{ about.id }}</td>
+    <td>{{ about.name }}</td>
+    <td><img width="30px" height="30px" src="{{ about.icon.url }}" alt=""></td>
+</tr>
+{% endfor %}

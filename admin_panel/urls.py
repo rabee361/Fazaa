@@ -97,6 +97,11 @@ OrganizationPatterns=[
     path('contact-us/<int:id>/info' , app_views.UpdateContactUsView.as_view() , name="contact-us-info"),
     path('contact-us/action/' , app_views.ContactUsBulkActionView.as_view() , name="contact-us-action"),
 
+    path('about-us' , app_views.AboutUsView.as_view() , name="about-us"),
+    path('about-us/add' , app_views.CreateAboutUsView.as_view() , name="add-about-us"),
+    path('about-us/<int:id>/info' , app_views.UpdateAboutUsView.as_view() , name="about-us-info"),
+    path('about-us/action/' , app_views.AboutUsBulkActionView.as_view() , name="about-us-action"),
+
     path('subscriptions' , app_views.ListSubscriptionsView.as_view() , name="subscriptions"),
     path('subscriptions/add' , app_views.CreateSubscriptionView.as_view() , name="add-subscription"),
     path('subscriptions/<int:id>/info' , app_views.SubscriptionInfoView.as_view() , name="subscription-info"),
@@ -105,6 +110,7 @@ OrganizationPatterns=[
     path('reports' , app_views.ListReportsView.as_view() , name="reports"),
     path('reports/<int:id>/info' , app_views.GetReportView.as_view() , name="report-info"),
     path('reports/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
+
 
     path('common-questions' , app_views.CommonQuestionsView.as_view() , name="common-questions"),
     path('common-questions/add' , app_views.CreateQuestionView.as_view() , name="add-common-question"),

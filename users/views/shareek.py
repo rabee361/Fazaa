@@ -28,6 +28,7 @@ class ShareekSignUpView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             user.create_signup_otp()
+            user.create_chat()
             data = serializer.data
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}
