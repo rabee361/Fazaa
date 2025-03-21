@@ -5,14 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: gunicorn Fazaa.wsgi:application --bind 0.0.0.0:8000
     container_name: fazaa_web_1
     volumes:
       - .:/home/app
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
-    ports:
-      - 8080:8000
+    expose:
+      - "8000"
     restart: always
     env_file:
       - ./.env
@@ -37,7 +36,6 @@ services:
           cpus: '0.5'
           memory: 512M
 
- 
   db:
     image: postgis/postgis:15-3.3
     container_name: fazaa_db_1
@@ -94,10 +92,11 @@ services:
     env_file:
       - ./.env
     ports:
-      - "9000:8080"
+      - "80:8080"
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - web
     restart: always
@@ -114,7 +113,6 @@ services:
         reservations:
           cpus: '0.2'
           memory: 256M
-
 
 networks:
   fazaa_network:
