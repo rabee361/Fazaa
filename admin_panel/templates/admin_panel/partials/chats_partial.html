@@ -1,0 +1,10 @@
+{% for chat in chats %} 
+    <div class="chat-item" data-chat-id="{{chat.id}}" onclick="selectChat(this, '{{chat.id}}', '{{chat.user.full_name}}')">
+        <img src="" alt="User" class="chat-avatar">
+        <div class="chat-info">
+            <h4>{{chat.user.full_name}}</h4>
+            <!-- <p>{{chat.last_message.content}}</p> -->
+        </div>
+        <span class="chat-time">{{chat.last_message|date:"H:i"}}</span>
+    </div>
+{% endfor %}

@@ -12,21 +12,12 @@
                 <h3>المحادثات</h3>
                 <div class="chat-search">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" placeholder="بحث...">
+                    <input hx-get="{% url 'chats' %}" hx-push-url="true" hx-target="#chats-partial" hx-swap="innerHTML" hx-trigger="keyup changed delay:500ms" type="text" name="q" class="form-control" placeholder="بحث..." value="{{ request.GET.q }}">
                 </div>
             </div>
         </div>
-        <div class="chat-list-content">
-            <!-- Sample chat items - Replace with dynamic data -->
-            {% for chat in chats %} 
-            <div class="chat-item">
-                <img src="{% static 'assets/images/placeholder.jpg' %}" alt="User" class="chat-avatar">
-                <div class="chat-info">
-                    <h4>{{chat.user.full_name}}</h4>
-                </div>
-                <span class="chat-time">{{chat.last_message|date:"H:i"}}</span>
-            </div>
-            {% endfor %}
+        <div class="chat-list-content" id="chats-partial">
+            {% include 'admin_panel/partials/chats_partial.html' %}
         </div>
     </div>
 
@@ -34,7 +25,7 @@
     <div class="chat-messages">
         <div class="chat-messages-header">
             <div class="current-chat-info">
-                <img src="{% static 'assets/images/placeholder.jpg' %}" alt="User" class="chat-avatar">
+                <img src="#" alt="User" class="chat-avatar">
                 <div>
                     <h3>ali ali</h3>
                     <span class="status online">متصل</span>
@@ -44,54 +35,12 @@
         
         <div class="messages-container">
             <!-- Sample messages - Replace with dynamic data -->
-            <div class="message received">
-                <div class="message-content">
-                    <p>مرحباً، كيف يمكنني المساعدة؟</p>
-                    <span class="message-time">12:25</span>
-                </div>
-            </div>
-            <div class="message sent">
+            <!-- <div class="message sent">
                 <div class="message-content">
                     <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
                     <span class="message-time">12:27</span>
                 </div>
-            </div>
-            <div class="message sent">
-                <div class="message-content">
-                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
-                    <span class="message-time">12:27</span>
-                </div>
-            </div>
-            <div class="message sent">
-                <div class="message-content">
-                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
-                    <span class="message-time">12:27</span>
-                </div>
-            </div>
-            <div class="message sent">
-                <div class="message-content">
-                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
-                    <span class="message-time">12:27</span>
-                </div>
-            </div>
-            <div class="message sent">
-                <div class="message-content">
-                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
-                    <span class="message-time">12:27</span>
-                </div>
-            </div>
-            <div class="message sent">
-                <div class="message-content">
-                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
-                    <span class="message-time">12:27</span>
-                </div>
-            </div>
-            <div class="message sent">
-                <div class="message-content">
-                    <p>أهلاً بك! أحتاج إلى مساعدة في طلبي</p>
-                    <span class="message-time">12:27</span>
-                </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="chat-input">

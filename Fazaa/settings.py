@@ -47,6 +47,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,15 +77,24 @@ LEAFLET_CONFIG = {
     'SCALE': 'both'
 }
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('redis', 6379)],
-        },
-    },
-}
 
+
+if ENVIRONMENT:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        },
+    }
+
+if not ENVIRONMENT:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('redis', 6379)],
+            },
+        },
+    }
 
 # CACHES = {
 #     "default": {
@@ -125,7 +135,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Fazaa.wsgi.application'
-# ASGI_APPLICATION = 'Fazaa.asgi.application'
+ASGI_APPLICATION = 'Fazaa.asgi.application'
 
 
 # Database

@@ -13,6 +13,7 @@ import json
 from django.db.models import Max
 from utils.notifications import send_users_notification
 from admin_panel.forms import NotificationForm
+from django.core.paginator import Paginator
 
 login_required_m =  method_decorator(login_required(login_url='login'), name="dispatch")
 
@@ -88,19 +89,51 @@ class DeleteReportView(View):
         return HttpResponseRedirect(reverse('reports'))
 
 
-class ListSupportChatsView(View):
-    def get(self, request):
-        chats = SupportChat.objects.select_related('user').annotate(last_message=Max('message__createdAt')).all()
-        context = {
-            'chats': chats,
-        }
-        return render(request, 'admin_panel/app/chats.html' , context=context)
+class ListSupportChatsView(generic.ListView):
+    model = SupportChat
+    context_object_name = 'chats'
+    template_name = 'admin_panel/app/chats.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('user').annotate(last_message=Max('message__createdAt'))
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/chats_partial.html'
+        if q:
+            return queryset.filter(user__full_name__icontains=q)
+        else:
+            return queryset
 
 
 class ListMessagesView(View):
-    def get(self,request,chat_id):
-        messages = Message.objects.filter(chat_id=chat_id)
-        return 
+    def get(self, request, chat_id):
+        page = int(request.GET.get('page', 1))
+        messages_per_page = 10  # Adjust this number as needed
+        
+        # Get the chat object
+        chat = SupportChat.objects.select_related('user').get(id=chat_id)
+        
+        # Get all messages for this chat, ordered by newest first
+        all_messages = Message.objects.filter(chat_id=chat_id).order_by('-createdAt')
+        
+        # Create paginator
+        paginator = Paginator(all_messages, messages_per_page)
+        messages = paginator.get_page(page)
+        
+        # Check if there are more messages
+        has_next = messages.has_next()
+        
+        context = {
+            'messages': messages,
+            'has_next': has_next,
+            'next_page': page + 1 if has_next else None,
+            'chat_id': chat_id,
+            'chat': chat,
+            'is_htmx': request.htmx
+        }
+        
+        return render(request, 'admin_panel/partials/messages_partial.html', context)
+
 
 @login_required_m
 class CommonQuestionsView(CustomListBaseView):

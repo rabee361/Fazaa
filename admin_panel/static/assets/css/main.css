@@ -1594,6 +1594,19 @@ input[type="checkbox"] {
     max-width: 70%;
     margin-bottom: 20px;
     display: flex;
+    animation: messageSlideIn 0.3s ease-out;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .message.received {
@@ -1610,11 +1623,19 @@ input[type="checkbox"] {
     padding: 10px 15px;
     border-radius: 12px;
     position: relative;
+    transition: all 0.3s ease;
 }
 
 .message.sent .message-content {
     background: var(--accent-color);
-    color: white;
+    color: var(--text-primary);
+    transform-origin: right bottom;
+}
+
+.message.received .message-content {
+    transform-origin: left bottom;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 .message-content p {
@@ -1639,6 +1660,8 @@ input[type="checkbox"] {
     display: flex;
     gap: 10px;
     align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 .chat-input input {
@@ -1648,6 +1671,12 @@ input[type="checkbox"] {
     border-radius: 8px;
     background: var(--bg-primary);
     color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.chat-input input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(166, 144, 118, 0.1);
 }
 
 .send-button {
@@ -1661,7 +1690,7 @@ input[type="checkbox"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .send-button:hover {

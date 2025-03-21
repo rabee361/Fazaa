@@ -1,4 +1,3 @@
-
 // Theme switching functionality
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -309,3 +308,155 @@ function togglePasswordVisibility() {
         toggleButton.classList.add('fa-eye');
     }
 }
+
+// Chat WebSocket functionality
+let currentChatSocket = null;
+
+class ChatWebSocket {
+    constructor(chatId, userName) {
+        this.chatId = chatId;
+        this.userName = userName;
+        this.socket = null;
+        this.messageContainer = document.querySelector('.messages-container');
+        this.chatInput = document.querySelector('.chat-input input');
+        this.sendButton = document.querySelector('.send-button');
+        this.setupWebSocket();
+        this.setupEventListeners();
+    }
+
+    setupWebSocket() {
+        // Close existing socket if any
+        if (currentChatSocket && currentChatSocket.socket) {
+            currentChatSocket.socket.close();
+        }
+
+        this.socket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${this.chatId}/`);
+        currentChatSocket = this;
+        
+        this.socket.onopen = () => {
+            console.log('WebSocket connection established');
+            // Request initial messages
+            this.socket.send(JSON.stringify({
+                'type': 'fetch_messages'
+            }));
+            // Update UI to show connection status
+            this.updateConnectionStatus(true);
+        };
+
+        this.socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'chat_message') {
+                this.displayMessage(data);
+            } else if (data.type === 'message_history') {
+                this.displayMessageHistory(data.messages);
+            }
+        };
+
+        this.socket.onclose = () => {
+            console.log('WebSocket connection closed');
+            this.updateConnectionStatus(false);
+        };
+
+        this.socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.updateConnectionStatus(false);
+        };
+    }
+
+    updateConnectionStatus(connected) {
+        const statusElement = document.querySelector('.status');
+        if (statusElement) {
+            statusElement.textContent = connected ? 'متصل' : 'غير متصل';
+            statusElement.classList.toggle('online', connected);
+        }
+    }
+
+    setupEventListeners() {
+        this.sendButton.addEventListener('click', () => this.sendMessage());
+        this.chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.sendMessage();
+            }
+        });
+    }
+
+    sendMessage() {
+        const message = this.chatInput.value.trim();
+        if (message && this.socket.readyState === WebSocket.OPEN) {
+            this.socket.send(JSON.stringify({
+                'type': 'chat_message',
+                'message': message
+            }));
+            this.chatInput.value = '';
+        }
+    }
+
+    displayMessage(data) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${data.sender == 1 ? 'sent' : 'received'}`;
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        
+        const messageText = document.createElement('p');
+        messageText.textContent = data.message;
+        
+        const messageTime = document.createElement('span');
+        // messageTime.className = 'message-time';
+        // messageTime.textContent = new Date().toLocaleTimeString('ar-EG', {
+        //     hour: '2-digit',
+        //     minute: '2-digit'
+        // });
+        
+        messageContent.appendChild(messageText);
+        // messageContent.appendChild(messageTime);
+        messageDiv.appendChild(messageContent);
+
+        this.messageContainer.appendChild(messageDiv);
+        this.scrollToBottom();
+    }
+
+    displayMessageHistory(messages) {
+        this.messageContainer.innerHTML = '';
+        messages.forEach(message => {
+            this.displayMessage(message);
+        });
+        this.scrollToBottom();
+    }
+
+    scrollToBottom() {
+        this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+    }
+}
+
+// Function to handle chat selection
+function selectChat(element, chatId, userName) {
+    // Update active chat styling
+    document.querySelectorAll('.chat-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    element.classList.add('active');
+
+    // Update chat header
+    const chatHeader = document.querySelector('.current-chat-info h3');
+    if (chatHeader) {
+        chatHeader.textContent = userName;
+    }
+
+    // Initialize new WebSocket connection for selected chat
+    new ChatWebSocket(chatId, userName);
+}
+
+// Initialize chat functionality when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const chatContainer = document.querySelector('.chat-container');
+    if (chatContainer) {
+        // Find first chat and select it if exists
+        const firstChat = document.querySelector('.chat-item');
+        if (firstChat) {
+            const chatId = firstChat.getAttribute('data-chat-id');
+            const userName = firstChat.querySelector('.chat-info h4').textContent;
+            selectChat(firstChat, chatId, userName);
+        }
+    }
+});

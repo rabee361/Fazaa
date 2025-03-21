@@ -59,11 +59,12 @@ class User(AbstractUser):
             )
             return otp
 
-    def create_chat(self, user_id):
-        if not SupportChat.objects.exists(user=user_id):
-            SupportChat.objects.create(
-                user = self,
+    def create_chat(self):
+        if not SupportChat.objects.filter(user=self).exists():
+            chat = SupportChat.objects.create(
+                user=self,
             )
+            return chat.id
 
     class Meta:
         ordering = ['-id']
