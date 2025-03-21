@@ -89,6 +89,7 @@ services:
   nginx:
     image: nginx
     build: ./nginx
+    container_name: fazaa_nginx_1
     env_file:
       - ./.env
     ports:
