@@ -20,6 +20,6 @@ apt-get install -y binutils libproj-dev gdal-bin
 # Copy project
 COPY . /home/app
 
-RUN python manage.py collectstatic --no-input
+# RUN python manage.py collectstatic --no-input
 
 CMD ["python", "manage.py", "runserver" ,"0.0.0.0:8000"]
