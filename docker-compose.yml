@@ -5,14 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: daphne -b 0.0.0.0 -p 8000 Fazaa.asgi:application
+    command: gunicorn Fazaa.wsgi:application --bind 0.0.0.0:8000
     container_name: fazaa_web_1
     volumes:
       - .:/home/app
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
-    expose:
-      - "8000"
+    ports:
+      - 8080:8000
     restart: always
     env_file:
       - ./.env
@@ -36,6 +36,8 @@ services:
         reservations:
           cpus: '0.5'
           memory: 512M
+
+ 
   db:
     image: postgis/postgis:15-3.3
     container_name: fazaa_db_1
@@ -92,7 +94,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "8088:8080"
+      - "9000:8080"
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
