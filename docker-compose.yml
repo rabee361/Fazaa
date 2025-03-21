@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: daphne -b 0.0.0.0 -p 8000 Fazaa.asgi:application
+    command: daphne -b 0.0.0.0 -p 8080 Fazaa.asgi:application
     container_name: fazaa_web_1
     volumes:
       - .:/home/app
