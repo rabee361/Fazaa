@@ -9,8 +9,6 @@ from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message as FCMessage, Notification
 from django.core.exceptions import ObjectDoesNotExist
 
-
-
 class SendMessage(AsyncWebsocketConsumer):
 	async def connect(self):
 		try:
@@ -26,11 +24,9 @@ class SendMessage(AsyncWebsocketConsumer):
 			print(f"User authenticated: {self.user.is_authenticated}")
 			if self.user.is_authenticated:
 				print(f"User ID: {self.user.id}, User type: {self.user.user_type}")
-			
-			# Check if user is authenticated
-			if not self.user.is_authenticated:
+			else:
 				print(f"Authentication failed: User is not authenticated")
-				await self.close(code=403)  # Authentication failed
+				await self.close(code=4003)  # Authentication failed
 				return
 				
 			self.user_id = self.user.id
@@ -68,11 +64,14 @@ class SendMessage(AsyncWebsocketConsumer):
 			message_type = text_data_json.get('type')
 			
 			if message_type == 'fetch_messages':
-				# Handle fetch messages request
-				messages = await self.get_chat_msgs(self.chat_id)
+				# Handle fetch messages request with pagination
+				page_number = text_data_json.get('page', 1)
+				page_size = text_data_json.get('page_size', 5)
+				messages = await self.get_chat_msgs(self.chat_id, page_number, page_size)
 				await self.send(text_data=json.dumps({
 					'type': 'message_history',
-					'messages': messages
+					'messages': messages['messages'],
+					'has_more': messages['has_more']
 				}))
 				return
 			
@@ -104,7 +103,7 @@ class SendMessage(AsyncWebsocketConsumer):
 			)
 
 			# Send notification
-			await self.send_message_notification(chat, user.full_name, message)
+			# await self.send_message_notification(chat, user.full_name, message)
 
 		except Exception as e:
 			print(f"Message handling error: {str(e)}")
@@ -135,17 +134,28 @@ class SendMessage(AsyncWebsocketConsumer):
 		)
 
 	@database_sync_to_async
-	def get_chat_msgs(self,chat_id):
-		messages = Message.objects.filter(chat=chat_id).order_by('createdAt')
-		return [
-			{
-				'message': msg.content,
-				'sender': msg.sender.id,
-				'chat': msg.chat.id,
-				'createdAt': msg.createdAt.isoformat() if hasattr(msg, 'createdAt') else None
-			}
-			for msg in messages
-		]
+	def get_chat_msgs(self, chat_id, page_number=1, page_size=5):
+		messages = Message.objects.filter(chat=chat_id).order_by('-createdAt')
+		total_messages = messages.count()
+		
+		start = (page_number - 1) * page_size
+		end = start + page_size
+		page_messages = messages[start:end]
+		
+		has_more = total_messages > (page_number * page_size)
+		
+		return {
+			'messages': [
+				{
+					'message': msg.content,
+					'sender': msg.sender.id,
+					'chat': msg.chat.id,
+					'createdAt': msg.createdAt.isoformat() if hasattr(msg, 'createdAt') else None
+				}
+				for msg in page_messages
+			],
+			'has_more': has_more
+		}
 
 	@database_sync_to_async
 	def get_user(self, user_id):
@@ -179,6 +189,3 @@ class SendMessage(AsyncWebsocketConsumer):
 			self.room_group_name,
 			self.channel_name
 		)
-
-
-

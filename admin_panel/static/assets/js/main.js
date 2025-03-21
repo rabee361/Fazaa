@@ -320,6 +320,9 @@ class ChatWebSocket {
         this.messageContainer = document.querySelector('.messages-container');
         this.chatInput = document.querySelector('.chat-input input');
         this.sendButton = document.querySelector('.send-button');
+        this.currentPage = 1;
+        this.isLoading = false;
+        this.hasMoreMessages = true;
         this.setupWebSocket();
         this.setupEventListeners();
     }
@@ -336,9 +339,7 @@ class ChatWebSocket {
         this.socket.onopen = () => {
             console.log('WebSocket connection established');
             // Request initial messages
-            this.socket.send(JSON.stringify({
-                'type': 'fetch_messages'
-            }));
+            this.loadMessages();
             // Update UI to show connection status
             this.updateConnectionStatus(true);
         };
@@ -346,9 +347,9 @@ class ChatWebSocket {
         this.socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'chat_message') {
-                this.displayMessage(data);
+                this.displayMessage(data, true);
             } else if (data.type === 'message_history') {
-                this.displayMessageHistory(data.messages);
+                this.handleMessageHistory(data.messages, data.has_more);
             }
         };
 
@@ -378,6 +379,86 @@ class ChatWebSocket {
                 this.sendMessage();
             }
         });
+
+        // Add scroll event listener for infinite scroll
+        this.messageContainer.addEventListener('scroll', () => {
+            if (this.shouldLoadMoreMessages()) {
+                this.loadMessages();
+            }
+        });
+    }
+
+    shouldLoadMoreMessages() {
+        if (this.isLoading || !this.hasMoreMessages) return false;
+        
+        const scrollTop = this.messageContainer.scrollTop;
+        // Load more when user scrolls near the top (100px threshold)
+        return scrollTop < 100;
+    }
+
+    loadMessages() {
+        if (this.isLoading || !this.hasMoreMessages) return;
+        
+        this.isLoading = true;
+        this.socket.send(JSON.stringify({
+            'type': 'fetch_messages',
+            'page': this.currentPage,
+            'page_size': 20
+        }));
+    }
+
+    handleMessageHistory(messages, hasMore) {
+        const initialHeight = this.messageContainer.scrollHeight;
+        const wasEmpty = this.messageContainer.children.length === 0;
+        
+        // Display messages at the top
+        const fragment = document.createDocumentFragment();
+        messages.reverse().forEach(message => {
+            const messageElement = this.createMessageElement(message);
+            fragment.appendChild(messageElement);
+        });
+        
+        // Prepend messages if not the first load
+        if (!wasEmpty) {
+            this.messageContainer.insertBefore(fragment, this.messageContainer.firstChild);
+            // Maintain scroll position
+            const newHeight = this.messageContainer.scrollHeight;
+            this.messageContainer.scrollTop = newHeight - initialHeight;
+        } else {
+            this.messageContainer.appendChild(fragment);
+            this.scrollToBottom();
+        }
+
+        this.hasMoreMessages = hasMore;
+        this.currentPage++;
+        this.isLoading = false;
+    }
+
+    createMessageElement(data) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${data.sender == 1 ? 'sent' : 'received'}`;
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        
+        const messageText = document.createElement('p');
+        messageText.textContent = data.message;
+        
+        messageContent.appendChild(messageText);
+        messageDiv.appendChild(messageContent);
+
+        return messageDiv;
+    }
+
+    displayMessage(data, isNew = false) {
+        const messageElement = this.createMessageElement(data);
+        
+        if (isNew) {
+            this.messageContainer.appendChild(messageElement);
+            this.scrollToBottom();
+        } else {
+            this.messageContainer.insertBefore(messageElement, this.messageContainer.firstChild);
+        }
     }
 
     sendMessage() {
@@ -389,39 +470,6 @@ class ChatWebSocket {
             }));
             this.chatInput.value = '';
         }
-    }
-
-    displayMessage(data) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${data.sender == 1 ? 'sent' : 'received'}`;
-        
-        const messageContent = document.createElement('div');
-        messageContent.className = 'message-content';
-        
-        const messageText = document.createElement('p');
-        messageText.textContent = data.message;
-        
-        const messageTime = document.createElement('span');
-        // messageTime.className = 'message-time';
-        // messageTime.textContent = new Date().toLocaleTimeString('ar-EG', {
-        //     hour: '2-digit',
-        //     minute: '2-digit'
-        // });
-        
-        messageContent.appendChild(messageText);
-        // messageContent.appendChild(messageTime);
-        messageDiv.appendChild(messageContent);
-
-        this.messageContainer.appendChild(messageDiv);
-        this.scrollToBottom();
-    }
-
-    displayMessageHistory(messages) {
-        this.messageContainer.innerHTML = '';
-        messages.forEach(message => {
-            this.displayMessage(message);
-        });
-        this.scrollToBottom();
     }
 
     scrollToBottom() {
