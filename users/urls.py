@@ -6,7 +6,7 @@ from rest_framework_simplejwt import views as jwt_views
 ShareekPatterns = [
     path('sign-up/' , shareek.ShareekSignUpView.as_view()),
     path('register-shareek/' , shareek.ShareekRegisterView.as_view()),
-    path('login/' , common.LoginView.as_view()),
+    path('login/' , common.ShareekLoginView.as_view()),
     path('logout/' , common.LogoutView.as_view()), 
     path('token/refresh/' , common.RefreshTokenView.as_view()),
     path('refresh-firebase-token/' , common.RefreshFirebaseToken.as_view()),
@@ -27,7 +27,7 @@ ShareekPatterns = [
 
 ClientPatterns = [
     path('sign-up/' , client.ClientSignUpView.as_view()),
-    path('login/' , common.LoginView.as_view()),
+    path('login/' , common.ClientLoginView.as_view()),
     path('logout/' , common.LogoutView.as_view()),
     path('token/refresh/' , jwt_views.TokenRefreshView.as_view()),
     path('refresh-firebase-token/' , common.RefreshFirebaseToken.as_view()),

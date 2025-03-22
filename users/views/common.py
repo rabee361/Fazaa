@@ -49,7 +49,49 @@ class RefreshFirebaseToken(BaseAPIView):
 
 
 
-class LoginView(APIView):
+class ShareekLoginView(APIView):
+    def post(self, request):
+        # validate the data
+        if not 'phonenumber' in request.data:
+            return Response({'error':'الرجاء إدخال رقم الهاتف'}, status=status.HTTP_400_BAD_REQUEST)
+        if not 'password' in request.data:
+            return Response({'error': 'الرجاء إدخال كلمة السر'}, status=status.HTTP_400_BAD_REQUEST)
+        phonenumber = request.data.get('phonenumber')
+        password = request.data.get('password')
+        user=authenticate(request,phonenumber=phonenumber,password=password)
+        if user:
+            # set the device token for notification 
+            device_token = request.data.get('device_token',None)
+            device_type = request.data.get('device_type','android')
+            try:
+                device_tok = FCMDevice.objects.get(registration_id=device_token ,type=device_type)
+                device_tok.user = user
+                device_tok.save()
+            except:
+                if device_token and device_token != '':
+                    FCMDevice.objects.create(user=user , registration_id=device_token ,type='android')
+                else:
+                    pass
+            try:
+                shareek = Shareek.objects.get(user=user)
+                organization = shareek.organization
+            except:
+                organization = 0
+            token = RefreshToken.for_user(user)
+            data = {
+                **UserSerializer(instance=user, context={'request': request}).data,
+                'refresh':str(token),
+                'organization': organization,
+                'access':str(token.access_token),
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error':'خطأ في رقم الهاتف أو كلمة المرور'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class ClientLoginView(APIView):
     def post(self, request):
         # validate the data
         if not 'phonenumber' in request.data:
