@@ -79,22 +79,16 @@ LEAFLET_CONFIG = {
 
 
 
-if ENVIRONMENT:
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        },
-    }
 
-if not ENVIRONMENT:
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [('redis', 6379)],
-            },
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
         },
-    }
+    },
+}
 
 # CACHES = {
 #     "default": {
@@ -141,37 +135,17 @@ ASGI_APPLICATION = 'Fazaa.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if ENVIRONMENT:
-    DATABASES = {
-        'default': {
-            'ENGINE': env('DEV_DB_ENGINE'),
-            'NAME': env('DEV_DB_NAME'),
-            'USER': env('DEV_DB_USER'),
-            'PASSWORD': env('DEV_DB_PASSWORD'),
-            'HOST': env('DEV_DB_HOST'),
-            'PORT': env('DEV_DB_PORT'),
-        },
-        'test': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'test.sqlite3',
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'postgres',
+        'USER': 'postgres', 
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
     }
-    print("Running in development using SQLite")
-
-
-
-if not ENVIRONMENT: # production
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'postgres',
-            'USER': 'postgres', 
-            'PASSWORD': 'postgres',
-            'HOST': 'db',
-            'PORT': '5432',
-        }
-    }
-    print("Running in production using PostgresQL")
+}
 
 AUTH_USER_MODEL = 'users.User'
 
