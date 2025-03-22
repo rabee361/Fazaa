@@ -23,9 +23,6 @@ environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# GDAL Settings
-if os.name == 'nt':  # for Windows
-    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal308.dll'  # Adjust version number if needed
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -81,9 +78,15 @@ LEAFLET_CONFIG = {
 }
 
 
+
+
+
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
     },
 }
 
@@ -132,22 +135,17 @@ ASGI_APPLICATION = 'Fazaa.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': env('DEV_DB_ENGINE'),
-        'NAME': env('DEV_DB_NAME'),
-        'USER': env('DEV_DB_USER'),
-        'PASSWORD': env('DEV_DB_PASSWORD'),
-        'HOST': env('DEV_DB_HOST'),
-        'PORT': env('DEV_DB_PORT'),
-    },
-    'test': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'postgres',
+        'USER': 'postgres', 
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
-
-
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -233,7 +231,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # TEST_RUNNER = "Fazaa.test_runner.ExampleTestRunner"
 
-
+# GDAL Settings
+if os.name == 'nt':  # for Windows
+    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal308.dll'  # Adjust version number if needed
 
 # jwt settings
 SIMPLE_JWT = {
