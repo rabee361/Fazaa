@@ -73,8 +73,8 @@ class ShareekLoginView(APIView):
                 else:
                     pass
             try:
-                shareek = Shareek.objects.get(user=user)
-                organization = shareek.organization
+                shareek = Shareek.objects.select_related('organization').get(user=user)
+                organization = shareek.organization.id
             except:
                 organization = 0
             token = RefreshToken.for_user(user)
