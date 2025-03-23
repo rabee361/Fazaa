@@ -81,16 +81,6 @@ LEAFLET_CONFIG = {
 
 
 
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('redis', 6379)],
-        },
-    },
-}
-
 # CACHES = {
 #     "default": {
 #         "BACKEND": "django.core.cache.backends.redis.RedisCache",
@@ -153,7 +143,6 @@ if ENVIRONMENT:
             'BACKEND': 'channels.layers.InMemoryChannelLayer',
         },
     }
-
 
 else:
     DATABASES = {

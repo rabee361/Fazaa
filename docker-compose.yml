@@ -16,7 +16,7 @@ services:
       - 8080:8000
     restart: always
     env_file:
-      - ./.env
+      - ./Fazaa/.env
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -43,7 +43,7 @@ services:
     image: postgis/postgis:15-3.3
     container_name: fazaa_db_1
     env_file:
-      - ./.env
+      - ./Fazaa/.env
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -93,7 +93,7 @@ services:
     image: nginx
     build: ./nginx
     env_file:
-      - ./.env
+      - ./Fazaa/.env
     ports:
       - "9000:8080"
     volumes:
