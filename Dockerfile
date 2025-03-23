@@ -12,7 +12,7 @@ WORKDIR /home/app
 COPY requirements.txt /home/app/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /home/app/requirements.txt
-RUN pip install gunicorn
+RUN pip install daphne
 
 RUN apt-get update && \
 apt-get install -y binutils libproj-dev gdal-bin
@@ -22,4 +22,4 @@ COPY . /home/app
 
 # RUN python manage.py collectstatic --no-input
 
-CMD ["python", "manage.py", "runserver" ,"0.0.0.0:8000"]
+CMD ["daphne", "Fazaa.wsgi:application", "-b", "0.0.0.0", "-p", "8000"]
