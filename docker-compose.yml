@@ -18,9 +18,12 @@ services:
     env_file:
       - ./Fazaa/.env
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      DB_ENGINE: ${DB_ENGINE}
+      DB_HOST: db
+      DB_PORT: ${DB_PORT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
     depends_on:
       - db
       - redis
@@ -45,10 +48,12 @@ services:
     env_file:
       - ./Fazaa/.env
     environment:
-      - POSTGRES_HOST=${DB_HOST}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_DB=${DB_NAME}
+      DB_ENGINE: ${DB_ENGINE}
+      DB_HOST: db
+      DB_PORT: ${DB_PORT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
