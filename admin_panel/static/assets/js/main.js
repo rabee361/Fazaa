@@ -333,7 +333,7 @@ class ChatWebSocket {
             currentChatSocket.socket.close();
         }
 
-        this.socket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${this.chatId}/`);
+        this.socket = new WebSocket(`ws://145.223.80.125:8080/ws/chat/${this.chatId}/`);
         currentChatSocket = this;
         
         this.socket.onopen = () => {
