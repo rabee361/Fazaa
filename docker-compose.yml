@@ -18,12 +18,12 @@ services:
     env_file:
       - ./Fazaa/.env
     environment:
-      DB_ENGINE: ${DB_ENGINE}
+      DB_ENGINE: django.contrib.gis.db.backends.postgis
       DB_HOST: db
-      DB_PORT: ${DB_PORT}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
+      DB_PORT: 5432
+      DB_PASSWORD: postgres
+      DB_USER: postgres
+      DB_NAME: postgres
     depends_on:
       - db
       - redis
@@ -48,12 +48,9 @@ services:
     env_file:
       - ./Fazaa/.env
     environment:
-      DB_ENGINE: ${DB_ENGINE}
-      DB_HOST: db
-      DB_PORT: ${DB_PORT}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
