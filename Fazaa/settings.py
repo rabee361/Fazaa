@@ -138,6 +138,18 @@ DATABASES = {
 }
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'fazaa_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'rabee123',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+
 if ENVIRONMENT:
 
     CHANNEL_LAYERS = {
