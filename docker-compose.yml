@@ -18,6 +18,7 @@ services:
     env_file:
       - ./Fazaa/.env
     environment:
+      DJANGO_SETTINGS_MODULE: Fazaa.settings
       DB_ENGINE: django.contrib.gis.db.backends.postgis
       DB_HOST: db
       DB_PORT: 5432
