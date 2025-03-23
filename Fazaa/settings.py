@@ -33,7 +33,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ENVIRONMENT = env('ENVIRONMENT', default=False)
+ENVIRONMENT = env('ENVIRONMENT')
+
 ALLOWED_HOSTS = [
     '145.223.80.125',
     '127.0.0.1',
@@ -135,17 +136,47 @@ ASGI_APPLICATION = 'Fazaa.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'postgres', 
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+if ENVIRONMENT:
+    DATABASES = {
+        'default': {
+            'ENGINE': env('DEV_DB_ENGINE'),
+            'NAME': env('DEV_DB_NAME'),
+            'USER': env('DEV_DB_USER'),
+            'PASSWORD': env('DEV_DB_PASSWORD'),
+            'HOST': env('DEV_DB_HOST'),
+            'PORT': env('DEV_DB_PORT'),
+        }
     }
-}
+
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        },
+    }
+
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'postgres',
+            'USER': 'postgres', 
+            'PASSWORD': 'postgres',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
+    }
+    
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('redis', 6379)],
+            },
+        },
+    }
+
+
 
 AUTH_USER_MODEL = 'users.User'
 
