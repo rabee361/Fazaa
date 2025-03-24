@@ -1,10 +1,7 @@
 from rest_framework.serializers import ModelSerializer , Serializer
 from .models import *
 from rest_framework import serializers
-from django.contrib.auth import authenticate
-from django.contrib.auth.password_validation import validate_password
 from base.models import OrganizationType
-from base.serializers import OrganizationTypeSerializer
 from django.core.exceptions import ValidationError
 from utils.validators import *
 

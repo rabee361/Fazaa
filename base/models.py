@@ -67,6 +67,7 @@ class Branch(gis_models.Model):
     location = gis_models.PointField(srid=4326 , verbose_name='الموقع')
     description = models.CharField(max_length=255,null=True ,blank=True , verbose_name='الوصف')
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name='الرابط المختصر')
+    visits = models.IntegerField(default=0 , verbose_name= "الزيارات")
 
     def get_absolute_url(self):
         return f"/branch/{self.short_url}/"

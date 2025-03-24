@@ -53,6 +53,23 @@ class DeliverySlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
+class BranchSlugUrlView(View):
+    def get(self,request,slug):
+        try:
+            branch = Branch.objects.get(short_url=slug)
+            assert branch.short_url
+            branch.visits += 1
+            branch.save()
+            base_url = "https://www.google.com/maps"
+            if branch.location:
+                print(branch.location.x,branch.location.y)
+                return redirect(f"{base_url}?q={branch.location.x},{branch.location.y}")
+            else:
+                return redirect(branch.organization.website)
+        except Exception as e:
+            return render(request, '404.html', status=400)
+
+
 class CatalogSlugUrlView(View):
     def get(self,request,slug):
         try:
