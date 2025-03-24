@@ -11,15 +11,24 @@ from utils.validators import *
 
 class UserSerializer(ModelSerializer):
     image = serializers.SerializerMethodField()
+    chat_id = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id','full_name','phonenumber','email','user_type','image','get_notifications']
+        fields = ['id','full_name','phonenumber','email','user_type','image','get_notifications','chat_id']
 
     def get_image(self,obj):
-        if obj.image:
+        if obj.image:   
             request = self.context.get('request')
             return request.build_absolute_uri(obj.image.url)
         return None
+
+    def get_chat_id(self,obj):
+        try:
+            chat = SupportChat.objects.get(user=obj)
+            return chat.id
+        except SupportChat.DoesNotExist:
+            return 0
+
 
 
 class LoginSerializer(Serializer):

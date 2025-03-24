@@ -130,7 +130,7 @@ class CreateOrganizationView(generic.CreateView):
 class ListCatalogsView(CustomListBaseView):
     model = Catalog
     context_object_name = 'catalogs'
-    context_fields = ['id','catalog_type','organization','short_url']
+    context_fields = ['id','catalog_type','organization','visits','short_url']
     template_name = 'admin_panel/organization/catalogs/catalogs.html' 
 
     def get_context_data(self, **kwargs):
@@ -164,6 +164,11 @@ class UpdateCatalogView(generic.UpdateView):
     fields = ['file', 'organization', 'catalog_type']
     success_url = '/dashboard/organization/catalogs'
     pk_url_kwarg = 'id'
+
+    def form_valid(self, form):
+        if 'file' in form.changed_data:
+            form.instance.visits = 0
+        return super().form_valid(form)
 
 @login_required_m
 class CatalogBulkActionView(View):
@@ -324,7 +329,7 @@ class DeliveryCompanyActionView(View):
 class ListDeliveryLinksView(CustomListBaseView):
     model = DeliveryCompanyUrl
     context_object_name = 'links'
-    context_fields = ['id','organization','delivery_company','active','short_url']
+    context_fields = ['id','organization','delivery_company','active','visits','short_url']
     template_name = 'admin_panel/links/delivery/delivey_links.html'
     
     def get_queryset(self):
@@ -358,6 +363,11 @@ class UpdateDeliveryLinkView(generic.UpdateView):
     fields = ['url', 'delivery_company','active' ,'organization']
     success_url = '/dashboard/organization/delivery-links'
     pk_url_kwarg = 'id'
+
+    def form_valid(self, form):
+        if 'url' in form.changed_data:
+            form.instance.visits = 0
+        return super().form_valid(form)
 
 @login_required_m
 class DeliveryLinkBulkActionView(View):
@@ -431,7 +441,7 @@ class UpdateSocialMedia(generic.UpdateView):
 class ListSocialLinksView(CustomListBaseView):
     model = SocialMediaUrl
     context_object_name = 'links'
-    context_fields = ['id','organization','social_media','active','short_url']
+    context_fields = ['id','organization','social_media','active','visits','short_url']
     template_name = 'admin_panel/links/social/social_links.html'
 
     def get_queryset(self):
@@ -466,6 +476,11 @@ class UpdateSocialLinkView(generic.UpdateView):
     success_url = '/dashboard/organization/social-links'
     pk_url_kwarg = 'id'
 
+    def form_valid(self, form):
+        if 'url' in form.changed_data:
+            form.instance.visits = 0
+        return super().form_valid(form)
+
 @login_required_m
 class SocialUrlBulkActionView(View):
     def post(self, request):
@@ -481,20 +496,22 @@ class SocialUrlBulkActionView(View):
 
 
 @login_required_m
-class ListBranches(CustomListBaseView,generic.ListView):
+class ListBranches(CustomListBaseView):
     model = Branch
     context_object_name = 'branches'
-    context_fields = ['id','organization','description','short_url']
+    context_fields = ['id','organization','description','short_url'] # add visits
     template_name = 'admin_panel/organization/branches/branches.html'
     success_url = '/dashboard/organization/branches'
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset().select_related('organization')
-    #     q = self.request.GET.get('q', '')
-    #     if self.request.htmx:
-    #         self.template_name = 'admin_panel/partials/branches_partial.html'
-    #     if q:
-    #         return queryset.filter(organization__name__icontains=q)
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('organization')
+        q = self.request.GET.get('q', '')
+        if self.request.htmx:
+            self.template_name = 'admin_panel/partials/branches_partial.html'
+        if q:
+            return queryset.filter(organization__name__icontains=q)
+        else:
+            return queryset
 
     def get_context_data(self):
         context = super().get_context_data()

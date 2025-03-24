@@ -23,6 +23,8 @@ class SocialMediaSlugUrlView(View):
         try:
             social = SocialMediaUrl.objects.get(short_url=slug)
             assert social.active and social.url
+            social.visits += 1
+            social.save()
             return redirect(social.url) 
         except Exception as e:
             return render(request, '404.html', status=400)
@@ -32,6 +34,8 @@ class WebsiteSlugUrlView(View):
         try:
             organization = Organization.objects.get(website_short_url=slug)
             assert organization.website_short_url
+            # organization.visits += 1
+            # organization.save()
             return redirect(organization.website)
         except Exception as e:
             return render(request, '404.html', status=400)
@@ -42,6 +46,8 @@ class DeliverySlugUrlView(View):
         try:
             delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
             assert delivery.active and delivery.url
+            delivery.visits += 1
+            delivery.save()
             return redirect(delivery.url)
         except Exception as e:
             return render(request, '404.html', status=400)
@@ -52,6 +58,8 @@ class CatalogSlugUrlView(View):
         try:
             catalog = Catalog.objects.get(short_url=slug)
             assert catalog.short_url
+            catalog.visits += 1
+            catalog.save()
             return redirect(catalog.file.url)
         except Exception as e:
             return render(request, '404.html', status=400)

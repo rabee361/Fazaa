@@ -111,6 +111,7 @@ class Catalog(models.Model):
     file = models.FileField(upload_to='media/images/catalogs/',verbose_name='الملف')
     short_url = models.SlugField(max_length=300 , default=generateShortUrl , verbose_name='الرابط المختصر')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name="المنظمة", related_name='catalogs')
+    visits = models.IntegerField(default=0 , verbose_name= "الزيارات")
 
     def clean(self):
         if self.file and self.file.size > 10 * 1024 * 1024:  # 10MB in bytes
@@ -167,6 +168,7 @@ class SocialMediaUrl(models.Model):
     active = models.BooleanField(default=False , verbose_name= "مفعل")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
     deleted = models.BooleanField(default=False , verbose_name= "محذوف")
+    visits = models.IntegerField(default=0 , verbose_name= "الزيارات")
 
     objects = SocialMediaUrlManager()
 
@@ -217,7 +219,8 @@ class DeliveryCompanyUrl(models.Model):
     active = models.BooleanField(default=False , verbose_name= "مفعل")
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name= "تاريخ الإنشاء")
     deleted = models.BooleanField(default=False , verbose_name= "محذوف")
-
+    visits = models.IntegerField(default=0 , verbose_name= "الزيارات")
+    
     objects = DeliveryCompanyUrlManager()
 
     def __str__(self) -> str:
