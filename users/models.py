@@ -35,6 +35,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True, verbose_name="مفعل")   
     long = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
 
     groups = None
     user_permissions = None
@@ -100,6 +101,7 @@ class Client(models.Model):
     
     class Meta:
         ordering = ['-id']
+
 
 class Shareek(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

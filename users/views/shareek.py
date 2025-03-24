@@ -103,22 +103,23 @@ class ShareekInfoView(BaseAPIView):
 class UpdateShareekView(BaseAPIView):
     @transaction.atomic
     def put(self ,request,pk):
-        user = get_object_or_404(User,pk=pk)
-        serializer = UpdateShareekSerializer(user,data=request.data , context={'request':request})
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            shareek = Shareek.objects.get(user=user)
-            return Response({
-                **serializer.data,
-                'job': shareek.job,
-                'organization_name': shareek.organization.name,
-                'organization_type_id': shareek.organization.organization_type.id,
-                'commercial_register_id': shareek.organization.commercial_register_id,
-            },status=status.HTTP_200_OK)
-        else:
-            return ErrorResult(serializer.errors,status=400)
-        
-
+        try:
+            user = User.objects.get(id=pk, is_deleted=False)
+            serializer = UpdateShareekSerializer(user,data=request.data , context={'request':request})
+            if serializer.is_valid(raise_exception=True):
+                user = serializer.save()
+                shareek = Shareek.objects.get(user=user)
+                return Response({
+                    **serializer.data,
+                    'job': shareek.job,
+                    'organization_name': shareek.organization.name,
+                    'organization_type_id': shareek.organization.organization_type.id,
+                    'commercial_register_id': shareek.organization.commercial_register_id,
+                },status=status.HTTP_200_OK)
+            else:
+                return ErrorResult(serializer.errors,status=400)
+        except User.DoesNotExist:
+            raise ErrorResult("لا يوجد شريك مسجل بهذه المعلومات" ,status=404)
 
 
 class DeleteShareekView(BaseAPIView):
@@ -126,10 +127,11 @@ class DeleteShareekView(BaseAPIView):
     def delete(self,request):
         try:
             user = request.user
+            user.is_deleted = True
             shareek = Shareek.objects.get(user=user)
             shareek.organization.delete()
-            shareek.delete()
-            user.delete()
+            user.save()
+            shareek.save()
             return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)
-        except Shareek.DoesNotExist:
+        except User.DoesNotExist:
             raise ErrorResult("لا يوجد شريك مسجل بهذه المعلومات" ,status=404)

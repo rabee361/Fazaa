@@ -12,8 +12,8 @@ from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from utils.views import BaseAPIView
 from utils.pagination import CustomPagination
-
-
+from django.utils import timezone
+from django.db import transaction
 
 
 
@@ -143,24 +143,27 @@ class LogoutView(BaseAPIView):
 
 class SignUpOTPView(BaseAPIView):
     def post(self,request):
-        phonenumber = self.request.data.get('phonenumber',None)
-        if phonenumber is None:
-            return Response({"error":'الرجاء إدخال رقم الهاتف'})
-        if not OTPCode.checkLimit(phonenumber):
-            otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.SIGNUP)
-            #send the code to the user over whatsapp
-            #send_code()
-            return Response({'message':'تم ارسال رمز التحقق'} , status=status.HTTP_200_OK)
-        else:
-            return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
+        try:
+            phonenumber = self.request.data.get('phonenumber',None)
+            User.objects.get(phonenumber=phonenumber, is_deleted=False)
+            if not OTPCode.checkLimit(phonenumber):
+                otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.SIGNUP)
+                #send the code to the user over whatsapp
+                #send_code()
+                return Response({'message':'تم ارسال رمز التحقق'} , status=status.HTTP_200_OK)
+            else:
+                return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'error':'الرجاء إدخال رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
 
 
 
 
 class ForgetPasswordOTPView(BaseAPIView):
     def post(self,request):
-        phonenumber = self.request.data.get('phonenumber',None)
-        if phonenumber:
+        try:
+            phonenumber = self.request.data.get('phonenumber',None)
+            User.objects.get(phonenumber=phonenumber, is_deleted=False)
             if not OTPCode.checkLimit(phonenumber):
                 otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.FORGET_PASSWORD)
                 #send the code to the user over sms
@@ -168,8 +171,8 @@ class ForgetPasswordOTPView(BaseAPIView):
                 return Response({'message':'تم ارسال رمز التحقق' , "code":f'{otp_code.code}'} , status=status.HTTP_200_OK)
             else:
                 return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
-        else:
-            raise serializers.ValidationError({'error':'أدخل رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'error':'الرجاء إدخال رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -177,8 +180,9 @@ class ForgetPasswordOTPView(BaseAPIView):
 
 class ResetPasswordOTPView(BaseAPIView):
     def post(self,request):
-        phonenumber = self.request.data.get('phonenumber',None)
-        if phonenumber:
+        try:
+            phonenumber = self.request.data.get('phonenumber',None)
+            User.objects.get(phonenumber=phonenumber, is_deleted=False)
             if not OTPCode.checkLimit(phonenumber):
                 otp_code = OTPCode.objects.create(phonenumber=phonenumber , code_type=CodeTypes.RESET_PASSWORD)
                 #send the code to the user over sms
@@ -186,8 +190,8 @@ class ResetPasswordOTPView(BaseAPIView):
                 return Response({'message':'تم ارسال رمز التحقق' , "code":f'{otp_code.code}'} , status=status.HTTP_200_OK)
             else:
                 return Response({'error':'لقد تجاوزت الحد المسموح لإرسال رمز التفعيل الرجاء المحاولة بعد قليل'} , status=status.HTTP_400_BAD_REQUEST)
-        else:
-            raise serializers.ValidationError({'error':'أدخل رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'error':'أدخل رقم هاتف صحيح'} , status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -253,7 +257,7 @@ class NotificationsView(generics.ListAPIView,BaseAPIView):
 class ActivateNotificationsView(APIView):
     def post(self,request,user_id):
         try:
-            user = User.objects.get(id=user_id)
+            user = User.objects.get(id=user_id, is_deleted=False)
         except User.DoesNotExist:
             return Response({"error":'المستخدم غير موجود'} , status=status.HTTP_404_NOT_FOUND)
         
@@ -283,11 +287,3 @@ class UpdateLocationView(BaseAPIView):
         else:
             return Response({"error":'الرجاء إدخال الموقع'} , status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-class DeleteAccountView(APIView):
-    def delete(self,request,user_id):
-        user = User.objects.get(id=user_id)
-        user.delete()
-        return Response({"message":"تم حذف الحساب بنجاح"} , status=status.HTTP_204_NO_CONTENT)

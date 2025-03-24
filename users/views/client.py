@@ -51,14 +51,22 @@ class UpdateClientView(BaseAPIView):
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
+class ClientInfoView(BaseAPIView):
+    def get(self,request,pk):
+        try:
+            user = User.objects.get(id=pk)
+            serializer = UserSerializer(user, context={'request':request})
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return Response({'message':'العميل غير موجود'},status=status.HTTP_404_NOT_FOUND)
+
 
 class DeleteClientView(BaseAPIView):
     @transaction.atomic
     def delete(self,request):
         user = request.user
-        client = Client.objects.get(user=user)
-        client.delete()
-        user.delete()
+        user.is_deleted = True
+        user.save()
         return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)
 
 

@@ -114,9 +114,9 @@ class ListClientsView(CustomListBaseView):
         if self.request.htmx:
             self.template_name = 'admin_panel/partials/clients_partial.html'
         if q:
-            return super().get_queryset().filter(Q(full_name__icontains=q) | Q(phonenumber__icontains=q), user_type='CLIENT')
+            return super().get_queryset().filter(Q(full_name__icontains=q) | Q(phonenumber__icontains=q), user_type='CLIENT', is_deleted=False)
         else:
-            return super().get_queryset().filter(user_type='CLIENT')
+            return super().get_queryset().filter(user_type='CLIENT', is_deleted=False)
 
 @login_required_m
 class CreateClientView(generic.CreateView):
@@ -162,9 +162,9 @@ class ListShareeksView(CustomListBaseView,generic.ListView):
         if self.request.htmx:
             self.template_name = 'admin_panel/partials/shareeks_partial.html'
         if q:
-            return super().get_queryset().filter(Q(full_name__istartswith=q) | Q(phonenumber__istartswith=q), user_type='SHAREEK')
+            return super().get_queryset().filter(Q(full_name__istartswith=q) | Q(phonenumber__istartswith=q), user_type='SHAREEK', is_deleted=False)
         else:
-            return super().get_queryset().filter(user_type='SHAREEK')
+            return super().get_queryset().filter(user_type='SHAREEK', is_deleted=False)
 
 @login_required_m
 class CreateShareekView(generic.CreateView):
@@ -210,9 +210,9 @@ class ListAdminsView(CustomListBaseView,generic.ListView):
         if self.request.htmx:
             self.template_name = 'admin_panel/partials/admins_partial.html'
         if q:
-            return super().get_queryset().filter(Q(full_name__istartswith=q) | Q(phonenumber__istartswith=q), user_type='ADMIN')
+            return super().get_queryset().filter(Q(full_name__istartswith=q) | Q(phonenumber__istartswith=q), user_type='ADMIN', is_deleted=False)
         else:
-            return super().get_queryset().filter(user_type='ADMIN')
+            return super().get_queryset().filter(user_type='ADMIN', is_deleted=False)
 
 @login_required_m
 class CreateAdminView(View):
