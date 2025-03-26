@@ -6,7 +6,7 @@ from fcm_django.models import FCMDevice
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
-from django.db.models import Q
+from django.db.models import Q, Min, Count, F, Subquery, OuterRef
 from django.contrib.gis.measure import D
 from utils.views import BaseAPIView
 from django.shortcuts import redirect
@@ -25,29 +25,74 @@ class OrganizationTypes(BaseAPIView,generics.ListAPIView):
     serializer_class = OrganizationTypeSerializer
 
 
-class OrganizatinosListView(BaseAPIView,generics.ListAPIView):
-    pagination_class = CustomPagination
-    serializer_class = BranchSerializer
+class OrganizationsListView(BaseAPIView,generics.ListAPIView):
+    # pagination_class = CustomPagination
+    serializer_class = BranchListSerializer
+    queryset = Branch.objects.all()
 
     def get_queryset(self):
-        queryset = Branch.objects.all()
-        distance = self.request.query_params.get('distance', None)
-
-        if distance:
+        queryset = super().get_queryset()
+        distance_limit = self.request.query_params.get('distance', 1000)
+        org_type_id = self.request.query_params.get('type', '')
+        order = self.request.query_params.get('order', 'id')  # visits / distance / offers / id
+        long = self.request.query_params.get('long', None)  
+        lat = self.request.query_params.get('lat', None)  
+        
+        # Convert distance_limit to float
+        try:
+            distance_limit = float(distance_limit)
+        except ValueError:
+            distance_limit = 1000.0  # Default distance if invalid
+        
+        # Apply organization type filter if provided
+        if org_type_id and org_type_id.isdigit():
+            queryset = queryset.filter(organization__organization_type_id=org_type_id)
+        
+        # Process user location for distance calculations
+        user_location = None
+        if long and lat:
             try:
-                distance = float(distance)
-
-                user_location = Point(35.882744 , 34.885522, srid=4326)
-                
-                queryset = queryset.filter(
-                    location__distance_lte=(user_location, D(km=distance))
-                ).annotate(
-                    distance=Distance('location', user_location)
-                ).order_by('distance').distinct()
-
-            except ValueError:
+                long_float = float(long)
+                lat_float = float(lat)
+                user_location = Point(long_float, lat_float, srid=4326)
+            except (ValueError, TypeError):
                 pass
-
+        
+        # Generate a Google Maps URL for each organization's branches (if user location is provided)
+        if user_location:
+            # Annotate organizations with the minimum distance to any of their branches
+            
+            # Subquery to find the closest branch for each organization
+            closest_branch = Branch.objects.filter(
+                organization=OuterRef('organization')
+            ).annotate(
+                distance=Distance('location', user_location)
+            ).order_by('distance').values('distance')[:1]
+            
+            # Annotate organizations with the distance to their closest branch
+            queryset = queryset.annotate(
+                min_distance=Subquery(closest_branch)
+            )
+            
+            # Filter by distance if a user location is provided
+            queryset = queryset.filter(min_distance__lte=distance_limit)
+        
+        # Count client offers for each organization
+        queryset = queryset.annotate(
+            client_offers_count=Count('organization__clientoffer', distinct=True)
+        )
+        
+        # Order the results based on the specified order parameter
+        if order == 'visits':
+            queryset = queryset.order_by('-organization__visits')
+        elif order == 'offers':
+            queryset = queryset.order_by('-client_offers_count')
+        elif order == 'distance' and user_location:
+            queryset = queryset.order_by('min_distance')
+        else:
+            # Default ordering by id
+            queryset = queryset.order_by('-id')
+        
         return queryset
 
 

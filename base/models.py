@@ -1,16 +1,12 @@
-from tabnanny import verbose
-from typing import Iterable
 from django.db import models
-from django.core.validators import MinValueValidator , MaxValueValidator
+from django.core.validators import MinValueValidator
 from utils.helper import generateShortUrl
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
-from django.utils import timezone
-from datetime import datetime
 from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
 from utils.types import CATALOG_TYPES
 # Create your models here.
- 
+
 
 class OrganizationType(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
@@ -18,7 +14,7 @@ class OrganizationType(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
     class Meta:
         ordering = ['-id']
 
@@ -74,7 +70,7 @@ class Branch(gis_models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
 
 class ImageGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
@@ -135,6 +131,7 @@ class Catalog(models.Model):
     class Meta:
         ordering = ['-id']  
         
+
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/default.jpg',verbose_name='الصورة')
@@ -154,10 +151,9 @@ class SocialMedia(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
     class Meta:
         ordering = ['-id']
-
 
 
 

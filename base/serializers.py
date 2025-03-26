@@ -3,15 +3,21 @@ from .models import *
 from rest_framework import serializers
 from users.models import User
 from django.contrib.gis.geos import Point
+from django.db.models import Sum
 from utils.validators import validate_catalog_size, validate_video_extension, validate_catalog_extension, validate_video_size, validate_image_size, validate_image_extension
 from utils.exception_handlers import ErrorResult
 from django.utils import timezone
 import os
 
 class OrganizationListSerializer(ModelSerializer):
+    visits = serializers.SerializerMethodField()
     class Meta:
         model = Organization
-        fields = ['id','name','description','logo']
+        fields = ['id','name','description','logo','visits']
+
+    def get_visits(self,obj):
+        visits = Branch.objects.filter(organization=obj).aggregate(total_visits=Sum('visits'))['total_visits'] or 0
+        return visits
 
 
 class BranchSerializer(ModelSerializer):
@@ -19,6 +25,19 @@ class BranchSerializer(ModelSerializer):
     class Meta:
         model = Branch
         fields = ['id','name','location']
+
+    def get_location(self,obj):
+        return {"longitude":obj.location.x, "latitude":obj.location.y}
+
+
+
+class BranchListSerializer(ModelSerializer):
+    location = serializers.SerializerMethodField()
+    organization = OrganizationListSerializer()
+    # distance = serializers.FloatField()
+    class Meta:
+        model = Branch
+        fields = ['id','name','location','organization']
 
     def get_location(self,obj):
         return {"longitude":obj.location.x, "latitude":obj.location.y}
