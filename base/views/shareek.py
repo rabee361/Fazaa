@@ -26,7 +26,7 @@ class OrganizationTypes(BaseAPIView,generics.ListAPIView):
 
 
 class OrganizationsListView(BaseAPIView,generics.ListAPIView):
-    # pagination_class = CustomPagination
+    pagination_class = CustomPagination
     serializer_class = BranchListSerializer
     queryset = Branch.objects.all()
 
