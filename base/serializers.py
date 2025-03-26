@@ -242,6 +242,7 @@ class ImagesGallerySerializer(ModelSerializer):
 #         fields = '__all__'
 
 
+
 class ServiceOfferSerializer(serializers.ModelSerializer):
     organization_name = serializers.CharField(source='organization.name', read_only=True)
     organization_logo = serializers.SerializerMethodField()
@@ -252,6 +253,19 @@ class ServiceOfferSerializer(serializers.ModelSerializer):
     def get_organization_logo(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.organization.logo.url)
+
+
+
+
+class ListClientOfferSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientOffer
+        fields = ['id','content','expiresAt','createdAt','cover']
+
+    def get_cover(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.cover.url)
+
 
 
 class ClientOfferSerializer(serializers.ModelSerializer):

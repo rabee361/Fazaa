@@ -269,10 +269,15 @@ class ServiceOffer(models.Model):
 
 class ClientOffer(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
+    cover = models.ImageField(upload_to='media/images/client_offers/', verbose_name='الغلاف',default='media/images/default.jpg')
     content = models.CharField(max_length=500 , verbose_name='المحتوى')
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
     template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True , verbose_name='القالب')
+
+    def clean(self):
+        if self.cover and self.cover.size > 1 * 1024 * 1024:  # 1MB in bytes
+            raise ValidationError('حجم الغلاف يجب أن لا يتجاوز 1 ميجابايت')
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.id}"

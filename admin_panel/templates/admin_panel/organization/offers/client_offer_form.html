@@ -29,6 +29,21 @@
                     </div>
 
                     <div class="form-group">
+                        <label>{{ form.cover.label }} :</label>
+                        <div class="image-upload">
+                            {{ form.cover }}
+                            <div class="upload-placeholder">اختر صورة</div>
+                        </div>
+                        {% if form.cover.errors %}
+                        <div class="error-message">
+                            {% for error in form.cover.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
                         <label>{{ form.template.label }}:</label>
                         {{ form.template }}
                     </div>

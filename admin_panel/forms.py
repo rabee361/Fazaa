@@ -253,7 +253,7 @@ class UpdateClientForm(forms.ModelForm):
 class ClientOfferForm(forms.ModelForm):
     class Meta:
         model = ClientOffer
-        fields = ['content', 'expiresAt', 'organization', 'template']
+        fields = ['content', 'expiresAt', 'organization', 'template','cover']
         widgets = {
             'expiresAt': forms.DateInput(
                 attrs={
@@ -269,6 +269,13 @@ class ClientOfferForm(forms.ModelForm):
             'template': 'القالب'
         }
 
+    def clean_cover(self):
+        cover = self.cleaned_data.get('cover')
+        if cover and hasattr(cover, 'size'):
+            if cover.size > 1 * 1024 * 1024:  # 1MB in bytes
+                raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 1 ميجابايت')
+        return cover
+    
 
 class ServiceOfferForm(forms.ModelForm):
     class Meta:

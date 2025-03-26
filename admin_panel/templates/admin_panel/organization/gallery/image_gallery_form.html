@@ -29,10 +29,10 @@
                     <div class="form-group">
                         <label>{{ form.image.label }} :</label>
                         <div class="image-upload">
-                        {{ form.image }}
-                        <div class="upload-placeholder">اختر صورة</div>
-                    </div>
-                    {% if form.image.errors %}
+                            {{ form.image }}
+                            <div class="upload-placeholder">اختر صورة</div>
+                        </div>
+                        {% if form.image.errors %}
                         <div class="error-message">
                             {% for error in form.image.errors %}
                                 {{ error }}

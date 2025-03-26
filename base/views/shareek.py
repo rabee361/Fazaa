@@ -102,9 +102,11 @@ class OrganizationInfoView(BaseAPIView):
             organization = Organization.objects.prefetch_related('branch_set').get(id=id)
             serializer = OrganizationSerializer(organization, context={'request': request})
             branches_serializer = BranchSerializer(organization.branch_set.all(), many=True)
+            client_offers = ListClientOfferSerializer(organization.clientoffer_set.all(), many=True , context={'request':request})
             return Response({
                 **serializer.data,
-                'branches': branches_serializer.data
+                'branches': branches_serializer.data,
+                'client_offers': client_offers.data
             }, status=status.HTTP_200_OK)
             
         except Organization.DoesNotExist:
