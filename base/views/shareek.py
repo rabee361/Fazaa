@@ -35,7 +35,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
         distance_limit = self.request.query_params.get('distance', 1000)
-        org_type_id = self.request.query_params.get('type', '')
+        org_types = self.request.query_params.getlist('type', [])
         name = self.request.query_params.get('name', '')
         order = self.request.query_params.get('order', 'id')  # visits / distance / offers / id
         long = self.request.query_params.get('long', None)  
@@ -48,8 +48,10 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             distance_limit = 1000.0  # Default distance if invalid
         
         # Apply organization type filter if provided
-        if org_type_id and org_type_id.isdigit():
-            queryset = queryset.filter(organization__organization_type_id=org_type_id)
+        if org_types:
+            valid_type_ids = [type_id for type_id in org_types if type_id.isdigit()]
+            if valid_type_ids:
+                queryset = queryset.filter(organization__organization_type_id__in=valid_type_ids)
         
         # Process user location for distance calculations
         user_location = None

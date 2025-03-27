@@ -26,11 +26,13 @@ class ClientSignUpView(APIView):
         serializer = SignUpClientSerializer(data = request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            user.create_signup_otp()
-            user.create_chat()
+            code = user.create_signup_otp()
+            chat_id = user.create_chat()
             data = serializer.data
             token = RefreshToken.for_user(user)
             data['tokens'] = {'refresh':str(token), 'access':str(token.access_token)}
+            data['code'] = code
+            data['chat_id'] = chat_id
             # send FCM token to the user
             # send it to client over sms
             return Response(data, status=status.HTTP_200_OK)

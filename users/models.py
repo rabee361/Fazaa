@@ -58,7 +58,7 @@ class User(AbstractUser):
                 phonenumber=self.phonenumber,
                 full_name=self.full_name
             )
-            return otp
+            return otp.code
 
     def create_chat(self):
         if not SupportChat.objects.filter(user=self).exists():
