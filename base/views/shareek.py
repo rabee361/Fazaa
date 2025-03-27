@@ -28,12 +28,15 @@ class OrganizationTypes(BaseAPIView,generics.ListAPIView):
 class OrganizationsListView(BaseAPIView,generics.ListAPIView):
     pagination_class = CustomPagination
     serializer_class = BranchListSerializer
-    queryset = Branch.objects.all()
+    queryset = Branch.objects.select_related('organization').all()
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_class = OrganizationFilter
 
     def get_queryset(self):
         queryset = super().get_queryset()
         distance_limit = self.request.query_params.get('distance', 1000)
         org_type_id = self.request.query_params.get('type', '')
+        name = self.request.query_params.get('name', '')
         order = self.request.query_params.get('order', 'id')  # visits / distance / offers / id
         long = self.request.query_params.get('long', None)  
         lat = self.request.query_params.get('lat', None)  
@@ -77,18 +80,24 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             # Filter by distance if a user location is provided
             queryset = queryset.filter(min_distance__lte=distance_limit)
         
-        # Count client offers for each organization
-        queryset = queryset.annotate(
-            client_offers_count=Count('organization__clientoffer', distinct=True)
-        )
+        if name:
+            queryset = queryset.filter(Q(name__icontains=name) | Q(organization__name__icontains=name))
+        
+
         
         # Order the results based on the specified order parameter
         if order == 'visits':
             queryset = queryset.order_by('-organization__visits')
+            
         elif order == 'offers':
+            # Count client offers for each organization
+            queryset = queryset.annotate(
+            client_offers_count=Count('organization__clientoffer', distinct=True))
             queryset = queryset.order_by('-client_offers_count')
+
         elif order == 'distance' and user_location:
             queryset = queryset.order_by('min_distance')
+            
         else:
             # Default ordering by id
             queryset = queryset.order_by('-id')
@@ -315,11 +324,6 @@ class DeleteGalleryView(generics.DestroyAPIView):
             return Response({"message":"تم الحذف بنجاح"})
         except ImageGallery.DoesNotExist:
             return Response({"error":"الصورة غير موجود"})
-
-
-
-
-
 
 
 
