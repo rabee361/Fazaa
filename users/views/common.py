@@ -255,7 +255,7 @@ class NotificationsView(generics.ListAPIView,BaseAPIView):
 
 
 
-class ActivateNotificationsView(APIView):
+class ActivateNotificationsView(BaseAPIView):
     def post(self,request,user_id):
         try:
             user = User.objects.get(id=user_id, is_deleted=False)

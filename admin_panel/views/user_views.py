@@ -126,12 +126,19 @@ class CreateClientView(generic.CreateView):
     success_url = '/dashboard/users/clients'
 
 @login_required_m
-class ClientInfoView(generic.UpdateView):
-    model = User
-    template_name = 'admin_panel/users/clients/update_client.html'
-    form_class = UpdateClientForm
-    success_url = '/dashboard/users/clients'
-    pk_url_kwarg = 'id'
+class ClientInfoView(View):
+    def get(self, request, id):
+        client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
+        form = UpdateClientForm(instance=client)
+        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form})
+
+    def post(self, request, id):
+        client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
+        form = UpdateClientForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect('client-info', id=id)
+        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -175,12 +182,19 @@ class CreateShareekView(generic.CreateView):
 
 
 @login_required_m
-class ShareekInfoView(generic.UpdateView):
-    model = User
-    form_class = UpdateShareekForm
-    template_name = 'admin_panel/users/shareeks/update_shareek.html'
-    success_url = '/dashboard/users/shareek'
-    pk_url_kwarg = 'id'
+class ShareekInfoView(View):
+    def get(self, request, id):
+        shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
+        form = UpdateShareekForm(instance=shareek)
+        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form})
+
+    def post(self, request, id):
+        shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
+        form = UpdateShareekForm(request.POST, instance=shareek)
+        if form.is_valid():
+            form.save()
+            return redirect('shareek-info', id=id)
+        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form})
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -250,7 +264,10 @@ class BulkActionView(View):
                 return self.get_redirect_url(request)
 
             if action == 'delete':
-                users.delete()
+                # Get all support chats for users being deleted
+                for user in users:
+                    Message.objects.filter(sender=user).delete()
+                users.update(is_deleted=True)
             elif action == 'deactivate':
                 users.update(is_active=False)
             elif action == 'activate':
@@ -277,12 +294,19 @@ class BulkActionView(View):
 
 
 @login_required_m
-class AdminInfoView(generic.UpdateView):
-    model = User
-    template_name = 'admin_panel/users/admins/update_admin.html'
-    form_class = UpdateAdminForm
-    success_url = '/dashboard/users/admins'
-    pk_url_kwarg = 'id'
+class AdminInfoView(View):
+    def get(self, request, id):
+        admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
+        form = UpdateAdminForm(instance=admin)
+        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form})
+
+    def post(self, request, id):
+        admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
+        form = UpdateAdminForm(request.POST, instance=admin)
+        if form.is_valid():
+            form.save()
+            return redirect('admin-info', id=id)
+        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -290,9 +314,10 @@ class AdminInfoView(generic.UpdateView):
         return context
 
 
+@login_required_m
 class ChangePasswordView(View):
     def get(self, request, user_id):
-        user = get_object_or_404(User, id=user_id)
+        user = get_object_or_404(User, id=user_id, is_deleted=False)
         form = ChangePasswordForm()
         return render(request, 'admin_panel/users/change_password.html', {
             'form': form,
@@ -300,7 +325,7 @@ class ChangePasswordView(View):
         })
         
     def post(self, request, user_id):
-        user = get_object_or_404(User, id=user_id)
+        user = get_object_or_404(User, id=user_id, is_deleted=False)
         form = ChangePasswordForm(data=request.POST)
 
         if form.is_valid():

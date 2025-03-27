@@ -21,8 +21,6 @@ UsersPatterns=[
 
     path('change-password/<int:user_id>/' , user_views.ChangePasswordView.as_view() , name="change-password"),
 
-    path('bulk-action/', user_views.BulkActionView.as_view(), name="bulk-action"),
-
     path('chats' , app_views.ListSupportChatsView.as_view() , name="chats"),
     path('<int:chat_id>/messages' , app_views.ListMessagesView.as_view() , name="messages"),
 ]

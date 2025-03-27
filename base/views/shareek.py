@@ -66,7 +66,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             # Annotate organizations with the minimum distance to any of their branches
             
             # Subquery to find the closest branch for each organization
-            closest_branch = Branch.objects.filter(
+            closest_branch = queryset.filter(
                 organization=OuterRef('organization')
             ).annotate(
                 distance=Distance('location', user_location)
@@ -97,7 +97,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
 
         elif order == 'distance' and user_location:
             queryset = queryset.order_by('min_distance')
-            
+
         else:
             # Default ordering by id
             queryset = queryset.order_by('-id')

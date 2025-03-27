@@ -8,10 +8,17 @@ from django.contrib.auth.admin import UserAdmin
 
 
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('id','phonenumber', 'full_name', 'email', 'is_active','user_type')
+    list_display = ('id','phonenumber', 'full_name', 'email', 'is_active','is_deleted','user_type')
     search_fields = ('phonenumber', 'full_name', 'email')
     list_filter = ('user_type', 'is_active')
     ordering = ('-id',)
+
+    actions = ['restore']
+
+    def restore(self, request, queryset):
+        queryset.update(is_deleted=False)
+
+    restore.short_description = 'Restore selected users'
 
 
 class OTPCodeAdmin(admin.ModelAdmin):

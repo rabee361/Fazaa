@@ -204,7 +204,7 @@ class UpdateShareekForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance:
             try:
-                shareek = Shareek.objects.get(user=self.instance)
+                shareek = Shareek.objects.get(user=self.instance, user__is_deleted=False)
                 self.fields['job'].initial = shareek.job
                 self.fields['organization_name'].initial = shareek.organization.name
                 self.fields['organization_type'].initial = shareek.organization.organization_type
