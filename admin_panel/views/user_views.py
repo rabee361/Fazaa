@@ -130,20 +130,15 @@ class ClientInfoView(View):
     def get(self, request, id):
         client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
         form = UpdateClientForm(instance=client)
-        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form})
+        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'image': client.image})
 
     def post(self, request, id):
         client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
         form = UpdateClientForm(request.POST, instance=client)
         if form.is_valid():
             form.save()
-            return redirect('client-info', id=id)
-        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['image'] = self.object.image
-        return context
+            return redirect('clients')
+        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'image': client.image})
 
 
 @login_required_m
@@ -186,20 +181,16 @@ class ShareekInfoView(View):
     def get(self, request, id):
         shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
         form = UpdateShareekForm(instance=shareek)
-        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form})
+        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form , 'image': shareek.image})
 
     def post(self, request, id):
         shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
-        form = UpdateShareekForm(request.POST, instance=shareek)
+        form = UpdateShareekForm(request.POST, request.FILES, instance=shareek)
+        print(form.errors)
         if form.is_valid():
             form.save()
-            return redirect('shareek-info', id=id)
-        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form})
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['image'] = self.object.image
-    #     return context
+            return redirect('shareeks')
+        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form , 'image': shareek.image})
 
 
 @login_required_m
@@ -298,20 +289,16 @@ class AdminInfoView(View):
     def get(self, request, id):
         admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
         form = UpdateAdminForm(instance=admin)
-        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form})
+        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form , 'image': admin.image})
 
     def post(self, request, id):
         admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
         form = UpdateAdminForm(request.POST, instance=admin)
         if form.is_valid():
             form.save()
-            return redirect('admin-info', id=id)
-        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form})
+            return redirect('admins')
+        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form , 'image': admin.image})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['image'] = self.object.image
-        return context
 
 
 @login_required_m

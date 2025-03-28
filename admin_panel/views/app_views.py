@@ -278,6 +278,11 @@ class UpdateContactUsView(generic.UpdateView):
     success_url = '/dashboard/organization/contact-us'
     pk_url_kwarg = 'id'
 
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['icon'] = self.object.icon
+        return context
+
 @login_required_m
 class ContactUsBulkActionView(View):
     def post(self, request):
@@ -353,6 +358,7 @@ class ListSubscriptionsView(CustomListBaseView):
             return queryset.filter(name__icontains=q)
         else:
             return queryset
+
 
 @login_required_m
 class CreateSubscriptionView(generic.CreateView):

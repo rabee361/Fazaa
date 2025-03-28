@@ -31,7 +31,11 @@
                     <div class="form-group">
                         <label>{{ form.template.label }} :</label>
                         <div class="image-upload">
-                            {{ form.template }}
+                            {% if template %}
+                                <img src="{{ template.url }}" alt="template" name="template" id="template" width="50" height="50">
+                            {% else %}
+                                {{ form.template }}
+                            {% endif %}
                             <div class="upload-placeholder">اختر ملف</div>
                         </div>
                         {% if form.template.errors %}

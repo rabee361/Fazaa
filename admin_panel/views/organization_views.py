@@ -427,7 +427,7 @@ class SocialMediaActionView(View):
 @login_required_m
 class UpdateSocialMedia(generic.UpdateView):
     model = SocialMedia
-    template_name = 'admin_panel/links/social/update_social_media.html'
+    template_name = 'admin_panel/links/social/social_media_form.html'
     form_class = SocialMediaForm
     success_url = '/dashboard/organization/social-media'
     pk_url_kwarg = 'id'
@@ -575,10 +575,16 @@ class CreateClientOffer(generic.CreateView):
 @login_required_m
 class UpdateClientOffer(generic.UpdateView):
     model = ClientOffer
-    template_name = 'admin_panel/organization/offers/client_offer_form.html'
+    template_name = 'admin_panel/organization/offers/update_client_offer.html'
     form_class = ClientOfferForm
     success_url = '/dashboard/organization/client-offers'
     pk_url_kwarg = 'id'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['cover'] = self.object.cover
+        return context
+
 
 @login_required_m
 class ClientOfferBulkActionView(View):
@@ -623,7 +629,6 @@ class UpdateServiceOffer(generic.UpdateView):
     success_url = '/dashboard/organization/service-offers'
     pk_url_kwarg = 'id'
 
-
 @login_required_m
 class ServiceOfferBulkActionView(View):
     def post(self, request):
@@ -655,6 +660,10 @@ class UpdateOfferTemplate(generic.UpdateView):
     success_url = '/dashboard/organization/offer-templates'
     pk_url_kwarg = 'id'
 
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['template'] = self.object.template
+        return context
 
 class DeleteOfferTemplate(View):
     def post(self, request):

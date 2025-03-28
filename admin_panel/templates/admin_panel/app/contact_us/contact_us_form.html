@@ -29,7 +29,11 @@
                     <div class="form-group">
                         <label>{{ form.icon.label }} :</label>
                         <div class="image-upload">
-                            {{ form.icon }}
+                            {% if icon %}
+                                <img src="{{ icon.url }}" alt="icon" name="icon" id="icon" width="50" height="50">
+                            {% else %}
+                                {{ form.icon }} 
+                            {% endif %}
                             <div class="upload-placeholder">اختر شعار :</div>
                         </div>
                         {% if form.icon.errors %}

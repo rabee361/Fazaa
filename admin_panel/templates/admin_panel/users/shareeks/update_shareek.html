@@ -20,13 +20,18 @@
         <div class="form-container">
             <div class="form-grid">
                 <div class="form-section">
-                    <!-- <div class="form-group">
+
+                    <div class="form-group">
                         <label>{{ form.image.label }}</label>
                         <div class="image-upload">
-                            {{ form.image }}
+                            <input type="file" name="image" id="image" class="my-img">
+                            <img src="{{ image.url }}" alt="image" name="image" id="image" width="50" height="50">
                             <div class="upload-placeholder">اختر صورة</div>
                         </div>
-                    </div> -->
+                        {% if form.image.errors %}
+                            <div class="error">{{ form.image.errors }}</div>
+                        {% endif %}
+                    </div>
 
                     <div class="form-group">
                         <label>{{ form.email.label }}</label>
@@ -36,11 +41,6 @@
                     <div class="form-group">
                         <label>{{ form.organization_type.label }}</label>
                         {{ form.organization_type }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>{{ form.phonenumber.label }}</label>
-                        {{ form.phonenumber }}
                     </div>
 
                 </div>
@@ -59,6 +59,11 @@
                     <div class="form-group">
                         <label>{{ form.job.label }}</label>
                         {{ form.job }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ form.phonenumber.label }}</label>
+                        {{ form.phonenumber }}
                     </div>
 
                 </div>
