@@ -90,7 +90,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
         
         # Order the results based on the specified order parameter
         if order == 1:
-            queryset = queryset.order_by('-organization__visits')
+            queryset = queryset.order_by('-visits')
             
         elif order == 2:
             # Count client offers for each organization
