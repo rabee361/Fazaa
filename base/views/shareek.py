@@ -37,10 +37,10 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
         distance_limit = self.request.query_params.get('distance', 1000)
         org_types = self.request.query_params.get('type', '')
         name = self.request.query_params.get('name', '')
-        order = self.request.query_params.get('order', 'id')  # visits / distance / offers / id
+        order = self.request.query_params.get('order', 0)  # visits / distance / offers / id
         long = self.request.query_params.get('long', None)  
         lat = self.request.query_params.get('lat', None)  
-        
+        order = int(order)
         # Convert distance_limit to float
         try:
             distance_limit = float(distance_limit)
@@ -89,16 +89,16 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
 
         
         # Order the results based on the specified order parameter
-        if order == 'visits':
+        if order == 1:
             queryset = queryset.order_by('-organization__visits')
             
-        elif order == 'offers':
+        elif order == 2:
             # Count client offers for each organization
             queryset = queryset.annotate(
             client_offers_count=Count('organization__clientoffer', distinct=True))
             queryset = queryset.order_by('-client_offers_count')
 
-        elif order == 'distance' and user_location:
+        elif order == 3 and user_location:
             queryset = queryset.order_by('min_distance')
 
         else:
