@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
 from django.db.models import Q, Min, Count, F, Subquery, OuterRef
-from django.contrib.gis.measure import D
 from utils.views import BaseAPIView
 from django.shortcuts import redirect
 from users.models import Shareek
@@ -15,6 +14,8 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from utils.pagination import CustomPagination
 from users.serializers import UserSerializer
+from django.db.models import FloatField
+from django.db.models.functions import Cast
 # Create your views here.
 
 
@@ -43,17 +44,17 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
         order = int(order)
         # Convert distance_limit to float
         try:
-            distance_limit = float(distance_limit)
+            distance_limit = float(distance_limit) * 1000
         except ValueError:
-            distance_limit = 1000.0  # Default distance if invalid
-        
+            distance_limit = 1000000.0  # Default distance if invalid
+        print(distance_limit)
+        print("EEEEEEEEEEEEEEEEE")
         # Apply organization type filter if provided
         if org_types:
             org_types = org_types.split(',')    
             valid_type_ids = [int(type_id) for type_id in org_types if type_id.isdigit()]
             if valid_type_ids:
                 queryset = queryset.filter(organization__organization_type_id__in=valid_type_ids)
-
         # Process user location for distance calculations
         user_location = None
         if long and lat:
@@ -63,28 +64,52 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
                 user_location = Point(long_float, lat_float, srid=4326)
             except (ValueError, TypeError):
                 pass
-        
-        # Generate a Google Maps URL for each organization's branches (if user location is provided)
+        # Filter and annotate branches with distance if user location provided
         if user_location:
-            # Annotate organizations with the minimum distance to any of their branches
-            
-            # Subquery to find the closest branch for each organization
-            closest_branch = queryset.filter(
-                organization=OuterRef('organization')
-            ).annotate(
-                distance=Distance('location', user_location)
-            ).order_by('distance').values('distance')[:1]
-            
-            # Annotate organizations with the distance to their closest branch
+            # First, annotate distances without casting
             queryset = queryset.annotate(
-                min_distance=Subquery(closest_branch)
+                distance=Distance('location', user_location)
             )
             
-            # Filter by distance if a user location is provided
-            queryset = queryset.filter(min_distance__lte=distance_limit)
-        
+            # Debug print to see actual distances
+            for branch in queryset:
+                print(f"Branch {branch.name}: {branch.distance.m} meters")
+            
+            # Then filter with explicit comparison
+            queryset = queryset.filter(
+                distance__lte=distance_limit
+            )
+            
+            # Verify the filter worked
+            print(f"After filtering - distance limit: {distance_limit}m")
+            print(f"Filtered branches: {list(queryset.values_list('name', flat=True))}")
+
         if name:
             queryset = queryset.filter(Q(name__icontains=name) | Q(organization__name__icontains=name))
+
+        # # Order the results based on the specified order parameter
+        # if order == 1:
+        #     queryset = queryset.order_by('-visits')
+            
+        #     # Calculate and print distance between user location and branch location
+        #     for branch in queryset:
+        #         distance = branch.location.distance(user_location) * 100  # Convert to km
+        #         print(f"Distance to {branch.name}: {distance:.2f} km")
+        #     # Annotate organizations with the minimum distance to any of their branches
+            
+        #     # Subquery to find the closest branch for each organization
+        #     closest_branch = queryset.filter(
+        #         organization=OuterRef('organization')
+        #     ).annotate(
+        #         distance=Distance('location', user_location)
+        #     ).order_by('distance').values('distance')[:1]
+        #     # Annotate organizations with the distance to their closest branch
+        #     queryset = queryset.annotate(
+        #         min_distance=Subquery(closest_branch)
+        #     )
+            
+        #     # Filter by distance if a user location is provided
+        #     queryset = queryset.filter(min_distance__lte=distance_limit)
         
 
         
