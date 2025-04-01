@@ -30,8 +30,6 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
     pagination_class = CustomPagination
     serializer_class = BranchListSerializer
     queryset = Branch.objects.select_related('organization').all()
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_class = OrganizationFilter
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -47,8 +45,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             distance_limit = float(distance_limit) * 1000
         except ValueError:
             distance_limit = 1000000.0  # Default distance if invalid
-        print(distance_limit)
-        print("EEEEEEEEEEEEEEEEE")
+
         # Apply organization type filter if provided
         if org_types:
             org_types = org_types.split(',')    
@@ -67,9 +64,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
         # Filter and annotate branches with distance if user location provided
         if user_location:
             # First, annotate distances without casting
-            queryset = queryset.annotate(
-                distance=Distance('location', user_location)
-            )
+            queryset = queryset.annotate(distance=Distance('location', user_location))
             
             # Debug print to see actual distances
             for branch in queryset:
@@ -86,32 +81,6 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
 
         if name:
             queryset = queryset.filter(Q(name__icontains=name) | Q(organization__name__icontains=name))
-
-        # # Order the results based on the specified order parameter
-        # if order == 1:
-        #     queryset = queryset.order_by('-visits')
-            
-        #     # Calculate and print distance between user location and branch location
-        #     for branch in queryset:
-        #         distance = branch.location.distance(user_location) * 100  # Convert to km
-        #         print(f"Distance to {branch.name}: {distance:.2f} km")
-        #     # Annotate organizations with the minimum distance to any of their branches
-            
-        #     # Subquery to find the closest branch for each organization
-        #     closest_branch = queryset.filter(
-        #         organization=OuterRef('organization')
-        #     ).annotate(
-        #         distance=Distance('location', user_location)
-        #     ).order_by('distance').values('distance')[:1]
-        #     # Annotate organizations with the distance to their closest branch
-        #     queryset = queryset.annotate(
-        #         min_distance=Subquery(closest_branch)
-        #     )
-            
-        #     # Filter by distance if a user location is provided
-        #     queryset = queryset.filter(min_distance__lte=distance_limit)
-        
-
         
         # Order the results based on the specified order parameter
         if order == 1:
@@ -124,13 +93,20 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             queryset = queryset.order_by('-client_offers_count')
 
         elif order == 3 and user_location:
-            queryset = queryset.order_by('min_distance')
+            queryset = queryset.order_by('distance')
 
         else:
             # Default ordering by id
             queryset = queryset.order_by('-id')
         
         return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['distance_limit'] = self.request.query_params.get('distance', None)
+        context['long'] = self.request.query_params.get('long', None)
+        context['lat'] = self.request.query_params.get('lat', None)
+        return context
 
 
 class OrganizationInfoView(BaseAPIView):
