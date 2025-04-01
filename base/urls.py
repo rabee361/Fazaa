@@ -50,6 +50,7 @@ urlpatterns = [
 
     path('reports/create/' , client.CreateReportView.as_view()),
     path('reports/<int:user_id>' , client.ReportListView.as_view()),
+    path('reports/organizations' , client.ReportOrganizationsView.as_view())
 ]
 
 

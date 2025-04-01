@@ -316,29 +316,6 @@ class ContactUsSerializer(ModelSerializer):
 
 
 
-class ReportSerializer(ModelSerializer):
-    class Meta:
-        model = Report
-        fields = '__all__'
-    
-    def validate_client(self,value):
-        if not User.objects.filter(id=value).exists():
-            raise ErrorResult({'error':'لا يوجد مستخدم بهذا الرقم'})
-        
-        today = timezone.now().date()
-        reports = Report.objects.filter(
-            client=value,
-            createdAt__date=today
-        )
-        if reports.count() >= 5:
-            raise ErrorResult({'error':'لا يمكنك إضافة أكثر من 5 تقارير في اليوم الواحد'})
-
-        return value
-
-
-
-
-
 
 
 class CatalogUrlsSerializer(ModelSerializer):
@@ -445,3 +422,45 @@ class UpdateOrganizationSerializer(ModelSerializer):
                         branch.save()
         instance.save()
         return instance
+
+
+
+
+class ReportSerializer(ModelSerializer):
+    organization = OrganizationListSerializer(many=False)
+    class Meta:
+        model = Report
+        fields = '__all__'
+    
+    def validate_client(self,value):
+        if not User.objects.filter(id=value).exists():
+            raise ErrorResult({'error':'لا يوجد مستخدم بهذا الرقم'})
+        
+        today = timezone.now().date()
+        reports = Report.objects.filter(
+            client=value,
+            createdAt__date=today
+        )
+        if reports.count() >= 5:
+            raise ErrorResult({'error':'لا يمكنك إضافة أكثر من 5 تقارير في اليوم الواحد'})
+
+        return value
+    
+
+class OrganizationReportsSerializer(ModelSerializer):
+    visits = serializers.SerializerMethodField()    
+    logo = serializers.SerializerMethodField()
+    class Meta:
+        model = Organization
+        fields = ['id','name','logo','description','visits']
+
+    def get_logo(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.logo.url)
+
+    def get_visits(self,obj):
+        visits = Branch.objects.filter(organization=obj).aggregate(total_visits=Sum('visits'))['total_visits'] or 0
+        return visits
+
+
+
