@@ -499,7 +499,7 @@ class SocialUrlBulkActionView(View):
 class ListBranches(CustomListBaseView):
     model = Branch
     context_object_name = 'branches'
-    context_fields = ['id','organization','description','short_url'] # add visits
+    context_fields = ['id','organization','name','short_url'] # add visits
     template_name = 'admin_panel/organization/branches/branches.html'
     success_url = '/dashboard/organization/branches'
 
@@ -523,8 +523,8 @@ class ListBranches(CustomListBaseView):
 @login_required_m
 class CreateBranch(generic.CreateView):
     model = Branch
+    form_class = BranchForm
     template_name = 'admin_panel/organization/branches/branch_form.html'
-    fields = ['description', 'location', 'organization']
     success_url = '/dashboard/organization/branches'
 
 @login_required_m
@@ -542,7 +542,7 @@ class BranchActionView(View):
 class UpdateBranch(generic.UpdateView):
     model = Branch
     template_name = 'admin_panel/organization/branches/branch_form.html'
-    fields = ['description', 'location', 'organization']
+    form_class = BranchForm
     success_url = '/dashboard/organization/branches'
     pk_url_kwarg = 'id'
 

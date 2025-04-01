@@ -1,9 +1,9 @@
 from django import forms
 from django.core.validators import RegexValidator
 from users.models import Shareek, User, Organization, OrganizationType, Notification
-from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer , ServiceOffer
+from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer , ServiceOffer, Branch
 from django.db import transaction
-
+from django.contrib.gis.geos import Point
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(
@@ -315,4 +315,26 @@ class NotificationForm(forms.ModelForm):
         fields = ['title','body','recipient_type']
 
 
+class BranchForm(forms.ModelForm):
+    longitude = forms.FloatField(label='الطول')
+    latitude = forms.FloatField(label='العرض')
+    
+    class Meta:
+        model = Branch
+        fields = ['description', 'organization', 'name', 'longitude', 'latitude']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.location:
+            self.fields['longitude'].initial = self.instance.location.x
+            self.fields['latitude'].initial = self.instance.location.y
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.location = Point(
+            float(self.cleaned_data['longitude']), 
+            float(self.cleaned_data['latitude'])
+        )
+        if commit:
+            instance.save()
+        return instance

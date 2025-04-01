@@ -85,7 +85,7 @@ OrganizationPatterns=[
     path('social-links/<int:id>/info' , organization_views.UpdateSocialLinkView.as_view() , name="social-link-info"),
     path('social-links/action/' , organization_views.SocialUrlBulkActionView.as_view() , name="social-bulk-action"),
 
-    path('branches/' , organization_views.ListBranches.as_view() , name="branches"),
+    path('branches' , organization_views.ListBranches.as_view() , name="branches"),
     path('branches/add/' , organization_views.CreateBranch.as_view() , name="add-branch"),
     path('branches/<int:id>/info/' , organization_views.UpdateBranch.as_view() , name="branch-info"),
     path('branches/action/' , organization_views.BranchActionView.as_view() , name="branch-action"),
