@@ -322,8 +322,8 @@ class ReportSerializer(ModelSerializer):
         fields = '__all__'
     
     def validate_client(self,value):
-        if not User.objects.filter(id=value, user_type='CLIENT').exists():
-            raise ErrorResult({'error':'لا يوجد عميل بهذا الرقم'})
+        if not User.objects.filter(id=value).exists():
+            raise ErrorResult({'error':'لا يوجد مستخدم بهذا الرقم'})
         
         today = timezone.now().date()
         reports = Report.objects.filter(
