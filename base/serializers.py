@@ -427,7 +427,7 @@ class UpdateOrganizationSerializer(ModelSerializer):
 
 
 class ReportSerializer(ModelSerializer):
-    organization = OrganizationListSerializer(many=False)
+    # organization = OrganizationListSerializer(many=False)
     class Meta:
         model = Report
         fields = '__all__'
@@ -446,6 +446,11 @@ class ReportSerializer(ModelSerializer):
 
         return value
     
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['organization'] = OrganizationListSerializer(instance.organization).data
+        return data
+
 
 class OrganizationReportsSerializer(ModelSerializer):
     visits = serializers.SerializerMethodField()    
