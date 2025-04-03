@@ -17,8 +17,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
+          script_stop: true  # Stop script execution when an error occurs
+          debug: true  # Enable debug mode to get more information
           script: |
             cd /home/fazaa/Fazaa
-            sudo git pull
-            sudo docker-compose down
-            sudo docker-compose up -d --build
+            git pull
+            docker-compose down
+            docker-compose up -d --build
