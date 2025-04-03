@@ -4,7 +4,7 @@ from .views import user_views , organization_views , app_views
 
 
 UsersPatterns=[
-    path('clients' , user_views.ListClientsView.as_view() , name="clients"),
+    path('clientss' , user_views.ListClientsView.as_view() , name="clients"),
     path('clients/add/' , user_views.CreateClientView.as_view() , name="add-client"),
     path('clients/<int:id>/info/' , user_views.ClientInfoView.as_view() , name="client-info"),
     path('clients/action/' , user_views.BulkActionView.as_view() , name="bulk-action"),
