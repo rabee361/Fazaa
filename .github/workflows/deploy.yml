@@ -1,10 +1,10 @@
 name: Deploy to Production
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main  # or master, depending on your default branch
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -20,6 +20,7 @@ jobs:
           debug: true  # Enable debug mode to get more information
           script: |
             cd /home/fazaa/Fazaa
-            git pull
+            git fetch origin
+            git rebase origin
             docker-compose down
             docker-compose up -d --build
