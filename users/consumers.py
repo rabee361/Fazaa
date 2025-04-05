@@ -66,7 +66,7 @@ class SendMessage(AsyncWebsocketConsumer):
 			if message_type == 'fetch_messages':
 				# Handle fetch messages request with pagination
 				page_number = text_data_json.get('page', 1)
-				page_size = text_data_json.get('page_size', 5)
+				page_size = text_data_json.get('page_size', 50)
 				messages = await self.get_chat_msgs(self.chat_id, page_number, page_size)
 				await self.send(text_data=json.dumps({
 					'type': 'message_history',
