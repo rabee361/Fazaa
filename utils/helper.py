@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.utils import timezone
 import random
-import ffmpeg
+# import ffmpeg
 import os
 from PIL import Image
 from django.core.files.base import ContentFile
@@ -29,58 +29,58 @@ def getRandomEmail():
 def getRandomPassword():
     return 'rabee123@@123'
 
-def generate_video_thumbnail(video_path):
-    try:
-        print(f"Starting thumbnail generation for video: {video_path}")
+# def generate_video_thumbnail(video_path):
+#     try:
+#         print(f"Starting thumbnail generation for video: {video_path}")
         
-        # Convert Django path to real file system path
-        if os.path.isabs(video_path) and os.path.exists(video_path):
-            real_path = video_path
-        else:
-            # If it's a relative path from MEDIA_ROOT, construct the absolute path
-            relative_path = video_path.replace('media/', '', 1) if video_path.startswith('media/') else video_path
-            real_path = os.path.join(settings.MEDIA_ROOT, relative_path)
-            print(f"Converted path to: {real_path}")
+#         # Convert Django path to real file system path
+#         if os.path.isabs(video_path) and os.path.exists(video_path):
+#             real_path = video_path
+#         else:
+#             # If it's a relative path from MEDIA_ROOT, construct the absolute path
+#             relative_path = video_path.replace('media/', '', 1) if video_path.startswith('media/') else video_path
+#             real_path = os.path.join(settings.MEDIA_ROOT, relative_path)
+#             print(f"Converted path to: {real_path}")
 
-        # Verify video file exists
-        if not os.path.exists(real_path):
-            print(f"Video file not found at path: {real_path}")
-            raise FileNotFoundError(f"Video file not found: {real_path}")
+#         # Verify video file exists
+#         if not os.path.exists(real_path):
+#             print(f"Video file not found at path: {real_path}")
+#             raise FileNotFoundError(f"Video file not found: {real_path}")
             
-        # Create thumbnails directory if it doesn't exist
-        thumb_dir = os.path.join(settings.MEDIA_ROOT, 'images/thumbnails/')
-        print(f"Creating thumbnails directory at: {thumb_dir}")
-        os.makedirs(thumb_dir, exist_ok=True)
+#         # Create thumbnails directory if it doesn't exist
+#         thumb_dir = os.path.join(settings.MEDIA_ROOT, 'images/thumbnails/')
+#         print(f"Creating thumbnails directory at: {thumb_dir}")
+#         os.makedirs(thumb_dir, exist_ok=True)
         
-        # Create thumbnail file path
-        thumb_filename = os.path.splitext(os.path.basename(video_path))[0] + '_thumb.jpg'
-        temp_thumb = os.path.join(thumb_dir, thumb_filename)
-        print(f"Thumbnail will be saved as: {thumb_filename}")
+#         # Create thumbnail file path
+#         thumb_filename = os.path.splitext(os.path.basename(video_path))[0] + '_thumb.jpg'
+#         temp_thumb = os.path.join(thumb_dir, thumb_filename)
+#         print(f"Thumbnail will be saved as: {thumb_filename}")
 
-        # Extract first frame using ffmpeg with specific output pattern
-        try:
-            stream = ffmpeg.input(real_path)
-            stream = ffmpeg.filter(stream, 'select', 'eq(n,0)') # Select first frame
-            stream = ffmpeg.output(stream, temp_thumb, vframes=1)
-            print("Extracting thumbnail from video...")
-            ffmpeg.run(stream, overwrite_output=True)
-        except ffmpeg._run.Error as e:
-            raise RuntimeError(f"FFmpeg error while generating thumbnail: {str(e)}")
+#         # Extract first frame using ffmpeg with specific output pattern
+#         try:
+#             stream = ffmpeg.input(real_path)
+#             stream = ffmpeg.filter(stream, 'select', 'eq(n,0)') # Select first frame
+#             stream = ffmpeg.output(stream, temp_thumb, vframes=1)
+#             print("Extracting thumbnail from video...")
+#             ffmpeg.run(stream, overwrite_output=True)
+#         except ffmpeg._run.Error as e:
+#             raise RuntimeError(f"FFmpeg error while generating thumbnail: {str(e)}")
 
-        # Verify thumbnail was created
-        if not os.path.exists(temp_thumb):
-            raise RuntimeError("Thumbnail file was not created")
+#         # Verify thumbnail was created
+#         if not os.path.exists(temp_thumb):
+#             raise RuntimeError("Thumbnail file was not created")
 
-        # Return relative path from MEDIA_ROOT
-        relative_thumb = os.path.join('images/thumbnails', thumb_filename)
-        print("Video thumbnail generation completed successfully")
-        return relative_thumb
+#         # Return relative path from MEDIA_ROOT
+#         relative_thumb = os.path.join('images/thumbnails', thumb_filename)
+#         print("Video thumbnail generation completed successfully")
+#         return relative_thumb
 
-    except Exception as e:
-        print(f"Error generating thumbnail: {str(e)}")
-        print(f"Error type: {type(e).__name__}")
-        print(f"Error details: {str(e)}")
-        raise
+    # except Exception as e:
+    #     print(f"Error generating thumbnail: {str(e)}")
+    #     print(f"Error type: {type(e).__name__}")
+    #     print(f"Error details: {str(e)}")
+    #     raise
     
 def generate_img_thumbnail(image_path):
     try:

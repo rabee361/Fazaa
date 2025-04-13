@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from utils.helper import generateShortUrl , generate_video_thumbnail , generate_img_thumbnail
+from utils.helper import generateShortUrl , generate_img_thumbnail
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
 from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
