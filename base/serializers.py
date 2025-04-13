@@ -147,8 +147,8 @@ class DeliveryCompanySerializer(ModelSerializer):
 
 class DeliveryCompanyUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
-    icon = serializers.ImageField(source='delivery_company.icon', read_only=True)
-    icon_thumbnail = serializers.ImageField(source='delivery_company.icon_thumbnail', read_only=True)
+    icon = serializers.SerializerMethodField()
+    icon_thumbnail = serializers.SerializerMethodField()
     name = serializers.CharField(source='delivery_company.name', read_only=True)
     class Meta:
         model = DeliveryCompanyUrl
@@ -156,12 +156,15 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
     
     def get_icon(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.delivery_company.icon.url)
-
+        if obj.icon:
+            return request.build_absolute_uri(obj.delivery_company.icon.url)
+        return None
+    
     def get_icon_thumbnail(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.delivery_company.icon_thumbnail.url)
-
+        if obj.icon_thumbnail:
+            return request.build_absolute_uri(obj.delivery_company.icon_thumbnail.url)
+        return None
 
     def get_short_url(self,obj):
         request = self.context.get('request')
