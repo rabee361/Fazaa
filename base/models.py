@@ -180,19 +180,19 @@ class SocialMedia(models.Model):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 1MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 1 ميجابايت')
 
-    # def save(self, *args, **kwargs):
-    #     # First save to ensure the image is saved to disk
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # First save to ensure the image is saved to disk
+        super().save(*args, **kwargs)
         
-    #     # Using the updated generate_img_thumbnail function
-    #     try:
-    #         print(f"Image path: {self.icon.path}")
-    #         content_file, thumb_filename = generate_img_thumbnail(self.icon.path)
-    #         self.icon_thumbnail.save(thumb_filename, content_file, save=False)
-    #         # Save again to update the thumbnail field
-    #         super().save(*args, **kwargs)
-    #     except Exception as e:
-    #         print(f"Error saving thumbnail: {str(e)}")
+        # Using the updated generate_img_thumbnail function
+        try:
+            print(f"Image path: {self.icon.path}")
+            content_file, thumb_filename = generate_img_thumbnail(self.icon.path)
+            self.icon_thumbnail.save(thumb_filename, content_file, save=False)
+            # Save again to update the thumbnail field
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving thumbnail: {str(e)}")
 
     def create_social_urls(self):
         organizations = Organization.objects.all()
