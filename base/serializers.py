@@ -156,13 +156,13 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
     
     def get_icon(self,obj):
         request = self.context.get('request')
-        if obj.icon:
+        if obj.delivery_company and obj.delivery_company.icon:
             return request.build_absolute_uri(obj.delivery_company.icon.url)
         return None
     
     def get_icon_thumbnail(self,obj):
         request = self.context.get('request')
-        if obj.icon_thumbnail:
+        if obj.delivery_company and obj.delivery_company.icon_thumbnail:
             return request.build_absolute_uri(obj.delivery_company.icon_thumbnail.url)
         return None
 
