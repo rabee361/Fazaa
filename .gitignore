@@ -1,9 +1,6 @@
 .bak
 .dat
 .dir
-# django.log
-# media
-# staticfiles
 *.pyc
 .pyc
 __pycache__/
@@ -25,3 +22,6 @@ __pycache__/
 /env
 test.pdf
 test.png
+media/
+.vscode/
+.vscode

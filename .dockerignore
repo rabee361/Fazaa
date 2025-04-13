@@ -17,3 +17,6 @@ __pycache__/
 *$py.class
 test.pdf
 test.png
+media/
+.vscode/
+.vscode

@@ -64,13 +64,18 @@ class OrganizationTypeSerializer(ModelSerializer):
 
 class SocialMediaSerializer(ModelSerializer):
     icon = serializers.SerializerMethodField()
+    icon_thumbnail = serializers.SerializerMethodField()
     class Meta:
         model = SocialMedia
-        fields = ['icon','name']
+        fields = ['icon','name','icon_thumbnail']
 
     def get_icon(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.icon.url)
+
+    def get_icon_thumbnail(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.icon_thumbnail.url)
 
     def validate_icon(self, icon):
         validate_image_size(icon)
@@ -82,15 +87,20 @@ class SocialMediaUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
     social_media = SocialMediaSerializer()
     icon = serializers.ImageField(source='social_media.icon', read_only=True)
+    icon_thumbnail = serializers.ImageField(source='social_media.icon_thumbnail', read_only=True)
     name = serializers.CharField(source='social_media.name', read_only=True)
     class Meta:
         model = SocialMediaUrl 
-        fields = ['id','organization','short_url','social_media','active','icon','name']
+        fields = ['id','organization','short_url','social_media','active','icon','name','icon_thumbnail']
 
 
     def get_icon(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.social_media.icon.url)
+    
+    def get_icon_thumbnail(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.social_media.icon_thumbnail.url)
 
     def get_short_url(self,obj):
         request = self.context.get('request')
@@ -120,6 +130,10 @@ class DeliveryCompanySerializer(ModelSerializer):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.icon.url)
     
+    def get_icon_thumbnail(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.icon_thumbnail.url)
+
     def validate_icon(self, icon):
         validate_image_size(icon)
         validate_image_extension(icon)
@@ -128,14 +142,19 @@ class DeliveryCompanySerializer(ModelSerializer):
 class DeliveryCompanyUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
     icon = serializers.ImageField(source='delivery_company.icon', read_only=True)
+    icon_thumbnail = serializers.ImageField(source='delivery_company.icon_thumbnail', read_only=True)
     name = serializers.CharField(source='delivery_company.name', read_only=True)
     class Meta:
         model = DeliveryCompanyUrl
-        fields = ['id','organization','short_url','delivery_company','active','icon','name']
+        fields = ['id','organization','short_url','delivery_company','active','icon','name','icon_thumbnail']
     
     def get_icon(self,obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.delivery_company.icon.url)
+
+    def get_icon_thumbnail(self,obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.delivery_company.icon_thumbnail.url)
 
 
     def get_short_url(self,obj):
@@ -148,17 +167,11 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
 
 
 
-
-
-
-
-
 class DeliveryUrlUpdateSerializer(ModelSerializer):
     class Meta:
         model = DeliveryCompanyUrl
         fields = ['id', 'organization', 'delivery_company', 'url', 'short_url', 'active', 'createdAt']
         read_only_fields = ['id', 'organization', 'delivery_company', 'short_url', 'createdAt']
-
 
 
     

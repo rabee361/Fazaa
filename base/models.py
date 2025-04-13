@@ -1,11 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from utils.helper import generateShortUrl
+from utils.helper import generateShortUrl , generate_video_thumbnail , generate_img_thumbnail
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
 from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
 from utils.types import CATALOG_TYPES
-# Create your models here.
+
 
 
 class OrganizationType(models.Model):
@@ -22,6 +22,7 @@ class OrganizationType(models.Model):
 class Organization(models.Model):
     commercial_register_id = models.IntegerField(null=True , blank=True , validators=[MinValueValidator(1000)], verbose_name='رقم السجل التجاري')
     logo = models.ImageField(upload_to='media/organizations/logos/', default='media/images/default.jpg', verbose_name='الشعار')
+    logo_thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
     name = models.CharField(max_length=255, verbose_name='الاسم')
     description = models.CharField(max_length=255 , null=True, blank=True, verbose_name='المعلومات التعريفية')
     organization_type = models.ForeignKey(OrganizationType, on_delete=models.SET_NULL, null=True, verbose_name='نوع المنظمة')
@@ -53,6 +54,22 @@ class Organization(models.Model):
     def get_absolute_website_url(self):
         return f"/website/{self.website_short_url}/"
 
+    def save(self, *args, **kwargs):
+        # First save to ensure the image is saved to disk
+        super().save(*args, **kwargs)
+        
+        # Using the updated generate_img_thumbnail function
+        try:
+            print(f"Image path: {self.logo.path}")
+            content_file, thumb_filename = generate_img_thumbnail(self.logo.path)
+            self.logo_thumbnail.save(thumb_filename, content_file, save=False)
+            print(self.logo_thumbnail.size)
+            print(self.logo.size)
+            # Save again to update the thumbnail field
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving thumbnail: {str(e)}")
+
     class Meta:
         ordering = ['-id']
 
@@ -75,33 +92,55 @@ class Branch(gis_models.Model):
 class ImageGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
     image = models.ImageField(upload_to='media/images/image_galleries/', verbose_name='الصورة')
+    thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 
     class Meta:
         ordering = ['-id']  
+
+    def save(self, *args, **kwargs):
+        # First save to ensure the image is saved to disk
+        super().save(*args, **kwargs)
+        
+        # Using the updated generate_img_thumbnail function
+        try:
+            print(f"Image path: {self.image.path}")
+            content_file, thumb_filename = generate_img_thumbnail(self.image.path)
+            self.thumbnail.save(thumb_filename, content_file, save=False)
+            print(self.thumbnail.size)
+            print(self.image.size)
+            # Save again to update the thumbnail field
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving thumbnail: {str(e)}")
 
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
     video = models.FileField(upload_to='media/images/reels_galleries/', verbose_name='الفيديو')
+    video_thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة',null=True , blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 
     class Meta:
         ordering = ['-id']  
 
-    # def clean(self):
-    #     if self.video and self.video.size > 25 * 1024 * 1024:  # 25MB in bytes
-    #         raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 25 ميجابايت')
-        
-    #     # Check if organization has reached daily limit of 20 reels
-    #     today = timezone.now().date()
-    #     today_reels_count = ReelsGallery.objects.filter(
-    #         organization=self.organization,
-    #         createdAt__date=today
-    #     ).count()
-        
-    #     if today_reels_count >= 20:
-    #         raise ValidationError('لا يمكن إضافة أكثر من 20 فيديو في اليوم')
+    def clean(self):
+        if self.video:
+            # Check file size
+            if self.video.size > 15 * 1024 * 1024:  # 15MB in bytes
+                raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 15 ميجابايت')
+            
+            # Check if file is video format
+            import mimetypes
+            file_type = mimetypes.guess_type(self.video.name)[0]
+            if not file_type or not file_type.startswith('video/'):
+                raise ValidationError('يجب أن يكون الملف بتنسيق فيديو')
+    
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)   
+    #     self.video_thumbnail = generate_video_thumbnail(self.video.path)
+
+
 
 class Catalog(models.Model):
     catalog_type = models.CharField(max_length=255 , choices=CATALOG_TYPES.choices , verbose_name='النوع')
@@ -135,10 +174,25 @@ class Catalog(models.Model):
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/social_media/', default='media/images/default.jpg',verbose_name='الصورة')
+    icon_thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
 
     def clean(self):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 1MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 1 ميجابايت')
+
+    def save(self, *args, **kwargs):
+        # First save to ensure the image is saved to disk
+        super().save(*args, **kwargs)
+        
+        # Using the updated generate_img_thumbnail function
+        try:
+            print(f"Image path: {self.icon.path}")
+            content_file, thumb_filename = generate_img_thumbnail(self.icon.path)
+            self.icon_thumbnail.save(thumb_filename, content_file, save=False)
+            # Save again to update the thumbnail field
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving thumbnail: {str(e)}")
 
     def create_social_urls(self):
         organizations = Organization.objects.all()
@@ -187,10 +241,25 @@ class SocialMediaUrl(models.Model):
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255,verbose_name='الاسم')
     icon = models.ImageField(upload_to='media/images/delivery_company/', default='media/images/default.jpg',verbose_name='الصورة')
+    icon_thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
 
     def clean(self):
         if self.icon and self.icon.size > 1 * 1024 * 1024:  # 1MB in bytes
             raise ValidationError('حجم الأيقونة يجب أن لا يتجاوز 1 ميجابايت')
+
+    def save(self, *args, **kwargs):
+        # First save to ensure the image is saved to disk
+        super().save(*args, **kwargs)
+        
+        # Using the updated generate_img_thumbnail function
+        try:
+            print(f"Image path: {self.icon.path}")
+            content_file, thumb_filename = generate_img_thumbnail(self.icon.path)
+            self.icon_thumbnail.save(thumb_filename, content_file, save=False)
+            # Save again to update the thumbnail field
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving thumbnail: {str(e)}")
 
     def create_delivery_urls(self):
         organizations = Organization.objects.all()
@@ -238,7 +307,24 @@ class DeliveryCompanyUrl(models.Model):
 class Template(models.Model):
     name = models.CharField(max_length=255, verbose_name='الاسم')
     template = models.ImageField(upload_to='media/images/templates/', verbose_name='القالب')
-    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
+    template_thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')   
+
+    def save(self, *args, **kwargs):
+        # First save to ensure the image is saved to disk
+        super().save(*args, **kwargs)
+        
+        # Using the updated generate_img_thumbnail function
+        try:
+            print(f"Image path: {self.template.path}")
+            content_file, thumb_filename = generate_img_thumbnail(self.template.path)
+            self.template_thumbnail.save(thumb_filename, content_file, save=False)
+            print(self.template_thumbnail.size)
+            print(self.template.size)
+            # Save again to update the thumbnail field
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving thumbnail: {str(e)}")
 
     def __str__(self) -> str:
         return self.name
