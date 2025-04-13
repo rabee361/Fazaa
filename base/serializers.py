@@ -71,36 +71,42 @@ class SocialMediaSerializer(ModelSerializer):
 
     def get_icon(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.icon.url)
-
+        if obj.icon:
+            return request.build_absolute_uri(obj.icon.url)
+        return None
+    
     def get_icon_thumbnail(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.icon_thumbnail.url)
-
+        if obj.icon_thumbnail:
+            return request.build_absolute_uri(obj.icon_thumbnail.url)
+        return None
+    
     def validate_icon(self, icon):
         validate_image_size(icon)
         validate_image_extension(icon)
         
 
-
 class SocialMediaUrlSerializer(ModelSerializer):
     short_url = serializers.SerializerMethodField()
-    social_media = SocialMediaSerializer()
-    icon = serializers.ImageField(source='social_media.icon', read_only=True)
-    icon_thumbnail = serializers.ImageField(source='social_media.icon_thumbnail', read_only=True)
+    social_media = SocialMediaSerializer()  #TODO remove the icon and icon_thumbnail from the body response 
+    icon = serializers.SerializerMethodField()
+    icon_thumbnail = serializers.SerializerMethodField() 
     name = serializers.CharField(source='social_media.name', read_only=True)
     class Meta:
         model = SocialMediaUrl 
         fields = ['id','organization','short_url','social_media','active','icon','name','icon_thumbnail']
 
-
     def get_icon(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.social_media.icon.url)
+        if obj.social_media and obj.social_media.icon:
+            return request.build_absolute_uri(obj.social_media.icon.url)
+        return None
     
     def get_icon_thumbnail(self,obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.social_media.icon_thumbnail.url)
+        if obj.social_media and obj.social_media.icon_thumbnail:
+            return request.build_absolute_uri(obj.social_media.icon_thumbnail.url)
+        return None
 
     def get_short_url(self,obj):
         request = self.context.get('request')
