@@ -77,7 +77,7 @@
             <button class="btn btn-brown">
                 حفظ
             </button>
-            <a href="{% url 'change-password' user.id %}" class="btn btn-brown">
+            <a href="{% url 'change-password' client.id %}" class="btn btn-brown">
                 تغيير كلمة السر
             </a>
             <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-white">

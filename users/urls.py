@@ -39,7 +39,7 @@ ClientPatterns = [
     path('change-password/' , common.ChangePasswordView.as_view()),
     path('update/<int:pk>/' , client.UpdateClientView.as_view()),
     path('info/<int:pk>/' , client.ClientInfoView.as_view()),
-    path('delete/' , client.DeleteClientView.as_view()),
+    path('delete/<int:pk>/' , client.DeleteClientView.as_view()),
     path('location/<int:user_id>/' , common.UpdateLocationView.as_view()),
     path('notifications/' , common.NotificationsView.as_view()),
     path('activate-notifications/<int:user_id>/' , common.ActivateNotificationsView.as_view()),

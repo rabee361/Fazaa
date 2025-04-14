@@ -40,6 +40,19 @@ class WebsiteSlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
+class OrganizationDeepLinkView(View):
+    def get(self,request,slug):
+        try:
+            organization = Organization.objects.get(deep_link=slug)
+            assert organization.deep_link
+            organization.visits += 1
+            organization.save()
+            return redirect(organization.deep_link)
+        except Exception as e:
+            return render(request, '404.html', status=400)
+
+
+
 class DeliverySlugUrlView(View):
     def get(self,request,slug):
         try:

@@ -29,6 +29,7 @@ class Organization(models.Model):
     website = models.CharField(max_length=300 , null=True, blank=True, verbose_name='الموقع الإلكتروني')
     website_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='اختصار الموقع الإلكتروني')
     card_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='البطاقة التعريفية')
+    # deep_link = models.CharField(max_length=300 , null=True, blank=True, verbose_name='رابط الملف الشخصية')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
 
     def clean(self):

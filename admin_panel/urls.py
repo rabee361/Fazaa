@@ -19,7 +19,7 @@ UsersPatterns=[
     path('admins/<int:id>/info/' , user_views.AdminInfoView.as_view() , name="admin-info"),
     path('admins/action/' , user_views.BulkActionView.as_view() , name="bulk-action"),
 
-    path('change-password/<int:user_id>/' , user_views.ChangePasswordView.as_view() , name="change-password"),
+    path('<int:user_id>/change-password/' , user_views.ChangePasswordView.as_view() , name="change-password"),
 
     path('chats' , app_views.ListSupportChatsView.as_view() , name="chats"),
     path('<int:chat_id>/messages' , app_views.ListMessagesView.as_view() , name="messages"),
@@ -138,6 +138,7 @@ urlpatterns = [
     path('catalog/<slug:slug>/' , app_views.CatalogSlugUrlView.as_view()),
     path('social/<slug:slug>/' , app_views.SocialMediaSlugUrlView.as_view()),
     path('website/<slug:slug>/' , app_views.WebsiteSlugUrlView.as_view()),
+    # path('deep-link/<slug:slug>/' , app_views.OrganizationDeepLinkView.as_view()),
     path('delivery/<slug:slug>/' , app_views.DeliverySlugUrlView.as_view()),  
     path('branch/<slug:slug>/' , app_views.BranchSlugUrlView.as_view()),  
     path('404/' , app_views.handler404.as_view() , name="404"),

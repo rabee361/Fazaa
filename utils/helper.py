@@ -20,6 +20,15 @@ def generateShortUrl():
     random_string = ''.join(random.choice(letters) for _ in range(8))
     return random_string
 
+def generate_product_deep_link(organization):
+    # Use your actual app scheme instead of "fazaaapp"
+    app_scheme = "fazaa"
+    resource_type = "organizations"
+    resource_id = str(organization.id)
+    
+    return f"{app_scheme}://{resource_type}/{resource_id}"
+
+
 def getRandomPhonenumber():
     return '01' + str(random.randint(100000000,999999999))
 

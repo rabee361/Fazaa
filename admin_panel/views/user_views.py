@@ -130,7 +130,7 @@ class ClientInfoView(View):
     def get(self, request, id):
         client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
         form = UpdateClientForm(instance=client)
-        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'image': client.image})
+        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'client': client, 'image': client.image})
 
     def post(self, request, id):
         client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
@@ -138,7 +138,7 @@ class ClientInfoView(View):
         if form.is_valid():
             form.save()
             return redirect('clients')
-        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'image': client.image})
+        return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'client': client, 'image': client.image})
 
 
 @login_required_m
@@ -181,16 +181,15 @@ class ShareekInfoView(View):
     def get(self, request, id):
         shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
         form = UpdateShareekForm(instance=shareek)
-        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form , 'image': shareek.image})
+        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form, 'shareek': shareek, 'image': shareek.image})
 
     def post(self, request, id):
         shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
         form = UpdateShareekForm(request.POST, request.FILES, instance=shareek)
-        print(form.errors)
         if form.is_valid():
             form.save()
             return redirect('shareeks')
-        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form , 'image': shareek.image})
+        return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form , 'shareek': shareek, 'image': shareek.image})
 
 
 @login_required_m
@@ -231,7 +230,6 @@ class CreateAdminView(View):
             password = form.cleaned_data['password']
             user = form.save(commit=False)
             user.user_type = 'ADMIN'
-            user.is_superuser = True
             user.set_password(password)
             user.save()
             return redirect('admins')
@@ -289,7 +287,7 @@ class AdminInfoView(View):
     def get(self, request, id):
         admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
         form = UpdateAdminForm(instance=admin)
-        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form , 'image': admin.image})
+        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form , 'admin': admin, 'image': admin.image})
 
     def post(self, request, id):
         admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
@@ -297,7 +295,7 @@ class AdminInfoView(View):
         if form.is_valid():
             form.save()
             return redirect('admins')
-        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form , 'image': admin.image})
+        return render(request, 'admin_panel/users/admins/update_admin.html', {'form': form , 'admin': admin, 'image': admin.image})
 
 
 

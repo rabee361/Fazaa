@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..serializers import *
 from ..models import *
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from fcm_django.models import FCMDevice
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -62,13 +63,16 @@ class ClientInfoView(BaseAPIView):
         except:
             return Response({'message':'العميل غير موجود'},status=status.HTTP_404_NOT_FOUND)
 
-
 class DeleteClientView(BaseAPIView):
     @transaction.atomic
-    def delete(self,request):
-        user = request.user
-        user.is_deleted = True
-        user.save()
-        return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)
-
+    def delete(self,request,pk):
+        try:
+            user = get_object_or_404(User,pk=pk)
+            user.is_deleted = True
+            user.save()
+            # Blacklist all refresh tokens for this user
+            OutstandingToken.objects.filter(user=user).delete()
+            return Response({'message':'تم حذف الحساب بنجاح'},status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'message':'العميل غير موجود'},status=status.HTTP_404_NOT_FOUND)
 

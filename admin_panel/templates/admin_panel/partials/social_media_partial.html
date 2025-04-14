@@ -3,6 +3,6 @@
     <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ social.id }}"></td>
     <td>{{ social.id }}</td>
     <td>{{ social.name }}</td>
-    <td><img width="30px" height="30px" src="{{ social.icon.url }}" alt=""></td>
+    <td><img width="30px" height="30px" src="{% if social.icon_thumbnail %}{{ social.icon_thumbnail.url }}{% else %}{{ social.icon.url }}{% endif %}" alt=""></td>
 </tr>
 {% endfor %}

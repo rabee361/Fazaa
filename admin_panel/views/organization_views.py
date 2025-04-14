@@ -275,7 +275,7 @@ class ReelGalleryBulkActionView(View):
 class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
     model = DeliveryCompany
     context_object_name = 'companies'
-    context_fields=['id','name','icon']
+    context_fields=['id','name','icon_thumbnail']
     template_name = 'admin_panel/links/delivery/delivery_company_list.html'
 
     def get_queryset(self):
@@ -387,7 +387,7 @@ class DeliveryLinkBulkActionView(View):
 class ListSocialMedia(CustomListBaseView):
     model = SocialMedia
     context_object_name = 'socials'
-    context_fields = ['id','name','icon']
+    context_fields = ['id','name','icon_thumbnail']
     template_name = 'admin_panel/links/social/social_media_list.html'
 
     def get_queryset(self):
