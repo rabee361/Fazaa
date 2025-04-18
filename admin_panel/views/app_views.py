@@ -1,8 +1,6 @@
-from django.forms import BaseModelForm
 from django.views import View , generic
 from users.models import *
 from base.models import *
-from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect , render
 from utils.views import CustomListBaseView
@@ -13,8 +11,9 @@ from django.db.models import Max
 from utils.notifications import send_users_notification
 from admin_panel.forms import NotificationForm
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import user_passes_test
 
-login_required_m =  method_decorator(login_required(login_url='login'), name="dispatch")
+login_required_m = method_decorator(user_passes_test(lambda u: u.user_type == 'ADMIN' and u.is_authenticated, login_url='login') , name="dispatch")
 
 
 class SocialMediaSlugUrlView(View):

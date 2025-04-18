@@ -11,9 +11,10 @@ import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from admin_panel.forms import *
-
+from django.contrib.auth.decorators import user_passes_test
 # login required decorator renamed to shorter name
-login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
+
+login_required_m = method_decorator(user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'user_type') and u.user_type == 'ADMIN', login_url='login'), name="dispatch")
 
 class CardUrlView(View):
     def get(self,request,slug):

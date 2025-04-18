@@ -35,9 +35,10 @@ class BranchListSerializer(ModelSerializer):
     location = serializers.SerializerMethodField()
     organization = OrganizationListSerializer()
     distance = serializers.SerializerMethodField()
+    offers = serializers.SerializerMethodField()
     class Meta:
         model = Branch
-        fields = ['id','name','location','distance','organization']
+        fields = ['id','name','location','distance','organization','offers']
 
     def get_location(self,obj):
         return {"longitude":obj.location.x, "latitude":obj.location.y}
@@ -48,6 +49,9 @@ class BranchListSerializer(ModelSerializer):
             distance_limit = float(distance_limit) * 1000
             return obj.location.distance(Point(float(self.context['long']), float(self.context['lat']))) * 100
         return None
+
+    def get_offers(self,obj):
+        return obj.organization.clientoffer_set.all().count()
 
 
 

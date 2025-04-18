@@ -1,7 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic import ListView
+from utils.permissions import IsClientUser , IsShareekUser
 
+# for admin panel only 
 class CustomListBaseView(ListView):
     """Base view that adds specified field verbose names to the context"""
     context_fields = []
@@ -15,7 +17,6 @@ class CustomListBaseView(ListView):
         ]
         return context
 
-
 # Usage example:
 # class MyListView(FieldListBaseView):
 #     model = MyModel
@@ -24,5 +25,5 @@ class CustomListBaseView(ListView):
 
 class BaseAPIView(APIView):
     pass
-    # permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated, IsShareekUser , IsClientUser]
 

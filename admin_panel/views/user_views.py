@@ -4,7 +4,6 @@ from base.models import *
 from users.models import *
 from django.shortcuts import redirect , render
 from django.contrib.auth import authenticate , login , logout
-from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from utils.views import CustomListBaseView
 from admin_panel.forms import *
@@ -14,8 +13,10 @@ from django.urls import reverse
 from django.db.models import Count, Q
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import user_passes_test
 
-login_required_m =  method_decorator(login_required(login_url='login') , name="dispatch")
+
+login_required_m = method_decorator(user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'user_type') and u.user_type == 'ADMIN', login_url='login'), name="dispatch")
 
 
 class LoginView(View):

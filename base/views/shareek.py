@@ -16,6 +16,7 @@ from utils.pagination import CustomPagination
 from users.serializers import UserSerializer
 from django.db.models import FloatField
 from django.db.models.functions import Cast
+from utils.mixins import OrganizationCheckMixin
 # Create your views here.
 
 
@@ -109,21 +110,17 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
         return context
 
 
-class OrganizationInfoView(BaseAPIView):
+class OrganizationInfoView(BaseAPIView, OrganizationCheckMixin):
     def get(self, request, id):
-        try:
-            organization = Organization.objects.prefetch_related('branch_set').get(id=id)
-            serializer = OrganizationSerializer(organization, context={'request': request})
-            branches_serializer = BranchSerializer(organization.branch_set.all(), many=True)
-            client_offers = ListClientOfferSerializer(organization.clientoffer_set.all(), many=True , context={'request':request})
-            return Response({
-                **serializer.data,
-                'branches': branches_serializer.data,
-                'client_offers': client_offers.data
-            }, status=status.HTTP_200_OK)
-            
-        except Organization.DoesNotExist:
-            raise ErrorResult({'error': 'لا يوجد منظمة بهذا الرقم'}, status=404)
+        organization = self.get_organization(id)
+        serializer = OrganizationSerializer(organization, context={'request': request})
+        branches_serializer = BranchSerializer(organization.branch_set.all(), many=True)
+        client_offers = ListClientOfferSerializer(organization.clientoffer_set.all(), many=True , context={'request':request})
+        return Response({
+            **serializer.data,
+            'branches': branches_serializer.data,
+            'client_offers': client_offers.data
+        }, status=status.HTTP_200_OK)
 
 
 class GetOrganizationView(BaseAPIView):
@@ -163,17 +160,14 @@ class UpdateOrganizationLogoView(generics.UpdateAPIView):
     serializer_class = UpdateOrganizationLogoSerializer
 
 
-class AvailableOffersView(BaseAPIView):
+class AvailableOffersView(BaseAPIView,OrganizationCheckMixin):
     def get(self,request,pk):
-        try:
-            organization = Organization.objects.select_related('organization_type').get(id=pk)
-            offers = ServiceOffer.objects.prefetch_related('organizations').select_related('organization').filter(Q(organizations=organization.organization_type) & ~Q(organization__id=organization.id))
-            paginator = CustomPagination()
-            paginated_offers = paginator.paginate_queryset(offers, request)
-            serializer = ServiceOfferSerializer(paginated_offers, many=True, context={'request':request})
-            return paginator.get_paginated_response(serializer.data)
-        except Organization.DoesNotExist:
-            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
+        organization = Organization.objects.select_related('organization_type').get(id=pk)
+        offers = ServiceOffer.objects.prefetch_related('organizations').select_related('organization').filter(Q(organizations=organization.organization_type) & ~Q(organization__id=organization.id))
+        paginator = CustomPagination()
+        paginated_offers = paginator.paginate_queryset(offers, request)
+        serializer = ServiceOfferSerializer(paginated_offers, many=True, context={'request':request})
+        return paginator.get_paginated_response(serializer.data)
 
 
 class DeleteOrganizationView(generics.DestroyAPIView):
@@ -182,17 +176,14 @@ class DeleteOrganizationView(generics.DestroyAPIView):
 
 
 
-class UpdateOrganizationView(BaseAPIView):
+class UpdateOrganizationView(BaseAPIView,OrganizationCheckMixin):
     def put(self,request,id):
-        try:
-            organization = Organization.objects.get(id=id)
-            serializer = UpdateOrganizationSerializer(organization , data=request.data , context={'request':request})
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data , status=status.HTTP_200_OK)
-            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
-        except Organization.DoesNotExist:
-            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_400_BAD_REQUEST)
+        organization = Organization.objects.get(id=id)
+        serializer = UpdateOrganizationSerializer(organization , data=request.data , context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data , status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
 
 class SocialMediaUrlView(BaseAPIView):
     def get(self,request,pk):
