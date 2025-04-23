@@ -1,7 +1,6 @@
 from datetime import timedelta
 from django.utils import timezone
 import random
-# import ffmpeg
 import os
 from PIL import Image
 from django.core.files.base import ContentFile
@@ -38,58 +37,46 @@ def getRandomEmail():
 def getRandomPassword():
     return 'rabee123@@123'
 
-# def generate_video_thumbnail(video_path):
-#     try:
-#         print(f"Starting thumbnail generation for video: {video_path}")
-        
-#         # Convert Django path to real file system path
-#         if os.path.isabs(video_path) and os.path.exists(video_path):
-#             real_path = video_path
-#         else:
-#             # If it's a relative path from MEDIA_ROOT, construct the absolute path
-#             relative_path = video_path.replace('media/', '', 1) if video_path.startswith('media/') else video_path
-#             real_path = os.path.join(settings.MEDIA_ROOT, relative_path)
-#             print(f"Converted path to: {real_path}")
+def generate_video_thumbnail(video_path):
+    """
+    Generate a JPEG thumbnail for a video by extracting the first frame as a JPEG image.
+    Returns the relative path to the thumbnail file.
+    """
+    import os
+    import subprocess
+    from django.conf import settings
 
-#         # Verify video file exists
-#         if not os.path.exists(real_path):
-#             print(f"Video file not found at path: {real_path}")
-#             raise FileNotFoundError(f"Video file not found: {real_path}")
-            
-#         # Create thumbnails directory if it doesn't exist
-#         thumb_dir = os.path.join(settings.MEDIA_ROOT, 'images/thumbnails/')
-#         print(f"Creating thumbnails directory at: {thumb_dir}")
-#         os.makedirs(thumb_dir, exist_ok=True)
-        
-#         # Create thumbnail file path
-#         thumb_filename = os.path.splitext(os.path.basename(video_path))[0] + '_thumb.jpg'
-#         temp_thumb = os.path.join(thumb_dir, thumb_filename)
-#         print(f"Thumbnail will be saved as: {thumb_filename}")
+    # Ensure the video exists
+    if not os.path.exists(video_path):
+        raise FileNotFoundError(f"Video file not found: {video_path}")
 
-#         # Extract first frame using ffmpeg with specific output pattern
-#         try:
-#             stream = ffmpeg.input(real_path)
-#             stream = ffmpeg.filter(stream, 'select', 'eq(n,0)') # Select first frame
-#             stream = ffmpeg.output(stream, temp_thumb, vframes=1)
-#             print("Extracting thumbnail from video...")
-#             ffmpeg.run(stream, overwrite_output=True)
-#         except ffmpeg._run.Error as e:
-#             raise RuntimeError(f"FFmpeg error while generating thumbnail: {str(e)}")
+    # Prepare thumbnail filename and path (JPEG format)
+    base_name = os.path.splitext(os.path.basename(video_path))[0]
+    thumb_filename = f"{base_name}_thumb.jpeg"
+    thumb_dir = os.path.join(settings.MEDIA_ROOT, 'images', 'thumbnails')
+    os.makedirs(thumb_dir, exist_ok=True)
+    thumb_path = os.path.join(thumb_dir, thumb_filename)
 
-#         # Verify thumbnail was created
-#         if not os.path.exists(temp_thumb):
-#             raise RuntimeError("Thumbnail file was not created")
+    # Use ffmpeg to extract the first frame and save as JPEG image
+    # This requires ffmpeg to be installed on the system
+    command = [
+        'ffmpeg',
+        '-y',  # Overwrite output file if exists
+        '-i', video_path,
+        '-vframes', '1',
+        '-q:v', '2',  # Quality for JPEG (lower is better)
+        thumb_path
+    ]
+    try:
+        subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception as e:
+        print(f"Error generating video thumbnail: {e}")
+        return None
 
-#         # Return relative path from MEDIA_ROOT
-#         relative_thumb = os.path.join('images/thumbnails', thumb_filename)
-#         print("Video thumbnail generation completed successfully")
-#         return relative_thumb
+    # Return the relative path from MEDIA_ROOT for Django ImageField
+    rel_thumb_path = os.path.relpath(thumb_path, settings.MEDIA_ROOT)
+    return os.path.join('media', rel_thumb_path).replace("\\", "/")
 
-    # except Exception as e:
-    #     print(f"Error generating thumbnail: {str(e)}")
-    #     print(f"Error type: {type(e).__name__}")
-    #     print(f"Error details: {str(e)}")
-    #     raise
     
 def generate_img_thumbnail(image_path):
     try:

@@ -224,6 +224,7 @@ class ImageGalleryBulkActionView(View):
             ImageGallery.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('images-gallery'))
 
+
 class ListReelsGalleryView(CustomListBaseView):
     model = ReelsGallery
     context_object_name = 'reels'
@@ -239,6 +240,7 @@ class ListReelsGalleryView(CustomListBaseView):
             return queryset.filter(organization__name__icontains=q)
         else:
             return queryset
+
 
 class CreateReelGalleryView(generic.CreateView):
     model = ReelsGallery
@@ -500,7 +502,7 @@ class SocialUrlBulkActionView(View):
 class ListBranches(CustomListBaseView):
     model = Branch
     context_object_name = 'branches'
-    context_fields = ['id','organization','name','short_url'] # add visits
+    context_fields = ['id','organization','name', 'visits' ,'short_url']
     template_name = 'admin_panel/organization/branches/branches.html'
     success_url = '/dashboard/organization/branches'
 

@@ -1,10 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from utils.helper import generateShortUrl , generate_img_thumbnail
+from utils.helper import generateShortUrl , generate_img_thumbnail , generate_video_thumbnail
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
 from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
 from utils.types import CATALOG_TYPES
+import mimetypes
 
 
 
@@ -31,6 +32,8 @@ class Organization(models.Model):
     card_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='البطاقة التعريفية')
     # deep_link = models.CharField(max_length=300 , null=True, blank=True, verbose_name='رابط الملف الشخصية')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
+    website_visits = models.IntegerField(verbose_name='زيارات الموقع' , default=0)
+    card_visits = models.IntegerField(verbose_name='زيارات البطاقة' , default=0)
 
     def clean(self):
         if self.logo and self.logo.size > 2 * 1024 * 1024:  # 2MB in bytes
@@ -82,6 +85,7 @@ class Branch(gis_models.Model):
     description = models.CharField(max_length=255,null=True ,blank=True , verbose_name='الوصف')
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name='الرابط المختصر')
     visits = models.IntegerField(default=0 , verbose_name= "الزيارات")
+    active = models.BooleanField(default=True , verbose_name= "مفعل")
 
     def get_absolute_url(self):
         return f"/branch/{self.short_url}/"
@@ -118,8 +122,8 @@ class ImageGallery(models.Model):
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
-    video = models.FileField(upload_to='media/images/reels_galleries/', verbose_name='الفيديو')
-    video_thumbnail = models.ImageField(upload_to='media/images/thumbnails/', verbose_name='الصورة المصغرة',null=True , blank=True)
+    video = models.FileField(upload_to='images/reels_galleries/', verbose_name='الفيديو')
+    video_thumbnail = models.ImageField(upload_to='images/thumbnails/', verbose_name='الصورة المصغرة',null=True , blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 
     class Meta:
@@ -132,14 +136,16 @@ class ReelsGallery(models.Model):
                 raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 15 ميجابايت')
             
             # Check if file is video format
-            import mimetypes
             file_type = mimetypes.guess_type(self.video.name)[0]
             if not file_type or not file_type.startswith('video/'):
                 raise ValidationError('يجب أن يكون الملف بتنسيق فيديو')
     
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)   
-    #     self.video_thumbnail = generate_video_thumbnail(self.video.path)
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.video:
+            self.video_thumbnail = generate_video_thumbnail(self.video.path)
+            super().save(*args, **kwargs)
+
 
 
 

@@ -3,8 +3,8 @@
 
 :root {
     /* Light theme variables */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f6f6f6;
+    --bg-primary: #f6f6f6;
+    --bg-secondary: #ffffff;
     --bg-table-header: #e6e6e6;
     --hover-bg: #e0e0e0;
     --text-primary: #494949;
