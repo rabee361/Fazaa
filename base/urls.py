@@ -2,7 +2,7 @@ from django.urls import path
 from .views import shareek , client , common
 
 
-urlpatterns = [
+urlpatterns = [ 
     path('shareek/organization/types' , shareek.OrganizationTypes.as_view()),
     path('shareek/organization/<int:id>/delete' , shareek.DeleteOrganizationView.as_view()),
     path('shareek/organization/<int:id>/update/' , shareek.UpdateOrganizationView.as_view()),

@@ -2,10 +2,12 @@ from datetime import timedelta
 from django.utils import timezone
 import random
 import os
-from PIL import Image
 from django.core.files.base import ContentFile
 import io
 from django.conf import settings
+from moviepy import VideoFileClip
+from PIL import Image
+
 
 def get_expiration_time():
     return timezone.now() + timedelta(minutes=10)
@@ -41,10 +43,8 @@ def generate_video_thumbnail(video_path):
     """
     Generate a JPEG thumbnail for a video by extracting the first frame as a JPEG image.
     Returns the relative path to the thumbnail file.
+    Uses moviepy (a lightweight library) instead of ffmpeg directly.
     """
-    import os
-    import subprocess
-    from django.conf import settings
 
     # Ensure the video exists
     if not os.path.exists(video_path):
@@ -57,25 +57,21 @@ def generate_video_thumbnail(video_path):
     os.makedirs(thumb_dir, exist_ok=True)
     thumb_path = os.path.join(thumb_dir, thumb_filename)
 
-    # Use ffmpeg to extract the first frame and save as JPEG image
-    # This requires ffmpeg to be installed on the system
-    command = [
-        'ffmpeg',
-        '-y',  # Overwrite output file if exists
-        '-i', video_path,
-        '-vframes', '1',
-        '-q:v', '2',  # Quality for JPEG (lower is better)
-        thumb_path
-    ]
     try:
-        subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # Load the video and get the first frame
+        with VideoFileClip(video_path) as clip:
+            frame = clip.get_frame(0)  # Get the first frame (at t=0)
+            img = Image.fromarray(frame)
+            img = img.convert("RGB")
+            img.thumbnail((300, 300))  # Optional: resize thumbnail
+            img.save(thumb_path, "JPEG", quality=85)
     except Exception as e:
         print(f"Error generating video thumbnail: {e}")
         return None
 
     # Return the relative path from MEDIA_ROOT for Django ImageField
     rel_thumb_path = os.path.relpath(thumb_path, settings.MEDIA_ROOT)
-    return os.path.join('media', rel_thumb_path).replace("\\", "/")
+    return os.path.join(rel_thumb_path).replace("\\", "/")
 
     
 def generate_img_thumbnail(image_path):
