@@ -396,6 +396,22 @@ class SubscriptionBulkActionView(View):
         return HttpResponseRedirect(reverse('subscriptions'))
 
 
+
+class TermsView(CustomListBaseView):
+    model = TermsPrivacy
+    context_object_name = 'terms'
+    context_fields = ['id','title','content']
+    template_name = 'admin_panel/app/terms/terms.html'
+    
+
+class UpdateTermView(generic.UpdateView):
+    model = TermsPrivacy
+    fields = ['title','content']
+    template_name = 'admin_panel/app/terms/term_form.html'
+    success_url = '/dashboard/organization/terms'
+    pk_url_kwarg = 'id'
+ 
+
 class handler404(View):
     def get(self, request):
         return render(request, '404.html')

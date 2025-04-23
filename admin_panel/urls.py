@@ -109,6 +109,8 @@ OrganizationPatterns=[
     path('reports/<int:id>/info' , app_views.GetReportView.as_view() , name="report-info"),
     path('reports/delete' , app_views.DeleteReportView.as_view() , name="delete-report"),
 
+    path('terms/' , app_views.TermsView.as_view() , name="terms"),
+    path('terms/<int:id>/info' , app_views.UpdateTermView.as_view() , name="term-info"),
 
     path('common-questions' , app_views.CommonQuestionsView.as_view() , name="common-questions"),
     path('common-questions/add' , app_views.CreateQuestionView.as_view() , name="add-common-question"),

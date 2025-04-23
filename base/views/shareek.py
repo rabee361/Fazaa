@@ -128,10 +128,11 @@ class GetOrganizationView(BaseAPIView):
         organization = Organization.objects.get(id=pk)
         client_offers = ClientOffer.objects.filter(organization__id=pk)
         branches = Branch.objects.filter(organization__id=pk)
-        gallery = ImageGallery.objects.filter(organization__id=pk)
+        reels = ReelsGallery.objects.filter(organization__id=pk)
         socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
         delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
         catalogs = Catalog.objects.filter(organization__id=pk)
+        gallery = ImageGallery.objects.filter(organization__id=pk)
 
         try:
             shareek_user = Shareek.objects.select_related('user').filter(organization=organization).first().user
@@ -144,6 +145,7 @@ class GetOrganizationView(BaseAPIView):
             **shareek_user_serializer.data,
             **organization_serializer.data,
             'gallery': ImagesGallerySerializer(gallery, many=True, context={'request':request}).data,
+            'reels': ReelsGallerySerializer(reels, many=True, context={'request':request}).data,
             'socials': SocialUrlSerializer(socials, many=True , context={'request':request}).data,
             'delivery': DeliveryUrlSerializer(delivery, many=True , context={'request':request}).data,
             'catalogs': CatalogUrlsSerializer(catalogs, many=True , context={'request':request}).data,
