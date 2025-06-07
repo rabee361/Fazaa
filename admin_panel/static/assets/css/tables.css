@@ -1,0 +1,122 @@
+@import url('/staticfiles/assets/css/variables.css');
+
+
+/* Dashboard Table Styles */
+.table {
+    width: 100%;
+    background-color: var(--bg-secondary);
+    border-radius: 15px;
+    box-shadow: none;
+    direction: rtl;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead tr {
+    background-color: var(--bg-table-header);
+    border-radius: 15px;
+    text-wrap: nowrap;
+}
+
+.table thead tr th {
+    border-radius: 0;  /* Reset individual cell border-radius */
+}
+
+.table thead tr th:first-child {
+    border-top-right-radius: 15px;
+}
+
+.table thead tr th:last-child {
+    border-top-left-radius: 15px;
+}
+
+.table thead th {
+    border-bottom: 2px solid var(--border-color);
+    padding: 12px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--text-primary);
+}
+
+.table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    text-wrap: nowrap;
+}
+
+.table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: right;
+    color: var(--text-primary);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table thead {
+    border-radius: 15px;
+}
+
+.table thead th:first-child {
+    text-align: center;
+}
+
+.table tbody td:first-child {
+    text-align: center;
+}
+
+
+.table-controls {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    gap: 1rem;
+}
+
+.table-container {
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 0.3rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(166, 144, 118, 0.1) !important;
+    cursor: pointer;
+}
+
+
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+
+/* Add media queries for responsive design */
+@media (max-width: 768px) {
+    .table-controls {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+}
+
+/* Add media queries for responsive design */
+@media (max-width: 480px) {
+    .table thead tr {
+        font-size: 14px;
+    }
+
+    .table tbody tr {
+        font-size: 14px;
+    }
+}
