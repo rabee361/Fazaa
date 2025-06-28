@@ -32,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-
-
 // Add this function to initialize copy buttons
 function initializeCopyButtons() {
     document.querySelectorAll('.copy-btn').forEach(button => {
@@ -228,10 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
-
-
 
 
 document.addEventListener('DOMContentLoaded', function() {

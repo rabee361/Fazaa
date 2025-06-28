@@ -36,9 +36,6 @@ class User(AbstractUser):
     long = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
-
-    groups = None
-    user_permissions = None
     
     objects = UserManager()
     USERNAME_FIELD = 'phonenumber'

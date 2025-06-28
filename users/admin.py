@@ -1,20 +1,34 @@
 from django.contrib import admin
 from .models import *
 from django.contrib.auth.admin import UserAdmin
-
-# # Register your models here.
-
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     list_display = ('id','phonenumber', 'full_name', 'email', 'is_active','is_deleted','user_type')
     search_fields = ('phonenumber', 'full_name', 'email')
     list_filter = ('user_type', 'is_active')
     ordering = ('-id',)
-
+    filter_horizontal=[]
     actions = ['restore']
-
+    
+    fieldsets = [
+        (None, {'fields': ['phonenumber', 'password']}),
+        ('Personal info', {'fields': ['full_name', 'email', 'image']}),
+        ('Permissions', {'fields': ['is_active', 'is_staff', 'is_superuser', 'user_type']}),
+        ('Location', {'fields': ['long', 'lat']}),
+        ('Important dates', {'fields': ['last_login', 'date_joined']}),
+        ('Status', {'fields': ['is_deleted', 'get_notifications']}),
+    ]
+    
+    add_fieldsets = [
+        (None, {
+            'classes': ['wide'],
+            'fields': ['phonenumber', 'full_name', 'email', 'password1', 'password2', 'user_type','image'],
+        }),
+    ]
+    
     def restore(self, request, queryset):
         queryset.update(is_deleted=False)
 
