@@ -1,10 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic import ListView
+from django.views import View
 from utils.permissions import IsClientUser , IsShareekUser
+from utils.mixins import CustomLoginRequiredMixin
+
 
 # for admin panel only 
-class CustomListBaseView(ListView):
+class CustomListBaseView(CustomLoginRequiredMixin, ListView):
     """Base view that adds specified field verbose names to the context"""
     context_fields = []
     paginate_by = 10
@@ -17,13 +20,11 @@ class CustomListBaseView(ListView):
         ]
         return context
 
-# Usage example:
-# class MyListView(FieldListBaseView):
-#     model = MyModel
-#     context_fields = ['field1', 'field2', 'field3']
-
 
 class BaseAPIView(APIView):
     pass
     # permission_classes = [IsAuthenticated, IsShareekUser , IsClientUser]
 
+
+class BaseView(CustomLoginRequiredMixin, View):
+    pass

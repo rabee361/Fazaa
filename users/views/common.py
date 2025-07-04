@@ -17,8 +17,6 @@ from django.db import transaction
 from django.contrib.auth import authenticate
 
 
-
-
 class RefreshTokenView(BaseAPIView):
     def post(self,request):
         refresh = request.data.get('refresh')

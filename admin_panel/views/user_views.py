@@ -4,19 +4,16 @@ from base.models import *
 from users.models import *
 from django.shortcuts import redirect , render
 from django.contrib.auth import authenticate , login , logout
-from django.utils.decorators import method_decorator
 from utils.views import CustomListBaseView
 from admin_panel.forms import *
 import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views import View
 from django.db.models import Count, Q
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import user_passes_test
-
-
-login_required_m = method_decorator(user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'user_type') and u.user_type == 'ADMIN', login_url='login'), name="dispatch")
+from utils.views import BaseView
 
 
 class LoginView(View):
@@ -57,20 +54,19 @@ class LoginView(View):
             context['password_error'] = True
             return render(request, 'admin_panel/login.html', context=context)
 
-@login_required_m
+
 class LogoutView(View):
     def post(self, request):
         logout(request)
         return redirect('login')
 
-@login_required_m
-class DashboardView(View):
+
+class DashboardView(BaseView):
     def get(self, request):
         return render(request, 'admin_panel/dashboard.html',context={})
 
 
-@login_required_m
-class DashboardPartialView(View):
+class DashboardPartialView(BaseView):
     def get(self, request):
         user_counts = User.objects.aggregate(
             admins=Count('id', filter=Q(user_type='ADMIN')),
@@ -103,7 +99,7 @@ class DashboardPartialView(View):
 
 
 
-@login_required_m
+
 class ListClientsView(CustomListBaseView):
     model = User
     context_object_name = 'clients'
@@ -119,15 +115,15 @@ class ListClientsView(CustomListBaseView):
         else:
             return super().get_queryset().filter(user_type='CLIENT', is_deleted=False)
 
-@login_required_m
-class CreateClientView(generic.CreateView):
+
+class CreateClientView(BaseView, generic.CreateView):
     model = User
     form_class = ClientForm
     template_name = 'admin_panel/users/clients/client_form.html'
     success_url = '/dashboard/users/clients'
 
-@login_required_m
-class ClientInfoView(View):
+
+class ClientInfoView(BaseView):
     def get(self, request, id):
         client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
         form = UpdateClientForm(instance=client)
@@ -142,8 +138,8 @@ class ClientInfoView(View):
         return render(request, 'admin_panel/users/clients/update_client.html', {'form': form , 'client': client, 'image': client.image})
 
 
-@login_required_m
-class DeleteClientView(View):
+
+class DeleteClientView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -153,8 +149,8 @@ class DeleteClientView(View):
 
 
 
-@login_required_m
-class ListShareeksView(CustomListBaseView,generic.ListView):
+
+class ListShareeksView(CustomListBaseView, generic.ListView):
     model = User
     context_object_name = 'shareeks'
     context_fields = ['id','full_name','phonenumber','is_active']
@@ -169,16 +165,15 @@ class ListShareeksView(CustomListBaseView,generic.ListView):
         else:
             return super().get_queryset().filter(user_type='SHAREEK', is_deleted=False)
 
-@login_required_m
-class CreateShareekView(generic.CreateView):
+
+class CreateShareekView(BaseView, generic.CreateView):
     model = Shareek
     form_class = ShareekForm
     template_name = 'admin_panel/users/shareeks/shareek_form.html'
     success_url = '/dashboard/users/shareek'
 
 
-@login_required_m
-class ShareekInfoView(View):
+class ShareekInfoView(BaseView):
     def get(self, request, id):
         shareek = get_object_or_404(User, id=id, user_type='SHAREEK', is_deleted=False)
         form = UpdateShareekForm(instance=shareek)
@@ -193,8 +188,8 @@ class ShareekInfoView(View):
         return render(request, 'admin_panel/users/shareeks/update_shareek.html', {'form': form , 'shareek': shareek, 'image': shareek.image})
 
 
-@login_required_m
-class DeleteShareekView(View):
+
+class DeleteShareekView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -203,8 +198,7 @@ class DeleteShareekView(View):
 
 
 
-@login_required_m
-class ListAdminsView(CustomListBaseView,generic.ListView):
+class ListAdminsView(CustomListBaseView, generic.ListView):
     model = User
     context_object_name = 'admins'
     context_fields = ['id','full_name','phonenumber','is_active']
@@ -219,8 +213,8 @@ class ListAdminsView(CustomListBaseView,generic.ListView):
         else:
             return super().get_queryset().filter(user_type='ADMIN', is_deleted=False)
 
-@login_required_m
-class CreateAdminView(View):
+
+class CreateAdminView(BaseView):
     def get(self,request):
         form = AdminForm()
         return render (request, 'admin_panel/users/admins/admin_form.html',{'form':form})
@@ -237,8 +231,7 @@ class CreateAdminView(View):
         return render(request,'admin_panel/users/admins/admin_form.html',{'form':form})
 
 
-@login_required_m
-class BulkActionView(View):
+class BulkActionView(BaseView):
     def post(self, request):
         try:
             selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
@@ -283,8 +276,7 @@ class BulkActionView(View):
             return redirect('admins')
 
 
-@login_required_m
-class AdminInfoView(View):
+class AdminInfoView(BaseView):
     def get(self, request, id):
         admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
         form = UpdateAdminForm(instance=admin)
@@ -300,8 +292,8 @@ class AdminInfoView(View):
 
 
 
-@login_required_m
-class ChangePasswordView(View):
+
+class ChangePasswordView(BaseView):
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id, is_deleted=False)
         form = ChangePasswordForm()

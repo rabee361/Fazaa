@@ -1,7 +1,6 @@
-from django.views import View , generic
+from django.views import View, generic
 from users.models import *
 from base.models import *
-from django.utils.decorators import method_decorator
 from django.shortcuts import redirect , render
 from utils.views import CustomListBaseView
 from django.http import HttpResponseRedirect
@@ -11,12 +10,10 @@ from django.db.models import Max
 from utils.notifications import send_users_notification
 from admin_panel.forms import NotificationForm
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import user_passes_test
-
-login_required_m = method_decorator(user_passes_test(lambda u: u.user_type == 'ADMIN' and u.is_authenticated, login_url='login') , name="dispatch")
+from utils.views import BaseView
 
 
-class SocialMediaSlugUrlView(View):
+class SocialMediaSlugUrlView(BaseView):
     def get(self,request,slug):
         try:
             social = SocialMediaUrl.objects.get(short_url=slug)
@@ -27,7 +24,7 @@ class SocialMediaSlugUrlView(View):
         except Exception as e:
             return render(request, '404.html', status=400)
 
-class WebsiteSlugUrlView(View):
+class WebsiteSlugUrlView(BaseView):
     def get(self,request,slug):
         try:
             organization = Organization.objects.get(website_short_url=slug)
@@ -39,7 +36,7 @@ class WebsiteSlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
-class OrganizationDeepLinkView(View):
+class OrganizationDeepLinkView(BaseView):
     def get(self,request,slug):
         try:
             organization = Organization.objects.get(deep_link=slug)
@@ -52,7 +49,7 @@ class OrganizationDeepLinkView(View):
 
 
 
-class DeliverySlugUrlView(View):
+class DeliverySlugUrlView(BaseView):
     def get(self,request,slug):
         try:
             delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
@@ -64,7 +61,7 @@ class DeliverySlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
-class BranchSlugUrlView(View):
+class BranchSlugUrlView(BaseView):
     def get(self,request,slug):
         try:
             branch = Branch.objects.get(short_url=slug)
@@ -80,7 +77,7 @@ class BranchSlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
-class CatalogSlugUrlView(View):
+class CatalogSlugUrlView(BaseView):
     def get(self,request,slug):
         try:
             catalog = Catalog.objects.get(short_url=slug)
@@ -92,7 +89,7 @@ class CatalogSlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
-@login_required_m
+
 class ListReportsView(CustomListBaseView):
     model = Report
     context_object_name = 'reports'
@@ -106,8 +103,8 @@ class ListReportsView(CustomListBaseView):
             queryset = queryset.filter(organization__name__icontains=search_query)
         return queryset
 
-@login_required_m
-class GetReportView(generic.UpdateView):
+
+class GetReportView(BaseView, generic.UpdateView):
     model = Report
     context_object_name = 'report'
     template_name = 'admin_panel/app/reports/report_form.html'
@@ -115,8 +112,8 @@ class GetReportView(generic.UpdateView):
     fields = ['client','organization','content']
     success_url = '/dashboard/organization/reports'
 
-@login_required_m
-class DeleteReportView(View):
+
+class DeleteReportView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
@@ -124,7 +121,7 @@ class DeleteReportView(View):
         return HttpResponseRedirect(reverse('reports'))
 
 
-class ListSupportChatsView(generic.ListView):
+class ListSupportChatsView(BaseView, generic.ListView):
     model = SupportChat
     context_object_name = 'chats'
     template_name = 'admin_panel/app/chats.html'
@@ -140,7 +137,7 @@ class ListSupportChatsView(generic.ListView):
             return queryset
 
 
-class ListMessagesView(View):
+class ListMessagesView(BaseView):
     def get(self, request, chat_id):
         page = int(request.GET.get('page', 1))
         messages_per_page = 10  # Adjust this number as needed
@@ -170,7 +167,7 @@ class ListMessagesView(View):
         return render(request, 'admin_panel/partials/messages_partial.html', context)
 
 
-@login_required_m
+
 class CommonQuestionsView(CustomListBaseView):
     model = CommonQuestion
     context_object_name = 'common_questions'   
@@ -187,23 +184,23 @@ class CommonQuestionsView(CustomListBaseView):
         else:
             return queryset
         
-@login_required_m
-class CreateQuestionView(generic.CreateView):
+
+class CreateQuestionView(BaseView, generic.CreateView):
     model = CommonQuestion
     fields = ['question','answer']
     template_name = 'admin_panel/app/common_questions/common_question_form.html'
     success_url = '/dashboard/organization/common-questions'
 
-@login_required_m
-class UpdateQuestionView(generic.UpdateView):
+
+class UpdateQuestionView(BaseView, generic.UpdateView):
     model = CommonQuestion
     fields = ['question','answer']
     template_name = 'admin_panel/app/common_questions/common_question_form.html'
     success_url = '/dashboard/organization/common-questions'
     pk_url_kwarg = 'id'
 
-@login_required_m
-class CommonQuestionBulkActionView(View):
+
+class CommonQuestionBulkActionView(BaseView):
     def post(self, request):    
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -212,7 +209,7 @@ class CommonQuestionBulkActionView(View):
         return HttpResponseRedirect(reverse('common-questions'))
 
 
-@login_required_m
+
 class BaseNotificationsView(CustomListBaseView):
     model = Notification
     context_object_name = 'notifications'
@@ -220,8 +217,8 @@ class BaseNotificationsView(CustomListBaseView):
     template_name = 'admin_panel/notifications/notifications.html'
 
 
-@login_required_m
-class SendNotificationView(View):
+
+class SendNotificationView(BaseView):
     def get(self, request): 
         form = NotificationForm()
         return render(request, 'admin_panel/notifications/send_notification.html', {'form': form})
@@ -246,8 +243,8 @@ class SendNotificationView(View):
         return render(request, 'admin_panel/notifications/send_notification.html', {'form': form})
 
 
-@login_required_m
-class NotificationBulkActionView(View):
+
+class NotificationBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -256,7 +253,7 @@ class NotificationBulkActionView(View):
         return HttpResponseRedirect(reverse('notifications'))
 
 
-@login_required_m
+
 class ContactUsView(CustomListBaseView):
     model = ContactUs
     context_object_name = 'contact_us'
@@ -273,15 +270,15 @@ class ContactUsView(CustomListBaseView):
         else:
             return queryset
 
-@login_required_m
-class CreateContactUsView(generic.CreateView):
+
+class CreateContactUsView(BaseView, generic.CreateView):
     model = ContactUs
     template_name = 'admin_panel/app/contact_us/contact_us_form.html'
     fields = ['name','link','icon']
     success_url = '/dashboard/organization/contact-us'
 
-@login_required_m
-class UpdateContactUsView(generic.UpdateView):
+
+class UpdateContactUsView(BaseView, generic.UpdateView):
     model = ContactUs
     context_object_name = 'contact_us'
     template_name = 'admin_panel/app/contact_us/contact_us_form.html'
@@ -294,8 +291,8 @@ class UpdateContactUsView(generic.UpdateView):
         context['icon'] = self.object.icon
         return context
 
-@login_required_m
-class ContactUsBulkActionView(View):
+
+class ContactUsBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -305,7 +302,7 @@ class ContactUsBulkActionView(View):
 
 
 
-@login_required_m
+
 class AboutUsView(CustomListBaseView):
     model = AboutUs
     context_object_name = 'about_us'
@@ -322,15 +319,15 @@ class AboutUsView(CustomListBaseView):
         else:
             return queryset
 
-@login_required_m
-class CreateAboutUsView(generic.CreateView):
+
+class CreateAboutUsView(BaseView, generic.CreateView):
     model = AboutUs
     template_name = 'admin_panel/app/about_us/about_us_form.html'
     fields = ['name','link','icon']
     success_url = '/dashboard/organization/about-us'
 
-@login_required_m
-class UpdateAboutUsView(generic.UpdateView):
+
+class UpdateAboutUsView(BaseView, generic.UpdateView):
     model = AboutUs
     context_object_name = 'about_us'
     template_name = 'admin_panel/app/about_us/about_us_form.html'
@@ -338,8 +335,8 @@ class UpdateAboutUsView(generic.UpdateView):
     success_url = '/dashboard/organization/about-us'
     pk_url_kwarg = 'id'
 
-@login_required_m
-class AboutUsBulkActionView(View):
+
+class AboutUsBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -353,7 +350,7 @@ class AboutUsBulkActionView(View):
 
 
 
-@login_required_m
+
 class ListSubscriptionsView(CustomListBaseView):
     model = Subscription
     context_fields = ['id','name','days','price']
@@ -371,23 +368,23 @@ class ListSubscriptionsView(CustomListBaseView):
             return queryset
 
 
-@login_required_m
-class CreateSubscriptionView(generic.CreateView):
+
+class CreateSubscriptionView(BaseView, generic.CreateView):
     model = Subscription
     fields = ['name','days','price']
     template_name = 'admin_panel/app/subscription_form.html'
     success_url = '/dashboard/organization/subscriptions'
 
-@login_required_m
-class SubscriptionInfoView(generic.UpdateView):
+
+class SubscriptionInfoView(BaseView, generic.UpdateView):
     model = Subscription
     fields = ['name','days','price']
     template_name = 'admin_panel/app/subscription_form.html'
     success_url = '/dashboard/organization/subscriptions'
     pk_url_kwarg = 'id'
 
-@login_required_m
-class SubscriptionBulkActionView(View):
+
+class SubscriptionBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -404,7 +401,7 @@ class TermsView(CustomListBaseView):
     template_name = 'admin_panel/app/terms/terms.html'
     
 
-class UpdateTermView(generic.UpdateView):
+class UpdateTermView(BaseView, generic.UpdateView):
     model = TermsPrivacy
     fields = ['title','content']
     template_name = 'admin_panel/app/terms/term_form.html'
@@ -412,11 +409,11 @@ class UpdateTermView(generic.UpdateView):
     pk_url_kwarg = 'id'
  
 
-class handler404(View):
+class handler404(BaseView):
     def get(self, request):
         return render(request, '404.html')
 
-class handler500(View):
+class handler500(BaseView):
     def get(self, request):
         return render(request, '500.html')
 

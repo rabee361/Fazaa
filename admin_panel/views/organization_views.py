@@ -1,22 +1,15 @@
-from dataclasses import Field
 from django.views import generic
-from utils import permissions
 from base.models import *
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from utils.views import CustomListBaseView
 from django.shortcuts import render
-from django.views import View
 import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from utils.views import BaseView
 from admin_panel.forms import *
-from django.contrib.auth.decorators import user_passes_test
-# login required decorator renamed to shorter name
 
-login_required_m = method_decorator(user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'user_type') and u.user_type == 'ADMIN', login_url='login'), name="dispatch")
 
-class CardUrlView(View):
+class CardUrlView(BaseView):
     def get(self,request,slug):
         try:
             organization = Organization.objects.select_related('organization_type').get(card_url=slug)
@@ -27,7 +20,7 @@ class CardUrlView(View):
             return render(request, '404.html', status=400)
 
 
-@login_required_m
+
 class ListOrganizationType(CustomListBaseView):
     model = OrganizationType
     context_object_name = 'types'
@@ -45,16 +38,16 @@ class ListOrganizationType(CustomListBaseView):
             return queryset
 
 
-@login_required_m
-class CreateOrganizationType(generic.CreateView):
+
+class CreateOrganizationType(BaseView, generic.CreateView):
     model = OrganizationType
     template_name = 'admin_panel/organization/type_form.html'
     fields = ['name']
     success_url = '/dashboard/organization/types'
 
 
-@login_required_m
-class UpdateOrganizationType(generic.UpdateView):
+
+class UpdateOrganizationType(BaseView, generic.UpdateView):
     model = OrganizationType
     template_name = 'admin_panel/organization/type_form.html'
     fields = ['name']
@@ -62,8 +55,8 @@ class UpdateOrganizationType(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 
-@login_required_m
-class OrganizationTypesBulkActionView(View):
+
+class OrganizationTypesBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -72,7 +65,7 @@ class OrganizationTypesBulkActionView(View):
         return HttpResponseRedirect(reverse('organization-types'))
 
 
-@login_required_m
+
 class ListOrganizationsView(CustomListBaseView):
     model = Organization
     context_object_name = 'organizations'
@@ -103,8 +96,8 @@ class ListOrganizationsView(CustomListBaseView):
         return context
 
 
-@login_required_m
-class OrganizationInfoView(generic.UpdateView):
+
+class OrganizationInfoView(BaseView, generic.UpdateView):
     model = Organization
     fields = ['name','logo','website','description','organization_type','commercial_register_id']
     template_name = 'admin_panel/organization/info/organization_info.html'
@@ -119,15 +112,15 @@ class OrganizationInfoView(generic.UpdateView):
         return queryset
 
 
-@login_required_m
-class CreateOrganizationView(generic.CreateView):
+
+class CreateOrganizationView(BaseView, generic.CreateView):
     model = Organization
     template_name = 'admin_panel/organization/info/organization_info.html'
     fields = ['name','organization_type','logo','website','description']
     success_url = '/dashboard/organization/organizations'
 
 
-@login_required_m
+
 class ListCatalogsView(CustomListBaseView):
     model = Catalog
     context_object_name = 'catalogs'
@@ -151,15 +144,15 @@ class ListCatalogsView(CustomListBaseView):
             return queryset
 
 
-@login_required_m
-class CreateCatalogView(generic.CreateView):
+
+class CreateCatalogView(BaseView, generic.CreateView):
     model = Catalog
     template_name = 'admin_panel/organization/catalogs/catalog_form.html'
     form_class = CatalogForm
     success_url = '/dashboard/organization/catalogs'
 
-@login_required_m
-class UpdateCatalogView(generic.UpdateView):
+
+class UpdateCatalogView(BaseView, generic.UpdateView):
     model = Catalog
     template_name = 'admin_panel/organization/catalogs/catalog_form.html'
     fields = ['file', 'organization', 'catalog_type']
@@ -171,8 +164,8 @@ class UpdateCatalogView(generic.UpdateView):
             form.instance.visits = 0
         return super().form_valid(form)
 
-@login_required_m
-class CatalogBulkActionView(View):
+
+class CatalogBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -198,13 +191,13 @@ class ListImagesGalleryView(CustomListBaseView):
         else:
             return queryset
 
-class CreateImageGalleryView(generic.CreateView):
+class CreateImageGalleryView(BaseView, generic.CreateView):
     model = ImageGallery
     template_name = 'admin_panel/organization/gallery/image_gallery_form.html'
     fields = ['image','organization']
     success_url = '/dashboard/organization/images-gallery'
 
-class UpdateImageGalleryView(generic.UpdateView):
+class UpdateImageGalleryView(BaseView, generic.UpdateView):
     model = ImageGallery
     template_name = 'admin_panel/organization/gallery/update_image_gallery.html'
     fields = ['image','organization']
@@ -216,7 +209,7 @@ class UpdateImageGalleryView(generic.UpdateView):
         context['image'] = self.object.image
         return context
 
-class ImageGalleryBulkActionView(View):
+class ImageGalleryBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -242,13 +235,13 @@ class ListReelsGalleryView(CustomListBaseView):
             return queryset
 
 
-class CreateReelGalleryView(generic.CreateView):
+class CreateReelGalleryView(BaseView, generic.CreateView):
     model = ReelsGallery
     template_name = 'admin_panel/organization/gallery/reel_gallery_form.html'
     fields = ['video','organization']
     success_url = '/dashboard/organization/reels-gallery'
 
-class UpdateReelGalleryView(generic.UpdateView):
+class UpdateReelGalleryView(BaseView, generic.UpdateView):
     model = ReelsGallery
     template_name = 'admin_panel/organization/gallery/update_reel_gallery.html'
     fields = ['video','organization']
@@ -260,7 +253,7 @@ class UpdateReelGalleryView(generic.UpdateView):
         context['video'] = self.object.video
         return context
 
-class ReelGalleryBulkActionView(View):
+class ReelGalleryBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -274,8 +267,8 @@ class ReelGalleryBulkActionView(View):
 
 
 
-@login_required_m
-class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
+
+class ListDeliveryCompanies(CustomListBaseView,BaseView, generic.ListView):
     model = DeliveryCompany
     context_object_name = 'companies'
     context_fields=['id','name','icon_thumbnail']
@@ -293,8 +286,8 @@ class ListDeliveryCompanies(CustomListBaseView,generic.ListView):
 
         
 
-@login_required_m
-class CreateDeliveryCompany(generic.CreateView):
+
+class CreateDeliveryCompany(BaseView, generic.CreateView):
     model = DeliveryCompany
     template_name = 'admin_panel/links/delivery/delivery_company_form.html'
     fields = ['name','icon']
@@ -305,8 +298,8 @@ class CreateDeliveryCompany(generic.CreateView):
         self.object.create_delivery_urls()
         return response 
 
-@login_required_m
-class UpdateDeliveryCompany(generic.UpdateView):
+
+class UpdateDeliveryCompany(BaseView, generic.UpdateView):
     model = DeliveryCompany
     template_name = 'admin_panel/links/delivery/delivery_company_form.html'
     form_class = DeliveryCompanyForm
@@ -318,8 +311,8 @@ class UpdateDeliveryCompany(generic.UpdateView):
         context['icon'] = self.object.icon
         return context
 
-@login_required_m
-class DeliveryCompanyActionView(View):
+
+class DeliveryCompanyActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -328,7 +321,7 @@ class DeliveryCompanyActionView(View):
         return HttpResponseRedirect(reverse('delivery-companies'))
 
 
-@login_required_m
+
 class ListDeliveryLinksView(CustomListBaseView):
     model = DeliveryCompanyUrl
     context_object_name = 'links'
@@ -352,15 +345,15 @@ class ListDeliveryLinksView(CustomListBaseView):
         return context
 
 
-@login_required_m
-class CreateDeliveryLinkView(generic.CreateView):
+
+class CreateDeliveryLinkView(BaseView, generic.CreateView):
     model = DeliveryCompanyUrl
     template_name = 'admin_panel/links/delivery/delivery_link_form.html'
     fields = ['url', 'delivery_company','active' ,'organization']
     success_url = '/dashboard/organization/delivery-links'
 
-@login_required_m
-class UpdateDeliveryLinkView(generic.UpdateView):
+
+class UpdateDeliveryLinkView(BaseView, generic.UpdateView):
     model = DeliveryCompanyUrl
     template_name = 'admin_panel/links/delivery/delivery_link_form.html'
     fields = ['url', 'delivery_company','active' ,'organization']
@@ -372,8 +365,8 @@ class UpdateDeliveryLinkView(generic.UpdateView):
             form.instance.visits = 0
         return super().form_valid(form)
 
-@login_required_m
-class DeliveryLinkBulkActionView(View):
+
+class DeliveryLinkBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -386,7 +379,7 @@ class DeliveryLinkBulkActionView(View):
         return HttpResponseRedirect(reverse('delivery-links'))
 
 
-@login_required_m
+
 class ListSocialMedia(CustomListBaseView):
     model = SocialMedia
     context_object_name = 'socials'
@@ -405,8 +398,8 @@ class ListSocialMedia(CustomListBaseView):
 
         
 
-@login_required_m
-class CreateSocialMedia(generic.CreateView):
+
+class CreateSocialMedia(BaseView, generic.CreateView):
     model = SocialMedia
     template_name = 'admin_panel/links/social/social_media_form.html'
     fields = ['name', 'icon']
@@ -417,8 +410,8 @@ class CreateSocialMedia(generic.CreateView):
         self.object.create_social_urls()
         return response
 
-@login_required_m
-class SocialMediaActionView(View):
+
+class SocialMediaActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -427,8 +420,8 @@ class SocialMediaActionView(View):
         return HttpResponseRedirect(reverse('social-media'))
 
 
-@login_required_m
-class UpdateSocialMedia(generic.UpdateView):
+
+class UpdateSocialMedia(BaseView, generic.UpdateView):
     model = SocialMedia
     template_name = 'admin_panel/links/social/social_media_form.html'
     form_class = SocialMediaForm
@@ -440,7 +433,7 @@ class UpdateSocialMedia(generic.UpdateView):
         context['icon'] = self.object.icon
         return context
 
-@login_required_m
+
 class ListSocialLinksView(CustomListBaseView):
     model = SocialMediaUrl
     context_object_name = 'links'
@@ -464,15 +457,15 @@ class ListSocialLinksView(CustomListBaseView):
         return context
 
 
-@login_required_m
-class CreateSocialLinkView(generic.CreateView):
+
+class CreateSocialLinkView(BaseView, generic.CreateView):
     model = SocialMediaUrl
     template_name = 'admin_panel/links/social/social_link_form.html'
     fields = ['url', 'social_media','active','organization']
     success_url = '/dashboard/organization/social-links'
 
-@login_required_m
-class UpdateSocialLinkView(generic.UpdateView):
+
+class UpdateSocialLinkView(BaseView, generic.UpdateView):
     model = SocialMediaUrl
     template_name = 'admin_panel/links/social/social_link_form.html'
     fields = ['url', 'social_media','active','organization']
@@ -484,8 +477,8 @@ class UpdateSocialLinkView(generic.UpdateView):
             form.instance.visits = 0
         return super().form_valid(form)
 
-@login_required_m
-class SocialUrlBulkActionView(View):
+
+class SocialUrlBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -498,7 +491,7 @@ class SocialUrlBulkActionView(View):
         return HttpResponseRedirect(reverse('social-links'))
 
 
-@login_required_m
+
 class ListBranches(CustomListBaseView):
     model = Branch
     context_object_name = 'branches'
@@ -523,15 +516,15 @@ class ListBranches(CustomListBaseView):
         return context
 
 
-@login_required_m
-class CreateBranch(generic.CreateView):
+
+class CreateBranch(BaseView, generic.CreateView):
     model = Branch
     form_class = BranchForm
     template_name = 'admin_panel/organization/branches/branch_form.html'
     success_url = '/dashboard/organization/branches'
 
-@login_required_m
-class BranchActionView(View):
+
+class BranchActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -541,8 +534,8 @@ class BranchActionView(View):
         return HttpResponseRedirect(reverse('branches'))
 
 
-@login_required_m
-class UpdateBranch(generic.UpdateView):
+
+class UpdateBranch(BaseView, generic.UpdateView):
     model = Branch
     template_name = 'admin_panel/organization/branches/branch_form.html'
     form_class = BranchForm
@@ -550,8 +543,8 @@ class UpdateBranch(generic.UpdateView):
     pk_url_kwarg = 'id'
 
 
-@login_required_m
-class ListClientOffers(CustomListBaseView,generic.ListView):
+
+class ListClientOffers(CustomListBaseView,BaseView, generic.ListView):
     model = ClientOffer
     context_object_name = 'offers'
     context_fields = ['id','organization','expiresAt','createdAt']
@@ -568,15 +561,15 @@ class ListClientOffers(CustomListBaseView,generic.ListView):
             return queryset
         
 
-@login_required_m
-class CreateClientOffer(generic.CreateView):
+
+class CreateClientOffer(BaseView, generic.CreateView):
     model = ClientOffer
     template_name = 'admin_panel/organization/offers/client_offer_form.html'
     form_class = ClientOfferForm
     success_url = '/dashboard/organization/client-offers'
 
-@login_required_m
-class UpdateClientOffer(generic.UpdateView):
+
+class UpdateClientOffer(BaseView, generic.UpdateView):
     model = ClientOffer
     template_name = 'admin_panel/organization/offers/update_client_offer.html'
     form_class = ClientOfferForm
@@ -589,8 +582,8 @@ class UpdateClientOffer(generic.UpdateView):
         return context
 
 
-@login_required_m
-class ClientOfferBulkActionView(View):
+
+class ClientOfferBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -599,8 +592,8 @@ class ClientOfferBulkActionView(View):
         return HttpResponseRedirect(reverse('client-offers'))
 
 
-@login_required_m
-class ListServiceOffers(CustomListBaseView,generic.ListView):
+
+class ListServiceOffers(CustomListBaseView,BaseView, generic.ListView):
     model = ServiceOffer
     context_object_name = 'offers'
     context_fields = ['id','organization','expiresAt','createdAt']
@@ -617,23 +610,23 @@ class ListServiceOffers(CustomListBaseView,generic.ListView):
             return queryset
         
 
-@login_required_m
-class CreateServiceOffer(generic.CreateView):
+
+class CreateServiceOffer(BaseView, generic.CreateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
     form_class = ServiceOfferForm
     success_url = '/dashboard/organization/service-offers'
 
-@login_required_m
-class UpdateServiceOffer(generic.UpdateView):
+
+class UpdateServiceOffer(BaseView, generic.UpdateView):
     model = ServiceOffer
     template_name = 'admin_panel/organization/offers/service_offer_form.html'
     form_class = ServiceOfferForm
     success_url = '/dashboard/organization/service-offers'
     pk_url_kwarg = 'id'
 
-@login_required_m
-class ServiceOfferBulkActionView(View):
+
+class ServiceOfferBulkActionView(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
@@ -649,14 +642,14 @@ class ListOfferTemplates(CustomListBaseView):
     template_name = 'admin_panel/organization/offers/offer_templates.html'
     
 
-class CreateOfferTemplate(generic.CreateView):
+class CreateOfferTemplate(BaseView, generic.CreateView):
     model = Template
     template_name = 'admin_panel/organization/offers/offer_template_form.html'
     fields = ['name','template']
     success_url = '/dashboard/organization/offer-templates'
 
 
-class UpdateOfferTemplate(generic.UpdateView):
+class UpdateOfferTemplate(BaseView, generic.UpdateView):
     model = Template
     template_name = 'admin_panel/organization/offers/offer_template_form.html'
     fields = ['name','template']
@@ -668,7 +661,7 @@ class UpdateOfferTemplate(generic.UpdateView):
         context['template'] = self.object.template
         return context
 
-class DeleteOfferTemplate(View):
+class DeleteOfferTemplate(BaseView):
     def post(self, request):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         if selected_ids:
