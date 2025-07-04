@@ -93,14 +93,13 @@ class ShareekForm(UserForm):
     organization_type = forms.ModelChoiceField(queryset=OrganizationType.objects.all(), required=True, label='نوع المنظمة')
     organization_name = forms.CharField(max_length=255, required=True, label='اسم المنظمة')
 
-    @transaction.atomic
     def save(self):
         user = super().save()
         user.user_type = 'SHAREEK'
         user.save()
         organization = Organization.objects.create(
             name=self.cleaned_data['organization_name'],
-            organization_type=OrganizationType.objects.get(id=self.cleaned_data['organization_type'].id),
+            organization_type=self.cleaned_data['organization_type'],
         )
         shareek = Shareek.objects.create(
             user=user,

@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, TransactionTestCase
 from django.urls import reverse
 from users.models import User, Shareek, Organization, OrganizationType, SupportChat
 from base.models import (
@@ -9,9 +9,9 @@ from django.contrib.gis.geos import Point
 import json
 
 
-class AdminPanelURLTestCase(TestCase):
+class AdminPanelURLTestCase(TransactionTestCase):
     """Test case for all admin panel URLs"""
-
+    reset_sequences = True
     def setUp(self):
         """Set up test data"""
         self.client = Client()
@@ -34,57 +34,57 @@ class AdminPanelURLTestCase(TestCase):
             user_type='CLIENT'
         )
 
-        # # Create organization type
-        # self.org_type = OrganizationType.objects.create(name='Test Organization Type')
+        # Create organization type
+        self.org_type = OrganizationType.objects.create(name='Test Organization Type')
 
-        # # Create organization
-        # self.organization = Organization.objects.create(
-        #     name='Test Organization',
-        #     organization_type=self.org_type,
-        #     commercial_register_id=1234567890
-        # )
+        # Create organization
+        self.organization = Organization.objects.create(
+            name='Test Organization',
+            organization_type=self.org_type,
+            commercial_register_id=1234567890
+        )
 
         # Create shareek user
-        # self.shareek_user = User.objects.create_user(
-        #     phonenumber='1234567892',
-        #     full_name='Shareek Test User',
-        #     email='shareek@test.com',
-        #     password='testpass123',
-        #     user_type='SHAREEK'
-        # )
+        self.shareek_user = User.objects.create_user(
+            phonenumber='1234567892',
+            full_name='Shareek Test User',
+            email='shareek@test.com',
+            password='testpass123',
+            user_type='SHAREEK'
+        )
 
-        # self.shareek = Shareek.objects.create(
-        #     user=self.shareek_user,
-        #     organization=self.organization,
-        #     job='Test Job'
-        # )
+        self.shareek = Shareek.objects.create(
+            user=self.shareek_user,
+            organization=self.organization,
+            job='Test Job'
+        )
 
         # Create test data for various models
-        # self.social_media = SocialMedia.objects.create(name='Facebook')
-        # self.delivery_company = DeliveryCompany.objects.create(name='Test Delivery')
-        # self.subscription = Subscription.objects.create(
-        #     name='Basic Plan',
-        #     days=30,
-        #     price=100.00
-        # )
-        # self.contact_us = ContactUs.objects.create(
-        #     name='Phone',
-        #     link='tel:+1234567890'
-        # )
-        # self.about_us = AboutUs.objects.create(
-        #     name='About Us',
-        #     link='Test content'
-        # )
-        # self.terms = TermsPrivacy.objects.create(
-        #     title='Terms',
-        #     content='Test terms content'
-        # )
-        # self.common_question = CommonQuestion.objects.create(
-        #     question='Test Question?',
-        #     answer='Test Answer'
-        # )
+        self.social_media = SocialMedia.objects.create(name='Facebook')
+        self.delivery_company = DeliveryCompany.objects.create(name='Test Delivery')
+        self.subscription = Subscription.objects.create(
+            name='Basic Plan',
+            days=30,
+            price=100.00
+        )
+        self.contact_us = ContactUs.objects.create(
+            name='Phone',
+            link='tel:+1234567890'
+        )
+        self.about_us = AboutUs.objects.create(
+            name='About Us',
+            link='Test content'
+        )
+        self.terms = TermsPrivacy.objects.create(
+            title='Terms',
+            content='Test terms content'
+        )
+        self.common_question = CommonQuestion.objects.create(
+            question='Test Question?',
+            answer='Test Answer'
+        )
 
-        # # Create branch with location
+        # Create branch with location
         # self.branch = Branch.objects.create(
         #     organization=self.organization,
         #     name='Test Branch',
@@ -93,7 +93,7 @@ class AdminPanelURLTestCase(TestCase):
         # )
 
         # Create support chat
-        # self.support_chat = SupportChat.objects.create(user=self.client_user)
+        self.support_chat = SupportChat.objects.create(user=self.client_user)
 
     def login_admin(self):
         """Helper method to login admin user"""
@@ -122,12 +122,12 @@ class AdminPanelURLTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'error')
 
-    # def test_logout_view(self):
-    #     """Test logout functionality"""
-    #     self.login_admin()
-    #     response = self.client.post(reverse('logout'))
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, reverse('login'))
+    def test_logout_view(self):
+        """Test logout functionality"""
+        self.login_admin()
+        response = self.client.post(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('login'))
 
     def test_dashboard_view(self):
         """Test dashboard access"""
@@ -135,62 +135,62 @@ class AdminPanelURLTestCase(TestCase):
         response = self.client.get(reverse('dashboard'))
         self.assertEqual(response.status_code, 200)
 
-    # def test_dashboard_partial_view(self):
-    #     """Test dashboard partial view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('dashboard-partial'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, 'admins')
+    def test_dashboard_partial_view(self):
+        """Test dashboard partial view"""
+        self.login_admin()
+        response = self.client.get(reverse('dashboard-partial'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'admins')
 
-    # def test_clients_list_view(self):
-    #     """Test clients list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('clients'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, 'clients')
+    def test_clients_list_view(self):
+        """Test clients list view"""
+        self.login_admin()
+        response = self.client.get(reverse('clients'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'clients')
 
-    # def test_clients_list_view_with_search(self):
-    #     """Test clients list view with search query"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('clients'), {'q': 'Client'})
-    #     self.assertEqual(response.status_code, 200)
+    def test_clients_list_view_with_search(self):
+        """Test clients list view with search query"""
+        self.login_admin()
+        response = self.client.get(reverse('clients'), {'q': 'Client'})
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_client_view_get(self):
-    #     """Test add client form GET request"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-client'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_client_view_get(self):
+        """Test add client form GET request"""
+        self.login_admin()
+        response = self.client.get(reverse('add-client'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_client_view_post(self):
-    #     """Test add client form POST request"""
-    #     self.login_admin()
-    #     response = self.client.post(reverse('add-client'), {
-    #         'full_name': 'New Client',
-    #         'phonenumber': '1234567893',
-    #         'email': 'newclient@test.com',
-    #         'password': 'newpass123',
-    #         'confirm_password': 'newpass123'
-    #     })
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertTrue(User.objects.filter(phonenumber='1234567893').exists())
+    def test_add_client_view_post(self):
+        """Test add client form POST request"""
+        self.login_admin()
+        response = self.client.post(reverse('add-client'), {
+            'full_name': 'New Client',
+            'phonenumber': '1234567893',
+            'email': 'newclient@test.com',
+            'password': 'newpass123',
+            'confirm_password': 'newpass123'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.objects.filter(phonenumber='1234567893').exists())
 
-    # def test_client_info_view(self):
-    #     """Test client info view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('client-info', kwargs={'id': self.client_user.id}))
-    #     self.assertEqual(response.status_code, 200)
+    def test_client_info_view(self):
+        """Test client info view"""
+        self.login_admin()
+        response = self.client.get(reverse('client-info', kwargs={'id': self.client_user.id}))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_shareeks_list_view(self):
-    #     """Test shareeks list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('shareeks'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_shareeks_list_view(self):
+        """Test shareeks list view"""
+        self.login_admin()
+        response = self.client.get(reverse('shareeks'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_shareek_view_get(self):
-    #     """Test add shareek form GET request"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-shareek'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_shareek_view_get(self):
+        """Test add shareek form GET request"""
+        self.login_admin()
+        response = self.client.get(reverse('add-shareek'))
+        self.assertEqual(response.status_code, 200)
 
     # def test_shareek_info_view(self):
     #     """Test shareek info view"""
@@ -198,78 +198,80 @@ class AdminPanelURLTestCase(TestCase):
     #     response = self.client.get(reverse('shareek-info', kwargs={'id': self.shareek_user.id}))
     #     self.assertEqual(response.status_code, 200)
 
-    # def test_admins_list_view(self):
-    #     """Test admins list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('admins'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_admins_list_view(self):
+        """Test admins list view"""
+        self.login_admin()
+        response = self.client.get(reverse('admins'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_admin_view_get(self):
-    #     """Test add admin form GET request"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-admin'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_admin_view_get(self):
+        """Test add admin form GET request"""
+        self.login_admin()
+        response = self.client.get(reverse('add-admin'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_admin_view_post(self):
-    #     """Test add admin form POST request"""
-    #     self.login_admin()
-    #     response = self.client.post(reverse('add-admin'), {
-    #         'full_name': 'New Admin',
-    #         'phonenumber': '1234567894',
-    #         'email': 'newadmin@test.com',
-    #         'password': 'newpass123',
-    #         'confirm_password': 'newpass123'
-    #     })
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertTrue(User.objects.filter(phonenumber='1234567894', user_type='ADMIN').exists())
+    def test_add_admin_view_post(self):
+        """Test add admin form POST request"""
+        self.login_admin()
+        response = self.client.post(reverse('add-admin'), {
+            'full_name': 'New Admin',
+            'phonenumber': '1234567894',
+            'email': 'newadmin@test.com',
+            'password': 'newpass123',
+            'confirm_password': 'newpass123'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.objects.filter(phonenumber='1234567894', user_type='ADMIN').exists())
 
-    # def test_admin_info_view(self):
-    #     """Test admin info view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('admin-info', kwargs={'id': self.admin_user.id}))
-    #     self.assertEqual(response.status_code, 200)
+    def test_admin_info_view(self):
+        """Test admin info view"""
+        self.login_admin()
+        print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+        print(self.admin_user.id)
+        response = self.client.get(reverse('admin-info', kwargs={'id': self.admin_user.id}))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_change_password_view(self):
-    #     """Test change password view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('change-password', kwargs={'user_id': self.admin_user.id}))
-    #     self.assertEqual(response.status_code, 200)
+    def test_change_password_view(self):
+        """Test change password view"""
+        self.login_admin()
+        response = self.client.get(reverse('change-password', kwargs={'user_id': self.admin_user.id}))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_chats_view(self):
-    #     """Test support chats list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('chats'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_chats_view(self):
+        """Test support chats list view"""
+        self.login_admin()
+        response = self.client.get(reverse('chats'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_messages_view(self):
-    #     """Test messages view for a specific chat"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('messages', kwargs={'chat_id': self.support_chat.id}))
-    #     self.assertEqual(response.status_code, 200)
+    def test_messages_view(self):
+        """Test messages view for a specific chat"""
+        self.login_admin()
+        response = self.client.get(reverse('messages', kwargs={'chat_id': self.support_chat.id}))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_organization_types_view(self):
-    #     """Test organization types list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('organization-types'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_organization_types_view(self):
+        """Test organization types list view"""
+        self.login_admin()
+        response = self.client.get(reverse('organization-types'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_organization_type_view(self):
-    #     """Test add organization type view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-organization-type'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_organization_type_view(self):
+        """Test add organization type view"""
+        self.login_admin()
+        response = self.client.get(reverse('add-organization-type'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_organization_type_info_view(self):
-    #     """Test organization type info view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('organization-type-info', kwargs={'id': self.org_type.id}))
-    #     self.assertEqual(response.status_code, 200)
+    def test_organization_type_info_view(self):
+        """Test organization type info view"""
+        self.login_admin()
+        response = self.client.get(reverse('organization-type-info', kwargs={'id': self.org_type.id}))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_organizations_view(self):
-    #     """Test organizations list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('organizations'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_organizations_view(self):
+        """Test organizations list view"""
+        self.login_admin()
+        response = self.client.get(reverse('organizations'))
+        self.assertEqual(response.status_code, 200)
 
     # def test_organization_info_view(self):
     #     """Test organization info view"""
@@ -277,53 +279,53 @@ class AdminPanelURLTestCase(TestCase):
     #     response = self.client.get(reverse('organization-info', kwargs={'id': self.organization.id}))
     #     self.assertEqual(response.status_code, 200)
 
-    # def test_catalogs_view(self):
-    #     """Test catalogs list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('catalogs'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_catalogs_view(self):
+        """Test catalogs list view"""
+        self.login_admin()
+        response = self.client.get(reverse('catalogs'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_catalog_view(self):
-    #     """Test add catalog view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-catalog'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_catalog_view(self):
+        """Test add catalog view"""
+        self.login_admin()
+        response = self.client.get(reverse('add-catalog'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_images_gallery_view(self):
-    #     """Test images gallery view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('images-gallery'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_images_gallery_view(self):
+        """Test images gallery view"""
+        self.login_admin()
+        response = self.client.get(reverse('images-gallery'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_image_view(self):
-    #     """Test add image view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-image'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_image_view(self):
+        """Test add image view"""
+        self.login_admin()
+        response = self.client.get(reverse('add-image'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_reels_gallery_view(self):
-    #     """Test reels gallery view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('reels-gallery'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_reels_gallery_view(self):
+        """Test reels gallery view"""
+        self.login_admin()
+        response = self.client.get(reverse('reels-gallery'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_reel_view(self):
-    #     """Test add reel view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-reel'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_reel_view(self):
+        """Test add reel view"""
+        self.login_admin()
+        response = self.client.get(reverse('add-reel'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_social_media_view(self):
-    #     """Test social media list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('social-media'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_social_media_view(self):
+        """Test social media list view"""
+        self.login_admin()
+        response = self.client.get(reverse('social-media'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_social_media_view(self):
-    #     """Test add social media view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-social-media'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_social_media_view(self):
+        """Test add social media view"""
+        self.login_admin()
+        response = self.client.get(reverse('add-social-media'))
+        self.assertEqual(response.status_code, 200)
 
     # def test_social_media_info_view(self):
     #     """Test social media info view"""
@@ -331,17 +333,17 @@ class AdminPanelURLTestCase(TestCase):
     #     response = self.client.get(reverse('social-media-info', kwargs={'id': self.social_media.id}))
     #     self.assertEqual(response.status_code, 200)
 
-    # def test_delivery_companies_view(self):
-    #     """Test delivery companies list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('delivery-companies'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_delivery_companies_view(self):
+        """Test delivery companies list view"""
+        self.login_admin()
+        response = self.client.get(reverse('delivery-companies'))
+        self.assertEqual(response.status_code, 200)
 
-    # def test_add_delivery_company_view(self):
-    #     """Test add delivery company view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-delivery-company'))
-    #     self.assertEqual(response.status_code, 200)
+    def test_add_delivery_company_view(self):
+        """Test add delivery company view"""
+        self.login_admin()
+        response = self.client.get(reverse('add-delivery-company'))
+        self.assertEqual(response.status_code, 200)
 
     # def test_delivery_company_info_view(self):
     #     """Test delivery company info view"""

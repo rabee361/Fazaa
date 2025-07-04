@@ -29,7 +29,7 @@ class User(AbstractUser):
     )
     full_name = models.CharField(max_length=255 , null=True , blank=True, verbose_name='الاسم')
     email = models.EmailField(null=True , blank=True, verbose_name='البريد الالكتروني')
-    image = models.ImageField(upload_to='media/images/users/', default='media/images/users/placeholder.jpg' , verbose_name="الصورة الشخصية")
+    image = models.ImageField(upload_to='images/users/', default="images/users/placeholder.jpg" , verbose_name="الصورة الشخصية")
     user_type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CLIENT)
     get_notifications = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True, verbose_name="مفعل")   

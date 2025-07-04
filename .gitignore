@@ -23,5 +23,6 @@ __pycache__/
 test.pdf
 test.png
 media/
+staticfiles/
 .vscode/
 .vscode
