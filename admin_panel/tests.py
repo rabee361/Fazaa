@@ -9,9 +9,8 @@ from django.contrib.gis.geos import Point
 import json
 
 
-class AdminPanelURLTestCase(TransactionTestCase):
+class AdminPanelURLTestCase(TestCase):
     """Test case for all admin panel URLs"""
-    reset_sequences = True
     def setUp(self):
         """Set up test data"""
         self.client = Client()
@@ -37,12 +36,12 @@ class AdminPanelURLTestCase(TransactionTestCase):
         # Create organization type
         self.org_type = OrganizationType.objects.create(name='Test Organization Type')
 
-        # Create organization
-        self.organization = Organization.objects.create(
-            name='Test Organization',
-            organization_type=self.org_type,
-            commercial_register_id=1234567890
-        )
+        # # Create organization
+        # self.organization = Organization.objects.create(
+        #     name='Test Organization',
+        #     organization_type=self.org_type,
+        #     commercial_register_id=1234567890
+        # )
 
         # Create shareek user
         self.shareek_user = User.objects.create_user(
@@ -53,15 +52,15 @@ class AdminPanelURLTestCase(TransactionTestCase):
             user_type='SHAREEK'
         )
 
-        self.shareek = Shareek.objects.create(
-            user=self.shareek_user,
-            organization=self.organization,
-            job='Test Job'
-        )
+        # self.shareek = Shareek.objects.create(
+        #     user=self.shareek_user,
+        #     organization=self.organization,
+        #     job='Test Job'
+        # )
 
         # Create test data for various models
-        self.social_media = SocialMedia.objects.create(name='Facebook')
-        self.delivery_company = DeliveryCompany.objects.create(name='Test Delivery')
+        # self.social_media = SocialMedia.objects.create(name='Facebook')
+        # self.delivery_company = DeliveryCompany.objects.create(name='Test Delivery')
         self.subscription = Subscription.objects.create(
             name='Basic Plan',
             days=30,
@@ -226,8 +225,6 @@ class AdminPanelURLTestCase(TransactionTestCase):
     def test_admin_info_view(self):
         """Test admin info view"""
         self.login_admin()
-        print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
-        print(self.admin_user.id)
         response = self.client.get(reverse('admin-info', kwargs={'id': self.admin_user.id}))
         self.assertEqual(response.status_code, 200)
 
