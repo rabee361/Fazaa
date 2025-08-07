@@ -16,7 +16,7 @@ services:
       - 8080:8000
     restart: always
     env_file:
-      - .venv
+      - ./Fazaa/.env
     environment:
       DJANGO_SETTINGS_MODULE: Fazaa.settings
       DB_ENGINE: django.contrib.gis.db.backends.postgis
@@ -47,7 +47,7 @@ services:
     image: postgis/postgis:15-3.3
     container_name: fazaa_db_1
     env_file:
-      - .venv
+      - ./Fazaa/.env
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
@@ -96,7 +96,7 @@ services:
     image: nginx
     build: ./nginx
     env_file:
-      - .venv
+      - ./Fazaa/.env
     ports:
       - "9000:8080"
     volumes:
