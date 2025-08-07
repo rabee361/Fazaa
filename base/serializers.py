@@ -116,7 +116,7 @@ class SocialMediaUrlSerializer(ModelSerializer):
         request = self.context.get('request')
 
         if obj.url:
-            return f"http://145.223.80.125:8080/social/{obj.short_url}/"
+            return f"http://168.231.127.170/social/{obj.short_url}/"
         return None
 
 
@@ -174,7 +174,7 @@ class DeliveryCompanyUrlSerializer(ModelSerializer):
         request = self.context.get('request')
 
         if obj.url:
-            return f"http://145.223.80.125:8080/delivery/{obj.short_url}/"
+            return f"http://168.231.127.170/delivery/{obj.short_url}/"
         return None
 
 
@@ -198,7 +198,7 @@ class CatalogSerializer(ModelSerializer):
     def get_short_url(self,obj):
         request = self.context.get('request')
         if obj.file:
-            return f"http://145.223.80.125:8080/catalog/{obj.short_url}/"
+            return f"http://168.231.127.170/catalog/{obj.short_url}/"
         return None
 
     def get_file_name(self, obj):

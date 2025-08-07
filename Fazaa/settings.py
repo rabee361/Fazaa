@@ -36,9 +36,10 @@ DEBUG = True
 ENVIRONMENT = env('ENVIRONMENT')
 
 ALLOWED_HOSTS = [
-    '145.223.80.125',
+    '168.231.127.170',
     '127.0.0.1',
     'localhost',
+    'faazza.com',
     # Add any other hosts you need
 ]
 
