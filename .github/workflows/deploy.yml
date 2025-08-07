@@ -19,7 +19,7 @@ jobs:
           port: ${{ secrets.PORT }}
           debug: true  # Enable debug mode to get more information
           script: |
-            cd /home/fazaa/Fazaa
+            cd /home/fazaa/Fazaa 
             git fetch origin
             git rebase origin
             docker-compose down
