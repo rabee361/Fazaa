@@ -88,7 +88,27 @@ class CatalogSlugUrlView(BaseView):
         except Exception as e:
             return render(request, '404.html', status=400)
 
+class ClientOfferUrlView(BaseView):
+    def get(self,request,slug):
+        try:
+            catalog = ClientOffer.objects.get(short_url=slug)
+            assert catalog.short_url
+            catalog.visits += 1
+            catalog.save()
+            return redirect(catalog.file.url)
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
+class ServiceOfferUrlView(BaseView):
+    def get(self,request,slug):
+        try:
+            catalog = ServiceOffer.objects.get(short_url=slug)
+            assert catalog.short_url
+            catalog.visits += 1
+            catalog.save()
+            return redirect(catalog.file.url)
+        except Exception as e:
+            return render(request, '404.html', status=400)
 
 class ListReportsView(CustomListBaseView):
     model = Report
