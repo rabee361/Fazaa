@@ -105,7 +105,6 @@ class Shareek(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True, related_name='shareeks')
     job = models.CharField(max_length=255, null=True, blank=True)
 
-    @transaction.atomic 
     def create_organization(commercial_register_id ,organization_type ,organization_name ,**args):
         organization_type = OrganizationType.objects.get(id=organization_type[0])
         organization = Organization.objects.create(

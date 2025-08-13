@@ -351,6 +351,7 @@ class ServiceOffer(models.Model):
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
     organizations = models.ManyToManyField(OrganizationType , verbose_name='المنظمات')
+    visits = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.id}"
