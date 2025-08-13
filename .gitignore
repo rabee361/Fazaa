@@ -24,7 +24,6 @@ __pycache__/
 /venv
 test.pdf
 test.png
-media/
 staticfiles/
 .vscode/
 .vscode
