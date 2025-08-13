@@ -351,10 +351,14 @@ class ServiceOffer(models.Model):
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
     organizations = models.ManyToManyField(OrganizationType , verbose_name='المنظمات')
-    visits = models.IntegerField(default=0)
+    visits = models.IntegerField(default=0 , verbose_name= "الزيارات")
+    short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
 
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.id}"
+    
+    def get_absolute_url(self):
+        return f"/service_offers/{self.short_url}/"
 
     class Meta:
         ordering = ['-id']
@@ -368,6 +372,7 @@ class ClientOffer(models.Model):
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
     template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True , verbose_name='القالب')
+    short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
 
     def clean(self):
         if self.cover and self.cover.size > 1 * 1024 * 1024:  # 1MB in bytes
@@ -376,6 +381,9 @@ class ClientOffer(models.Model):
     def __str__(self) -> str:
         return f"{self.organization.name} - {self.id}"
     
+    def get_absolute_url(self):
+        return f"/client_offers/{self.short_url}/"
+
     class Meta:
         ordering = ['-id']
 
