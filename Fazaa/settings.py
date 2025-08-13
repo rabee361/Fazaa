@@ -39,7 +39,6 @@ ALLOWED_HOSTS = [
     '168.231.127.170',
     '127.0.0.1',
     'localhost',
-    'faazza.com',
 ]
 
 # CSRF_TRUSTED_ORIGINS = [
