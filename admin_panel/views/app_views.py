@@ -77,7 +77,7 @@ class BranchSlugUrlView(BaseView):
             return render(request, '404.html', status=400)
 
 
-class CatalogSlugUrlView(BaseView):
+class CatalogSlugUrlView(View):
     def get(self,request,slug):
         try:
             catalog = Catalog.objects.get(short_url=slug)
