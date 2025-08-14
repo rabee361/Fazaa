@@ -1,90 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    const deleteForm = document.getElementById('deleteForm');
-    const deleteBtn = document.getElementById('deleteBtn');
-    const selectedIdsInput = document.getElementById('selectedIds');
-
-    selectAllCheckbox.addEventListener('change', function() {
-        rowCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    });
-
-    rowCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
-            selectAllCheckbox.checked = allChecked;
-        });
-    });
-
-    deleteForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
-        
-        if (selectedCheckboxes.length === 0) {
-            alert('الرجاء تحديد عنصر واحد على الأقل للحذف');
-            return;
-        }
-
-        if (confirm('هل أنت متأكد من حذف العناصر المحددة؟')) {
-            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
-            selectedIdsInput.value = JSON.stringify(selectedIds);
-            this.submit();
-        }
-    });
-
-    // Handle copy button clicks
-    document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('click', async function(e) {
-            e.stopPropagation(); // Prevent row click event
-            const url = this.getAttribute('data-url');
-            
-            try {
-                // Try modern clipboard API first
-                if (navigator.clipboard && window.isSecureContext) {
-                    await navigator.clipboard.writeText(url);
-                    showToast('تم نسخ الرابط بنجاح');
-                } else {
-                    // Fallback for older browsers and non-HTTPS contexts
-                    const textArea = document.createElement('textarea');
-                    textArea.value = url;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    textArea.style.top = '-999999px';
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-
-                    try {
-                        document.execCommand('copy');
-                        textArea.remove();
-                        showToast('تم نسخ الرابط بنجاح');
-                    } catch (err) {
-                        textArea.remove();
-                        showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
-                        // Show the URL in a selectable format
-                        showSelectableUrl(url);
-                    }
-                }
-            } catch (err) {
-                showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
-                // Show the URL in a selectable format
-                showSelectableUrl(url);
-            }
-        });
-    });
-});
-
-
-function clickHandler(event) {
-    if (!event.target.closest('.checkbox-cell')) {
-        window.location.href = event.currentTarget.getAttribute('data-link');
-    }
-}
-
-
-document.addEventListener('DOMContentLoaded', function() {
     const hamburgerBtn = document.getElementById('hamburgerMenu');
     const sidebar = document.querySelector('.sidebar');
     const overlay = document.getElementById('sidebarOverlay');
@@ -167,9 +81,6 @@ function showSelectableUrl(url) {
 }
 
 
-
-
-
 function executeBulkAction() {
     const bulkActionForm = document.getElementById('bulkActionForm');
     if (!bulkActionForm) {
@@ -223,44 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-
-        // Theme switching functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle.querySelector('i');
-    
-    // Check for saved theme preference
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateThemeIcon(currentTheme);
-    
-    // Toggle theme
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-    
-    function updateThemeIcon(theme) {
-        if (theme === 'dark') {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-        } else {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-        }
-    }
-});
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     // Handle collapsible sections
     const collapsibles = document.querySelectorAll('.collapsible');
@@ -296,3 +169,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Password visibility toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordToggles = document.querySelectorAll('.password-toggle');
+    
+    passwordToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
+    });
+});
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('loginPassword');
+    const toggleButton = document.querySelector('.password-toggle-btn i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleButton.classList.remove('fa-eye');
+        toggleButton.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleButton.classList.remove('fa-eye-slash');
+        toggleButton.classList.add('fa-eye');
+    }
+}

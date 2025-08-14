@@ -3,8 +3,8 @@
 
 :root {
     /* Light theme variables */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f6f6f6;
+    --bg-primary: #f6f6f6;
+    --bg-secondary: #ffffff;
     --bg-table-header: #e6e6e6;
     --hover-bg: #e0e0e0;
     --text-primary: #494949;
@@ -128,6 +128,7 @@
 .login-text {
     text-align: center;
     margin: 10px;
+    color: var(--text-primary);
 }
 
 .remember-me-checkbox {
@@ -905,12 +906,14 @@
 .stat-card {
     background: var(--bg-secondary);
     color: var(--text-primary);
+    cursor: pointer;
     border-radius: 8px;
+    text-decoration: none;
     padding: 1rem;
     position: relative;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.5s ease;
+    transition: transform 0.3s ease, box-shadow 0.5s ease, background-color 0.5s ease;
     min-height: 120px;
     display: flex;
     flex-direction: column;
@@ -918,8 +921,8 @@
 }
 
 .stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card h3 {
@@ -1591,6 +1594,19 @@ input[type="checkbox"] {
     max-width: 70%;
     margin-bottom: 20px;
     display: flex;
+    animation: messageSlideIn 0.3s ease-out;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .message.received {
@@ -1607,11 +1623,19 @@ input[type="checkbox"] {
     padding: 10px 15px;
     border-radius: 12px;
     position: relative;
+    transition: all 0.3s ease;
 }
 
 .message.sent .message-content {
     background: var(--accent-color);
-    color: white;
+    color: var(--text-primary);
+    transform-origin: right bottom;
+}
+
+.message.received .message-content {
+    transform-origin: left bottom;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 .message-content p {
@@ -1636,6 +1660,8 @@ input[type="checkbox"] {
     display: flex;
     gap: 10px;
     align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 .chat-input input {
@@ -1645,6 +1671,12 @@ input[type="checkbox"] {
     border-radius: 8px;
     background: var(--bg-primary);
     color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.chat-input input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(166, 144, 118, 0.1);
 }
 
 .send-button {
@@ -1658,7 +1690,7 @@ input[type="checkbox"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .send-button:hover {
@@ -1755,4 +1787,154 @@ input[type="checkbox"] {
         right: 8px;
         font-size: 12px;
     }
+}
+
+/* Password field styles */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    flex: 1;
+}
+
+.password-toggle {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #333;
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
+[data-theme="dark"] .password-toggle {
+    color: #999;
+}
+
+[data-theme="dark"] .password-toggle:hover {
+    color: #fff;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle-btn:hover {
+    color: #333;
+}
+
+.password-toggle-btn:focus {
+    outline: none;
+}
+
+
+
+.dropdown-checklist {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-checklist .anchor {
+    position: relative;
+    cursor: pointer;
+    display: block;
+    padding: 0 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    font-size: 0.85rem;
+    height: 35px;
+    line-height: 35px;
+    color: var(--text-primary);
+    box-sizing: border-box;
+}
+
+.dropdown-checklist .anchor:after {
+    content: "";
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid var(--text-primary);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dropdown-checklist .items {
+    display: none;
+    position: absolute;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 2px;
+}
+
+.dropdown-checklist .items li {
+    padding-bottom: 8px;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.dropdown-checklist .items li:hover {
+    background-color: var(--hover-bg);
+}
+
+.dropdown-checklist .items label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    cursor: pointer;
+    direction: rtl;
+}
+
+.dropdown-checklist .items input[type="checkbox"] {
+    margin-right: 0;
+    margin-left: 8px;
+    width: 14px;
+    height: 14px;
+    order: 2;
+}
+
+.dropdown-checklist.visible .items {
+    display: block;
+}
+
+/* Hide the original select element */
+select.dropdown-checklist {
+    display: none !important;
 }

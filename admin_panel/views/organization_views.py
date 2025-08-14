@@ -1,4 +1,4 @@
-from django.views import generic
+from django.views import generic, View
 from base.models import *
 from utils.views import CustomListBaseView
 from django.shortcuts import render
@@ -9,7 +9,7 @@ from utils.views import BaseView
 from admin_panel.forms import *
 
 
-class CardUrlView(BaseView):
+class CardUrlView(View):
     def get(self,request,slug):
         try:
             organization = Organization.objects.select_related('organization_type').get(card_url=slug)

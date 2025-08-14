@@ -36,14 +36,14 @@ class WebsiteSlugUrlView(BaseView):
             return render(request, '404.html', status=400)
 
 
-class OrganizationDeepLinkView(BaseView):
+class OrganizationUrlInfoView(BaseView):
     def get(self,request,slug):
         try:
             organization = Organization.objects.get(deep_link=slug)
-            assert organization.deep_link
-            organization.visits += 1
-            organization.save()
-            return redirect(organization.deep_link)
+            context = {
+                'organization': organization
+            }
+            return render(request, 'organization.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
 
@@ -91,25 +91,25 @@ class CatalogSlugUrlView(BaseView):
 class ClientOfferUrlView(BaseView):
     def get(self,request,slug):
         try:
-            offer = ClientOffer.objects.get(short_url=slug)
-            assert offer.short_url
-            offer.visits += 1
-            offer.save()
-            return redirect(offer.file.url)
+            offer = ClientOffer.objects.get(deep_link=slug)
+            context = {
+                'offer': offer
+            }
+            return render(request, 'client_offer.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
 
 class ServiceOfferUrlView(BaseView):
     def get(self,request,slug):
         try:
-            offer = ServiceOffer.objects.get(short_url=slug)
-            assert offer.short_url
-            offer.visits += 1
-            offer.save()
-            return redirect(offer.file.url)
+            offer = ServiceOffer.objects.get(deep_link=slug)
+            context = {
+                'offer': offer
+            }
+            return render(request, 'service_offer.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
-
+        
 class ListReportsView(CustomListBaseView):
     model = Report
     context_object_name = 'reports'
