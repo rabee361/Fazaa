@@ -12,8 +12,8 @@ services:
       - .:/home/app
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
-    expose:
-      - 8000
+    ports:
+      - 8080:8000
     restart: always
     env_file:
       - ./Fazaa/.env
@@ -98,7 +98,7 @@ services:
     env_file:
       - ./Fazaa/.env
     ports:
-      - "9000:9000"
+      - "9000:8080"
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
