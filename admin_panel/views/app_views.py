@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 from utils.views import BaseView
 
 
-class SocialMediaSlugUrlView(BaseView):
+class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
         try:
             social = SocialMediaUrl.objects.get(short_url=slug)
@@ -24,7 +24,7 @@ class SocialMediaSlugUrlView(BaseView):
         except Exception as e:
             return render(request, '404.html', status=400)
 
-class WebsiteSlugUrlView(BaseView):
+class WebsiteSlugUrlView(View):
     def get(self,request,slug):
         try:
             organization = Organization.objects.get(website_short_url=slug)
@@ -49,7 +49,7 @@ class OrganizationUrlInfoView(BaseView):
 
 
 
-class DeliverySlugUrlView(BaseView):
+class DeliverySlugUrlView(View):
     def get(self,request,slug):
         try:
             delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
@@ -61,7 +61,7 @@ class DeliverySlugUrlView(BaseView):
             return render(request, '404.html', status=400)
 
 
-class BranchSlugUrlView(BaseView):
+class BranchSlugUrlView(View):
     def get(self,request,slug):
         try:
             branch = Branch.objects.get(short_url=slug)
@@ -88,7 +88,7 @@ class CatalogSlugUrlView(View):
         except Exception as e:
             return render(request, '404.html', status=400)
 
-class ClientOfferUrlView(BaseView):
+class ClientOfferUrlView(View):
     def get(self,request,slug):
         try:
             offer = ClientOffer.objects.get(deep_link=slug)
@@ -99,7 +99,7 @@ class ClientOfferUrlView(BaseView):
         except Exception as e:
             return render(request, '404.html', status=400)
 
-class ServiceOfferUrlView(BaseView):
+class ServiceOfferUrlView(View):
     def get(self,request,slug):
         try:
             offer = ServiceOffer.objects.get(deep_link=slug)
