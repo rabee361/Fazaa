@@ -57,10 +57,10 @@ class TemplateAdmin(admin.ModelAdmin):
     list_display = ['id', 'createdAt']
 
 class ServiceOfferAdmin(admin.ModelAdmin):
-    list_display = ['id','organization__name','expiresAt']
+    list_display = ['id','organization__name','expiresAt','short_url']
 
 class ClientOfferAdmin(admin.ModelAdmin):
-    list_display = ['id','organization__name','expiresAt']
+    list_display = ['id','organization__name','expiresAt','short_url']
 
 
 class ReportAdmin(admin.ModelAdmin):

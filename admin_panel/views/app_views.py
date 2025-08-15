@@ -95,7 +95,7 @@ class ClientOfferUrlView(View):
             context = {
                 'offer': offer
             }
-            return render(request, 'client_offer.html', context=context)
+            return render(request, 'admin_panel/client_offer.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
 
@@ -106,7 +106,7 @@ class ServiceOfferUrlView(View):
             context = {
                 'offer': offer
             }
-            return render(request, 'service_offer.html', context=context)
+            return render(request, 'admin_panel/service_offer.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
         
