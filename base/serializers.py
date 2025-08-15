@@ -36,6 +36,7 @@ class BranchListSerializer(ModelSerializer):
     organization = OrganizationListSerializer()
     distance = serializers.SerializerMethodField()
     offers = serializers.SerializerMethodField()
+    
     class Meta:
         model = Branch
         fields = ['id','name','location','distance','organization','offers']
