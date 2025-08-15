@@ -31,7 +31,7 @@ environ.Env.read_env(os.path.join(BASE_DIR , 'Fazaa', '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env('DEBUG', False)
 
 ENVIRONMENT = env('ENVIRONMENT')
 
@@ -131,12 +131,11 @@ ASGI_APPLICATION = 'Fazaa.asgi.application'
 #         'ENGINE': env('DB_ENGINE'),
 #         'NAME': env('DB_NAME'),
 #         'USER': env('DB_USER'),
-#         'PASSWORD': ('rabee123'),
+#         'PASSWORD': env('DB_PASSWORD'),
 #         'HOST': env('DB_HOST'),
 #         'PORT': env('DB_PORT'),
 #     }
 # }
-
 
 DATABASES = {
     'default': {
