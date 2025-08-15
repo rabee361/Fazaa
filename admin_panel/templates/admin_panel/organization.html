@@ -1,0 +1,759 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{{ organization.name }} - معلومات المنظمة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Noto+Sans+Arabic:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap');
+
+        :root {
+            --bg-primary: #f6f6f6;
+            --bg-secondary: #ffffff;
+            --bg-table-header: #e6e6e6;
+            --hover-bg: #e0e0e0;
+            --text-primary: #494949;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --accent-color: #b4a38e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: var(--accent-color);
+            padding: 0.1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar.scrolled .navbar-brand {
+            color: var(--text-primary);
+            text-shadow: none;
+        }
+
+        .navbar-brand {
+            color: var(--bg-secondary);
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .navbar-logo {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        /* Organization Card Styles */
+        .organization-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            height: fit-content;
+            border: 1px solid var(--border-color);
+        }
+
+        .organization-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .organization-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.75rem;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 2px 10px rgba(179, 155, 125, 0.2);
+        }
+
+        .organization-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .organization-type {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .organization-info {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0.4rem;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .info-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            margin-left: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .info-text {
+            color: var(--text-primary);
+            font-size: 0.8rem;
+        }
+
+        /* Social Media Section Styles */
+        .social-media-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-media-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .social-media-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            padding: 0.4rem 0.6rem;
+            background: var(--bg-table-header);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .social-link:hover {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(179, 155, 125, 0.3);
+        }
+
+        .social-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            margin-left: 0.4rem;
+            object-fit: cover;
+        }
+
+        .social-name {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-logo {
+            height: 40px;
+            width: auto;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Organization Details Styles */
+        .organization-details {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .details-header {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .details-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .details-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .organization-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-table-header);
+            border-radius: 10px;
+            border-right: 4px solid var(--accent-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--accent-color);
+            color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(179, 155, 125, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .organization-info-section {
+            background: var(--bg-table-header);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-detail {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .info-detail-icon {
+            width: 20px;
+            height: 20px;
+            margin-left: 0.75rem;
+            color: var(--accent-color);
+        }
+
+        .info-detail-content {
+            flex: 1;
+        }
+
+        .info-detail-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-detail-value {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.5rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .navbar-logo {
+                height: 30px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .details-title {
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-media-links {
+                gap: 0.5rem;
+            }
+
+            .social-link {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .social-icon {
+                width: 16px;
+                height: 16px;
+            }
+
+            .footer-content {
+                padding: 0 1rem;
+            }
+
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">فزاع</a>
+        <img src="{% static 'assets/images/fazaa.png' %}" alt="فزاع" class="navbar-logo">
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Organization Info Card -->
+        <div class="organization-card slide-in-righth">
+            <div class="organization-header">
+                <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" class="organization-logo">
+                <h2 class="organization-name">{{ organization.name }}</h2>
+                {% if organization.organization_type %}
+                    <p class="organization-type">{{ organization.organization_type.name }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="organization-info">
+                
+                {% if organization.description %}
+                <div class="info-item">
+                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="info-text">{{ organization.description }}</span>
+                </div>
+                {% endif %}
+
+                {% if organization.commercial_register_id %}
+                <div class="info-item">
+                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="info-text">رقم السجل التجاري: {{ organization.commercial_register_id }}</span>
+                </div>
+                {% endif %}
+
+                {% if organization.website %}
+                <div class="info-item">
+                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="info-text">الموقع الإلكتروني</span>
+                </div>
+                {% endif %}
+
+                <div class="info-item">
+                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="info-text">تاريخ التسجيل: {{ organization.createdAt|date:"d/m/Y" }}</span>
+                </div>
+            </div>
+
+            <!-- Social Media Section -->
+            {% if organization.socials.all %}
+            <div class="social-media-section">
+                <h3 class="social-media-title">تابعنا على</h3>
+                <div class="social-media-links">
+                    {% for social in organization.socials.all %}
+                        {% if social.active and social.url %}
+                        <a href="{{ social.url }}" target="_blank" class="social-link" title="{{ social.social_media.name }}">
+                            <img src="{{ social.social_media.icon_thumbnail.url }}" alt="{{ social.social_media.name }}" class="social-icon">
+                            <span class="social-name">{{ social.social_media.name }}</span>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Organization Details -->
+        <div class="organization-details slide-in-left">
+            <div class="details-header">
+                <h1 class="details-title">معلومات المنظمة</h1>
+                <p class="details-subtitle">{{ organization.name }}</p>
+            </div>
+
+            {% if organization.description %}
+            <div class="organization-description">
+                {{ organization.description }}
+            </div>
+            {% endif %}
+
+            <!-- Statistics Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-eye stat-icon"></i>
+                    <div class="stat-label">زيارات الصفحة</div>
+                    <div class="stat-value">{{ organization.org_visits|default:0 }}</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-id-card stat-icon"></i>
+                    <div class="stat-label">زيارات البطاقة</div>
+                    <div class="stat-value">{{ organization.card_visits|default:0 }}</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-globe stat-icon"></i>
+                    <div class="stat-label">زيارات الموقع</div>
+                    <div class="stat-value">{{ organization.website_visits|default:0 }}</div>
+                </div>
+            </div>
+
+            <!-- Organization Information Sections -->
+            <div class="organization-info-section">
+                <h3 class="info-section-title">
+                    <i class="fas fa-info-circle"></i>
+                    معلومات أساسية
+                </h3>
+                <div class="info-grid">
+                    {% if organization.organization_type %}
+                    <div class="info-detail">
+                        <i class="fas fa-building info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">نوع المنظمة</div>
+                            <div class="info-detail-value">{{ organization.organization_type.name }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if organization.commercial_register_id %}
+                    <div class="info-detail">
+                        <i class="fas fa-certificate info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">رقم السجل التجاري</div>
+                            <div class="info-detail-value">{{ organization.commercial_register_id }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="info-detail">
+                        <i class="fas fa-calendar-alt info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">تاريخ التسجيل</div>
+                            <div class="info-detail-value">{{ organization.createdAt|date:"d/m/Y" }}</div>
+                        </div>
+                    </div>
+                    
+                    {% if organization.website %}
+                    <div class="info-detail">
+                        <i class="fas fa-link info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">الموقع الإلكتروني</div>
+                            <div class="info-detail-value">
+                                <a href="{{ organization.website }}" target="_blank" style="color: var(--accent-color); text-decoration: none;">
+                                    زيارة الموقع
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- URL Information Section -->
+            <div class="organization-info-section">
+                <h3 class="info-section-title">
+                    <i class="fas fa-link"></i>
+                    روابط المنظمة
+                </h3>
+                <div class="info-grid">
+                    <div class="info-detail">
+                        <i class="fas fa-qrcode info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">رابط البطاقة التعريفية</div>
+                            <div class="info-detail-value">{{ organization.card_url }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-detail">
+                        <i class="fas fa-external-link-alt info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">رابط الصفحة التعريفية</div>
+                            <div class="info-detail-value">{{ organization.org_short_url }}</div>
+                        </div>
+                    </div>
+                    
+                    {% if organization.website_short_url %}
+                    <div class="info-detail">
+                        <i class="fas fa-compress-alt info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">رابط الموقع المختصر</div>
+                            <div class="info-detail-value">{{ organization.website_short_url }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="{% static 'assets/images/fazaa.png' %}" alt="فزاع" class="footer-logo">
+            <p class="footer-text">منصة فزاع - ربط المنظمات بالعملاء</p>
+            <p class="footer-copyright">© {{ "now"|date:"Y" }} جميع الحقوق محفوظة لمنصة فزاع</p>
+        </div>
+    </footer>
+
+    <script>
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.navbar');
+            
+            // Navbar scroll effect
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+
+            // Add scroll event listener
+            window.addEventListener('scroll', handleScroll);
+            
+            // Initial check
+            handleScroll();
+
+            // Add fade-in animation to main elements
+            const elements = document.querySelectorAll('.organization-card, .offer-info');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // Add hover effects to info items
+            const infoItems = document.querySelectorAll('.info-item');
+            infoItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+
+            // Add click effect to detail cards
+            const detailCards = document.querySelectorAll('.detail-card');
+            detailCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+
+            // Smooth scroll for navbar brand
+            document.querySelector('.navbar-brand').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

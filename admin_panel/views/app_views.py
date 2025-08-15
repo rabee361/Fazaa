@@ -39,11 +39,11 @@ class WebsiteSlugUrlView(View):
 class OrganizationUrlInfoView(View):
     def get(self,request,slug):
         try:
-            organization = Organization.objects.get(short_url=slug)
+            organization = Organization.objects.get(org_short_url=slug)
             context = {
                 'organization': organization
             }
-            return render(request, 'organization.html', context=context)
+            return render(request, 'admin_panel/organization.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
 

@@ -8,7 +8,6 @@ from utils.types import CATALOG_TYPES
 import mimetypes
 
 
-
 class OrganizationType(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
@@ -34,6 +33,8 @@ class Organization(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
     website_visits = models.IntegerField(verbose_name='زيارات الموقع' , default=0)
     card_visits = models.IntegerField(verbose_name='زيارات البطاقة' , default=0)
+    org_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='اختصار الصفحة التعريفية ') 
+    org_visits = models.IntegerField(verbose_name='زيارات الصفحة' , default=0)
 
     def clean(self):
         if self.logo and self.logo.size > 2 * 1024 * 1024:  # 2MB in bytes
@@ -54,6 +55,9 @@ class Organization(models.Model):
     
     def get_absolute_card_url(self):
         return f"/card/{self.card_url}/"
+    
+    def get_absolute_org_url(self):
+        return f"/org/{self.org_short_url}/"
 
     def get_absolute_website_url(self):
         return f"/website/{self.website_short_url}/"
