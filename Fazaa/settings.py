@@ -31,7 +31,7 @@ environ.Env.read_env(os.path.join(BASE_DIR , 'Fazaa', '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ENVIRONMENT = env('ENVIRONMENT')
 
@@ -137,27 +137,27 @@ ASGI_APPLICATION = 'Fazaa.asgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'NAME': 'fazaa_db',
+#         'NAME': 'postgres',
 #         'USER': 'postgres',
-#         'PASSWORD': 'rabee123',
-#         'HOST': 'localhost',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'db',
 #         'PORT': '5432',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'fazaa_db',
+        'USER': 'postgres',
+        'PASSWORD': 'rabee123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 if ENVIRONMENT:

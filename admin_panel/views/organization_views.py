@@ -112,7 +112,6 @@ class OrganizationInfoView(BaseView, generic.UpdateView):
         return queryset
 
 
-
 class CreateOrganizationView(BaseView, generic.CreateView):
     model = Organization
     template_name = 'admin_panel/organization/info/organization_info.html'

@@ -92,12 +92,19 @@ class ClientOfferUrlView(View):
     def get(self,request,slug):
         try:
             offer = ClientOffer.objects.get(short_url=slug)
+            organization = Organization.objects.get(id=offer.organization.id)
+            offers = ClientOffer.objects.filter(organization=organization)
+            socials = SocialMediaUrl.objects.filter(organization=organization)
             context = {
-                'offer': offer
+                'offer': offer,
+                'organization':organization,
+                'offers':offers,
+                'socials':socials
             }
             return render(request, 'admin_panel/client_offer.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
+        
 
 class ServiceOfferUrlView(View):
     def get(self,request,slug):
