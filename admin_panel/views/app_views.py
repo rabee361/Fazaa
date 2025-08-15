@@ -36,10 +36,10 @@ class WebsiteSlugUrlView(View):
             return render(request, '404.html', status=400)
 
 
-class OrganizationUrlInfoView(BaseView):
+class OrganizationUrlInfoView(View):
     def get(self,request,slug):
         try:
-            organization = Organization.objects.get(deep_link=slug)
+            organization = Organization.objects.get(short_url=slug)
             context = {
                 'organization': organization
             }
@@ -91,7 +91,7 @@ class CatalogSlugUrlView(View):
 class ClientOfferUrlView(View):
     def get(self,request,slug):
         try:
-            offer = ClientOffer.objects.get(deep_link=slug)
+            offer = ClientOffer.objects.get(short_url=slug)
             context = {
                 'offer': offer
             }
@@ -102,7 +102,7 @@ class ClientOfferUrlView(View):
 class ServiceOfferUrlView(View):
     def get(self,request,slug):
         try:
-            offer = ServiceOffer.objects.get(deep_link=slug)
+            offer = ServiceOffer.objects.get(short_url=slug)
             context = {
                 'offer': offer
             }
