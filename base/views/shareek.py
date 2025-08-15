@@ -125,35 +125,39 @@ class OrganizationInfoView(BaseAPIView, OrganizationCheckMixin):
 
 class GetOrganizationView(BaseAPIView):
     def get(self,request,pk):
-        organization = Organization.objects.get(id=pk)
-        client_offers = ClientOffer.objects.filter(organization__id=pk)
-        branches = Branch.objects.filter(organization__id=pk)
-        reels = ReelsGallery.objects.filter(organization__id=pk)
-        socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
-        delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
-        catalogs = Catalog.objects.filter(organization__id=pk)
-        gallery = ImageGallery.objects.filter(organization__id=pk)
-
         try:
-            shareek_user = Shareek.objects.select_related('user').filter(organization=organization).first().user
-            shareek_user_serializer = UserSerializer(shareek_user, many=False, context={'request':request})
-        except Shareek.DoesNotExist:
-            return ErrorResult("لا يوجد شريك مرتبط بهذه المنظمة")
-        organization_serializer = OrganizationSerializer(organization, many=False , context={'request':request})
+            organization = Organization.objects.get(id=pk)
+            client_offers = ClientOffer.objects.filter(organization__id=pk)
+            branches = Branch.objects.filter(organization__id=pk)
+            reels = ReelsGallery.objects.filter(organization__id=pk)
+            socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
+            delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
+            catalogs = Catalog.objects.filter(organization__id=pk)
+            gallery = ImageGallery.objects.filter(organization__id=pk)
 
-        data = {
-            **shareek_user_serializer.data,
-            **organization_serializer.data,
-            'gallery': ImagesGallerySerializer(gallery, many=True, context={'request':request}).data,
-            'reels': ReelsGallerySerializer(reels, many=True, context={'request':request}).data,
-            'socials': SocialUrlSerializer(socials, many=True , context={'request':request}).data,
-            'delivery': DeliveryUrlSerializer(delivery, many=True , context={'request':request}).data,
-            'catalogs': CatalogUrlsSerializer(catalogs, many=True , context={'request':request}).data,
-            'client_offers': ListClientOfferSerializer(client_offers, many=True , context={'request':request}).data,
-            'branches': BranchSerializer(branches , many=True).data
-        }
+            try:
+                shareek_user = Shareek.objects.select_related('user').filter(organization=organization).first().user
+                shareek_user_serializer = UserSerializer(shareek_user, many=False, context={'request':request})
+            except Shareek.DoesNotExist:
+                return ErrorResult("لا يوجد شريك مرتبط بهذه المنظمة")
+            organization_serializer = OrganizationSerializer(organization, many=False , context={'request':request})
 
-        return Response(data , status=status.HTTP_200_OK)
+            data = {
+                **shareek_user_serializer.data,
+                **organization_serializer.data,
+                'gallery': ImagesGallerySerializer(gallery, many=True, context={'request':request}).data,
+                'reels': ReelsGallerySerializer(reels, many=True, context={'request':request}).data,
+                'socials': SocialUrlSerializer(socials, many=True , context={'request':request}).data,
+                'delivery': DeliveryUrlSerializer(delivery, many=True , context={'request':request}).data,
+                'catalogs': CatalogUrlsSerializer(catalogs, many=True , context={'request':request}).data,
+                'client_offers': ListClientOfferSerializer(client_offers, many=True , context={'request':request}).data,
+                'branches': BranchSerializer(branches , many=True).data
+            }
+
+            return Response(data , status=status.HTTP_200_OK)
+        except Organization.DoesNotExist:
+            return Response({"error":"لا يوجد منظمة بهذا الرقم"} , status=status.HTTP_404_NOT_FOUND)
+
 
 
 

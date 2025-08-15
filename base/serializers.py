@@ -292,7 +292,7 @@ class ServiceOfferSerializer(serializers.ModelSerializer):
 class ListClientOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientOffer
-        fields = ['id','content','expiresAt','createdAt','cover','template','slug']
+        fields = ['id','content','expiresAt','createdAt','cover','template','short_url']
 
     def get_cover(self,obj):
         request = self.context.get('request')
