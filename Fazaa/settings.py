@@ -372,3 +372,7 @@ FCM_DJANGO_SETTINGS = {
      # default: False
     "DELETE_INACTIVE_DEVICES": False,
 }
+
+# SSL - Additional configuration (main SSL settings are above in the HTTPS Security Settings section)
+# The SECURE_PROXY_SSL_HEADER is already set above, but keeping this for reference
+# CSRF_TRUSTED_ORIGINS is already configured above with the proper domains

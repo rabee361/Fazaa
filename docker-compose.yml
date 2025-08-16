@@ -103,8 +103,8 @@ services:
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
     depends_on:
       - web
     restart: always
@@ -124,10 +124,16 @@ services:
 
   certbot:
     image: certbot/certbot
+    container_name: fazaa_certbot_1
     volumes:
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-    command: certonly --webroot --webroot-path=/var/www/certbot -d faazza.com -d www.faazza.com
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email liamona0129@gmail.com --agree-tos --no-eff-email -d faazza.com -d www.faazza.com
+    depends_on:
+      - nginx
+    networks:
+      - fazaa_network
+
 
 networks:
   fazaa_network:
@@ -138,3 +144,5 @@ volumes:
   media_volume:
   static_volume:
   redis_data:
+  certbot_conf:
+  certbot_www:
