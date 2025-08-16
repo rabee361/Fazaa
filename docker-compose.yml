@@ -103,9 +103,8 @@ services:
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
-      - certbot_webroot:/var/www/certbot
-      - letsencrypt_certs:/etc/letsencrypt
-      - letsencrypt_lib:/var/lib/letsencrypt
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
     depends_on:
       - web
     restart: always
@@ -123,6 +122,12 @@ services:
           cpus: '0.2'
           memory: 256M
 
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    command: certonly --webroot --webroot-path=/var/www/certbot -d faazza.com -d www.faazza.com
 
 networks:
   fazaa_network:
@@ -133,6 +138,3 @@ volumes:
   media_volume:
   static_volume:
   redis_data:
-  certbot_webroot:
-  letsencrypt_certs:
-  letsencrypt_lib:
