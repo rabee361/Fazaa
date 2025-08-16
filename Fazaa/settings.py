@@ -39,12 +39,41 @@ ALLOWED_HOSTS = [
     '168.231.127.170',
     '127.0.0.1',
     'localhost',
-    'faazza.com'
+    'faazza.com',
+    'www.faazza.com'
 ]
 
-# CSRF_TRUSTED_ORIGINS = [
-# "http://127.0.0.1:8000",
-# ]
+# CSRF and CORS settings for HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    "https://faazza.com",
+    "https://www.faazza.com",
+    "http://127.0.0.1:8000",  # Keep for local development
+]
+
+# HTTPS Security Settings
+if not DEBUG:
+    # Force HTTPS
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # HSTS (HTTP Strict Transport Security)
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Secure cookies
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    
+    # Additional security headers
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    
+    # Referrer policy
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 # Application definition
 
 INSTALLED_APPS = [

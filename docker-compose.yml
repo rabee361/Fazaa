@@ -99,9 +99,13 @@ services:
       - ./Fazaa/.env
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
+      - certbot_webroot:/var/www/certbot
+      - letsencrypt_certs:/etc/letsencrypt
+      - letsencrypt_lib:/var/lib/letsencrypt
     depends_on:
       - web
     restart: always
@@ -129,3 +133,6 @@ volumes:
   media_volume:
   static_volume:
   redis_data:
+  certbot_webroot:
+  letsencrypt_certs:
+  letsencrypt_lib:
