@@ -50,32 +50,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",  # Keep for local development
 ]
 
-# HTTPS Security Settings
-if not DEBUG:
-    # Force HTTPS
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    
-    # HSTS (HTTP Strict Transport Security)
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    
-    # Secure cookies
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
-    
-    # Additional security headers
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = 'DENY'
-    
-    # Referrer policy
-    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
-# Application definition
-
 INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',
@@ -372,7 +346,3 @@ FCM_DJANGO_SETTINGS = {
      # default: False
     "DELETE_INACTIVE_DEVICES": False,
 }
-
-# SSL - Additional configuration (main SSL settings are above in the HTTPS Security Settings section)
-# The SECURE_PROXY_SSL_HEADER is already set above, but keeping this for reference
-# CSRF_TRUSTED_ORIGINS is already configured above with the proper domains
