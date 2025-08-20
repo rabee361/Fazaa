@@ -69,7 +69,7 @@ class OrganizationTypesBulkActionView(BaseView):
 class ListOrganizationsView(CustomListBaseView):
     model = Organization
     context_object_name = 'organizations'
-    context_fields = ['id','name','organization_type','card_url']
+    context_fields = ['id','name','organization_type','card_url','org_short_url']
     template_name = 'admin_panel/organization/info/organizations.html'
 
     def get_queryset(self):
@@ -93,6 +93,7 @@ class ListOrganizationsView(CustomListBaseView):
         context = super().get_context_data()
         for organization in context['organizations']:
             organization.card_url = self.request.build_absolute_uri(organization.get_absolute_card_url())
+            organization.org_short_url = self.request.build_absolute_uri(organization.get_absolute_org_url())
         return context
 
 

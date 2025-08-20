@@ -33,7 +33,7 @@ class Organization(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')
     website_visits = models.IntegerField(verbose_name='زيارات الموقع' , default=0)
     card_visits = models.IntegerField(verbose_name='زيارات البطاقة' , default=0)
-    org_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='اختصار الصفحة التعريفية ') 
+    org_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='رابط الصفحة التعريفية ') 
     org_visits = models.IntegerField(verbose_name='زيارات الصفحة' , default=0)
 
     def clean(self):

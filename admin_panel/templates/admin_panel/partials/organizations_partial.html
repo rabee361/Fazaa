@@ -10,5 +10,11 @@
             <i class="fas fa-copy"></i>
         </div>
     </td>
+    <td onclick="event.stopPropagation();">
+        <div class="copy-btn-wrapper">
+            <input type="button" class="copy-btn" data-url="{{ organization.org_short_url}}" value="" title="نسخ الرابط">
+            <i class="fas fa-copy"></i>
+        </div>
+    </td>
 </tr>
 {% endfor %}
