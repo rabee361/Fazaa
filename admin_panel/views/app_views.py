@@ -40,10 +40,20 @@ class OrganizationUrlInfoView(View):
     def get(self,request,slug):
         try:
             organization = Organization.objects.get(org_short_url=slug)
+            social_urls = SocialMediaUrl.objects.filter(organization=organization)
+            offers = ClientOffer.objects.filter(organization=organization)
+            catalogs = Catalog.objects.filter(organization=organization)
+            gallery = ImageGallery.objects.filter(organization=organization)[:3]
+            delivery_companies = DeliveryCompanyUrl.objects.filter(organization=organization)
             context = {
-                'organization': organization
+                'organization': organization,
+                'social_urls': social_urls,
+                'offers': offers,
+                'catalogs': catalogs,
+                'gallery': gallery,
+                'delivery_companies': delivery_companies
             }
-            return render(request, 'admin_panel/organization.html', context=context)
+            return render(request, 'admin_panel/profile.html', context=context)
         except Exception as e:
             return render(request, '404.html', status=400)
 

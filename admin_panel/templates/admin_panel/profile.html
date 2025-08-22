@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/profile.css' %}">
+    <script src="{% static 'assets/js/profile.js' %}"></script>
+    <title>{{ organization.name }} - معلومات المنظمة</title>
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">فزاع</a>
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-adjust"></i>
+        </button>
+    </nav>
+
+    <!-- Cover Image Carousel -->
+    {% if gallery %}
+    <div class="cover-carousel">
+        <div class="cover-carousel-track">
+            {% for image in gallery %}
+            <div class="cover-slide">
+                <img src="{{ image.image.url }}" alt="{{ organization.name }} - {{ forloop.counter }}" class="cover-image">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-btn prev-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="carousel-btn next-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <div class="carousel-indicators">
+            {% for image in gallery %}
+            <span class="indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Organization Info Card -->
+        <div class="organization-card slide-in-right">
+            <div class="organization-header">
+                <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" class="organization-logo">
+                <h2 class="organization-name">{{ organization.name }}</h2>
+            </div>
+
+        </div>
+
+        <!-- Organization Details -->
+        <div class="organization-details slide-in-left">
+            <div class="details-header">
+                <h1 class="details-title">معلومات المنظمة</h1>
+                <p class="details-subtitle">{{ organization.name }}</p>
+            </div>
+
+            {% if organization.description %}
+            <div class="organization-description">
+                {{ organization.description }}
+            </div>
+            {% endif %}
+
+            <!-- New dropdown squares section -->
+            <div class="dropdown-squares-section">
+                <div class="dropdown-square">
+                    <div class="square-header">
+                        <i class="fas fa-share-alt"></i>
+                        <span>وسائل التواصل</span>
+                    </div>
+                    <div class="square-dropdown">
+                        {% for social_url in social_urls %}
+                            {% if social_url.active %}
+                            <div class="dropdown-item">
+                                <div class="item-info">
+                                    {% if social_url.social_media.icon_thumbnail %}
+                                        <img src="{{ social_url.social_media.icon_thumbnail.url }}" alt="{{ social_url.social_media.name }}" class="dropdown-icon">
+                                    {% endif %}
+                                    <span class="dropdown-name">{{ social_url.social_media.name }}</span>
+                                </div>
+                                <div class="item-actions">
+                                    <a href="{{ social_url.url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ social_url.url }}"><i class="fa fa-copy"></i></a>
+                                    <a href="{{ social_url.url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="dropdown-square">
+                    <div class="square-header">
+                        <i class="fas fa-book"></i>
+                        <span>الكتالوجات</span>
+                    </div>
+                    <div class="square-dropdown">
+                        {% for catalog in catalogs %}
+                        <div class="dropdown-item">
+                            <div class="item-info">
+                                <i class="fas fa-file-alt dropdown-icon"></i>
+                                <span class="dropdown-name">{{ catalog.catalog_type }}</span>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{{ catalog.url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ catalog.url }}"><i class="fa fa-copy"></i></a>
+                                <a href="{{ catalog.url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="dropdown-square">
+                    <div class="square-header">
+                        <i class="fas fa-truck"></i>
+                        <span>شركات التوصيل</span>
+                    </div>
+                    <div class="square-dropdown">
+                        {% for delivery in delivery_companies %}
+                            {% if delivery.active %}
+                            <div class="dropdown-item">
+                                <div class="item-info">
+                                    {% if delivery.delivery_company.icon_thumbnail %}
+                                        <img src="{{ delivery.delivery_company.icon_thumbnail.url }}" alt="{{ delivery.delivery_company.name }}" class="dropdown-icon">
+                                    {% endif %}
+                                    <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
+                                </div>
+                                <div class="item-actions">
+                                    <a href="{{ delivery.url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ delivery.url }}"><i class="fa fa-copy"></i></a>
+                                    <a href="{{ delivery.url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organization Information Sections -->
+            <div class="organization-info-section">
+                <h3 class="info-section-title">
+                    <i class="fas fa-info-circle"></i>
+                    معلومات أساسية
+                </h3>
+                <div class="info-grid">
+                    {% if organization.organization_type %}
+                    <div class="info-detail">
+                        <i class="fas fa-building info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">نوع المنظمة</div>
+                            <div class="info-detail-value">{{ organization.organization_type.name }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if organization.commercial_register_id %}
+                    <div class="info-detail">
+                        <i class="fas fa-certificate info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">رقم السجل التجاري</div>
+                            <div class="info-detail-value">{{ organization.commercial_register_id }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="info-detail">
+                        <i class="fas fa-calendar-alt info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">تاريخ التسجيل</div>
+                            <div class="info-detail-value">{{ organization.createdAt|date:"d/m/Y" }}</div>
+                        </div>
+                    </div>
+                    
+                    {% if organization.website %}
+                    <div class="info-detail">
+                        <i class="fas fa-link info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">الموقع الإلكتروني</div>
+                            <div class="info-detail-value">
+                                <a href="{{ organization.website }}" target="_blank" style="color: var(--accent-color); text-decoration: none;">
+                                    زيارة الموقع
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if organization.card_url %}
+                    <div class="info-detail">
+                        <i class="fas fa-link info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">بطاقة الأعمال</div>
+                            <div class="info-detail-value">
+                                <a href="{{ organization.get_absolute_card_url }}" target="_blank" style="color: var(--accent-color); text-decoration: none;">
+                                     فتح البطاقة
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- Other Offers Section -->
+    <section class="other-offers-section">
+        <div class="other-offers-container">
+            <h2 class="other-offers-title">عروض</h2>
+            <div class="other-offers-slider">
+                <div class="other-offers-track" id="offersTrack">
+                    {% for other_offer in offers %}
+                        {% if other_offer.id != offer.id %}
+                        <div class="other-offer-card fade-in">
+                            <div class="other-offer-image">
+                                <img src="{{ other_offer.cover.url }}" alt="{{ other_offer.content|truncatechars:50 }}" class="offer-cover">
+                                <div class="offer-overlay">
+                                    <a href="/client_offers/{{ other_offer.short_url }}" class="view-offer-btn">
+                                        <i class="fas fa-eye"></i>
+                                        عرض التفاصيل
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="other-offer-content">
+                                <p class="other-offer-text">{{ other_offer.content|truncatechars:30 }}</p>
+                                <div class="other-offer-meta">
+                                    <div class="offer-date">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>{{ other_offer.createdAt|date:"d/m/Y" }}</span>
+                                    </div>
+                                    <div class="offer-expires">
+                                        <i class="fas fa-clock"></i>
+                                        <span>ينتهي: {{ other_offer.expiresAt|date:"d/m/Y" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% empty %}
+                        <div class="no-offers-message">
+                            <i class="fas fa-info-circle"></i>
+                            <p>لا توجد عروض أخرى متاحة حالياً</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% if offers|length > 1 %}
+                <div class="slider-controls">
+                    <button class="slider-btn" id="prevBtn" onclick="moveSlider(-1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="slider-btn" id="nextBtn" onclick="moveSlider(1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <div class="slider-indicators" id="indicators"></div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="{% static 'assets/images/fazaa.png' %}" alt="فزاع" class="footer-logo">
+            <p class="footer-text">منصة فزاع - ربط المنظمات بالعملاء</p>
+            <p class="footer-copyright">© {{ "now"|date:"Y" }} جميع الحقوق محفوظة لمنصة فزاع</p>
+        </div>
+    </footer>
+
+</body>
+</html>
