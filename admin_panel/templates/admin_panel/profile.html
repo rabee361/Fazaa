@@ -51,20 +51,16 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Organization Info Card -->
-        <div class="organization-card slide-in-right">
-            <div class="organization-header">
-                <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" class="organization-logo">
-                <h2 class="organization-name">{{ organization.name }}</h2>
-            </div>
-
-        </div>
-
         <!-- Organization Details -->
         <div class="organization-details slide-in-left">
             <div class="details-header">
-                <h1 class="details-title">معلومات المنظمة</h1>
-                <p class="details-subtitle">{{ organization.name }}</p>
+                <div class="organization-header">
+                    <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" class="organization-logo">
+                    <div>
+                        <h1 class="details-title">{{ organization.name }}</h1>
+                        <p class="details-subtitle">{{ organization.name }}</p>
+                    </div>
+                </div>
             </div>
 
             {% if organization.description %}
@@ -145,6 +141,33 @@
                         {% endfor %}
                     </div>
                 </div>
+
+                <div class="dropdown-square">
+                    <div class="square-header">
+                        <i class="fas fa-link"></i>
+                        <span>الروابط التعريفية</span>
+                    </div>
+                    <div class="square-dropdown">
+                        <div class="dropdown-item">
+                            <div class="item-info">
+                                <span class="dropdown-name">الموقع الالكتروني</span>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{{ organization.website }}" target="_blank" class="copy-btn" data-clipboard-text="{{ organization.website }}"><i class="fa fa-copy"></i></a>
+                                <a href="{{ organization.website }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                        <div class="dropdown-item">
+                            <div class="item-info">
+                                <span class="dropdown-name">البطاقة التعريفية</span>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{{ organization.card_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ organization.card_url }}"><i class="fa fa-copy"></i></a>
+                                <a href="{{ organization.card_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Organization Information Sections -->
@@ -181,37 +204,8 @@
                             <div class="info-detail-value">{{ organization.createdAt|date:"d/m/Y" }}</div>
                         </div>
                     </div>
-                    
-                    {% if organization.website %}
-                    <div class="info-detail">
-                        <i class="fas fa-link info-detail-icon"></i>
-                        <div class="info-detail-content">
-                            <div class="info-detail-label">الموقع الإلكتروني</div>
-                            <div class="info-detail-value">
-                                <a href="{{ organization.website }}" target="_blank" style="color: var(--accent-color); text-decoration: none;">
-                                    زيارة الموقع
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    {% if organization.card_url %}
-                    <div class="info-detail">
-                        <i class="fas fa-link info-detail-icon"></i>
-                        <div class="info-detail-content">
-                            <div class="info-detail-label">بطاقة الأعمال</div>
-                            <div class="info-detail-value">
-                                <a href="{{ organization.get_absolute_card_url }}" target="_blank" style="color: var(--accent-color); text-decoration: none;">
-                                     فتح البطاقة
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
-
         </div>
     </div>
 

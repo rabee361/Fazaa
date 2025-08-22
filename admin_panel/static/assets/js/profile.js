@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     handleScroll();
 
     // Add fade-in animation to main elements
-    const elements = document.querySelectorAll('.organization-card, .offer-info');
+    const elements = document.querySelectorAll('.organization-details, .offer-info');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -74,10 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add copy functionality to copy buttons
     const copyButtons = document.querySelectorAll('.copy-btn');
     copyButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const textToCopy = this.getAttribute('data-clipboard-text');
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const textToCopy = this.getAttribute('data-clipboard-text') || this.href;
             navigator.clipboard.writeText(textToCopy).then(function() {
-                console.log('Text copied to clipboard');
+                // Show toast notification
+                showToast('تم نسخ الرابط إلى الحافظة');
             }, function(err) {
                 console.error('Could not copy text: ', err);
             });
@@ -257,6 +259,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Show toast notification
+function showToast(message) {
+    // Remove any existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    
+    // Add to document
+    document.body.appendChild(toast);
+    
+    // Show toast
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
 
 // Add loading animation
 window.addEventListener('load', function() {
