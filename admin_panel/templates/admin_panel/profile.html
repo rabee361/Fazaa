@@ -63,9 +63,11 @@
                 </div>
             </div>
 
+            <!-- New description section -->
             {% if organization.description %}
-            <div class="organization-description">
-                {{ organization.description }}
+            <div class="organization-description-section">
+                <h3 class="description-title">الوصف</h3>
+                <p class="description-text">{{ organization.description }}</p>
             </div>
             {% endif %}
 
@@ -153,8 +155,8 @@
                                 <span class="dropdown-name">الموقع الالكتروني</span>
                             </div>
                             <div class="item-actions">
-                                <a href="{{ organization.website }}" target="_blank" class="copy-btn" data-clipboard-text="{{ organization.website }}"><i class="fa fa-copy"></i></a>
-                                <a href="{{ organization.website }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                <a href="{{ website_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ website_url }}"><i class="fa fa-copy"></i></a>
+                                <a href="{{ website_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
                             </div>
                         </div>
                         <div class="dropdown-item">
@@ -162,8 +164,8 @@
                                 <span class="dropdown-name">البطاقة التعريفية</span>
                             </div>
                             <div class="item-actions">
-                                <a href="{{ organization.card_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ organization.card_url }}"><i class="fa fa-copy"></i></a>
-                                <a href="{{ organization.card_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                <a href="{{ card_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ card_url }}"><i class="fa fa-copy"></i></a>
+                                <a href="{{ card_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
                             </div>
                         </div>
                     </div>

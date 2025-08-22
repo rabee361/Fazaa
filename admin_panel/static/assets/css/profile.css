@@ -234,6 +234,29 @@ body {
     background-color: #3d3d3d;
 }
 
+/* New description section styles */
+.organization-description-section {
+    margin: 2rem 0;
+    background-color: var(--bg-secondary);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-right: 3px solid var(--accent-color);
+}
+
+.description-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.description-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
 /* Dropdown Squares Styles */
 .dropdown-squares-section {
     display: grid;
@@ -380,10 +403,11 @@ body {
     background-color: var(--bg-secondary);
     border-radius: 8px;
     border-right: 3px solid var(--accent-color);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 [data-theme="dark"] .info-detail {
-    background-color: #3d3d3d;
+    background-color: var(--bg-secondary);
 }
 
 .info-detail-icon {

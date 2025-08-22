@@ -48,6 +48,8 @@ class OrganizationUrlInfoView(View):
             context = {
                 'organization': organization,
                 'social_urls': social_urls,
+                'website_url': request.build_absolute_uri(organization.get_absolute_website_url()),
+                'card_url': request.build_absolute_uri(organization.get_absolute_card_url()),
                 'offers': offers,
                 'catalogs': catalogs,
                 'gallery': gallery,
@@ -108,6 +110,8 @@ class ClientOfferUrlView(View):
             context = {
                 'offer': offer,
                 'organization':organization,
+                'website_url': request.build_absolute_uri(organization.get_absolute_website_url()),
+                'card_url': request.build_absolute_uri(organization.get_absolute_card_url()),
                 'offers':offers,
                 'socials':socials
             }

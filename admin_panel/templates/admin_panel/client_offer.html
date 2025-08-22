@@ -2,77 +2,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>{{ offer.organization.name }} - عرض خاص</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/profile.css' %}">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Noto+Sans+Arabic:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap');
-
-        :root {
-            --bg-primary: #f6f6f6;
-            --bg-secondary: #ffffff;
-            --bg-table-header: #e6e6e6;
-            --hover-bg: #e0e0e0;
-            --text-primary: #494949;
-            --text-secondary: #666666;
-            --border-color: #e0e0e0;
-            --accent-color: #b4a38e;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            background-color: var(--accent-color);
-            padding: 0.1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar.scrolled .navbar-brand {
-            color: var(--text-primary);
-            text-shadow: none;
-        }
-
-        .navbar-brand {
-            color: var(--bg-secondary);
-            font-size: 2rem;
-            font-weight: bold;
-            text-decoration: none;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .navbar-logo {
-            height: 50px;
-            width: auto;
-            border-radius: 8px;
-        }
-
         /* Cover Image Styles */
         .cover-section {
             width: 100%;
@@ -692,10 +632,13 @@
     </style>
 </head>
 <body>
+    
     <!-- Navbar -->
     <nav class="navbar">
         <a href="#" class="navbar-brand">فزاع</a>
-        <img src="{% static 'assets/images/fazaa.png' %}" alt="فزاع" class="navbar-logo">
+        <button class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fas fa-adjust"></i>
+        </button>
     </nav>
 
     <!-- Cover Section -->
@@ -711,9 +654,6 @@
             <div class="organization-header">
                 <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" class="organization-logo">
                 <h2 class="organization-name">{{ organization.name }}</h2>
-                {% if organization.organization_type %}
-                    <p class="organization-type">{{ organization.organization_type.name }}</p>
-                {% endif %}
             </div>
             
             <div class="organization-info">
@@ -741,7 +681,17 @@
                     <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
                     </svg>
-                    <span class="info-text">الموقع الإلكتروني</span>
+                    <a href="{{ organization.website }}" target="_blank" class="info-text" style="text-decoration: none; color: inherit;">الموقع الالكتروني</a>
+                </div>
+                {% endif %}
+
+                {% if organization.card_url %}
+                <div class="info-item">
+                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                        <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+                    </svg>
+                    <a href="{{ card_url }}" target="_blank" class="info-text" style="text-decoration: none; color: inherit;">البطاقة التعريفية</a>
                 </div>
                 {% endif %}
 
@@ -861,157 +811,7 @@
         </div>
     </footer>
 
-    <script>
-        // Add smooth scrolling and animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const navbar = document.querySelector('.navbar');
-            
-            // Navbar scroll effect
-            function handleScroll() {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            }
-
-            // Add scroll event listener
-            window.addEventListener('scroll', handleScroll);
-            
-            // Initial check
-            handleScroll();
-
-            // Add fade-in animation to main elements
-            const elements = document.querySelectorAll('.organization-card, .offer-info');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-
-            elements.forEach(el => {
-                observer.observe(el);
-            });
-
-            // Add hover effects to info items
-            const infoItems = document.querySelectorAll('.info-item');
-            infoItems.forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateX(5px)';
-                    this.style.transition = 'transform 0.3s ease';
-                });
-                
-                item.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateX(0)';
-                });
-            });
-
-            // Add click effect to detail cards
-            const detailCards = document.querySelectorAll('.detail-card');
-            detailCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = 'scale(1)';
-                    }, 150);
-                });
-            });
-
-            // Smooth scroll for navbar brand
-            document.querySelector('.navbar-brand').addEventListener('click', function(e) {
-                e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Slider functionality
-        let currentSlide = 0;
-        const track = document.getElementById('offersTrack');
-        const cards = document.querySelectorAll('.other-offer-card');
-        const totalSlides = cards.length;
-        const cardsPerView = window.innerWidth <= 768 ? 1 : (window.innerWidth <= 1024 ? 2 : 3);
-        const maxSlide = Math.max(0, totalSlides - cardsPerView);
-
-        function updateSlider() {
-            if (track && totalSlides > 0) {
-                const cardWidth = cards[0].offsetWidth + 32; // card width + gap
-                const translateX = currentSlide * cardWidth;
-                track.style.transform = `translateX(-${translateX}px)`;
-                
-                // Update button states
-                const prevBtn = document.getElementById('prevBtn');
-                const nextBtn = document.getElementById('nextBtn');
-                
-                if (prevBtn) prevBtn.disabled = currentSlide === 0;
-                if (nextBtn) nextBtn.disabled = currentSlide >= maxSlide;
-                
-                // Update indicators
-                updateIndicators();
-            }
-        }
-
-        function moveSlider(direction) {
-            currentSlide += direction;
-            currentSlide = Math.max(0, Math.min(currentSlide, maxSlide));
-            updateSlider();
-        }
-
-        function createIndicators() {
-            const indicatorsContainer = document.getElementById('indicators');
-            if (indicatorsContainer && totalSlides > cardsPerView) {
-                indicatorsContainer.innerHTML = '';
-                for (let i = 0; i <= maxSlide; i++) {
-                    const indicator = document.createElement('div');
-                    indicator.className = 'indicator';
-                    indicator.onclick = () => goToSlide(i);
-                    indicatorsContainer.appendChild(indicator);
-                }
-            }
-        }
-
-        function updateIndicators() {
-            const indicators = document.querySelectorAll('.indicator');
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === currentSlide);
-            });
-        }
-
-        function goToSlide(slideIndex) {
-            currentSlide = slideIndex;
-            updateSlider();
-        }
-
-        // Initialize slider
-        if (totalSlides > 0) {
-            createIndicators();
-            updateSlider();
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                const newCardsPerView = window.innerWidth <= 768 ? 1 : (window.innerWidth <= 1024 ? 2 : 3);
-                const newMaxSlide = Math.max(0, totalSlides - newCardsPerView);
-                currentSlide = Math.min(currentSlide, newMaxSlide);
-                createIndicators();
-                updateSlider();
-            });
-        }
-
-        // Add loading animation
-        window.addEventListener('load', function() {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease-in';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-    </script>
+    <!-- External JS -->
+    <script src="{% static 'assets/js/profile.js' %}"></script>
 </body>
 </html>
