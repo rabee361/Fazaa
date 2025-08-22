@@ -257,6 +257,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', toggleTheme);
     }
+
+    // Add hover effect to dropdown squares to show dropdown above others
+    const dropdownSquares = document.querySelectorAll('.dropdown-square');
+    dropdownSquares.forEach(square => {
+        square.addEventListener('mouseenter', function() {
+            this.style.zIndex = '102'; // Raise the square when hovered
+            const dropdown = this.querySelector('.square-dropdown');
+            if (dropdown) {
+                dropdown.style.zIndex = '103'; // Raise the dropdown when hovered
+            }
+        });
+
+        square.addEventListener('mouseleave', function() {
+            this.style.zIndex = '1'; // Reset zIndex on mouse leave
+            const dropdown = this.querySelector('.square-dropdown');
+            if (dropdown) {
+                dropdown.style.zIndex = '101'; // Reset dropdown zIndex on mouse leave
+            }
+        });
+    });
 });
 
 // Show toast notification

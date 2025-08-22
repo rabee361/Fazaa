@@ -251,6 +251,7 @@ body {
     border: 1px solid var(--border-color);
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 1; /* Added to ensure base square is above others */
 }
 
 .dropdown-square:hover {
@@ -281,7 +282,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     border: 1px solid var(--border-color);
-    z-index: 100;
+    z-index: 101; /* Ensure dropdown is above other elements */
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease, padding 0.3s ease;
