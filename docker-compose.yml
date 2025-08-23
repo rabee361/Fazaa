@@ -122,12 +122,10 @@ services:
           cpus: '0.2'
           memory: 256M
 
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d faazza.com -d www.faazza.com
+
+networks:
+  fazaa_network:
+    driver: bridge
 
 volumes:
   postgres_data:
