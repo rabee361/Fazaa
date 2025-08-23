@@ -16,12 +16,6 @@ from django.shortcuts import get_object_or_404
 from utils.views import BaseView
 
 
-
-class LandingView(View):
-    def get(self, request):
-        return render(request, 'admin_panel/landing.html', context={})
-
-
 class LoginView(View):
     def get(self, request):
         return render(request, 'admin_panel/login.html', context={})
