@@ -133,6 +133,7 @@ DashboardPatterns = [
 
 
 urlpatterns = [
+    path('' , user_views.LandingView.as_view() , name="land"),
     path('login/' , user_views.LoginView.as_view() , name="login"),
     path('logout/' , user_views.LogoutView.as_view() , name="logout"),
     path('dashboard/' , include(DashboardPatterns)),
