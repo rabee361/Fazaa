@@ -103,6 +103,8 @@ services:
     volumes:
       - static_volume:/home/app/staticfiles
       - media_volume:/home/app/media
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - web
     restart: always
@@ -120,10 +122,12 @@ services:
           cpus: '0.2'
           memory: 256M
 
-
-networks:
-  fazaa_network:
-    driver: bridge
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d faazza.com -d www.faazza.com
 
 volumes:
   postgres_data:
