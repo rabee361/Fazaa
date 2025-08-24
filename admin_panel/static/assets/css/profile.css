@@ -433,6 +433,11 @@ body {
     font-weight: 500;
 }
 
+.info-detail-value a {
+    text-decoration: none;
+    color: var(--accent-color);
+}
+
 /* Other Offers Section Styles */
 .other-offers-section {
     background-color: var(--bg-primary);
@@ -475,6 +480,12 @@ body {
 .other-offers-track {
     display: flex;
     gap: 2rem;
+}
+
+.other-offers-track:has(.no-offers-message) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .slider-controls {

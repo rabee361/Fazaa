@@ -80,7 +80,6 @@
                     </div>
                     <div class="square-dropdown">
                         {% for social_url in social_urls %}
-                            {% if social_url.active %}
                             <div class="dropdown-item">
                                 <div class="item-info">
                                     {% if social_url.social_media.icon_thumbnail %}
@@ -89,11 +88,10 @@
                                     <span class="dropdown-name">{{ social_url.social_media.name }}</span>
                                 </div>
                                 <div class="item-actions">
-                                    <a href="{{ social_url.url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ social_url.url }}"><i class="fa fa-copy"></i></a>
-                                    <a href="{{ social_url.url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                    <a href="{{ social_url.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ social_url.short_url }}"><i class="fa fa-copy"></i></a>
+                                    <a href="{{ social_url.short_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
                                 </div>
                             </div>
-                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -111,10 +109,14 @@
                                 <span class="dropdown-name">{{ catalog.catalog_type }}</span>
                             </div>
                             <div class="item-actions">
-                                <a href="{{ catalog.url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ catalog.url }}"><i class="fa fa-copy"></i></a>
-                                <a href="{{ catalog.url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                <a href="{{ catalog.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ catalog.short_url }}"><i class="fa fa-copy"></i></a>
+                                <a href="{{ catalog.short_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
                             </div>
                         </div>
+                        {% empty %}
+                            <div class="dropdown-item">
+                                <h5>لا يوجد كتالوجات</h5>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -126,7 +128,6 @@
                     </div>
                     <div class="square-dropdown">
                         {% for delivery in delivery_companies %}
-                            {% if delivery.active %}
                             <div class="dropdown-item">
                                 <div class="item-info">
                                     {% if delivery.delivery_company.icon_thumbnail %}
@@ -135,11 +136,10 @@
                                     <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
                                 </div>
                                 <div class="item-actions">
-                                    <a href="{{ delivery.url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ delivery.url }}"><i class="fa fa-copy"></i></a>
-                                    <a href="{{ delivery.url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                    <a href="{{ delivery.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ delivery.short_url }}"><i class="fa fa-copy"></i></a>
+                                    <a href="{{ delivery.short_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
                                 </div>
                             </div>
-                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -199,6 +199,26 @@
                     </div>
                     {% endif %}
                     
+                    {% if shareek.user.phonenumber %}
+                    <div class="info-detail">
+                        <i class="fas fa-certificate info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">رقم الهاتف</div>
+                            <div class="info-detail-value"><a href="tel: {{ shareek.user.phonenumber }}">{{ shareek.user.phonenumber }}</a></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if shareek.user.email %}
+                    <div class="info-detail">
+                        <i class="fas fa-certificate info-detail-icon"></i>
+                        <div class="info-detail-content">
+                            <div class="info-detail-label">الايميل</div>
+                            <div class="info-detail-value"><a href="mailto:{{ shareek.user.email }}">{{ shareek.user.email }}</a></div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
                     <div class="info-detail">
                         <i class="fas fa-calendar-alt info-detail-icon"></i>
                         <div class="info-detail-content">
@@ -248,8 +268,7 @@
                         {% endif %}
                     {% empty %}
                         <div class="no-offers-message">
-                            <i class="fas fa-info-circle"></i>
-                            <p>لا توجد عروض أخرى متاحة حالياً</p>
+                            <p>لا توجد عروض متاحة حالياً</p>
                         </div>
                     {% endfor %}
                 </div>

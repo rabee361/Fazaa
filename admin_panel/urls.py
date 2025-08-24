@@ -138,7 +138,7 @@ urlpatterns = [
     path('dashboard/' , include(DashboardPatterns)),
     path('card/<slug:slug>/' , organization_views.CardUrlView.as_view() , name="card-url"),
     path('catalog/<slug:slug>/' , app_views.CatalogSlugUrlView.as_view()),
-    path('social/<slug:slug>/' , app_views.SocialMediaSlugUrlView.as_view()),
+    path('social/<slug:slug>/' , app_views.SocialMediaSlugUrlView.as_view(), name="social-media-url"),
     path('website/<slug:slug>/' , app_views.WebsiteSlugUrlView.as_view()),
     path('client_offers/<slug:slug>/' , app_views.ClientOfferUrlView.as_view()),
     path('service_offers/<slug:slug>/' , app_views.ServiceOfferUrlView.as_view()),

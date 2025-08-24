@@ -6,6 +6,7 @@ from django.contrib.gis.db import models as gis_models
 from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
 from utils.types import CATALOG_TYPES
 import mimetypes
+from django.urls import reverse
 
 
 class OrganizationType(models.Model):
@@ -238,7 +239,7 @@ class SocialMediaUrl(models.Model):
         return f"{self.organization.name} - {self.social_media.name}"
 
     def get_absolute_url(self):
-        return f"/social/{self.short_url}/"
+        return reverse('social-media-url', kwargs={"slug": str(self.short_url)})
 
     def save(self, *args, **kwargs):
         if self.url:

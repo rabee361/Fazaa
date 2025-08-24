@@ -40,11 +40,22 @@ class OrganizationUrlInfoView(View):
     def get(self,request,slug):
         try:
             organization = Organization.objects.get(org_short_url=slug)
+            shareek = Shareek.objects.filter(organization=organization).first()
             social_urls = SocialMediaUrl.objects.filter(organization=organization)
             offers = ClientOffer.objects.filter(organization=organization)
             catalogs = Catalog.objects.filter(organization=organization)
             gallery = ImageGallery.objects.filter(organization=organization)[:3]
             delivery_companies = DeliveryCompanyUrl.objects.filter(organization=organization)
+
+            for link in social_urls:
+                link.short_url = self.request.build_absolute_uri(link.get_absolute_url())
+
+            for delivery_link in delivery_companies:
+                delivery_link.short_url = self.request.build_absolute_uri(delivery_link.get_absolute_url())
+
+            for catalog_link in catalogs:
+                catalog_link.short_url = self.request.build_absolute_uri(catalog_link.get_absolute_url())
+
             context = {
                 'organization': organization,
                 'social_urls': social_urls,
@@ -53,6 +64,7 @@ class OrganizationUrlInfoView(View):
                 'offers': offers,
                 'catalogs': catalogs,
                 'gallery': gallery,
+                'shareek': shareek,
                 'delivery_companies': delivery_companies
             }
             return render(request, 'admin_panel/profile.html', context=context)
