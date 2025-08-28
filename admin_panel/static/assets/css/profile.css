@@ -11,18 +11,6 @@
     --accent-color: #b4a38e;
 }
 
-/* Dark theme variables */
-[data-theme="dark"] {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-table-header: #3d3d3d;
-    --hover-bg: #3d3d3d;
-    --text-primary: #f0f0f0;
-    --text-secondary: #cccccc;
-    --border-color: #444444;
-    --accent-color: #b4a38e;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -35,59 +23,6 @@ body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
-}
-
-/* Navbar Styles */
-.navbar {
-    background-color: var(--accent-color);
-    padding: 0.1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-}
-
-.navbar.scrolled {
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="dark"] .navbar.scrolled {
-    background-color: rgba(45, 45, 45, 0.95);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-}
-
-.navbar-brand {
-    color: var(--bg-secondary);
-    font-size: 2rem;
-    font-weight: bold;
-    text-decoration: none;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.navbar-logo {
-    height: 50px;
-    width: auto;
-    border-radius: 8px;
-}
-
-/* Theme Toggle Button Styles */
-.theme-toggle-btn {
-    background: none;
-    border: none;
-    color: var(--bg-secondary);
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-left: 1rem;
-}
-
-[data-theme="dark"] .theme-toggle-btn {
-    color: var(--text-primary);
 }
 
 /* Cover Carousel Styles */
@@ -230,9 +165,6 @@ body {
     border-right: 4px solid var(--accent-color);
 }
 
-[data-theme="dark"] .organization-description {
-    background-color: #3d3d3d;
-}
 
 /* New description section styles */
 .organization-description-section {
@@ -376,10 +308,6 @@ body {
     margin-bottom: 1.5rem;
 }
 
-[data-theme="dark"] .organization-info-section {
-    background-color: #3d3d3d;
-}
-
 .info-section-title {
     font-size: 1.2rem;
     font-weight: bold;
@@ -404,10 +332,6 @@ body {
     border-radius: 8px;
     border-right: 3px solid var(--accent-color);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-
-[data-theme="dark"] .info-detail {
-    background-color: var(--bg-secondary);
 }
 
 .info-detail-icon {
@@ -515,10 +439,6 @@ body {
     transform: scale(1.1);
 }
 
-[data-theme="dark"] .slider-btn:hover {
-    background-color: #555;
-}
-
 .slider-btn:disabled {
     background-color: var(--border-color);
     color: var(--text-secondary);
@@ -617,9 +537,6 @@ body {
     transform: scale(1.05);
 }
 
-[data-theme="dark"] .view-offer-btn:hover {
-    background-color: #555;
-}
 
 .other-offer-content {
     padding: 1.5rem;
@@ -640,53 +557,8 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-/* Footer Styles */
-.footer {
-    background-color: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    padding: 2rem 0;
-    margin-top: 3rem;
-    text-align: center;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.footer-logo {
-    height: 40px;
-    width: auto;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-}
-
-.footer-text {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-}
-
-.footer-copyright {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    opacity: 0.8;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
-    .navbar {
-        padding: 0.5rem;
-    }
-
-    .navbar-brand {
-        font-size: 1.5rem;
-    }
-
-    .navbar-logo {
-        height: 30px;
-    }
 
     .cover-carousel {
         height: 200px;
@@ -707,10 +579,6 @@ body {
 
     .dropdown-squares-section {
         grid-template-columns: 1fr 1fr;
-    }
-
-    .footer-content {
-        padding: 0 1rem;
     }
 }
 

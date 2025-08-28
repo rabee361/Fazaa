@@ -44,6 +44,11 @@
                     <div class="form-group">
                         <label>{{ form.organizations.label }}:</label>
                         {{ form.organizations }}
+                        {% if form.organizations.errors %}
+                        <div class="form-errors">
+                            {{ form.organizations.errors }}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -58,8 +63,41 @@
                 إلغاء
             </a>
         </div>
-
-
     </form>
 </div>
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Initialize Select2 with checkboxes for organizations field
+    $('#id_organizations').select2({
+        placeholder: "اختر المنظمات",
+        width: '100%',
+        closeOnSelect: false,
+        templateResult: formatOrganization,
+        templateSelection: formatOrganizationSelection
+    });
+
+    // Custom template for organization options
+    function formatOrganization (data) {
+        if (data.loading) return data.text;
+
+        var $container = $(`<span>${data.text}</span>`);
+
+        if (data.selected) {
+            $container.prepend('<i class="fas fa-check"></i> ');
+        }
+
+        return $container;
+    }
+
+    // Custom template for selection
+    function formatOrganizationSelection (data) {
+        return data.text;
+    }
+});
+</script>
 {% endblock %}

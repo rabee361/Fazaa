@@ -100,7 +100,8 @@ class ListOrganizationsView(CustomListBaseView):
 
 class OrganizationInfoView(BaseView, generic.UpdateView):
     model = Organization
-    fields = ['name','logo','website','description','organization_type','commercial_register_id']
+    # fields = ['name','logo','website','description','organization_type','commercial_register_id']
+    form_class = OrganizationInfoForm
     template_name = 'admin_panel/organization/info/organization_info.html'
     success_url = '/dashboard/organization/organizations'
     pk_url_kwarg = 'id'
@@ -111,6 +112,11 @@ class OrganizationInfoView(BaseView, generic.UpdateView):
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['logo'] = self.object.logo
+        return context
 
 
 class CreateOrganizationView(BaseView, generic.CreateView):

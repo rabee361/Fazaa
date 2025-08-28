@@ -71,7 +71,6 @@ class User(AbstractUser):
         return f"{self.full_name} - {self.phonenumber}"
 
 
-
 class OTPCode(models.Model):
     phonenumber = models.CharField(max_length=20)
     full_name = models.CharField(max_length=40 , null=True , blank=True)
@@ -87,7 +86,6 @@ class OTPCode(models.Model):
 
     def __str__(self) -> str:
         return f"{self.phonenumber} - {self.code}"
-
 
 
 class Client(models.Model):

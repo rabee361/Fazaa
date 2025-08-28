@@ -25,19 +25,17 @@
                     </div>
                 </div>
                 
-                <div class="form-section">
-                    <div class="form-group">
-                        <label>{{ form.image.label }}</label>
-                        <div class="image-upload">
-                            <input type="file" name="image" id="image" class="my-img">
-                            <img src="{{ image.url }}" alt="image" name="image" id="image" width="50" height="50">
-                            <div class="upload-placeholder">اختر صورة</div>
+                <div class="form-sction">
+                    <div class="form-group image-picker">
+                        <label>صورة </label>
+                        <input type="file" id="image-upload" name="image" accept="image/*">
+                        <div class="image-preview">
+                            <img id="image-preview" width="100" height="100" src="{{ image.url }}" alt="Preview">
+                            {% if not image.url %}
+                                <div class="placeholder-text" id="placeholder-text">لا توجد صورة محددة</div>
+                            {% endif %}
                         </div>
-                        {% if form.image.errors %}
-                            <div class="error">{{ form.image.errors }}</div>
-                        {% endif %}
                     </div>
-                </div>
     
             </div>
         </div>
@@ -54,4 +52,27 @@
 
     </form>
 </div>
+
+<script>
+$(document).ready(function() {
+    $('#image-upload').on('change', function(e) {
+        var file = e.target.files[0];
+        var preview = $('#image-preview');
+        var placeholder = $('#placeholder-text');
+        
+        if (file) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.attr('src', e.target.result);
+                placeholder.hide();
+            };
+            
+            reader.readAsDataURL(file);
+        } else {
+            placeholder.show();
+        }
+    });
+});
+</script>
 {% endblock %}

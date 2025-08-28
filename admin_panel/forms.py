@@ -1,9 +1,9 @@
 from django import forms
 from django.core.validators import RegexValidator
 from users.models import Shareek, User, Organization, OrganizationType, Notification
-from base.models import SocialMedia, DeliveryCompany, Catalog, ClientOffer , ServiceOffer, Branch
-from django.db import transaction
+from base.models import *
 from django.contrib.gis.geos import Point
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(
@@ -106,6 +106,8 @@ class ShareekForm(UserForm):
             job=self.cleaned_data['job'],
             organization=organization,
         )
+        organization.create_social_media()
+        organization.create_delivery_company()
         return shareek
 
 class AdminForm(UserForm):
@@ -131,6 +133,14 @@ class OrganizationInfoForm(forms.ModelForm):
             if logo.size > 2 * 1024 * 1024:  # 2MB in bytes
                 raise forms.ValidationError('حجم الشعار يجب أن لا يتجاوز 2 ميجابايت')
         return logo
+
+
+# class ImageGalleryForm(forms.ModelForm):
+#     class Meta: 
+#         model = ImageGallery
+#         fields = ['image','organization']
+
+    
 
 
 class SocialMediaForm(forms.ModelForm):    
@@ -247,8 +257,7 @@ class UpdateClientForm(forms.ModelForm):
             if image.size > 2 * 1024 * 1024:  # 2MB in bytes
                 raise forms.ValidationError('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت')
         return image
-
-
+    
 class ClientOfferForm(forms.ModelForm):
     class Meta:
         model = ClientOffer
@@ -287,11 +296,6 @@ class ServiceOfferForm(forms.ModelForm):
                     'class': 'form-control',
                 }
             ),
-            'organizations': forms.SelectMultiple(
-                attrs={
-                    'class': 'form-control',
-                }
-            )
         }
         labels = {
             'content': 'المحتوى',

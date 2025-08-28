@@ -131,7 +131,7 @@ class ClientInfoView(BaseView):
 
     def post(self, request, id):
         client = get_object_or_404(User, id=id, user_type='CLIENT', is_deleted=False)
-        form = UpdateClientForm(request.POST, instance=client)
+        form = UpdateClientForm(request.POST, request.FILES, instance=client)
         if form.is_valid():
             form.save()
             return redirect('clients')
@@ -284,7 +284,7 @@ class AdminInfoView(BaseView):
 
     def post(self, request, id):
         admin = get_object_or_404(User, id=id, user_type='ADMIN', is_deleted=False)
-        form = UpdateAdminForm(request.POST, instance=admin)
+        form = UpdateAdminForm(request.POST, request.FILES, instance=admin)
         if form.is_valid():
             form.save()
             return redirect('admins')

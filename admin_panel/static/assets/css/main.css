@@ -719,14 +719,6 @@
     color: var(--text-primary);
 }
 
-.image-upload {
-    position: relative;
-    border: 1px dashed var(--border-color);
-    border-radius: 4px;
-    padding: 1rem;
-    text-align: center;
-    background: var(--bg-secondary);
-}
 
 .image-upload input[type="file"] {
     opacity: 0;
@@ -1269,6 +1261,8 @@ input[type="checkbox"] {
     border-radius: 4px;
     position: relative;
     margin-bottom: 0.5rem;
+    text-align: center;
+    background: var(--bg-secondary);
 }
 
 .image-upload.has-error {
@@ -1937,4 +1931,72 @@ input[type="checkbox"] {
 /* Hide the original select element */
 select.dropdown-checklist {
     display: none !important;
+}
+
+
+
+.select2-checkboxes {
+    width: 100% !important;
+}
+
+.select2-results__option[aria-selected=true] {
+    background-color: #f0f0f0;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.image-picker {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.image-picker label.upload-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 0.5rem;
+}
+
+.image-picker label.upload-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.image-picker label.upload-btn i {
+    margin-right: 0.5rem;
+}
+
+.image-preview {
+    position: relative;
+    margin-top: 1rem;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    min-height: 150px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 50%;
+    display: none;
+}
+
+.image-preview .placeholder-text {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }
