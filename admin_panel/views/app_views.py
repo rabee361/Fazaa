@@ -46,6 +46,7 @@ class OrganizationUrlInfoView(View):
             catalogs = Catalog.objects.filter(organization=organization)
             gallery = ImageGallery.objects.filter(organization=organization)[:3]
             delivery_companies = DeliveryCompanyUrl.objects.filter(organization=organization)
+            branches = Branch.objects.filter(organization=organization)
 
             for link in social_urls:
                 link.short_url = self.request.build_absolute_uri(link.get_absolute_url())
@@ -56,6 +57,9 @@ class OrganizationUrlInfoView(View):
             for catalog_link in catalogs:
                 catalog_link.short_url = self.request.build_absolute_uri(catalog_link.get_absolute_url())
 
+            for branch_link in branches:
+                branch_link.short_url = self.request.build_absolute_uri(branch_link.get_absolute_url())
+
             context = {
                 'organization': organization,
                 'social_urls': social_urls,
@@ -63,6 +67,7 @@ class OrganizationUrlInfoView(View):
                 'card_url': request.build_absolute_uri(organization.get_absolute_card_url()),
                 'offers': offers,
                 'catalogs': catalogs,
+                'branches': branches,
                 'gallery': gallery,
                 'shareek': shareek,
                 'delivery_companies': delivery_companies

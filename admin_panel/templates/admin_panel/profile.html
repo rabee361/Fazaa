@@ -139,7 +139,7 @@
                                 </div>
                                 <div class="item-actions">
                                     <a href="{{ social_url.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ social_url.short_url }}"><i class="fa fa-copy"></i></a>
-                                    <a href="{{ social_url.short_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                    <a href="#" class="qr-btn" onclick="generateQR(event, '{{ social_url.short_url }}')"><i class="fa fa-qrcode"></i></a>
                                 </div>
                             </div>
                         {% endfor %}
@@ -148,7 +148,7 @@
 
                 <div class="dropdown-square">
                     <div class="square-header">
-                        <i class="fas fa-book"></i>
+                        <i class="fas fa-file-alt dropdown-icon"></i>
                         <span>الكتالوجات</span>
                     </div>
                     <div class="square-dropdown">
@@ -160,7 +160,7 @@
                             </div>
                             <div class="item-actions">
                                 <a href="{{ catalog.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ catalog.short_url }}"><i class="fa fa-copy"></i></a>
-                                <a href="{{ catalog.short_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ catalog.short_url }}')"><i class="fa fa-qrcode"></i></a>
                             </div>
                         </div>
                         {% empty %}
@@ -187,7 +187,7 @@
                                 </div>
                                 <div class="item-actions">
                                     <a href="{{ delivery.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ delivery.short_url }}"><i class="fa fa-copy"></i></a>
-                                    <a href="{{ delivery.short_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                    <a href="#" class="qr-btn" onclick="generateQR(event, '{{ delivery.short_url }}')"><i class="fa fa-qrcode"></i></a>
                                 </div>
                             </div>
                         {% endfor %}
@@ -206,7 +206,7 @@
                             </div>
                             <div class="item-actions">
                                 <a href="{{ website_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ website_url }}"><i class="fa fa-copy"></i></a>
-                                <a href="{{ website_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ website_url }}')"><i class="fa fa-qrcode"></i></a>
                             </div>
                         </div>
                         <div class="dropdown-item">
@@ -215,12 +215,51 @@
                             </div>
                             <div class="item-actions">
                                 <a href="{{ card_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ card_url }}"><i class="fa fa-copy"></i></a>
-                                <a href="{{ card_url }}" target="_blank" class="visit-btn"><i class="fa fa-link"></i></a>
+                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ card_url }}')"><i class="fa fa-qrcode"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- QR Modal -->
+            <div id="qrModal" class="qr-modal">
+                <div class="qr-modal-content">
+                    <span class="qr-close" onclick="closeQR()">&times;</span>
+                    <canvas id="qrCanvas"></canvas>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+            <script>
+                function generateQR(event, url) {
+                    event.preventDefault();
+                    const modal = document.getElementById('qrModal');
+                    const canvas = document.getElementById('qrCanvas');
+                    
+                    // Clear previous QR code
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Generate new QR code
+                    QRCode.toCanvas(canvas, url, { width: 200 }, function (error) {
+                        if (error) console.error(error);
+                    });
+                    
+                    modal.style.display = 'block';
+                }
+
+                function closeQR() {
+                    document.getElementById('qrModal').style.display = 'none';
+                }
+
+                // Close modal when clicking outside
+                window.onclick = function(event) {
+                    const modal = document.getElementById('qrModal');
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                    }
+                }
+            </script>
 
             <!-- Organization Information Sections -->
             <!-- <div class="organization-info-section">
@@ -281,5 +320,42 @@
         </div>
     </div>
 
+    <!-- Fixed Bottom Navbar -->
+    <div class="bottom-nav">
+        <a href="mailto:{{ shareek.user.email }}" class="bottom-nav-item">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="tel:{{ shareek.user.phonenumber }}" class="bottom-nav-item">
+            <i class="fas fa-phone"></i>
+        </a>
+        <a href="sms:{{ shareek.user.phonenumber }}" class="bottom-nav-item">
+            <i class="fas fa-comment-sms"></i>
+        </a>
+        <a href="https://t.me/{{ shareek.user.phonenumber }}" class="bottom-nav-item">
+            <i class="fab fa-telegram-plane"></i>
+        </a>
+        <a href="https://wa.me/{{ shareek.user.phonenumber }}" class="bottom-nav-item">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+    <script>
+        // Handle potential missing Telegram/WhatsApp variables
+        document.addEventListener('DOMContentLoaded', function() {
+            const telegramLink = document.querySelectorAll('[href^="https://t.me/"]');
+            const whatsappLink = document.querySelectorAll('[href^="https://wa.me/"]');
+            
+            telegramLink.forEach(link => {
+                if (link.href === 'https://t.me/') {
+                    link.closest('.bottom-nav-item').style.display = 'none';
+                }
+            });
+            
+            whatsappLink.forEach(link => {
+                if (link.href === 'https://wa.me/') {
+                    link.closest('.bottom-nav-item').style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
