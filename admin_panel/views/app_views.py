@@ -393,6 +393,11 @@ class UpdateAboutUsView(BaseView, generic.UpdateView):
     success_url = '/dashboard/organization/about-us'
     pk_url_kwarg = 'id'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['icon'] = self.object.icon
+        return context
+
 
 class AboutUsBulkActionView(BaseView):
     def post(self, request):

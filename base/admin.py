@@ -79,6 +79,9 @@ class TermsPrivacyAdmin(admin.ModelAdmin):
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
+class AboutUsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+
 
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(OrganizationType, OrganizationTypeAdmin)
@@ -98,3 +101,4 @@ admin.site.register(Report, ReportAdmin)
 admin.site.register(CommonQuestion, CommonQuestionAdmin)
 admin.site.register(TermsPrivacy, TermsPrivacyAdmin)
 admin.site.register(ContactUs, ContactUsAdmin)
+admin.site.register(AboutUs, AboutUsAdmin)
