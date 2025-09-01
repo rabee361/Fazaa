@@ -69,7 +69,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             if distance:
                 queryset = queryset.annotate(distance=distance)
             else:
-                queryset = queryset.annotate(distance=100)
+                queryset = queryset.annotate(distance=Distance(km=100))
             
             # Debug print to see actual distances
             for branch in queryset:
