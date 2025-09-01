@@ -11,6 +11,7 @@ __pycache__/
 *.sqlite3
 .env
 .vscode
+.vscode/
 *.log
 *.db
 *.db3

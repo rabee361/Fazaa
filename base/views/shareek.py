@@ -65,7 +65,11 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
         # Filter and annotate branches with distance if user location provided
         if user_location:
             # First, annotate distances without casting
-            queryset = queryset.annotate(distance=Distance('location', user_location))
+            distance = Distance('location', user_location)
+            if distance:
+                queryset = queryset.annotate(distance=distance)
+            else:
+                queryset = queryset.annotate(distance=100)
             
             # Debug print to see actual distances
             for branch in queryset:
