@@ -8,32 +8,22 @@
     <link rel="stylesheet" href="{% static 'assets/css/profile.css' %}">
     <script src="{% static 'assets/js/profile.js' %}"></script>
     <title>{{ organization.name }} - معلومات المنظمة</title>
-
 </head>
 <body>
-
     <!-- Cover Image Carousel -->
     {% if gallery %}
-    <div class="cover-carousel">
-        <div class="cover-carousel-track">
+    <div class="carousel-container">
+        <div class="carousel-track">
             {% for image in gallery %}
-            <div class="cover-slide">
-                <img src="{{ image.image.url }}" alt="{{ organization.name }} - {{ forloop.counter }}" class="cover-image">
+            <div class="carousel-item">
+                <img src="{{ image.image.url }}" alt="Cover Image">
             </div>
             {% endfor %}
         </div>
         <div class="carousel-controls">
-            <button class="carousel-btn prev-btn">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-            <button class="carousel-btn next-btn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-        </div>
-        <div class="carousel-indicators">
-            {% for image in gallery %}
-            <span class="indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
-            {% endfor %}
+            <button class="carousel-prev"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-indicators"></div>
+            <button class="carousel-next"><i class="fas fa-chevron-left"></i></button>
         </div>
     </div>
     {% endif %}
@@ -164,7 +154,7 @@
                                         <span class="dropdown-name">{{ social_url.social_media.name }}</span>
                                     </div>
                                     <div class="item-actions">
-                                        <a href="{{ social_url.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ social_url.short_url }}"><i class="fa fa-copy"></i></a>
+                                        <button class="copy-btn" data-url="{{ social_url.short_url }}"><i class="fa fa-copy"></i></button>
                                         <a href="#" class="qr-btn" onclick="generateQR(event, '{{ social_url.short_url }}')"><i class="fa fa-qrcode"></i></a>
                                     </div>
                                 </div>
@@ -189,7 +179,7 @@
                                         <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
                                     </div>
                                     <div class="item-actions">
-                                        <a href="{{ delivery.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ delivery.short_url }}"><i class="fa fa-copy"></i></a>
+                                        <button class="copy-btn" data-url="{{ delivery.short_url }}"><i class="fa fa-copy"></i></button>
                                         <a href="#" class="qr-btn" onclick="generateQR(event, '{{ delivery.short_url }}')"><i class="fa fa-qrcode"></i></a>
                                     </div>
                                 </div>
@@ -212,7 +202,7 @@
                                     <span class="dropdown-name">{{ catalog.catalog_type }}</span>
                                 </div>
                                 <div class="item-actions">
-                                    <a href="{{ catalog.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ catalog.short_url }}"><i class="fa fa-copy"></i></a>
+                                    <button class="copy-btn" data-url="{{ catalog.short_url }}"><i class="fa fa-copy"></i></button>
                                     <a href="#" class="qr-btn" onclick="generateQR(event, '{{ catalog.short_url }}')"><i class="fa fa-qrcode"></i></a>
                                 </div>
                             </div>
@@ -234,7 +224,7 @@
                                         <span class="dropdown-name">{{ branch.name }}</span>
                                     </div>
                                     <div class="item-actions">
-                                        <a href="{{ branch.short_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ branch.short_url }}"><i class="fa fa-copy"></i></a>
+                                        <button class="copy-btn" data-url="{{ branch.short_url }}"><i class="fa fa-copy"></i></button>
                                         <a href="#" class="qr-btn" onclick="generateQR(event, '{{ branch.short_url }}')"><i class="fa fa-qrcode"></i></a>
                                     </div>
                                 </div>
@@ -254,7 +244,7 @@
                                 <span class="dropdown-name">الموقع الالكتروني</span>
                             </div>
                             <div class="item-actions">
-                                <a href="{{ website_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ website_url }}"><i class="fa fa-copy"></i></a>
+                                <button class="copy-btn" data-url="{{ website_url }}"><i class="fa fa-copy"></i></button>
                                 <a href="#" class="qr-btn" onclick="generateQR(event, '{{ website_url }}')"><i class="fa fa-qrcode"></i></a>
                             </div>
                         </div>
@@ -263,7 +253,7 @@
                                 <span class="dropdown-name">البطاقة التعريفية</span>
                             </div>
                             <div class="item-actions">
-                                <a href="{{ card_url }}" target="_blank" class="copy-btn" data-clipboard-text="{{ card_url }}"><i class="fa fa-copy"></i></a>
+                                <button class="copy-btn" data-url="{{ card_url }}"><i class="fa fa-copy"></i></button>
                                 <a href="#" class="qr-btn" onclick="generateQR(event, '{{ card_url }}')"><i class="fa fa-qrcode"></i></a>
                             </div>
                         </div>

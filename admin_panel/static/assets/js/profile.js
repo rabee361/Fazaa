@@ -50,125 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add copy functionality to copy buttons
-    const copyButtons = document.querySelectorAll('.copy-btn');
-    copyButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const textToCopy = this.getAttribute('data-clipboard-text') || this.href;
-            navigator.clipboard.writeText(textToCopy).then(function() {
-                // Show toast notification
-                showToast('تم نسخ الرابط إلى الحافظة');
-            }, function(err) {
-                console.error('Could not copy text: ', err);
-            });
-        });
-    });
-
-    // Carousel functionality for cover images
-    const coverTrack = document.querySelector('.cover-carousel-track');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    const indicators = document.querySelectorAll('.indicator');
-    
-    if (coverTrack && prevBtn && nextBtn && indicators.length > 0) {
-        let currentIndex = 0;
-        const slideCount = indicators.length;
-        const slideWidth = 100; // Each slide is 100% width
-        
-        // Update carousel position
-        function updateCarousel() {
-            coverTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
-            
-            // Update indicators
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === currentIndex);
-            });
-        }
-        
-        // Next slide
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % slideCount;
-            updateCarousel();
-        }
-        
-        // Previous slide
-        function prevSlide() {
-            currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-            updateCarousel();
-        }
-        
-        // Auto slide functionality
-        function autoSlideCover() {
-            nextSlide();
-        }
-        
-        // Start auto sliding
-        let autoSlideInterval = setInterval(autoSlideCover, 4000);
-        
-        // Pause auto sliding when user interacts
-        coverTrack.addEventListener('mouseenter', () => {
-            clearInterval(autoSlideInterval);
-        });
-        
-        coverTrack.addEventListener('mouseleave', () => {
-            autoSlideInterval = setInterval(autoSlideCover, 4000);
-        });
-        
-        // Event listeners for buttons
-        nextBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            nextSlide();
-            resetAutoSlide();
-        });
-        
-        prevBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            prevSlide();
-            resetAutoSlide();
-        });
-        
-        // Event listeners for indicators
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentIndex = index;
-                updateCarousel();
-                resetAutoSlide();
-            });
-        });
-        
-        // Reset auto slide timer
-        function resetAutoSlide() {
-            clearInterval(autoSlideInterval);
-            autoSlideInterval = setInterval(autoSlideCover, 4000);
-        }
-        
-        // Touch support for carousel
-        let startX = 0;
-        let endX = 0;
-        
-        coverTrack.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            clearInterval(autoSlideInterval);
-        });
-        
-        coverTrack.addEventListener('touchmove', (e) => {
-            endX = e.touches[0].clientX;
-        });
-        
-        coverTrack.addEventListener('touchend', () => {
-            const threshold = 50;
-            if (startX - endX > threshold) {
-                nextSlide();
-            } else if (endX - startX > threshold) {
-                prevSlide();
-            }
-            autoSlideInterval = setInterval(autoSlideCover, 4000);
-        });
-    }
-
-    // Carousel functionality for offers slider with touch support
     const track = document.getElementById('offersTrack');
     const indicatorsContainer = document.getElementById('indicators');
     
@@ -311,25 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
         themeToggleBtn.addEventListener('click', toggleTheme);
     }
 
-    // Add hover effect to dropdown squares to show dropdown above others
-    const dropdownSquares = document.querySelectorAll('.dropdown-square');
-    dropdownSquares.forEach(square => {
-        square.addEventListener('mouseenter', function() {
-            this.style.zIndex = '102'; // Raise the square when hovered
-            const dropdown = this.querySelector('.square-dropdown');
-            if (dropdown) {
-                dropdown.style.zIndex = '103'; // Raise the dropdown when hovered
-            }
-        });
-
-        square.addEventListener('mouseleave', function() {
-            this.style.zIndex = '1'; // Reset zIndex on mouse leave
-            const dropdown = this.querySelector('.square-dropdown');
-            if (dropdown) {
-                dropdown.style.zIndex = '101'; // Reset dropdown zIndex on mouse leave
-            }
-        });
-    });
 });
 
 // Show toast notification
@@ -379,3 +241,157 @@ function toggleTheme() {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
 }
+
+// Add carousel functionality to profile.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize carousel
+    const carouselTrack = document.querySelector('.carousel-track');
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    const indicatorsContainer = document.querySelector('.carousel-indicators');
+    
+    if (carouselTrack && carouselItems.length > 0) {
+        let currentIndex = 0;
+        const totalItems = carouselItems.length;
+        let autoSlideInterval;
+        
+        // Create indicators
+        function createIndicators() {
+            if (!indicatorsContainer) return;
+            
+            for (let i = 0; i < totalItems; i++) {
+                const indicator = document.createElement('div');
+                indicator.classList.add('carousel-indicator');
+                if (i === 0) indicator.classList.add('active');
+                indicator.addEventListener('click', () => goToSlide(i));
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+        
+        // Update indicators
+        function updateIndicators() {
+            if (!indicatorsContainer) return;
+            
+            const indicators = indicatorsContainer.querySelectorAll('.carousel-indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        }
+        
+        // Go to specific slide
+        function goToSlide(index) {
+            if (index < 0 || index >= totalItems) return;
+            
+            currentIndex = index;
+            const offset = currentIndex * 100;
+            carouselTrack.style.transform = `translateX(${offset}%)`;
+            
+            updateIndicators();
+            resetAutoSlide();
+        }
+        
+        // Next slide
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalItems;
+            goToSlide(currentIndex);
+        }
+        
+        // Previous slide
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            goToSlide(currentIndex);
+        }
+        
+        // Start auto slide
+        function startAutoSlide() {
+            if (totalItems > 1) {
+                autoSlideInterval = setInterval(nextSlide, 4000);
+            }
+        }
+        
+        // Reset auto slide
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+        
+        // Initialize carousel
+        function initCarousel() {
+            // Set initial position
+            carouselTrack.style.transform = `translateX(0%)`;
+            
+            // Add event listeners to controls
+            document.querySelector('.carousel-next')?.addEventListener('click', nextSlide);
+            document.querySelector('.carousel-prev')?.addEventListener('click', prevSlide);
+            
+            // Create indicators
+            createIndicators();
+            
+            // Start auto slide
+            startAutoSlide();
+        }
+        
+        // Initialize the carousel
+        initCarousel();
+    }
+    
+});
+
+
+
+
+
+
+
+
+// Add this function to initialize copy buttons
+function initializeCopyButtons() {
+    document.querySelectorAll('.copy-btn').forEach(button => {
+        // Remove existing event listener to prevent duplicates
+        button.removeEventListener('click', copyButtonHandler);
+        // Add new event listener
+        button.addEventListener('click', copyButtonHandler);
+    });
+}
+
+// Separate the handler function
+async function copyButtonHandler(e) {
+    e.stopPropagation(); // Prevent row click event
+    const url = this.getAttribute('data-url');
+    
+    try {
+        // Try modern clipboard API first
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(url);
+            showToast('تم نسخ الرابط بنجاح');
+        } else {
+            // Fallback for older browsers and non-HTTPS contexts
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                textArea.remove();
+                showToast('تم نسخ الرابط بنجاح');
+            } catch (err) {
+                textArea.remove();
+                showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
+                showSelectableUrl(url);
+            }
+        }
+    } catch (err) {
+        showToast('حدث خطأ أثناء نسخ الرابط - الرجاء النسخ يدوياً');
+        showSelectableUrl(url);
+    }
+}
+
+// Call initializeCopyButtons when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCopyButtons();
+});
+
