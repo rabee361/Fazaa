@@ -3,7 +3,7 @@
     <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ offer.id }}"></td>
     <td>{{ offer.id }}</td>
     <td>{{ offer.organization.name }}</td>
-    <td>{{ offer.createdAt }}</td>
     <td>{{ offer.expiresAt }}</td>
+    <td>{{ offer.createdAt }}</td>
 </tr>
 {% endfor %}
