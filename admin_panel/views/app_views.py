@@ -45,6 +45,7 @@ class OrganizationUrlInfoView(View):
             offers = ClientOffer.objects.filter(organization=organization)
             catalogs = Catalog.objects.filter(organization=organization)
             gallery = ImageGallery.objects.filter(organization=organization)[:3]
+            reels = ReelsGallery.objects.filter(organization=organization)[:3]
             delivery_companies = DeliveryCompanyUrl.objects.filter(organization=organization)
             branches = Branch.objects.filter(organization=organization)
 
@@ -69,6 +70,7 @@ class OrganizationUrlInfoView(View):
                 'catalogs': catalogs,
                 'branches': branches,
                 'gallery': gallery,
+                'reels': reels,
                 'shareek': shareek,
                 'delivery_companies': delivery_companies
             }

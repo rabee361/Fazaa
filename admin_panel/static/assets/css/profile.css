@@ -26,6 +26,135 @@ body {
     margin-bottom: 70px; /* Add space for fixed navbar */
 }
 
+
+/* Reels Slider Styles */
+.reels-slider-container {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
+
+.reels-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    position: relative;
+    display: inline-block;
+}
+
+.reels-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
+.reels-slider-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--bg-primary);
+}
+
+.reels-slider-track::-webkit-scrollbar {
+    height: 6px;
+}
+
+.reels-slider-track::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 3px;
+}
+
+.reels-slider-track::-webkit-scrollbar-track {
+    background-color: var(--bg-primary);
+}
+
+.reel-item {
+    flex: 0 0 auto;
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.reel-thumbnail {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio (square) */
+    border-radius: 100%;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+}
+
+.reel-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.reel-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    color: var(--accent-color);
+}
+
+.reel-placeholder i {
+    font-size: 2rem;
+}
+
+.reel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.reel-thumbnail:hover .reel-overlay {
+    opacity: 1;
+}
+
+.reel-overlay i {
+    color: white;
+    font-size: 2rem;
+}
+
+.reel-info {
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.reel-info .reel-title {
+    font-size: 0.85rem;
+    font-weight: normal;
+    margin: 0;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
 /* Cover Carousel Styles */
 .cover-carousel {
     position: relative;
@@ -130,17 +259,11 @@ body {
 
 /* Organization Details Styles */
 .organization-details {
-    background-color: var(--bg-secondary);
     border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border: 1px solid var(--border-color);
 }
 
 .details-header {
-    border-bottom: 2px solid var(--accent-color);
     padding-bottom: 1rem;
-    margin-bottom: 2rem;
 }
 
 .details-title {
@@ -169,16 +292,14 @@ body {
 
 /* New description section styles */
 .organization-description-section {
-    margin: 2rem 0;
     background-color: var(--bg-secondary);
     border-radius: 15px;
-    padding: 2rem;
+    padding: 1rem;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border-right: 3px solid var(--accent-color);
 }
 
 .description-title {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     color: var(--text-primary);
     margin-bottom: 1rem;
@@ -187,6 +308,7 @@ body {
 .description-text {
     font-size: 1.1rem;
     line-height: 1.6;
+    text-wrap: wrap;
     color: var(--text-primary);
 }
 
@@ -207,7 +329,6 @@ body {
     border: 1px solid var(--border-color);
     cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 1; /* Added to ensure base square is above others */
 }
 
 .dropdown-square:hover {
@@ -222,6 +343,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    z-index: 1;
     font-weight: bold;
     color: var(--text-primary);
 }
@@ -240,7 +362,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     border: 1px solid var(--border-color);
-    z-index: 101; /* Ensure dropdown is above other elements */
+    z-index: 2;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease, padding 0.3s ease;
@@ -365,16 +487,12 @@ body {
     color: var(--accent-color);
 }
 
-/* Other Offers Section Styles */
-.other-offers-section {
-    background-color: var(--bg-primary);
-    padding: 3rem 0;
-}
 
 .other-offers-container {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
+    background: linear-gradient(#9b784d, white);
 }
 
 .other-offers-title {
@@ -470,14 +588,11 @@ body {
 }
 
 .other-offer-card {
-    background-color: var(--bg-secondary);
-    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border: 1px solid var(--border-color);
     cursor: pointer;
-    min-width: 320px;
+    min-width: 280px;
     flex-shrink: 0;
+    margin: 1rem;
 }
 
 .other-offer-card:hover {
@@ -488,6 +603,7 @@ body {
 .other-offer-image {
     position: relative;
     height: 200px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
@@ -542,7 +658,7 @@ body {
 
 
 .other-offer-content {
-    padding: 1.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .other-offer-text {
@@ -557,7 +673,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    color: white;
 }
 
 /* Responsive Design */
@@ -571,9 +687,8 @@ body {
         padding: 1rem;
     }
 
-    .organization-header {
-        flex-direction: column;
-        text-align: center;
+    .details-title {
+        font-size: 1rem;
     }
 
     .info-grid {
@@ -581,14 +696,62 @@ body {
     }
 
     .dropdown-squares-section {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 3fr);
+    }
+    
+    .dropdown-square {
+        padding: 0.5rem;
+    }
+    
+    .square-header i {
+        font-size: 1rem;
+    }
+    
+    .square-header span {
+        font-size: 0.5rem;
+    }
+    
+    .dropdown-name {
+        display: none;
+    }
+    
+    .copy-btn, .qr-btn {
+        padding: 0.2rem 0.25rem;
+        font-size: 0.5rem;
     }
 }
 
 @media (max-width: 480px) {
     .dropdown-squares-section {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
     }
+    
+    .dropdown-square {
+        padding: 0.6rem;
+    }
+    
+    .square-header i {
+        font-size: 0.75rem;
+    }
+    
+    .dropdown-name {
+        font-size: 0.75rem;
+    }
+    
+    .copy-btn, .visit-btn {
+        padding: 0.25rem 0.4rem;
+    }
+
+    .item-actions { 
+        gap: 0
+    }
+
+    .main-content {
+        max-width: 1200px;
+        margin: 0;
+        padding: 0;
+    }
+
 }
 
 /* Animation Classes */
@@ -723,8 +886,8 @@ body {
 
 .qr-modal-content {
     background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
+    margin: 5% auto;
+    padding: 10px;
     border: 1px solid #888;
     width: 240px;
     border-radius: 10px;
@@ -769,3 +932,5 @@ body {
     background-color: var(--accent-color);
     color: var(--bg-secondary);
 }
+
+

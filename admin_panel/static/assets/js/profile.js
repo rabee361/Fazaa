@@ -1,26 +1,5 @@
 // Add smooth scrolling and animations
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for saved theme preference or default to light
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
-    const navbar = document.querySelector('.navbar');
-    
-    // Navbar scroll effect
-    function handleScroll() {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    }
-
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll);
-    
-    // Initial check
-    handleScroll();
-
     // Add fade-in animation to main elements
     const elements = document.querySelectorAll('.organization-details, .offer-info');
     
@@ -99,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update carousel position
         function updateCarousel() {
-            coverTrack.style.transform = `translateX(${currentIndex * slideWidth}%)`;
+            coverTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
             
             // Update indicators
             indicators.forEach((indicator, index) => {
@@ -119,23 +98,40 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCarousel();
         }
         
-        // Auto slide every 5 seconds
-        let autoSlide = setInterval(nextSlide, 5000);
+        // Auto slide functionality
+        function autoSlideCover() {
+            nextSlide();
+        }
+        
+        // Start auto sliding
+        let autoSlideInterval = setInterval(autoSlideCover, 4000);
+        
+        // Pause auto sliding when user interacts
+        coverTrack.addEventListener('mouseenter', () => {
+            clearInterval(autoSlideInterval);
+        });
+        
+        coverTrack.addEventListener('mouseleave', () => {
+            autoSlideInterval = setInterval(autoSlideCover, 4000);
+        });
         
         // Event listeners for buttons
-        nextBtn.addEventListener('click', () => {
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             nextSlide();
             resetAutoSlide();
         });
         
-        prevBtn.addEventListener('click', () => {
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             prevSlide();
             resetAutoSlide();
         });
         
         // Event listeners for indicators
         indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
+            indicator.addEventListener('click', (e) => {
+                e.preventDefault();
                 currentIndex = index;
                 updateCarousel();
                 resetAutoSlide();
@@ -144,24 +140,49 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Reset auto slide timer
         function resetAutoSlide() {
-            clearInterval(autoSlide);
-            autoSlide = setInterval(nextSlide, 5000);
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(autoSlideCover, 4000);
         }
+        
+        // Touch support for carousel
+        let startX = 0;
+        let endX = 0;
+        
+        coverTrack.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            clearInterval(autoSlideInterval);
+        });
+        
+        coverTrack.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+        });
+        
+        coverTrack.addEventListener('touchend', () => {
+            const threshold = 50;
+            if (startX - endX > threshold) {
+                nextSlide();
+            } else if (endX - startX > threshold) {
+                prevSlide();
+            }
+            autoSlideInterval = setInterval(autoSlideCover, 4000);
+        });
     }
 
-    // Carousel functionality for offers slider
+    // Carousel functionality for offers slider with touch support
     const track = document.getElementById('offersTrack');
-    const prevBtnOffers = document.getElementById('prevBtn');
-    const nextBtnOffers = document.getElementById('nextBtn');
     const indicatorsContainer = document.getElementById('indicators');
     
-    if (track && prevBtnOffers && nextBtnOffers) {
+    if (track) {
         let currentIndex = 0;
         let cards = Array.from(track.children);
         let cardCount = cards.length;
         let cardWidth = cards[0]?.offsetWidth + 32 || 352; // 32px for gap
         let visibleCards = Math.floor(track.parentElement.offsetWidth / cardWidth);
         let maxIndex = cardCount - visibleCards;
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+        let startTime = 0;
         
         // Create indicators
         if (indicatorsContainer) {
@@ -182,18 +203,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return track.scrollWidth > track.parentElement.offsetWidth;
         }
         
-        // Update button states
-        function updateButtons() {
-            if (!isOverflowing()) {
-                prevBtnOffers.disabled = true;
-                nextBtnOffers.disabled = true;
-                return;
-            }
-            
-            prevBtnOffers.disabled = currentIndex === 0;
-            nextBtnOffers.disabled = currentIndex === maxIndex;
-        }
-        
         // Update indicators
         function updateIndicators() {
             if (!indicatorsContainer) return;
@@ -208,35 +217,80 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!isOverflowing()) return;
             
             currentIndex = Math.max(0, Math.min(index, maxIndex));
-            const translateX = currentIndex * cardWidth;
+            const translateX = -(currentIndex * cardWidth);
             track.style.transform = `translateX(${translateX}px)`;
             
-            updateButtons();
             updateIndicators();
         }
         
-        // Move slider by offset
-        function moveSlider(offset) {
-            moveToSlide(currentIndex + offset);
-        }
+        // Touch and drag events
+        track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            startTime = new Date().getTime();
+            track.style.transition = 'none';
+        });
         
-        // Initialize carousel
-        function initCarousel() {
-            if (!isOverflowing()) {
-                // Hide controls if not needed
-                if (prevBtnOffers) prevBtnOffers.style.display = 'none';
-                if (nextBtnOffers) nextBtnOffers.style.display = 'none';
-                if (indicatorsContainer) indicatorsContainer.style.display = 'none';
-                return;
-            }
+        track.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
             
-            updateButtons();
-            updateIndicators();
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            
+            // Check if horizontal or vertical scrolling
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                e.preventDefault();
+                const translateX = -(currentIndex * cardWidth) + diffX;
+                track.style.transform = `translateX(${translateX}px)`;
+            }
+        });
+        
+        track.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            track.style.transition = 'transform 0.5s ease-in-out';
+            
+            const endX = e.changedTouches[0].clientX;
+            const diffX = endX - startX;
+            const deltaTime = new Date().getTime() - startTime;
+            
+            // Determine if it's a swipe or just a tap
+            if (Math.abs(diffX) > 50 || (Math.abs(diffX) > 10 && deltaTime < 300)) {
+                if (diffX > 0 && currentIndex > 0) {
+                    moveToSlide(currentIndex - 1);
+                } else if (diffX < 0 && currentIndex < maxIndex) {
+                    moveToSlide(currentIndex + 1);
+                } else {
+                    moveToSlide(currentIndex);
+                }
+            } else {
+                moveToSlide(currentIndex);
+            }
+        });
+        
+        // Auto slide functionality
+        function autoSlideOffers() {
+            if (isOverflowing()) {
+                currentIndex = (currentIndex + 1) % (maxIndex + 1);
+                moveToSlide(currentIndex);
+            }
         }
         
-        // Event listeners for buttons
-        prevBtnOffers.addEventListener('click', () => moveSlider(-1));
-        nextBtnOffers.addEventListener('click', () => moveSlider(1));
+        // Start auto sliding
+        let autoSlideInterval = setInterval(autoSlideOffers, 4000);
+        
+        // Pause auto sliding when user interacts
+        track.addEventListener('touchstart', () => {
+            clearInterval(autoSlideInterval);
+        });
+        
+        track.addEventListener('touchend', () => {
+            autoSlideInterval = setInterval(autoSlideOffers, 4000);
+        });
         
         // Handle window resize
         window.addEventListener('resize', () => {
@@ -244,12 +298,11 @@ document.addEventListener('DOMContentLoaded', function() {
             visibleCards = Math.floor(track.parentElement.offsetWidth / cardWidth);
             maxIndex = Math.max(0, cardCount - visibleCards);
             currentIndex = Math.min(currentIndex, maxIndex);
-            initCarousel();
             moveToSlide(currentIndex);
         });
         
         // Initialize carousel
-        initCarousel();
+        moveToSlide(0);
     }
 
     // Add theme toggle button functionality

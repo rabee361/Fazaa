@@ -137,8 +137,8 @@ class ReelsGallery(models.Model):
     def clean(self):
         if self.video:
             # Check file size
-            if self.video.size > 15 * 1024 * 1024:  # 15MB in bytes
-                raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 15 ميجابايت')
+            if self.video.size > 20 * 1024 * 1024:  # 20MB in bytes
+                raise ValidationError('حجم الفيديو يجب أن لا يتجاوز 20 ميجابايت')
             
             # Check if file is video format
             file_type = mimetypes.guess_type(self.video.name)[0]
