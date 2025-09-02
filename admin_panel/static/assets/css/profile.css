@@ -284,14 +284,12 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     border: 1px solid var(--border-color);
     z-index: 2000000;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    display: none;
     padding: 0;
 }
 
 .dropdown-square:hover .square-dropdown {
-    max-height: 300px;
+    display: block;
     padding: 0.5rem;
 }
 
@@ -614,6 +612,7 @@ body {
 
     .dropdown-squares-section {
         grid-template-columns: repeat(3, 3fr);
+        gap: 0.5rem;
     }
     
     .dropdown-square {
