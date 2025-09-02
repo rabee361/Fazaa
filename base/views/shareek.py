@@ -162,9 +162,18 @@ class GetOrganizationView(BaseAPIView):
 
 
 
-class UpdateOrganizationLogoView(generics.UpdateAPIView):
-    queryset = Organization.objects.all()
-    serializer_class = UpdateOrganizationLogoSerializer
+class UpdateOrganizationLogoView(BaseAPIView):
+    def put(self, request, pk):
+        organization = Organization.objects.get(id=pk)
+        serializer = UpdateOrganizationLogoSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            organization.logo = serializer.validated_data['logo']
+            organization.save()
+            return Response({
+                'logo': serializer.get_logo(organization)
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AvailableOffersView(BaseAPIView,OrganizationCheckMixin):

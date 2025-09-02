@@ -408,18 +408,15 @@ class OrganizationSerializer(ModelSerializer):
         return request.build_absolute_uri(obj.get_absolute_card_url())
 
 
-class UpdateOrganizationLogoSerializer(ModelSerializer):
-    logo = serializers.SerializerMethodField()
-    class Meta:
-        model = Organization
-        fields = ['logo']
+class UpdateOrganizationLogoSerializer(serializers.Serializer):
+    logo = serializers.ImageField()
 
-    def validate_logo(self, logo):
-        validate_image_size(logo)
-        validate_image_extension(logo)
-        return logo
+    def validate_logo(self, value):
+        validate_image_size(value)
+        validate_image_extension(value)
+        return value
     
-    def get_logo(self,obj):
+    def get_logo(self, obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.logo.url)
 
