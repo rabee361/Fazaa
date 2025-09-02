@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from ..serializers import *
+from datetime import datetime
 from ..models import *
 from fcm_django.models import FCMDevice
 from rest_framework.response import Response
@@ -169,7 +170,7 @@ class UpdateOrganizationLogoView(generics.UpdateAPIView):
 class AvailableOffersView(BaseAPIView,OrganizationCheckMixin):
     def get(self,request,pk):
         organization = Organization.objects.select_related('organization_type').get(id=pk)
-        offers = ServiceOffer.objects.prefetch_related('organizations').select_related('organization').filter(Q(organizations=organization.organization_type) & ~Q(organization__id=organization.id))
+        offers = ServiceOffer.objects.prefetch_related('organizations').select_related('organization').filter(Q(organizations=organization.organization_type) & ~Q(organization__id=organization.id) & Q(expiresAt__gt=datetime.now()))
         paginator = CustomPagination()
         paginated_offers = paginator.paginate_queryset(offers, request)
         serializer = ServiceOfferSerializer(paginated_offers, many=True, context={'request':request})
