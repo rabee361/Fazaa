@@ -624,7 +624,7 @@ body {
     }
     
     .square-header span {
-        font-size: 0.5rem;
+        font-size: 1rem;
     }
     
     .dropdown-name {
@@ -650,8 +650,12 @@ body {
         font-size: 1.75rem;
     }
     
+    .square-header span {
+        font-size: 1.75rem;
+    }
+    
     .dropdown-name {
-        font-size: 2rem;
+        font-size: 1.25rem;
     }
     
     .copy-btn, .visit-btn {
