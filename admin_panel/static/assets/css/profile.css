@@ -27,6 +27,73 @@ body {
 }
 
 
+/* Carousel Styles */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 1rem;
+}
+
+.carousel-prev, .carousel-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 1rem;
+    border-radius: 150%;
+    cursor: pointer;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.carousel-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.carousel-indicator.active {
+    background-color: white;
+}
+
+
+
 /* Reels Slider Styles */
 .reels-slider-container {
     max-width: 1200px;
@@ -631,9 +698,14 @@ body {
         display: none;
     }
     
+    .show-on-mobile {
+        display: block;
+        font-size: 0.25rem;
+    }
+
     .copy-btn, .qr-btn {
         padding: 0.2rem 0.25rem;
-        font-size: 0.5rem;
+        font-size: 0.75rem;
     }
 }
 
@@ -658,6 +730,12 @@ body {
         font-size: 1.25rem;
     }
     
+    .show-on-mobile {
+        display: block;
+        font-size: 0.5rem;
+        font-weight: 600;
+    }
+
     .copy-btn, .visit-btn {
         padding: 0.25rem 0.4rem;
     }
@@ -783,12 +861,20 @@ body {
 }
 
 @media (max-width: 480px) {
+    .carousel-controls {
+        top: 80%;
+    }
+  
     .bottom-nav-item span {
         display: none;
     }
     
     .bottom-nav-item {
         min-width: 40px;
+    }
+
+    .dropdown-item {
+        gap: 10px;        
     }
 }
 
@@ -852,69 +938,4 @@ body {
 .qr-btn:hover {
     background-color: var(--accent-color);
     color: var(--bg-secondary);
-}
-
-/* Carousel Styles */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    margin-bottom: 2rem;
-}
-
-.carousel-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.carousel-item {
-    min-width: 100%;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.carousel-item img {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: cover;
-}
-
-.carousel-controls {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    padding: 0 1rem;
-}
-
-.carousel-prev, .carousel-next {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: white;
-    padding: 1rem;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.carousel-indicators {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 0.5rem;
-}
-
-.carousel-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-}
-
-.carousel-indicator.active {
-    background-color: white;
 }
