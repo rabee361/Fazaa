@@ -6,7 +6,7 @@ from utils.views import CustomListBaseView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import json
-from django.db.models import Max
+from django.db.models import Max , Q
 from utils.notifications import send_users_notification
 from admin_panel.forms import NotificationForm
 from django.core.paginator import Paginator
@@ -41,12 +41,12 @@ class OrganizationUrlInfoView(View):
         try:
             organization = Organization.objects.get(org_short_url=slug)
             shareek = Shareek.objects.filter(organization=organization).first()
-            social_urls = SocialMediaUrl.objects.filter(organization=organization)
+            social_urls = SocialMediaUrl.objects.filter(Q(organization=organization) & Q(active=True) & Q(url__isnull=False))
             offers = ClientOffer.objects.filter(organization=organization)
             catalogs = Catalog.objects.filter(organization=organization)
             gallery = ImageGallery.objects.filter(organization=organization)[:3]
             reels = ReelsGallery.objects.filter(organization=organization)[:3]
-            delivery_companies = DeliveryCompanyUrl.objects.filter(organization=organization)
+            delivery_companies = DeliveryCompanyUrl.objects.filter(Q(organization=organization) & Q(active=True) & Q(url__isnull=False))
             branches = Branch.objects.filter(organization=organization)
 
             for link in social_urls:

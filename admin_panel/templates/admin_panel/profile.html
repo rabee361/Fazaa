@@ -150,10 +150,12 @@
                             {% for social_url in social_urls %}
                                 <div class="dropdown-item">
                                     <div class="item-info">
-                                        {% if social_url.social_media.icon_thumbnail %}
-                                            <img src="{{ social_url.social_media.icon_thumbnail.url }}" alt="{{ social_url.social_media.name }}" class="dropdown-icon">
-                                        {% endif %}
-                                        <span class="dropdown-name">{{ social_url.social_media.name }}</span>
+                                        <a href="{{ social_url.short_url }}" target="_blank">
+                                            {% if social_url.social_media.icon_thumbnail %}
+                                                <img src="{{ social_url.social_media.icon_thumbnail.url }}" alt="{{ social_url.social_media.name }}" class="dropdown-icon">
+                                            {% endif %}
+                                            <span class="dropdown-name">{{ social_url.social_media.name }}</span>
+                                        </a>
                                     </div>
                                     <div class="item-actions">
                                         <button class="copy-btn" data-url="{{ social_url.short_url }}"><i class="fa fa-copy"></i></button>
@@ -175,10 +177,12 @@
                             {% for delivery in delivery_companies %}
                                 <div class="dropdown-item">
                                     <div class="item-info">
-                                        {% if delivery.delivery_company.icon_thumbnail %}
-                                            <img src="{{ delivery.delivery_company.icon_thumbnail.url }}" alt="{{ delivery.delivery_company.name }}" class="dropdown-icon">
-                                        {% endif %}
-                                        <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
+                                        <a href="{{ delivery.short_url }}" target="_blank">
+                                            {% if delivery.delivery_company.icon_thumbnail %}
+                                                <img src="{{ delivery.delivery_company.icon_thumbnail.url }}" alt="{{ delivery.delivery_company.name }}" class="dropdown-icon">
+                                            {% endif %}
+                                            <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
+                                        </a>
                                     </div>
                                     <div class="item-actions">
                                         <button class="copy-btn" data-url="{{ delivery.short_url }}"><i class="fa fa-copy"></i></button>
@@ -200,8 +204,17 @@
                             {% for catalog in catalogs %}
                             <div class="dropdown-item">
                                 <div class="item-info">
-                                    <i class="fas fa-file-alt dropdown-icon"></i>
-                                    <span class="dropdown-name">{{ catalog.catalog_type }}</span>
+                                    <a href="{{ catalog.short_url }}" target="_blank">
+                                        <span class="dropdown-name">
+                                        {% if catalog.catalog_type == 'OFFERS' %}
+                                            العروض
+                                        {% elif catalog.catalog_type == 'MENU' %}
+                                            المينيو
+                                        {% else %}
+                                            الخصومات
+                                        {% endif %}
+                                        </span>
+                                    </a>
                                 </div>
                                 <div class="item-actions">
                                     <button class="copy-btn" data-url="{{ catalog.short_url }}"><i class="fa fa-copy"></i></button>
@@ -223,7 +236,9 @@
                             {% for branch in branches %}
                                 <div class="dropdown-item">
                                     <div class="item-info">
+                                    <a href="{{branch.short_url}}" target="_blank">
                                         <span class="dropdown-name">{{ branch.name }}</span>
+                                    </a>
                                     </div>
                                     <div class="item-actions">
                                         <button class="copy-btn" data-url="{{ branch.short_url }}"><i class="fa fa-copy"></i></button>
@@ -243,7 +258,9 @@
                     <div class="square-dropdown">
                         <div class="dropdown-item">
                             <div class="item-info">
-                                <span class="dropdown-name show-on-mobile">الموقع الالكتروني</span>
+                                <a href="{{ website_url }}" target="_blank">
+                                    <span class="dropdown-name show-on-mobile"> الموقع الالكتروني </span>
+                                </a>
                             </div>
                             <div class="item-actions">
                                 <button class="copy-btn" data-url="{{ website_url }}"><i class="fa fa-copy"></i></button>
@@ -252,7 +269,11 @@
                         </div>
                         <div class="dropdown-item">
                             <div class="item-info">
-                                <span class="dropdown-name show-on-mobile">البطاقة التعريفية</span>
+                                <a href="{{ card_url }}" target="_blank">
+                                    <span class="dropdown-name show-on-mobile">
+                                        البطاقة التعريفية
+                                    </span>
+                                </a> 
                             </div>
                             <div class="item-actions">
                                 <button class="copy-btn" data-url="{{ card_url }}"><i class="fa fa-copy"></i></button>

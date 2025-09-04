@@ -49,7 +49,7 @@ class BranchListSerializer(ModelSerializer):
         if distance_limit:
             distance_limit = float(distance_limit) * 1000
             return obj.location.distance(Point(float(self.context['long']), float(self.context['lat']))) * 100
-        return 100
+        return None
 
     def get_offers(self,obj):
         return obj.organization.clientoffer_set.all().count()
