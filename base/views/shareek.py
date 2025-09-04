@@ -64,6 +64,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
             except (ValueError, TypeError):
                 pass
         # Filter and annotate branches with distance if user location provided
+        print("rrrrrrr",user_location)
         if user_location:
             # First, annotate distances without casting
             queryset = queryset.annotate(distance=Distance('location', user_location))
@@ -105,7 +106,7 @@ class OrganizationsListView(BaseAPIView,generics.ListAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context['distance_limit'] = self.request.query_params.get('distance', None)
+        context['distance_limit'] = self.request.query_params.get('distance', 1000)
         context['long'] = self.request.query_params.get('long', None)
         context['lat'] = self.request.query_params.get('lat', None)
         return context

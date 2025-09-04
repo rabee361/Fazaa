@@ -46,6 +46,7 @@ class BranchListSerializer(ModelSerializer):
 
     def get_distance(self,obj):
         distance_limit = self.context.get('distance_limit')
+        print("D limit",distance_limit)
         if distance_limit:
             distance_limit = float(distance_limit) * 1000
             return obj.location.distance(Point(float(self.context['long']), float(self.context['lat']))) * 100
