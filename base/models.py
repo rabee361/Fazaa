@@ -22,7 +22,7 @@ class OrganizationType(models.Model):
 
 class Organization(models.Model):
     commercial_register_id = models.IntegerField(null=True , blank=True , validators=[MinValueValidator(1000)], verbose_name='رقم السجل التجاري')
-    logo = models.ImageField(upload_to='organizations/logos/', default='images/default.jpg', verbose_name='الشعار')
+    logo = models.ImageField(upload_to='organizations/logos/', default='images/users/fazaa.png', verbose_name='الشعار')
     logo_thumbnail = models.ImageField(upload_to='images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
     name = models.CharField(max_length=255, verbose_name='الاسم')
     description = models.CharField(max_length=255 , null=True, blank=True, verbose_name='المعلومات التعريفية')
@@ -185,7 +185,7 @@ class Catalog(models.Model):
 
 class SocialMedia(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
-    icon = models.ImageField(upload_to='images/social_', default='images/default.jpg',verbose_name='الصورة')
+    icon = models.ImageField(upload_to='images/social_', default='images/users/fazaa.png',verbose_name='الصورة')
     icon_thumbnail = models.ImageField(upload_to='images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
 
     def clean(self):
@@ -252,7 +252,7 @@ class SocialMediaUrl(models.Model):
 
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255,verbose_name='الاسم')
-    icon = models.ImageField(upload_to='images/delivery_company/', default='images/default.jpg',verbose_name='الصورة')
+    icon = models.ImageField(upload_to='images/delivery_company/', default='images/users/fazaa.png',verbose_name='الصورة')
     icon_thumbnail = models.ImageField(upload_to='images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
 
     def clean(self):
@@ -372,7 +372,7 @@ class ServiceOffer(models.Model):
 
 class ClientOffer(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
-    cover = models.ImageField(upload_to='images/client_offers/', verbose_name='الغلاف',default='images/default.jpg')
+    cover = models.ImageField(upload_to='images/client_offers/', verbose_name='الغلاف',default='images/users/fazaa.png')
     content = models.CharField(max_length=500 , verbose_name='المحتوى')
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
@@ -399,7 +399,7 @@ class ClientOffer(models.Model):
 class ContactUs(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     link = models.CharField(max_length=255 , verbose_name='الرابط')
-    icon = models.ImageField(upload_to='images/about_us/', default='images/default.jpg', verbose_name='الشعار')
+    icon = models.ImageField(upload_to='images/about_us/', default='images/users/fazaa.png', verbose_name='الشعار')
 
     def __str__(self) -> str:
         return self.name
@@ -411,7 +411,7 @@ class ContactUs(models.Model):
 class AboutUs(models.Model):
     name = models.CharField(max_length=255 , verbose_name='الاسم')
     link = models.CharField(max_length=255 , verbose_name='الرابط')
-    icon = models.ImageField(upload_to='images/about_us/', default='images/default.jpg', verbose_name='الشعار')
+    icon = models.ImageField(upload_to='images/about_us/', default='images/users/fazaa.png', verbose_name='الشعار')
 
     def __str__(self) -> str:
         return self.name
