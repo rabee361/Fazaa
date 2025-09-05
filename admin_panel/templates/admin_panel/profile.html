@@ -328,19 +328,19 @@
     <!-- Fixed Bottom Navbar -->
     <div class="bottom-nav">
         <a href="mailto:{{ shareek.user.email }}" class="bottom-nav-item">
-            <i class="fas fa-envelope"></i>
-        </a>
-        <a href="tel:{{ shareek.user.phonenumber }}" class="bottom-nav-item">
-            <i class="fas fa-phone"></i>
+            <img src="{% static 'assets/icons/email.png' %}" alt="">
         </a>
         <a href="sms:{{ shareek.user.phonenumber }}" class="bottom-nav-item">
-            <i class="fas fa-comment-sms"></i>
+            <img src="{% static 'assets/icons/sms.png' %}" alt="">
+        </a>
+        <a href="tel:{{ shareek.user.phonenumber }}" class="bottom-nav-item">
+            <img src="{% static 'assets/icons/phone.png' %}" alt="">
         </a>
         <a href="https://t.me/{{ shareek.user.phonenumber }}" class="bottom-nav-item">
-            <i class="fab fa-telegram-plane"></i>
+            <img src="{% static 'assets/icons/telegram.png' %}" alt="">
         </a>
         <a href="https://wa.me/{{ shareek.user.phonenumber }}" class="bottom-nav-item">
-            <i class="fab fa-whatsapp"></i>
+            <img src="{% static 'assets/icons/whatsapp.png' %}" alt="">
         </a>
     </div>
     <script>

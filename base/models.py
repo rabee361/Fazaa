@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from utils.helper import generateShortUrl , generate_img_thumbnail , generate_video_thumbnail
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db import models as gis_models
-from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager
+from utils.managers import DeliveryCompanyUrlManager , SocialMediaUrlManager, OrganizationManager
 from utils.types import CATALOG_TYPES
 import mimetypes
 from django.urls import reverse
@@ -36,6 +36,10 @@ class Organization(models.Model):
     card_visits = models.IntegerField(verbose_name='زيارات البطاقة' , default=0)
     org_short_url = models.SlugField(max_length=50 , default=generateShortUrl, verbose_name='رابط الصفحة التعريفية ') 
     org_visits = models.IntegerField(verbose_name='زيارات الصفحة' , default=0)
+    deletedAt = models.DateTimeField(null=True, blank=True)
+
+    objects = models.Manager()
+    active = OrganizationManager()
 
     def clean(self):
         if self.logo and self.logo.size > 2 * 1024 * 1024:  # 2MB in bytes

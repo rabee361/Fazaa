@@ -23,3 +23,8 @@ class SocialMediaUrlManager(models.Manager):
         else:
             return self.get_queryset().update(deleted=True, active=False, url=None)
 
+
+
+class OrganizationManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deletedAt__isnull=True)
