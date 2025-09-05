@@ -44,7 +44,6 @@ class ShareekSignUpView(APIView):
 
 
 class ShareekRegisterView(BaseAPIView):
-
     def post(self, request):
         ShareekRegisterSerializer(data=request.data).is_valid(raise_exception=True)
         image = request.data.get('image', None)
@@ -128,6 +127,7 @@ class DeleteShareekView(BaseAPIView):
         try:
             user = request.user
             user.is_deleted = True
+            user.is_active = False
             shareek = Shareek.objects.get(user=user)
             shareek.organization.delete()
             user.save()

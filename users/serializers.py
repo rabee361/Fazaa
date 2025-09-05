@@ -166,9 +166,12 @@ class ShareekRegisterSerializer(serializers.Serializer):
         'null': 'اسم المنظمة مطلوب'
     })
     image = serializers.ImageField(required=False)
+    commercial_register_id = serializers.IntegerField(required=False)
 
     def validate(self, data):
         type_id = data.get('organization_type')
+        commercial_register_id = data.get('commercial_register_id')
+        validate_commercial_regsiter_id(commercial_register_id)
         validate_organization_type(type_id)
         return data
 

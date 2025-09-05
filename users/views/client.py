@@ -69,6 +69,7 @@ class DeleteClientView(BaseAPIView):
         try:
             user = get_object_or_404(User,pk=pk)
             user.is_deleted = True
+            user.is_active = False
             user.save()
             # Blacklist all refresh tokens for this user
             OutstandingToken.objects.filter(user=user).delete()

@@ -42,6 +42,25 @@ def validate_required_field(value, field_name):
         raise ErrorResult({"error":f"{field_name} مطلوب"})
     return value
 
+def validate_commercial_regsiter_id(value):
+    # Check if value is an integer
+    try:
+        int_value = int(value)
+    except (ValueError, TypeError):
+        raise ErrorResult({"error": "رقم السجل التجاري يجب أن يكون رقماً صحيحاً"})
+    
+    # Check if value is positive and above 0
+    if int_value <= 0:
+        raise ErrorResult({"error": "رقم السجل التجاري يجب أن يكون أكبر من صفر"})
+    
+    # Check if value has less than 10 digits
+    if len(str(int_value)) >= 10:
+        raise ErrorResult({"error": "رقم السجل التجاري يجب أن يكون أقل من 10 أرقام"})
+    
+    # Check if value has more than 3 digits
+    if len(str(int_value)) <= 3:
+        raise ErrorResult({"error": "رقم السجل التجاري يجب أن يكون أكبر من 3 أرقام"})
+
 
 def validate_organization_type(type_id):
     try:
