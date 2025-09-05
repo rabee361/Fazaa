@@ -132,8 +132,8 @@ class GetOrganizationView(BaseAPIView):
             client_offers = ClientOffer.objects.filter(organization__id=pk)
             branches = Branch.objects.filter(organization__id=pk)
             reels = ReelsGallery.objects.filter(organization__id=pk)
-            socials = SocialMediaUrl.objects.select_related('social_media').filter(organization__id=pk)
-            delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(organization__id=pk)
+            socials = SocialMediaUrl.objects.select_related('social_media').filter(Q(organization__id=pk) & Q(active=True) & Q(url__isnull=False))
+            delivery = DeliveryCompanyUrl.objects.select_related('delivery_company').filter(Q(organization__id=pk) & Q(active=True) & Q(url__isnull=False))
             catalogs = Catalog.objects.filter(organization__id=pk)
             gallery = ImageGallery.objects.filter(organization__id=pk)
 
