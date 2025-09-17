@@ -129,7 +129,7 @@ class GetOrganizationView(BaseAPIView):
     def get(self,request,pk):
         try:
             organization = Organization.objects.get(id=pk)
-            client_offers = ClientOffer.objects.filter(organization__id=pk)
+            client_offers = ClientOffer.objects.filter(Q(organization__id=pk) & Q(expiresAt__gte=datetime.now()))
             branches = Branch.objects.filter(organization__id=pk)
             reels = ReelsGallery.objects.filter(organization__id=pk)
             socials = SocialMediaUrl.objects.select_related('social_media').filter(Q(organization__id=pk) & Q(active=True) & Q(url__isnull=False))

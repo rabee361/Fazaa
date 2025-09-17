@@ -2,6 +2,7 @@ from django.views import View, generic
 from users.models import *
 from base.models import *
 from django.shortcuts import redirect , render
+from datetime import datetime
 from utils.views import CustomListBaseView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -38,45 +39,45 @@ class WebsiteSlugUrlView(View):
 
 class OrganizationUrlInfoView(View):
     def get(self,request,slug):
-        try:
-            organization = Organization.objects.get(org_short_url=slug)
-            shareek = Shareek.objects.filter(organization=organization).first()
-            social_urls = SocialMediaUrl.objects.filter(Q(organization=organization) & Q(active=True) & Q(url__isnull=False))
-            offers = ClientOffer.objects.filter(organization=organization)
-            catalogs = Catalog.objects.filter(organization=organization)
-            gallery = ImageGallery.objects.filter(organization=organization)[:3]
-            reels = ReelsGallery.objects.filter(organization=organization)[:3]
-            delivery_companies = DeliveryCompanyUrl.objects.filter(Q(organization=organization) & Q(active=True) & Q(url__isnull=False))
-            branches = Branch.objects.filter(organization=organization)
+        # try:
+        organization = Organization.objects.get(org_short_url=slug)
+        shareek = Shareek.objects.filter(organization=organization).first()
+        social_urls = SocialMediaUrl.objects.filter(Q(organization=organization) & Q(active=True) & Q(url__isnull=False))
+        offers = ClientOffer.objects.filter(Q(organization=organization)& Q(expiresAt__gte=datetime.now()))
+        catalogs = Catalog.objects.filter(organization=organization)
+        gallery = ImageGallery.objects.filter(organization=organization)[:3]
+        reels = ReelsGallery.objects.filter(organization=organization)[:3]
+        delivery_companies = DeliveryCompanyUrl.objects.filter(Q(organization=organization) & Q(active=True) & Q(url__isnull=False))
+        branches = Branch.objects.filter(organization=organization)
 
-            for link in social_urls:
-                link.short_url = self.request.build_absolute_uri(link.get_absolute_url())
+        for link in social_urls:
+            link.short_url = self.request.build_absolute_uri(link.get_absolute_url())
 
-            for delivery_link in delivery_companies:
-                delivery_link.short_url = self.request.build_absolute_uri(delivery_link.get_absolute_url())
+        for delivery_link in delivery_companies:
+            delivery_link.short_url = self.request.build_absolute_uri(delivery_link.get_absolute_url())
 
-            for catalog_link in catalogs:
-                catalog_link.short_url = self.request.build_absolute_uri(catalog_link.get_absolute_url())
+        for catalog_link in catalogs:
+            catalog_link.short_url = self.request.build_absolute_uri(catalog_link.get_absolute_url())
 
-            for branch_link in branches:
-                branch_link.short_url = self.request.build_absolute_uri(branch_link.get_absolute_url())
+        for branch_link in branches:
+            branch_link.short_url = self.request.build_absolute_uri(branch_link.get_absolute_url())
 
-            context = {
-                'organization': organization,
-                'social_urls': social_urls,
-                'website_url': request.build_absolute_uri(organization.get_absolute_website_url()),
-                'card_url': request.build_absolute_uri(organization.get_absolute_card_url()),
-                'offers': offers,
-                'catalogs': catalogs,
-                'branches': branches,
-                'gallery': gallery,
-                'reels': reels,
-                'shareek': shareek,
-                'delivery_companies': delivery_companies
-            }
-            return render(request, 'admin_panel/profile.html', context=context)
-        except Exception as e:
-            return render(request, '404.html', status=400)
+        context = {
+            'organization': organization,
+            'social_urls': social_urls,
+            'website_url': request.build_absolute_uri(organization.get_absolute_website_url()),
+            'card_url': request.build_absolute_uri(organization.get_absolute_card_url()),
+            'offers': offers,
+            'catalogs': catalogs,
+            'branches': branches,
+            'gallery': gallery,
+            'reels': reels,
+            'shareek': shareek,
+            'delivery_companies': delivery_companies
+        }
+        return render(request, 'admin_panel/profile.html', context=context)
+        # except Exception as e:
+        #     return render(request, '404.html', status=400)
 
 
 
@@ -124,7 +125,7 @@ class ClientOfferUrlView(View):
         try:
             offer = ClientOffer.objects.get(short_url=slug)
             organization = Organization.objects.get(id=offer.organization.id)
-            offers = ClientOffer.objects.filter(organization=organization)
+            offers = ClientOffer.objects.filter(Q(organization=organization) & Q(expiresAt__gte=datetime.now()))
             socials = SocialMediaUrl.objects.filter(organization=organization)
             context = {
                 'offer': offer,

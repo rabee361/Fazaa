@@ -137,153 +137,6 @@
                 {% endif %}
             </section>
 
-
-            <!-- New dropdown squares section -->
-            <div class="dropdown-squares-section">
-                <div class="dropdown-square">
-                    <div class="square-header">
-                        <i class="fas fa-share-alt"></i>
-                        <span>وسائل التواصل</span>
-                    </div>
-                    {% if social_urls %}
-                        <div class="square-dropdown">
-                            {% for social_url in social_urls %}
-                                <div class="dropdown-item">
-                                    <div class="item-info">
-                                        <a href="{{ social_url.short_url }}" target="_blank">
-                                            {% if social_url.social_media.icon_thumbnail %}
-                                                <img src="{{ social_url.social_media.icon_thumbnail.url }}" alt="{{ social_url.social_media.name }}" class="dropdown-icon">
-                                            {% endif %}
-                                            <span class="dropdown-name">{{ social_url.social_media.name }}</span>
-                                        </a>
-                                    </div>
-                                    <div class="item-actions">
-                                        <button class="copy-btn" data-url="{{ social_url.short_url }}"><i class="fa fa-copy"></i></button>
-                                        <a href="#" class="qr-btn" onclick="generateQR(event, '{{ social_url.short_url }}')"><i class="fa fa-qrcode"></i></a>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                
-                <div class="dropdown-square">
-                    <div class="square-header">
-                        <i class="fas fa-truck"></i>
-                        <span>برامج التوصيل</span>
-                    </div>
-                    {% if delivery_companies %}
-                        <div class="square-dropdown">
-                            {% for delivery in delivery_companies %}
-                                <div class="dropdown-item">
-                                    <div class="item-info">
-                                        <a href="{{ delivery.short_url }}" target="_blank">
-                                            {% if delivery.delivery_company.icon_thumbnail %}
-                                                <img src="{{ delivery.delivery_company.icon_thumbnail.url }}" alt="{{ delivery.delivery_company.name }}" class="dropdown-icon">
-                                            {% endif %}
-                                            <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
-                                        </a>
-                                    </div>
-                                    <div class="item-actions">
-                                        <button class="copy-btn" data-url="{{ delivery.short_url }}"><i class="fa fa-copy"></i></button>
-                                        <a href="#" class="qr-btn" onclick="generateQR(event, '{{ delivery.short_url }}')"><i class="fa fa-qrcode"></i></a>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <div class="dropdown-square">
-                    <div class="square-header">
-                        <i class="fas fa-file-pdf dropdown-icon"></i>
-                        <span>الكتالوجات</span>
-                    </div>
-                    {% if catalogs %}
-                        <div class="square-dropdown">
-                            {% for catalog in catalogs %}
-                            <div class="dropdown-item">
-                                <div class="item-info">
-                                    <a href="{{ catalog.short_url }}" target="_blank">
-                                        <span class="dropdown-name">
-                                        {% if catalog.catalog_type == 'OFFERS' %}
-                                            العروض
-                                        {% elif catalog.catalog_type == 'MENU' %}
-                                            المينيو
-                                        {% else %}
-                                            الخصومات
-                                        {% endif %}
-                                        </span>
-                                    </a>
-                                </div>
-                                <div class="item-actions">
-                                    <button class="copy-btn" data-url="{{ catalog.short_url }}"><i class="fa fa-copy"></i></button>
-                                    <a href="#" class="qr-btn" onclick="generateQR(event, '{{ catalog.short_url }}')"><i class="fa fa-qrcode"></i></a>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <div class="dropdown-square">
-                    <div class="square-header">
-                        <i class="fas fa-map"></i>
-                        <span>الفروع</span>
-                    </div>
-                    {% if branches %}
-                        <div class="square-dropdown">
-                            {% for branch in branches %}
-                                <div class="dropdown-item">
-                                    <div class="item-info">
-                                    <a href="{{branch.short_url}}" target="_blank">
-                                        <span class="dropdown-name">{{ branch.name }}</span>
-                                    </a>
-                                    </div>
-                                    <div class="item-actions">
-                                        <button class="copy-btn" data-url="{{ branch.short_url }}"><i class="fa fa-copy"></i></button>
-                                        <a href="#" class="qr-btn" onclick="generateQR(event, '{{ branch.short_url }}')"><i class="fa fa-qrcode"></i></a>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <div class="dropdown-square">
-                    <div class="square-header">
-                        <i class="fas fa-link"></i>
-                        <span>الموقع الالكتروني</span>
-                    </div>
-                    <div class="square-dropdown">
-                        <div class="dropdown-item">
-                            <div class="item-info">
-                                <a href="{{ website_url }}" target="_blank">
-                                    <span class="dropdown-name show-on-mobile"> الموقع الالكتروني </span>
-                                </a>
-                            </div>
-                            <div class="item-actions">
-                                <button class="copy-btn" data-url="{{ website_url }}"><i class="fa fa-copy"></i></button>
-                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ website_url }}')"><i class="fa fa-qrcode"></i></a>
-                            </div>
-                        </div>
-                        <div class="dropdown-item">
-                            <div class="item-info">
-                                <a href="{{ card_url }}" target="_blank">
-                                    <span class="dropdown-name show-on-mobile">
-                                        البطاقة التعريفية
-                                    </span>
-                                </a> 
-                            </div>
-                            <div class="item-actions">
-                                <button class="copy-btn" data-url="{{ card_url }}"><i class="fa fa-copy"></i></button>
-                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ card_url }}')"><i class="fa fa-qrcode"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- QR Modal -->
             <div id="qrModal" class="qr-modal">
                 <div class="qr-modal-content">
@@ -324,6 +177,159 @@
             </script>
         </div>
     </div>
+
+
+    
+    <!-- Fixed Bottom Navbar -->
+    <div class="bottom-nav-squares">
+        <div class="dropdown-square">
+            <div class="square-header">
+                <i class="fas fa-share-alt"></i>
+                <span>وسائل التواصل</span>
+            </div>
+            {% if social_urls %}
+                <div class="square-dropdown">
+                    {% for social_url in social_urls %}
+                        <div class="dropdown-item">
+                            <div class="item-info">
+                                <a href="{{ social_url.short_url }}" target="_blank">
+                                    {% if social_url.social_media.icon_thumbnail %}
+                                        <img src="{{ social_url.social_media.icon_thumbnail.url }}" alt="{{ social_url.social_media.name }}" class="dropdown-icon">
+                                    {% endif %}
+                                    <span class="dropdown-name">{{ social_url.social_media.name }}</span>
+                                </a>
+                            </div>
+                            <div class="item-actions">
+                                <button class="copy-btn" data-url="{{ social_url.short_url }}"><i class="fa fa-copy"></i></button>
+                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ social_url.short_url }}')"><i class="fa fa-qrcode"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="dropdown-square">
+            <div class="square-header">
+                <i class="fas fa-truck"></i>
+                <span>برامج التوصيل</span>
+            </div>
+            {% if delivery_companies %}
+                <div class="square-dropdown">
+                    {% for delivery in delivery_companies %}
+                        <div class="dropdown-item">
+                            <div class="item-info">
+                                <a href="{{ delivery.short_url }}" target="_blank">
+                                    {% if delivery.delivery_company.icon_thumbnail %}
+                                        <img src="{{ delivery.delivery_company.icon_thumbnail.url }}" alt="{{ delivery.delivery_company.name }}" class="dropdown-icon">
+                                    {% endif %}
+                                    <span class="dropdown-name">{{ delivery.delivery_company.name }}</span>
+                                </a>
+                            </div>
+                            <div class="item-actions">
+                                <button class="copy-btn" data-url="{{ delivery.short_url }}"><i class="fa fa-copy"></i></button>
+                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ delivery.short_url }}')"><i class="fa fa-qrcode"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="dropdown-square">
+            <div class="square-header">
+                <i class="fas fa-file-pdf dropdown-icon"></i>
+                <span>الكتالوجات</span>
+            </div>
+            {% if catalogs %}
+                <div class="square-dropdown">
+                    {% for catalog in catalogs %}
+                    <div class="dropdown-item">
+                        <div class="item-info">
+                            <a href="{{ catalog.short_url }}" target="_blank">
+                                <span class="dropdown-name">
+                                {% if catalog.catalog_type == 'OFFERS' %}
+                                    العروض
+                                {% elif catalog.catalog_type == 'MENU' %}
+                                    المينيو
+                                {% else %}
+                                    الخصومات
+                                {% endif %}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="item-actions">
+                            <button class="copy-btn" data-url="{{ catalog.short_url }}"><i class="fa fa-copy"></i></button>
+                            <a href="#" class="qr-btn" onclick="generateQR(event, '{{ catalog.short_url }}')"><i class="fa fa-qrcode"></i></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="dropdown-square">
+            <div class="square-header">
+                <i class="fas fa-map"></i>
+                <span>الفروع</span>
+            </div>
+            {% if branches %}
+                <div class="square-dropdown">
+                    {% for branch in branches %}
+                        <div class="dropdown-item">
+                            <div class="item-info">
+                            <a href="{{branch.short_url}}" target="_blank">
+                                <span class="dropdown-name">{{ branch.name }}</span>
+                            </a>
+                            </div>
+                            <div class="item-actions">
+                                <button class="copy-btn" data-url="{{ branch.short_url }}"><i class="fa fa-copy"></i></button>
+                                <a href="#" class="qr-btn" onclick="generateQR(event, '{{ branch.short_url }}')"><i class="fa fa-qrcode"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="dropdown-square">
+            <div class="square-header">
+                <i class="fas fa-link"></i>
+                <span>الموقع الالكتروني</span>
+            </div>
+            <div class="square-dropdown">
+                <div class="dropdown-item">
+                    <div class="item-info">
+                        <a href="{{ website_url }}" target="_blank">
+                            <span class="dropdown-name show-on-mobile"> الموقع الالكتروني </span>
+                        </a>
+                    </div>
+                    <div class="item-actions">
+                        <button class="copy-btn" data-url="{{ website_url }}"><i class="fa fa-copy"></i></button>
+                        <a href="#" class="qr-btn" onclick="generateQR(event, '{{ website_url }}')"><i class="fa fa-qrcode"></i></a>
+                    </div>
+                </div>
+                <div class="dropdown-item">
+                    <div class="item-info">
+                        <a href="{{ card_url }}" target="_blank">
+                            <span class="dropdown-name show-on-mobile">
+                                البطاقة التعريفية
+                            </span>
+                        </a> 
+                    </div>
+                    <div class="item-actions">
+                        <button class="copy-btn" data-url="{{ card_url }}"><i class="fa fa-copy"></i></button>
+                        <a href="#" class="qr-btn" onclick="generateQR(event, '{{ card_url }}')"><i class="fa fa-qrcode"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 
     <!-- Fixed Bottom Navbar -->
     <div class="bottom-nav">

@@ -356,7 +356,7 @@ class Template(models.Model):
 
 class ServiceOffer(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
-    content = models.CharField(max_length=500 , verbose_name='المحتوى')
+    content = models.CharField(max_length=200 , verbose_name='المحتوى')
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
     organizations = models.ManyToManyField(OrganizationType , verbose_name='المنظمات')
@@ -377,7 +377,7 @@ class ServiceOffer(models.Model):
 class ClientOffer(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
     cover = models.ImageField(upload_to='images/client_offers/', verbose_name='الغلاف',default='images/users/fazaa.png')
-    content = models.CharField(max_length=500 , verbose_name='المحتوى')
+    content = models.CharField(max_length=200 , verbose_name='المحتوى')
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
     template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True , verbose_name='القالب')

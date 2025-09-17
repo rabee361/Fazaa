@@ -336,12 +336,45 @@ document.addEventListener('DOMContentLoaded', function() {
     
 });
 
+// Initialize dropdown squares functionality
+function initializeDropdownSquares() {
+    const dropdownSquares = document.querySelectorAll('.dropdown-square');
+    
+    dropdownSquares.forEach(square => {
+        square.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Close all other dropdowns
+            dropdownSquares.forEach(otherSquare => {
+                if (otherSquare !== this) {
+                    otherSquare.classList.remove('active');
+                }
+            });
+            
+            // Toggle current dropdown
+            this.classList.toggle('active');
+        });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function() {
+        dropdownSquares.forEach(square => {
+            square.classList.remove('active');
+        });
+    });
+    
+    // Prevent dropdown from closing when clicking inside
+    document.querySelectorAll('.square-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+}
 
-
-
-
-
-
+// Call initializeDropdownSquares when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDropdownSquares();
+});
 
 // Add this function to initialize copy buttons
 function initializeCopyButtons() {
