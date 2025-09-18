@@ -53,8 +53,6 @@ class CatalogAdmin(admin.ModelAdmin):
     list_display = ['id', 'organization' ,'catalog_type', 'file']
     list_filter = ['organization']
 
-class TemplateAdmin(admin.ModelAdmin):
-    list_display = ['id', 'createdAt']
 
 class ServiceOfferAdmin(admin.ModelAdmin):
     list_display = ['id','organization__name','expiresAt','short_url']
@@ -96,7 +94,6 @@ admin.site.register(DeliveryCompany, DeliveryCompanyAdmin)
 admin.site.register(DeliveryCompanyUrl, DeliveryCompanyUrlAdmin)
 admin.site.register(ClientOffer, ClientOfferAdmin)
 admin.site.register(ServiceOffer, ServiceOfferAdmin)
-admin.site.register(Template, TemplateAdmin)
 admin.site.register(Report, ReportAdmin)
 admin.site.register(CommonQuestion, CommonQuestionAdmin)
 admin.site.register(TermsPrivacy, TermsPrivacyAdmin)

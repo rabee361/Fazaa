@@ -261,7 +261,7 @@ class UpdateClientForm(forms.ModelForm):
 class ClientOfferForm(forms.ModelForm):
     class Meta:
         model = ClientOffer
-        fields = ['content', 'expiresAt', 'organization', 'template','cover']
+        fields = ['content', 'expiresAt', 'organization','cover']
         widgets = {
             'expiresAt': forms.DateInput(
                 attrs={
@@ -274,7 +274,6 @@ class ClientOfferForm(forms.ModelForm):
             'content': 'المحتوى',
             'expiresAt': 'تاريخ الانتهاء',
             'organization': 'المنظمة',
-            'template': 'القالب'
         }
 
     def clean_cover(self):

@@ -70,10 +70,6 @@ OrganizationPatterns=[
     path('service-offers/<int:id>/update/' , organization_views.UpdateServiceOffer.as_view() , name="service-offer-info"),
     path('service-offers/action/' , organization_views.ServiceOfferBulkActionView.as_view() , name="service-offer-action"),
 
-    path('offer-templates' , organization_views.ListOfferTemplates.as_view() , name="offer-templates"),
-    path('offer-templates/add/' , organization_views.CreateOfferTemplate.as_view() , name="add-offer-template"),
-    path('offer-templates/<int:id>/info/' , organization_views.UpdateOfferTemplate.as_view() , name="offer-template-info"),
-    path('offer-templates/delete/' , organization_views.DeleteOfferTemplate.as_view() , name="delete-offer-template"),
 
     path('delivery-links' , organization_views.ListDeliveryLinksView.as_view() , name="delivery-links"),
     path('delivery-links/add/' , organization_views.CreateDeliveryLinkView.as_view() , name="add-delivery-link"),

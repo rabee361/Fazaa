@@ -640,37 +640,3 @@ class ServiceOfferBulkActionView(BaseView):
             ServiceOffer.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('service-offers'))
 
-
-class ListOfferTemplates(CustomListBaseView):
-    model = Template
-    context_object_name = 'templates'
-    context_fields = ['id','name','createdAt']
-    template_name = 'admin_panel/organization/offers/offer_templates.html'
-    
-
-class CreateOfferTemplate(BaseView, generic.CreateView):
-    model = Template
-    template_name = 'admin_panel/organization/offers/offer_template_form.html'
-    fields = ['name','template']
-    success_url = '/dashboard/organization/offer-templates'
-
-
-class UpdateOfferTemplate(BaseView, generic.UpdateView):
-    model = Template
-    template_name = 'admin_panel/organization/offers/offer_template_form.html'
-    fields = ['name','template']
-    success_url = '/dashboard/organization/offer-templates'
-    pk_url_kwarg = 'id'
-
-    def get_context_data(self):
-        context = super().get_context_data()
-        context['template'] = self.object.template
-        return context
-
-class DeleteOfferTemplate(BaseView):
-    def post(self, request):
-        selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
-        if selected_ids:
-            Template.objects.filter(id__in=selected_ids).delete()
-        return HttpResponseRedirect(reverse('offer-templates'))
-

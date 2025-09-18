@@ -320,40 +320,6 @@ class DeliveryCompanyUrl(models.Model):
         ordering = ['-id']
 
 
-class Template(models.Model):
-    name = models.CharField(max_length=255, verbose_name='الاسم')
-    template = models.ImageField(upload_to='images/templates/', verbose_name='القالب')
-    template_thumbnail = models.ImageField(upload_to='images/thumbnails/', verbose_name='الصورة المصغرة', null=True, blank=True)
-    createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الانشاء')   
-
-    def save(self, *args, **kwargs):
-        # First save to ensure the image is saved to disk
-        super().save(*args, **kwargs)
-        
-        # Using the updated generate_img_thumbnail function
-        try:
-            print(f"Image path: {self.template.path}")
-            content_file, thumb_filename = generate_img_thumbnail(self.template.path)
-            self.template_thumbnail.save(thumb_filename, content_file, save=False)
-            print(self.template_thumbnail.size)
-            print(self.template.size)
-            # Save again to update the thumbnail field
-            super().save(*args, **kwargs)
-        except Exception as e:
-            print(f"Error saving thumbnail: {str(e)}")
-
-    def __str__(self) -> str:
-        return self.name
-    
-    def clean(self):
-        if self.template and self.template.size > 1 * 1024 * 1024:  # 1MB in bytes
-            raise ValidationError('حجم القالب يجب أن لا يتجاوز 1 ميجابايت')
-
-    class Meta:
-        ordering = ['-id']
-
-
-
 class ServiceOffer(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE , verbose_name='المنظمة')
     content = models.CharField(max_length=200 , verbose_name='المحتوى')
@@ -380,7 +346,6 @@ class ClientOffer(models.Model):
     content = models.CharField(max_length=200 , verbose_name='المحتوى')
     expiresAt = models.DateField(verbose_name='تاريخ الانتهاء')
     createdAt = models.DateTimeField(auto_now_add=True , verbose_name='تاريخ الانشاء')
-    template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True , verbose_name='القالب')
     short_url = models.SlugField(max_length=50 , default=generateShortUrl , verbose_name= "الرابط المختصر")
 
     def clean(self):

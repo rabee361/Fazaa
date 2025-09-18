@@ -294,7 +294,7 @@ class ServiceOfferSerializer(serializers.ModelSerializer):
 class ListClientOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientOffer
-        fields = ['id','content','expiresAt','createdAt','cover','template','short_url']
+        fields = ['id','content','expiresAt','createdAt','cover','short_url']
 
     def get_cover(self,obj):
         request = self.context.get('request')
@@ -306,17 +306,6 @@ class ClientOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClientOffer
         fields = '__all__'
-
-
-class TemplateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Template
-        fields = '__all__'
-
-    def validate_template(self, template):
-        validate_image_size(template)
-        validate_image_extension(template)
-        return template
 
 
 class TermsPrivacySerializer(serializers.ModelSerializer):

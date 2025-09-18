@@ -42,8 +42,6 @@ urlpatterns = [
     path('shareek/organization/service-offers/<int:id>/delete/' , shareek.DeleteServiceOffer.as_view()),
     path('shareek/organization/service-offers/<int:id>/update/' , shareek.UpdateServiceOffer.as_view()),
 
-    path('shareek/templates/' , shareek.TemplatesView.as_view()),
-
     path('terms-privacy' , common.TermsPrivacyView.as_view()),
     path('contact-us' , common.ContactUsView.as_view()),
     path('common-questions' , common.CommonQuestionsView.as_view()),

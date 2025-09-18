@@ -1,7 +1,7 @@
 from users.models import User, Client, Shareek, Organization, OrganizationType
 from utils.helper import getRandomPhonenumber, getRandomEmail, getRandomPassword
 from django.core.files.uploadedfile import SimpleUploadedFile
-from base.models import SocialMedia, DeliveryCompany, Template
+from base.models import SocialMedia, DeliveryCompany
 
 
 #function to create client user
@@ -63,11 +63,3 @@ def create_organization():
     return organization
 
 
-def create_template():
-    with open('test.png', 'rb') as file:
-        upload_icon = SimpleUploadedFile('test.png', file.read()) # creating the file
-    template = Template.objects.create(
-        name='test',
-        template=upload_icon
-    )
-    return template

@@ -372,18 +372,6 @@ class AdminPanelURLTestCase(TestCase):
     #     response = self.client.get(reverse('add-service-offer'))
     #     self.assertEqual(response.status_code, 200)
 
-    # def test_offer_templates_view(self):
-    #     """Test offer templates list view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('offer-templates'))
-    #     self.assertEqual(response.status_code, 200)
-
-    # def test_add_offer_template_view(self):
-    #     """Test add offer template view"""
-    #     self.login_admin()
-    #     response = self.client.get(reverse('add-offer-template'))
-    #     self.assertEqual(response.status_code, 200)
-
     # def test_delivery_links_view(self):
     #     """Test delivery links list view"""
     #     self.login_admin()
@@ -970,8 +958,7 @@ class AdminPanelURLTestCase(TestCase):
     #         'reels-gallery', 'add-reel', 'social-media',
     #         'add-social-media', 'delivery-companies',
     #         'add-delivery-company', 'client-offers',
-    #         'add-client-offer', 'service-offers', 'add-service-offer',
-    #         'offer-templates', 'add-offer-template', 'delivery-links',
+    #         'add-client-offer', 'service-offers', 'add-service-offer','delivery-links',
     #         'add-delivery-link', 'social-links', 'add-social-link',
     #         'branches', 'add-branch', 'contact-us', 'add-contact-us',
     #         'about-us', 'add-about-us', 'subscriptions',

@@ -390,8 +390,7 @@ class CreateClientOffer(BaseAPIView):
         # content = request.data.get('content', None)
         # expiresAt = request.data.get('expiresAt', None)
         # organization = request.data.get('organization', None)
-        # template = request.data.get('template', None)
-        # if not content or not expiresAt or not organization or not template:
+        # if not content or not expiresAt or not organization:
         #     return Response({"error":"الرجاء إدخال جميع البيانات"} , status=status.HTTP_400_BAD_REQUEST)
             
         # try:
@@ -449,13 +448,4 @@ class DeleteServiceOffer(BaseAPIView):
             return Response({"message":"تم الحذف بنجاح"})
         except ServiceOffer.DoesNotExist:
             return Response({"error":"العرض غير موجود"})
-
-
-
-
-class TemplatesView(generics.ListAPIView):
-    queryset = Template.objects.all()
-    serializer_class = TemplateSerializer
-
-
 
