@@ -131,7 +131,7 @@ ASGI_APPLICATION = 'Fazaa.asgi.application'
 #         'PORT': env('DB_PORT'),
 #     }
 # }
-
+ 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
