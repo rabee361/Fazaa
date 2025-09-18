@@ -150,12 +150,17 @@ class ReelsGallery(models.Model):
                 raise ValidationError('يجب أن يكون الملف بتنسيق فيديو')
     
     def save(self, *args, **kwargs):
+        # Check if this is a new instance or an update
+        is_new = self.pk is None
+        
+        # Save the instance first
         super().save(*args, **kwargs)
-        if self.video:
+        
+        # Only process video thumbnail for new instances or when video is provided
+        if self.video and is_new:
             self.video_thumbnail = generate_video_thumbnail(self.video.path)
-            super().save(*args, **kwargs)
-
-
+            # Update the instance with the thumbnail
+            super().save(update_fields=['video_thumbnail'])
 
 
 class Catalog(models.Model):

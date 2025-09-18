@@ -227,16 +227,6 @@ class ReelsGallerySerializer(ModelSerializer):
     def validate_video(self, video):
         validate_video_extension(video)
         validate_video_size(video)
-        # Check if organization has reached daily limit of 20 reels
-        today = timezone.now().date()
-        today_reels_count = ReelsGallery.objects.filter(
-            organization=self.initial_data['organization'],
-            createdAt__date=today
-        ).values('id').count()
-
-        if today_reels_count >= 10:
-            raise ErrorResult({'error':'لا يمكن إضافة أكثر من 10 فيديو في اليوم'})
-            
         return video
 
 

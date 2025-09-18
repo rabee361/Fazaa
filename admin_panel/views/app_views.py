@@ -102,7 +102,7 @@ class BranchSlugUrlView(View):
             branch.save()
             base_url = "https://www.google.com/maps"
             if branch.location:
-                return redirect(f"{base_url}?q={branch.location.x},{branch.location.y}")
+                return redirect(f"{base_url}?q={branch.location.y},{branch.location.x}")
             else:
                 return redirect(branch.organization.website)
         except Exception as e:
