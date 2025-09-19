@@ -35,21 +35,19 @@
     <div class="reels-slider-container">
         <div class="reels-slider-track">
             {% for reel in reels %}
-            <div class="reel-item">
-                <a href="{{ reel.video.url }}" target="_blank">
-                    <div class="reel-thumbnail">
-                        {% if reel.video_thumbnail %}
-                            <img src="{{ reel.video_thumbnail.url }}" alt="reel">
-                        {% else %}
-                            <div class="reel-placeholder">
-                                <i class="fas fa-play-circle"></i>
-                            </div>
-                        {% endif %}
-                        <div class="reel-overlay">
-                            <i class="fas fa-play"></i>
+            <div class="reel">
+                <div class="reel-item">
+                    <a href="{{ reel.video.url }}" target="_blank">
+                        <div class="reel-thumbnail">
+                            {% if reel.video_thumbnail %}
+                                <img src="{{ reel.video_thumbnail.url }}" alt="reel">
+                            {% endif %}
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+                <span>
+                    {{ reel.title }}
+                </span>
             </div>
             {% endfor %}
         </div>

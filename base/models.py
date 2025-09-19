@@ -131,6 +131,7 @@ class ImageGallery(models.Model):
 
 class ReelsGallery(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name='المنظمة')
+    title = models.CharField(max_length=255, verbose_name='العنوان', default='test')
     video = models.FileField(upload_to='images/reels_galleries/', verbose_name='الفيديو')
     video_thumbnail = models.ImageField(upload_to='images/thumbnails/', verbose_name='الصورة المصغرة',null=True , blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
