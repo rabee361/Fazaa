@@ -1,0 +1,220 @@
+/* Import theme variables */
+@import url('./variables.css');
+
+.video-uploader {
+    position: relative;
+    border: 2px dashed var(--accent-color);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background-color: var(--bg-secondary);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+.video-uploader:hover {
+    border-color: var(--accent-color);
+    background-color: var(--hover-bg);
+}
+
+.video-uploader.dragover {
+    border-color: var(--accent-color);
+    background-color: var(--bg-primary);
+}
+
+.video-uploader input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.video-upload-content {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.video-upload-icon {
+    font-size: 48px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.video-upload-text {
+    color: var(--text-primary);
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.video-upload-hint {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Progress Bar */
+.upload-progress {
+    display: none;
+    margin-top: 15px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--accent-color);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+/* Video Preview */
+.video-preview {
+    display: none;
+    margin-top: 15px;
+}
+
+.video-preview-container {
+    position: relative;
+    display: inline-block;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: var(--bg-secondary);
+}
+
+.video-preview video {
+    max-width: 200px;
+    max-height: 150px;
+    display: block;
+    border-radius: 8px;
+}
+
+.video-info {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.video-name {
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.video-size {
+    color: var(--text-secondary);
+}
+
+/* Remove/Change buttons */
+.video-actions {
+    margin-top: 10px;
+}
+
+.video-action-btn {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.video-action-btn:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--accent-color);
+}
+
+.video-action-btn.remove {
+    background-color: #ff6b6b;
+    color: white;
+    border-color: #ff6b6b;
+}
+
+.video-action-btn.remove:hover {
+    background-color: #ff5252;
+    border-color: #ff5252;
+}
+
+/* Error states */
+.video-uploader.error {
+    border-color: #ff6b6b;
+    background-color: var(--bg-secondary);
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Loading state */
+.video-uploader.loading {
+    pointer-events: none;
+}
+
+.video-uploader.loading .video-upload-content {
+    opacity: 0.6;
+}
+
+/* Show video preview when video is present */
+.video-uploader.video-uploader-active .video-upload-content {
+    display: none;
+}
+
+.video-uploader.video-uploader-active .video-preview {
+    display: block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .video-uploader {
+        padding: 15px;
+    }
+    
+    .video-upload-icon {
+        font-size: 36px;
+    }
+    
+    .video-upload-text {
+        font-size: 14px;
+    }
+    
+    .video-preview video {
+        max-width: 150px;
+        max-height: 100px;
+    }
+}
+
+/* RTL Support */
+[dir="rtl"] .video-upload-text,
+[dir="rtl"] .video-upload-hint,
+[dir="rtl"] .video-info {
+    text-align: center;
+}
+
+/* Hide default upload placeholder when video uploader is active */
+.video-uploader-active .upload-placeholder {
+    display: none;
+}

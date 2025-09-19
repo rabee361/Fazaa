@@ -4,6 +4,8 @@
 {% block title %} معلومات فيديو{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/video-uploader.css' %}"> 
+
 <div class="content-header">
     <nav class="breadcrumb">
         <a href="{% url 'reels-gallery' %}">الفيديوهات</a>
@@ -28,16 +30,29 @@
                 <div class="form-section">
                     <div class="form-group">
                         <label>{{ form.video.label }} :</label>
-                        <div class="image-upload">
-                        {{ form.video }}
-                        <div class="upload-placeholder">اختر ملف</div>
-                    </div>
-                    {% if form.video.errors %}
-                        <div class="error-message">
-                            {% for error in form.video.errors %}
-                                {{ error }}
-                            {% endfor %}
+                        <div class="video-uploader">
+                            {{ form.video }}
+                            <div class="video-upload-content">
+                                <div class="video-upload-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div class="video-upload-text">اضغط لاختيار فيديو أو اسحبه هنا</div>
+                                <div class="video-upload-hint">MP4, AVI, MOV حتى 50 ميجابايت</div>
+                            </div>
+                            <div class="upload-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill"></div>
+                                </div>
+                                <div class="progress-text"></div>
+                            </div>
+                            <div class="video-preview"></div>
                         </div>
+                        {% if form.video.errors %}
+                            <div class="error-message">
+                                {% for error in form.video.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -57,4 +72,6 @@
 
     </form>
 </div>
+
+<script src="{% static 'assets/js/video-uploader.js' %}"></script>
 {% endblock %}

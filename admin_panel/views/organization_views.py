@@ -1,3 +1,4 @@
+from django.http.response import HttpResponseRedirect
 from django.views import generic, View
 from base.models import *
 from utils.views import CustomListBaseView
@@ -535,8 +536,7 @@ class BranchActionView(BaseView):
         selected_ids = json.loads(request.POST.get('selected_ids', '[]'))
         action = request.POST.get('action')
         if action == 'delete':
-            # Branch.objects.filter(id__in=selected_ids).delete()
-            pass
+            Branch.objects.filter(id__in=selected_ids).delete()
         return HttpResponseRedirect(reverse('branches'))
 
 
