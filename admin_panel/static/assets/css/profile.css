@@ -63,6 +63,35 @@ body {
     padding: 0 1rem;
 }
 
+.share-btn-container {
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: end;
+    transform: translateY(-50%);
+    padding: 0 1rem;
+}
+
+.share-btn {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.share-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
 .carousel-prev, .carousel-next {
     background-color: rgba(0, 0, 0, 0.5);
     border: none;

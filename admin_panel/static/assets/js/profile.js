@@ -371,9 +371,136 @@ function initializeDropdownSquares() {
     });
 }
 
-// Call initializeDropdownSquares when the page loads
+// Initialize share button functionality
+function initializeShareButton() {
+    const shareBtn = document.querySelector('.share-btn');
+    
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async function(e) {
+            e.stopPropagation();
+            
+            const shareUrl = this.getAttribute('data-share-url');
+            const shareTitle = this.getAttribute('data-share-title');
+            const shareText = this.getAttribute('data-share-text');
+            
+            // Check if Web Share API is supported (mainly on mobile devices)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: shareTitle,
+                        text: shareText,
+                        url: shareUrl
+                    });
+                    showToast('تم المشاركة بنجاح');
+                } catch (err) {
+                    // User cancelled the share or an error occurred
+                    if (err.name !== 'AbortError') {
+                        console.error('Error sharing:', err);
+                        fallbackShare(shareUrl, shareTitle, shareText);
+                    }
+                }
+            } else {
+                // Fallback for devices that don't support Web Share API
+                fallbackShare(shareUrl, shareTitle, shareText);
+            }
+        });
+    }
+}
+
+// Fallback share function for devices without Web Share API
+function fallbackShare(url, title, text) {
+    // Try to copy to clipboard as fallback
+    const shareContent = `${title}\n${text}\n${url}`;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(shareContent).then(() => {
+            showToast('تم نسخ معلومات المشاركة إلى الحافظة');
+        }).catch(() => {
+            showSelectableContent(shareContent);
+        });
+    } else {
+        showSelectableContent(shareContent);
+    }
+}
+
+// Show selectable content in a modal-like format
+function showSelectableContent(content) {
+    // Remove any existing modal
+    const existingModal = document.querySelector('.share-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'share-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    `;
+    
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 90%;
+        text-align: center;
+    `;
+    
+    const title = document.createElement('h3');
+    title.textContent = 'انسخ معلومات المشاركة';
+    title.style.marginBottom = '15px';
+    
+    const textarea = document.createElement('textarea');
+    textarea.value = content;
+    textarea.style.cssText = `
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-family: inherit;
+        margin-bottom: 15px;
+    `;
+    textarea.select();
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'إغلاق';
+    closeBtn.style.cssText = `
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    `;
+    
+    closeBtn.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+    
+    modalContent.appendChild(title);
+    modalContent.appendChild(textarea);
+    modalContent.appendChild(closeBtn);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    
+    showToast('حدد النص لنسخه');
+}
+
+// Call initializeShareButton when the page loads
 document.addEventListener('DOMContentLoaded', function() {
-    initializeDropdownSquares();
+    initializeShareButton();
 });
 
 // Add this function to initialize copy buttons

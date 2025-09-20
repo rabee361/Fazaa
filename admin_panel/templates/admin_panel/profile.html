@@ -23,6 +23,9 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="share-btn-container">
+            <button class="share-btn" data-share-url="{{ request.build_absolute_uri }}" data-share-title="{{ organization.name }}" data-share-text="تعرف على {{ organization.name }} - {{ organization.description|truncatechars:50 }}"><i class="fas fa-share-alt"></i></button>
+        </div>
         <div class="carousel-controls">
             <button class="carousel-prev"><i class="fas fa-chevron-right"></i></button>
             <div class="carousel-indicators"></div>
