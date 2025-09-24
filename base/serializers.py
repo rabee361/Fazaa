@@ -234,7 +234,7 @@ class ReelsGallerySerializer(ModelSerializer):
         organization = attrs.get('organization')
         if organization:
             reels_count = ReelsGallery.objects.filter(organization=organization).count()
-            if reels_count >= 3:
+            if reels_count >= 20:
                 raise ErrorResult({'error': 'لا يمكن إضافة أكثر من 10 ريلز للمنظمة الواحدة'})
         return attrs
 
@@ -251,20 +251,21 @@ class ImagesGallerySerializer(ModelSerializer):
         if obj.image:
             return request.build_absolute_uri(obj.image.url)
         return None
-    
-    def validate_image(self, image):
-        validate_image_size(image)
-        validate_image_extension(image)
-        return image
 
     def validate(self, attrs):
         # Check if organization has more than 10 reels
         organization = attrs.get('organization')
         if organization:
-            reels_count = ReelsGallery.objects.filter(organization=organization).count()
-            if reels_count >= 3:
+            reels_count = ImageGallery.objects.filter(organization=organization).count()
+            print(reels_count)
+            if reels_count >= 20:
                 raise ErrorResult({'error': 'لا يمكن إضافة أكثر من 20 صور للمنظمة الواحدة'})
         return attrs
+
+    def validate_image(self, image):
+        validate_image_size(image)
+        validate_image_extension(image)
+        return image
 
 
 # class NotificationSerializer(ModelSerializer):

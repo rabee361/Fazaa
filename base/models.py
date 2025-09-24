@@ -113,20 +113,31 @@ class ImageGallery(models.Model):
         ordering = ['-id']  
 
     def save(self, *args, **kwargs):
-        # First save to ensure the image is saved to disk
+        # Check if this is a new object or if the image has changed
+        is_new = self.pk is None
+        old_image = None
+        
+        if not is_new:
+            try:
+                old_image = ImageGallery.objects.get(pk=self.pk).image
+            except ImageGallery.DoesNotExist:
+                pass
+        
+        # Save the object first to ensure the image is saved to disk
         super().save(*args, **kwargs)
         
-        # Using the updated generate_img_thumbnail function
-        try:
-            print(f"Image path: {self.image.path}")
-            content_file, thumb_filename = generate_img_thumbnail(self.image.path)
-            self.thumbnail.save(thumb_filename, content_file, save=False)
-            print(self.thumbnail.size)
-            print(self.image.size)
-            # Save again to update the thumbnail field
-            super().save(*args, **kwargs)
-        except Exception as e:
-            print(f"Error saving thumbnail: {str(e)}")
+        # Generate thumbnail only for new objects or when image has changed
+        if is_new or (old_image and old_image != self.image):
+            try:
+                print(f"Image path: {self.image.path}")
+                content_file, thumb_filename = generate_img_thumbnail(self.image.path)
+                self.thumbnail.save(thumb_filename, content_file, save=False)
+                print(self.thumbnail.size)
+                print(self.image.size)
+                # Update only the thumbnail field without triggering save recursion
+                ImageGallery.objects.filter(pk=self.pk).update(thumbnail=self.thumbnail.name)
+            except Exception as e:
+                print(f"Error saving thumbnail: {str(e)}")
 
 
 class ReelsGallery(models.Model):
