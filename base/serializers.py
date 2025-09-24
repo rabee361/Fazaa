@@ -228,6 +228,15 @@ class ReelsGallerySerializer(ModelSerializer):
         validate_video_extension(video)
         validate_video_size(video)
         return video
+    
+    def validate(self, attrs):
+        # Check if organization has more than 10 reels
+        organization = attrs.get('organization')
+        if organization:
+            reels_count = ReelsGallery.objects.filter(organization=organization).count()
+            if reels_count >= 3:
+                raise ErrorResult({'error': 'لا يمكن إضافة أكثر من 10 ريلز للمنظمة الواحدة'})
+        return attrs
 
 
 
@@ -246,18 +255,16 @@ class ImagesGallerySerializer(ModelSerializer):
     def validate_image(self, image):
         validate_image_size(image)
         validate_image_extension(image)
-        # Check if organization has reached daily limit of 20 images
-        today = timezone.now().date()
-        today_images_count = ImageGallery.objects.filter(
-            organization=self.initial_data['organization'],
-            createdAt__date=today
-        ).values('id').count()
-
-        if today_images_count >= 20:
-            raise ErrorResult({'error':'لا يمكن إضافة أكثر من 20 صورة في اليوم'})
-            
         return image
 
+    def validate(self, attrs):
+        # Check if organization has more than 10 reels
+        organization = attrs.get('organization')
+        if organization:
+            reels_count = ReelsGallery.objects.filter(organization=organization).count()
+            if reels_count >= 3:
+                raise ErrorResult({'error': 'لا يمكن إضافة أكثر من 20 صور للمنظمة الواحدة'})
+        return attrs
 
 
 # class NotificationSerializer(ModelSerializer):
