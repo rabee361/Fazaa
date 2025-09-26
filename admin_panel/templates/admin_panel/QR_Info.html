@@ -11,7 +11,7 @@
                 {% if organization.logo %}
                     <img width="100%" height="100%" src="{{ organization.logo.url }}" alt="صورة الملف الشخصي">
                 {% else %}
-                    <img width="100%" height="100%" src="{% static 'assets/images/fazaa.png' %}" alt="صورة الملف الشخصي">
+                    <img width="100%" height="100%" src="{{ organization.logo }}" alt="صورة الملف الشخصي">
                 {% endif %}
             </div>
             <div class="profile-details">
