@@ -1,0 +1,8 @@
+{% for setting in gallery_settings %}
+<tr onclick="clickHandler(event)" data-link="{% url 'gallery-settings-form' setting.id %}">
+    <td onclick="event.stopPropagation();"><input type="checkbox" class="row-checkbox" value="{{ setting.id }}"></td>
+    <td>{{ setting.id }}</td>
+    <td>{{ setting.name }}</td>
+    <td>{{ setting.value }}</td>
+</tr>
+{% endfor %}

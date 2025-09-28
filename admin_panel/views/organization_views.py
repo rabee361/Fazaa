@@ -269,9 +269,19 @@ class ReelGalleryBulkActionView(BaseView):
         return HttpResponseRedirect(reverse('reels-gallery'))
 
 
+class GallerySettingView(CustomListBaseView):
+    model = GallerySetting
+    fields = '__all__'
+    context_object_name = 'gallery_settings'
+    context_fields = ['id','name','value']
+    template_name = 'admin_panel/organization/gallery/settings.html'
 
-
-
+class GallerySettingFormView(BaseView, generic.UpdateView):
+    model = GallerySetting
+    template_name = 'admin_panel/organization/gallery/settings_form.html'
+    fields = ['value']
+    success_url = '/dashboard/organization/gallery/settings'
+    pk_url_kwarg = 'id'
 
 
 

@@ -50,6 +50,9 @@ OrganizationPatterns=[
     path('reels-gallery/<int:id>/info/' , organization_views.UpdateReelGalleryView.as_view() , name="reel-info"),
     path('reels-gallery/action/' , organization_views.ReelGalleryBulkActionView.as_view() , name="reel-gallery-bulk-action"),
 
+    path('gallery/settings/' , organization_views.GallerySettingView.as_view(), name="gallery-settings"),
+    path('gallery/settings/<int:id>' , organization_views.GallerySettingFormView.as_view(), name="gallery-settings-form"),
+
     path('social-media' , organization_views.ListSocialMedia.as_view() , name="social-media"),
     path('social-media/add' , organization_views.CreateSocialMedia.as_view() , name="add-social-media"),
     path('social-media/<int:id>/info' , organization_views.UpdateSocialMedia.as_view() , name="social-media-info"),

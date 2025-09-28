@@ -230,12 +230,15 @@ class ReelsGallerySerializer(ModelSerializer):
         return video
     
     def validate(self, attrs):
-        # Check if organization has more than 10 reels
         organization = attrs.get('organization')
         if organization:
             reels_count = ReelsGallery.objects.filter(organization=organization).count()
-            if reels_count >= 20:
-                raise ErrorResult({'error': 'لا يمكن إضافة أكثر من 10 ريلز للمنظمة الواحدة'})
+            try:
+                reels_limit = GallerySetting.objects.get(name="العدد الأقصى من الريلز").value or 40
+            except GallerySetting.DoesNotExist:
+                reels_limit = 40
+            if reels_count >= reels_limit:
+                raise ErrorResult({'error': f'لا يمكن إضافة أكثر من {reels_limit} ريلز للمنظمة الواحدة'})
         return attrs
 
 
@@ -253,13 +256,15 @@ class ImagesGallerySerializer(ModelSerializer):
         return None
 
     def validate(self, attrs):
-        # Check if organization has more than 10 reels
         organization = attrs.get('organization')
         if organization:
-            reels_count = ImageGallery.objects.filter(organization=organization).count()
-            print(reels_count)
-            if reels_count >= 20:
-                raise ErrorResult({'error': 'لا يمكن إضافة أكثر من 20 صور للمنظمة الواحدة'})
+            images_count = ImageGallery.objects.filter(organization=organization).count()
+            try:
+                images_limit = GallerySetting.objects.get(name="العدد الأقصى من الصور").value or 40
+            except GallerySetting.DoesNotExist:
+                images_limit = 40
+            if images_count >= images_limit:
+                raise ErrorResult({'error': f'لا يمكن إضافة أكثر من {images_limit} صور للمنظمة الواحدة'})
         return attrs
 
     def validate_image(self, image):

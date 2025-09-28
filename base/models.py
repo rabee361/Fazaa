@@ -449,3 +449,8 @@ class Subscription(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+
+class GallerySetting(models.Model):
+    name = models.CharField(max_length=100 , verbose_name="الاسم")
+    value = models.IntegerField(null=True , blank=True , validators=[MinValueValidator(0)], verbose_name="القيمة")

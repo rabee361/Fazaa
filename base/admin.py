@@ -80,6 +80,9 @@ class ContactUsAdmin(admin.ModelAdmin):
 class AboutUsAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
+class GallerySettingAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'value']
+
 
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(OrganizationType, OrganizationTypeAdmin)
@@ -99,3 +102,4 @@ admin.site.register(CommonQuestion, CommonQuestionAdmin)
 admin.site.register(TermsPrivacy, TermsPrivacyAdmin)
 admin.site.register(ContactUs, ContactUsAdmin)
 admin.site.register(AboutUs, AboutUsAdmin)
+admin.site.register(GallerySetting, GallerySettingAdmin)
