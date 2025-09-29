@@ -17,23 +17,25 @@ from django.contrib.sites.shortcuts import get_current_site
 
 class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
-        # try:
-        social = SocialMediaUrl.objects.get(short_url=slug)
-        assert social.active and social.url
-        social.visits += 1
-        social.save()
-        
-        # Prevent redirect loops by ensuring the URL is external
-        current_site = get_current_site(request)
-        if social.url.startswith('/') or \
-            social.url.startswith(f'http://{current_site.domain}') or \
-            social.url.startswith(f'https://{current_site.domain}'):
-            # If it's a relative URL or points to the same domain, show an error
-            return render(request, '404.html', status=400)
+        try:
+            social = SocialMediaUrl.objects.get(short_url=slug)
             
-        return redirect(social.url) 
-        # except Exception as e:
-        #     return render(request, '404.html', status=400)
+            # Prevent redirect loops by ensuring the URL is external
+            current_site = get_current_site(request)
+            if social.url.startswith('/') or \
+               social.url.startswith(f'http://{current_site.domain}') or \
+               social.url.startswith(f'https://{current_site.domain}'):
+                # If it's a relative URL or points to the same domain, show an error
+                return render(request, '404.html', status=400)
+            
+            assert social.active and social.url
+            social.visits += 1
+            social.save()
+
+            return redirect(social.url) 
+        except Exception as e:
+            return render(request, '404.html', status=400)
+
 
 class WebsiteSlugUrlView(View):
     def get(self,request,slug):
@@ -42,6 +44,15 @@ class WebsiteSlugUrlView(View):
             assert organization.website_short_url
             # organization.visits += 1
             # organization.save()
+
+            # Prevent redirect loops by ensuring the URL is external
+            current_site = get_current_site(request)
+            if organization.website.startswith('/') or \
+               organization.website.startswith(f'http://{current_site.domain}') or \
+               organization.website.startswith(f'https://{current_site.domain}'):
+                # If it's a relative URL or points to the same domain, show an error
+                return render(request, '404.html', status=400)
+                    
             return redirect(organization.website)
         except Exception as e:
             return render(request, '404.html', status=400)
@@ -95,6 +106,15 @@ class DeliverySlugUrlView(View):
     def get(self,request,slug):
         try:
             delivery = DeliveryCompanyUrl.objects.get(short_url=slug)
+
+            # Prevent redirect loops by ensuring the URL is external
+            current_site = get_current_site(request)
+            if delivery.url.startswith('/') or \
+               delivery.url.startswith(f'http://{current_site.domain}') or \
+               delivery.url.startswith(f'https://{current_site.domain}'):
+                # If it's a relative URL or points to the same domain, show an error
+                return render(request, '404.html', status=400)
+
             assert delivery.active and delivery.url
             delivery.visits += 1
             delivery.save()
