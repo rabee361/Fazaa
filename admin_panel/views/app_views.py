@@ -17,23 +17,23 @@ from django.contrib.sites.shortcuts import get_current_site
 
 class SocialMediaSlugUrlView(View):
     def get(self,request,slug):
-        try:
-            social = SocialMediaUrl.objects.get(short_url=slug)
-            assert social.active and social.url
-            social.visits += 1
-            social.save()
-            
-            # Prevent redirect loops by ensuring the URL is external
-            current_site = get_current_site(request)
-            if social.url.startswith('/') or \
-               social.url.startswith(f'http://{current_site.domain}') or \
-               social.url.startswith(f'https://{current_site.domain}'):
-                # If it's a relative URL or points to the same domain, show an error
-                return render(request, '404.html', status=400)
-               
-            return redirect(social.url) 
-        except Exception as e:
+        # try:
+        social = SocialMediaUrl.objects.get(short_url=slug)
+        assert social.active and social.url
+        social.visits += 1
+        social.save()
+        
+        # Prevent redirect loops by ensuring the URL is external
+        current_site = get_current_site(request)
+        if social.url.startswith('/') or \
+            social.url.startswith(f'http://{current_site.domain}') or \
+            social.url.startswith(f'https://{current_site.domain}'):
+            # If it's a relative URL or points to the same domain, show an error
             return render(request, '404.html', status=400)
+            
+        return redirect(social.url) 
+        # except Exception as e:
+        #     return render(request, '404.html', status=400)
 
 class WebsiteSlugUrlView(View):
     def get(self,request,slug):
