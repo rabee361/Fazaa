@@ -101,6 +101,9 @@ class Branch(gis_models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    class Meta:
+        ordering = ['-id']  
 
 
 class ImageGallery(models.Model):

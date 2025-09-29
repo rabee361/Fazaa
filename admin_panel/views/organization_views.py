@@ -228,7 +228,7 @@ class ImageGalleryBulkActionView(BaseView):
 class ListReelsGalleryView(CustomListBaseView):
     model = ReelsGallery
     context_object_name = 'reels'
-    context_fields = ['id','organization','createdAt']
+    context_fields = ['id','organization', 'title','createdAt']
     template_name = 'admin_panel/organization/gallery/reels_gallery.html'
 
     def get_queryset(self):
@@ -245,13 +245,13 @@ class ListReelsGalleryView(CustomListBaseView):
 class CreateReelGalleryView(BaseView, generic.CreateView):
     model = ReelsGallery
     template_name = 'admin_panel/organization/gallery/reel_gallery_form.html'
-    fields = ['video','organization']
+    fields = ['video','organization','title']
     success_url = '/dashboard/organization/reels-gallery'
 
 class UpdateReelGalleryView(BaseView, generic.UpdateView):
     model = ReelsGallery
     template_name = 'admin_panel/organization/gallery/update_reel_gallery.html'
-    fields = ['video','organization']
+    fields = ['video','organization', 'title']
     success_url = '/dashboard/organization/reels-gallery'
     pk_url_kwarg = 'id'
 

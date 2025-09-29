@@ -436,13 +436,18 @@ class UpdateOrganizationSerializer(ModelSerializer):
         instance.website = validated_data.get('website', instance.website)
         branches = validated_data.get('branches', None)
         if branches:
+            # Delete all existing branches for this organization
+            Branch.objects.filter(organization=instance).delete()
+            
+            # Create new branches
             for i, branch_data in enumerate(branches, 1):
                 if isinstance(branch_data, dict):
                     point = Point(branch_data['longitude'], branch_data['latitude'])
-                    branch, created = Branch.objects.get_or_create(organization=instance, location=point)
-                    if created:
-                        branch.name = f"{instance.name} - فرع {i}"
-                        branch.save()
+                    branch = Branch.objects.create(
+                        organization=instance,
+                        name=f"{instance.name} - فرع {i}",
+                        location=point
+                    )
         instance.save()
         return instance
 
