@@ -12,6 +12,7 @@ from utils.notifications import send_users_notification
 from admin_panel.forms import NotificationForm
 from django.core.paginator import Paginator
 from utils.views import BaseView
+from django.contrib.sites.shortcuts import get_current_site
 
 
 class SocialMediaSlugUrlView(View):
@@ -21,6 +22,15 @@ class SocialMediaSlugUrlView(View):
             assert social.active and social.url
             social.visits += 1
             social.save()
+            
+            # Prevent redirect loops by ensuring the URL is external
+            current_site = get_current_site(request)
+            if social.url.startswith('/') or \
+               social.url.startswith(f'http://{current_site.domain}') or \
+               social.url.startswith(f'https://{current_site.domain}'):
+                # If it's a relative URL or points to the same domain, show an error
+                return render(request, '404.html', status=400)
+               
             return redirect(social.url) 
         except Exception as e:
             return render(request, '404.html', status=400)
