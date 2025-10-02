@@ -23,8 +23,8 @@ class SocialMediaSlugUrlView(View):
             # Prevent redirect loops by ensuring the URL is external
             current_site = get_current_site(request)
             if social.url.startswith('/') or \
-               social.url.startswith(f'http://{current_site.domain}') or \
-               social.url.startswith(f'https://{current_site.domain}'):
+               social.url.startswith(f'http://{current_site.domain}/social') or \
+               social.url.startswith(f'https://{current_site.domain}/social'):
                 # If it's a relative URL or points to the same domain, show an error
                 return render(request, '404.html', status=400)
             
@@ -48,8 +48,8 @@ class WebsiteSlugUrlView(View):
             # Prevent redirect loops by ensuring the URL is external
             current_site = get_current_site(request)
             if organization.website.startswith('/') or \
-               organization.website.startswith(f'http://{current_site.domain}') or \
-               organization.website.startswith(f'https://{current_site.domain}'):
+               organization.website.startswith(f'http://{current_site.domain}/website') or \
+               organization.website.startswith(f'https://{current_site.domain}/website'):
                 # If it's a relative URL or points to the same domain, show an error
                 return render(request, '404.html', status=400)
                     
@@ -110,8 +110,8 @@ class DeliverySlugUrlView(View):
             # Prevent redirect loops by ensuring the URL is external
             current_site = get_current_site(request)
             if delivery.url.startswith('/') or \
-               delivery.url.startswith(f'http://{current_site.domain}') or \
-               delivery.url.startswith(f'https://{current_site.domain}'):
+               delivery.url.startswith(f'http://{current_site.domain}/delivery') or \
+               delivery.url.startswith(f'https://{current_site.domain}/delivery'):
                 # If it's a relative URL or points to the same domain, show an error
                 return render(request, '404.html', status=400)
 

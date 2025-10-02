@@ -610,6 +610,18 @@ body {
     box-shadow: 0 4px 15px rgba(179, 155, 125, 0.3);
 }
 
+
+/* Offer content styling */
+.offer-content {
+    padding: 1rem;
+    font-size: 1rem;
+    margin-top: 10px;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    border-radius: 0 0 10px 10px;
+}
+
+
 .slider-btn:hover {
     background-color: var(--text-primary);
     transform: scale(1.1);
